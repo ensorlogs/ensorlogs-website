@@ -1,0 +1,905 @@
+/**
+ * ENSOR.LOGS — marca (acento ámbar + verde apoyo + fondos cálidos)
+ * Carga después de style.min.css
+ */
+:root {
+    --ensor-accent: #e2a829;
+    --ensor-accent-hover: #c99216;
+    --ensor-accent-on-dark: #f5c84c;
+    --ensor-accent-soft: rgba(226, 168, 41, 0.14);
+    --ensor-green: #6b8e78;
+    --ensor-page-bg: #f7f5f1;
+    --ensor-ink: #1a1a1a;
+}
+
+/* Fondo página (modo claro): crema suave alineado al branding */
+html:not(.dark) body {
+    background-color: var(--ensor-page-bg) !important;
+}
+
+::selection {
+    background-color: var(--ensor-accent);
+    color: var(--ensor-ink);
+}
+
+html.dark ::selection {
+    background-color: var(--ensor-accent-on-dark);
+    color: var(--ensor-ink);
+}
+
+/* Logo wordmark */
+.ensor-logo-accent {
+    color: var(--ensor-accent);
+}
+
+html.dark .ensor-logo-accent {
+    color: var(--ensor-accent-on-dark);
+}
+
+/* Header lockup: marca negrita + tagline */
+.ensor-wordmark {
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    font-size: clamp(1.35rem, 3.2vw, 2.125rem);
+}
+
+header .nav > a[href="index.html"] .ensor-wordmark {
+    font-weight: 900;
+}
+
+.mobile_menu .ensor-wordmark {
+    font-size: clamp(1.2rem, 4.2vw, 1.45rem);
+}
+
+/* Avatar/logo circular: más grande + ligero “bob” (lados / arriba-abajo) */
+@keyframes ensor-logo-bob {
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    18% {
+        transform: translate(5px, -5px) rotate(3deg);
+    }
+    38% {
+        transform: translate(-6px, 4px) rotate(-3deg);
+    }
+    58% {
+        transform: translate(5px, 6px) rotate(2.5deg);
+    }
+    78% {
+        transform: translate(-5px, -4px) rotate(-2deg);
+    }
+}
+
+.ensor-header-logo-wrap {
+    width: 4.25rem;
+    height: 4.25rem;
+    animation: ensor-logo-bob 5.5s ease-in-out infinite;
+    will-change: transform;
+}
+
+@media (min-width: 768px) {
+    .ensor-header-logo-wrap {
+        width: 5rem;
+        height: 5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .ensor-header-logo-wrap {
+        width: 5.5rem;
+        height: 5.5rem;
+    }
+}
+
+/* Drawer móvil: algo más compacto que el header desktop, pero legible */
+.mobile_menu .ensor-header-logo-wrap {
+    width: 3.75rem !important;
+    height: 3.75rem !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-header-logo-wrap {
+        animation: none !important;
+    }
+}
+
+/*
+ * Personaje mirando a la derecha: si el PNG ya mira a la derecha,
+ * comenta la siguiente regla o elimina la clase en el HTML.
+ */
+.ensor-header-logo-img {
+    transform: scaleX(-1);
+}
+
+/* Subrayado solo bajo “Bitácora” (como referencia de marca) */
+.ensor-bitacora-word {
+    border-bottom: 2px solid var(--ensor-accent);
+    padding-bottom: 0.06em;
+}
+
+html.dark .ensor-bitacora-word {
+    border-bottom-color: var(--ensor-accent-on-dark);
+}
+
+/* Línea decorativa larga (opcional en otras secciones) */
+.ensor-tagline-rule {
+    display: block;
+    background: linear-gradient(
+        to right,
+        var(--ensor-accent) 0%,
+        var(--ensor-accent) 26%,
+        rgba(26, 26, 26, 0.14) 26%,
+        rgba(26, 26, 26, 0.14) 100%
+    );
+}
+
+html.dark .ensor-tagline-rule {
+    background: linear-gradient(
+        to right,
+        var(--ensor-accent-on-dark) 0%,
+        var(--ensor-accent-on-dark) 26%,
+        rgba(255, 255, 255, 0.18) 26%,
+        rgba(255, 255, 255, 0.18) 100%
+    );
+}
+
+/* Punto de estado (reemplaza verde genérico) */
+.ensor-pulse-dot::before {
+    background-color: var(--ensor-green) !important;
+}
+
+/* Etiquetas tipo kicker en tarjetas (subrayado fino como en el branding) */
+.widget p.text-sm.opacity-70 {
+    border-bottom: 2px solid var(--ensor-accent);
+    display: inline-block;
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
+}
+
+html.dark .widget p.text-sm.opacity-70 {
+    border-bottom-color: var(--ensor-accent-on-dark);
+}
+
+/*
+ * Portada 16:10 en widgets (index): style.min.css no incluye aspect-[16/10].
+ * Sin aspect-ratio el <a> colapsa a altura 0 si la <img> va en absolute.
+ */
+a.ensor-widget-cover-16-10 {
+    aspect-ratio: 16 / 10;
+}
+
+html.dark a.ensor-widget-cover-16-10 img {
+    filter: brightness(0.92);
+}
+
+/*
+ * Portada a sangre: el grid aplica *:p-6 / max-md:*:p-4 / xl:*:px-10 a cada .widget.
+ * Esta variante anula padding superior y lateral en la tarjeta; el texto lleva su propio padding.
+ */
+.widget.ensor-widget-media-card {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 1rem !important;
+}
+
+@media (min-width: 768px) {
+    .widget.ensor-widget-media-card {
+        padding-bottom: 1.5rem !important;
+    }
+}
+
+/* Navegación principal */
+header .main-menu a.active {
+    border-color: var(--ensor-accent) !important;
+}
+
+html:not(.dark) header .main-menu a:hover {
+    color: var(--ensor-accent) !important;
+}
+
+html.dark header .main-menu a:hover {
+    color: var(--ensor-accent-on-dark) !important;
+}
+
+/* CTA “Hablemos” */
+header .button-groups > a[href="contact.html"] {
+    border: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+html:not(.dark) header .button-groups > a[href="contact.html"]:hover {
+    border-color: var(--ensor-accent);
+    color: var(--ensor-accent) !important;
+    background: linear-gradient(
+        to bottom,
+        var(--ensor-accent-soft),
+        rgba(226, 168, 41, 0.06)
+    ) !important;
+}
+
+html.dark header .button-groups > a[href="contact.html"]:hover {
+    border-color: var(--ensor-accent-on-dark);
+    color: var(--ensor-accent-on-dark) !important;
+}
+
+/* Menú móvil: acento en ítem activo */
+.mobile_menu a.active {
+    box-shadow: inset 3px 0 0 var(--ensor-accent);
+}
+
+html.dark .mobile_menu a.active {
+    box-shadow: inset 3px 0 0 var(--ensor-accent-on-dark);
+}
+
+/* Botón principal menú móvil */
+.mobile_menu .cta_button a.bg-darkGray,
+.mobile_menu .cta_button a.dark\:bg-metalBlack {
+    background-color: var(--ensor-accent) !important;
+    color: var(--ensor-ink) !important;
+    transition: filter 0.2s ease;
+}
+
+.mobile_menu .cta_button a:hover {
+    filter: brightness(1.05);
+}
+
+/* Enlaces en tarjetas tipo widget (flecha) */
+main .widget h6.group:hover a,
+main .widget h6.group a:hover {
+    color: var(--ensor-accent);
+}
+
+html.dark main .widget h6.group:hover a,
+html.dark main .widget h6.group a:hover {
+    color: var(--ensor-accent-on-dark);
+}
+
+main .widget h6.group:hover svg,
+main .widget h6.group a:hover svg {
+    color: var(--ensor-accent) !important;
+}
+
+html.dark main .widget h6.group:hover svg,
+html.dark main .widget h6.group a:hover svg {
+    color: var(--ensor-accent-on-dark) !important;
+}
+
+/* Pie y correo */
+footer a.text-darkGray:hover,
+footer a.inline-flex:hover {
+    color: var(--ensor-accent) !important;
+    border-color: var(--ensor-accent) !important;
+}
+
+html.dark footer a.text-darkGray:hover {
+    color: var(--ensor-accent-on-dark) !important;
+}
+
+html.dark footer a.inline-flex:hover {
+    border-color: var(--ensor-accent-on-dark) !important;
+    color: var(--ensor-accent-on-dark) !important;
+}
+
+/* Scroll to top */
+#scroll-top:hover {
+    background-color: var(--ensor-accent) !important;
+    color: var(--ensor-ink) !important;
+}
+
+html.dark #scroll-top:hover {
+    background-color: var(--ensor-accent-on-dark) !important;
+    color: var(--ensor-ink) !important;
+}
+
+/* Sombras de tarjeta: ligero tinte ámbar */
+.widget:hover {
+    box-shadow: 0 12px 28px rgba(226, 168, 41, 0.07);
+}
+
+html.dark .widget:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Campos de formulario: foco con acento */
+input:focus,
+textarea:focus {
+    border-color: var(--ensor-accent) !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus {
+    border-color: var(--ensor-accent-on-dark) !important;
+}
+
+/* ---------- Preloader: tamaños en CSS puro (Tailwind JIT no incluye h-[9rem] en style.min) ---------- */
+.preloader {
+    transition: opacity 0.45s ease;
+}
+
+.ensor-preloader-inner {
+    animation: ensor-preloader-fade-in 0.45s ease-out both;
+}
+
+@keyframes ensor-preloader-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Caja del logo: dimensiones fijas (no depender de utilidades arbitrarias de Tailwind) */
+.ensor-preloader-logo {
+    position: relative;
+    width: 9rem;
+    height: 9rem;
+    margin-left: auto;
+    margin-right: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.08));
+}
+
+@media (min-width: 768px) {
+    .ensor-preloader-logo {
+        width: 11rem;
+        height: 11rem;
+    }
+}
+
+html.dark .ensor-preloader-logo {
+    filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.45));
+    /* PNG con fondo blanco: fundir con bg del preloader (sin bloque blanco sólido) */
+    mix-blend-mode: multiply;
+}
+
+/* Capa inferior: mismo PNG, siempre visible */
+.ensor-preloader-base-img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    opacity: 0.42;
+    pointer-events: none;
+    z-index: 0;
+}
+
+html.dark .ensor-preloader-base-img {
+    opacity: 0.48;
+}
+
+@keyframes ensor-preloader-widen {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.ensor-preloader-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    overflow: hidden;
+    z-index: 1;
+    animation: ensor-preloader-widen 1.85s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* Imagen de color: ancho fijo = caja del logo (la franja solo recorta) */
+.ensor-preloader-fill-img {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    height: 100%;
+    width: 9rem;
+    max-width: none;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+    .ensor-preloader-fill-img {
+        width: 11rem;
+    }
+}
+
+@keyframes ensor-preloader-loading-pulse {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.ensor-preloader-loading {
+    letter-spacing: 0.45em;
+    animation: ensor-preloader-loading-pulse 1.15s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-preloader-inner {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .ensor-preloader-fill {
+        width: 100% !important;
+        animation: none !important;
+    }
+
+    .ensor-preloader-loading {
+        animation: none !important;
+        opacity: 0.85 !important;
+    }
+}
+
+/* Grupo de widgets (propuesta + blog): sin estirar la tarjeta baja a la altura de la imagen */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .ensor-widgets-row.lg\:max-xl\:grid {
+        align-items: start;
+    }
+}
+
+/* SVG de marca en círculos (about): visible en modo oscuro */
+html.dark img.ensor-inline-brand-svg {
+    filter: invert(1) brightness(1.1);
+    opacity: 0.95;
+}
+
+/* Iconos Simple Icons vía jsDelivr (cdn.simpleicons.org suele fallar con Cloudflare en <img>) */
+img.ensor-simple-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+html.dark img.ensor-simple-icon {
+    filter: invert(1) brightness(1.08);
+    opacity: 0.92;
+}
+
+/* ---------- Widget “¿Tienes una propuesta?” — franja marquee compacta ---------- */
+.widget.ensor-proposal-widget {
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+}
+
+@media (min-width: 768px) {
+    .widget.ensor-proposal-widget {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+}
+
+.widget.ensor-proposal-widget h6.group {
+    margin-bottom: 0;
+}
+
+/* Terminal macOS + pantalla log (index, col 2): ocupa todo el ancho superior de la tarjeta */
+.widget.ensor-proposal-widget.ensor-terminal-widget {
+    padding: 0 !important;
+}
+
+.ensor-terminal-frame {
+    overflow: hidden;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.ensor-terminal-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.38rem 0.65rem 0.42rem;
+    background: linear-gradient(180deg, #3f4544 0%, #2e3231 52%, #252928 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.ensor-terminal-traffic {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.ensor-terminal-traffic__dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.35);
+}
+
+.ensor-terminal-traffic__dot--close {
+    background: #ff5f57;
+}
+
+.ensor-terminal-traffic__dot--min {
+    background: #febc2e;
+}
+
+.ensor-terminal-traffic__dot--max {
+    background: #28c840;
+}
+
+.ensor-terminal-titlebar__title {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.48);
+}
+
+.ensor-terminal-screen {
+    background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(0, 60, 30, 0.25) 0%, transparent 55%), #020807;
+    border-bottom: 1px solid rgba(57, 255, 20, 0.14);
+}
+
+.ensor-terminal-prompt {
+    margin: 0;
+    padding: 0.42rem 0.75rem 0.12rem;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
+.ensor-terminal-prompt__user {
+    color: #58d68d;
+}
+
+.ensor-terminal-prompt__sep,
+.ensor-terminal-prompt__path {
+    color: #5dade2;
+}
+
+.ensor-terminal-prompt__sig {
+    color: #f4d03f;
+    margin-left: 0.12em;
+}
+
+.ensor-terminal-prompt__cursor {
+    display: inline-block;
+    margin-left: 0.2em;
+    color: #39ff14;
+    animation: ensor-terminal-cursor 1.05s steps(1, end) infinite;
+}
+
+@keyframes ensor-terminal-cursor {
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.ensor-marquee--terminal.ensor-marquee--matrix {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.ensor-terminal-cta {
+    padding: 0.65rem 1rem 0.85rem;
+}
+
+@media (min-width: 768px) {
+    .ensor-terminal-cta {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-bottom: 1rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .ensor-terminal-cta {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-terminal-prompt__cursor {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+.ensor-marquee {
+    overflow: hidden;
+}
+
+/* Consola estilo Matrix (marquesina superior) */
+.ensor-marquee--matrix {
+    background: linear-gradient(180deg, #020705 0%, #071209 50%, #050a07 100%);
+    border-top: 1px solid rgba(57, 255, 20, 0.35);
+    border-bottom: 1px solid rgba(57, 255, 20, 0.22);
+    box-shadow:
+        inset 0 0 20px rgba(0, 255, 80, 0.07),
+        0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+html.dark .ensor-marquee--matrix {
+    background: linear-gradient(180deg, #010403 0%, #061208 100%);
+    border-top-color: rgba(74, 252, 92, 0.28);
+    border-bottom-color: rgba(74, 252, 92, 0.18);
+}
+
+.ensor-marquee__track {
+    display: flex;
+    width: max-content;
+    /* reverse: el texto se percibe moviéndose de izquierda a derecha */
+    animation: ensor-marquee-scroll 42s linear infinite reverse;
+}
+
+.ensor-marquee--matrix .ensor-marquee__track {
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        "Courier New",
+        monospace;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #39ff14;
+    text-shadow:
+        0 0 6px rgba(57, 255, 20, 0.85),
+        0 0 14px rgba(0, 255, 90, 0.35);
+}
+
+.ensor-marquee__segment {
+    flex-shrink: 0;
+    padding-left: 1rem;
+    padding-right: 2.5rem;
+}
+
+.ensor-marquee__segment--matrix {
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+}
+
+@keyframes ensor-marquee-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-marquee__track {
+        animation: none;
+        transform: none;
+    }
+
+    .ensor-marquee__segment[aria-hidden="true"] {
+        display: none;
+    }
+
+    .ensor-marquee {
+        text-align: center;
+    }
+
+    .ensor-marquee__segment {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .ensor-marquee--matrix .ensor-marquee__track {
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* ---------- Botones pill de marca (hero, formularios, listados) ---------- */
+.ensor-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-weight: 600;
+    border-radius: 9999px;
+    border-style: solid;
+    border-width: 2px;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease,
+        transform 0.15s ease;
+}
+
+.ensor-btn:focus-visible {
+    outline: 2px solid var(--ensor-accent);
+    outline-offset: 3px;
+}
+
+html.dark .ensor-btn:focus-visible {
+    outline-color: var(--ensor-accent-on-dark);
+}
+
+.ensor-btn-primary {
+    color: var(--ensor-ink);
+    background: linear-gradient(180deg, var(--ensor-accent) 0%, var(--ensor-accent-hover) 100%);
+    border-color: rgba(26, 26, 26, 0.1);
+    box-shadow:
+        0 4px 18px rgba(226, 168, 41, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.ensor-btn-primary:hover {
+    filter: brightness(1.06);
+    box-shadow:
+        0 8px 26px rgba(226, 168, 41, 0.48),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    transform: translateY(-1px);
+}
+
+.ensor-btn-primary:active {
+    transform: translateY(0);
+    filter: brightness(0.98);
+}
+
+html.dark .ensor-btn-primary {
+    background: linear-gradient(180deg, var(--ensor-accent-on-dark) 0%, var(--ensor-accent) 100%);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow:
+        0 4px 22px rgba(245, 200, 76, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+html.dark .ensor-btn-primary:hover {
+    filter: brightness(1.07);
+}
+
+.ensor-btn-outline {
+    color: var(--ensor-ink);
+    background: rgba(255, 255, 255, 0.72);
+    border-color: var(--ensor-accent);
+    box-shadow: 0 2px 14px rgba(226, 168, 41, 0.14);
+}
+
+html:not(.dark) .ensor-btn-outline:hover {
+    background: var(--ensor-accent-soft);
+    border-color: var(--ensor-accent-hover);
+    box-shadow: 0 5px 20px rgba(226, 168, 41, 0.26);
+    transform: translateY(-1px);
+}
+
+html.dark .ensor-btn-outline {
+    color: #e2e4e8;
+    background: rgba(22, 22, 24, 0.65);
+    border-color: var(--ensor-accent-on-dark);
+    box-shadow: 0 2px 16px rgba(245, 200, 76, 0.12);
+}
+
+html.dark .ensor-btn-outline:hover {
+    background: rgba(245, 200, 76, 0.14);
+    border-color: var(--ensor-accent-on-dark);
+    box-shadow: 0 6px 22px rgba(245, 200, 76, 0.22);
+    transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-btn-primary:hover,
+    .ensor-btn-outline:hover {
+        transform: none;
+    }
+}
+
+/* Lista «Mis servicios» (about): filas con ritmo ámbar / neutro oscuro */
+.services > ul > li {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    border-radius: 0.75rem;
+    transition:
+        background-color 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+html:not(.dark) .services > ul > li:nth-child(odd) {
+    background: linear-gradient(
+        105deg,
+        rgba(226, 168, 41, 0.16) 0%,
+        rgba(226, 168, 41, 0.05) 55%,
+        rgba(247, 245, 241, 0) 100%
+    );
+}
+
+html:not(.dark) .services > ul > li:nth-child(even) {
+    background: linear-gradient(
+        105deg,
+        rgba(26, 26, 26, 0.06) 0%,
+        rgba(26, 26, 26, 0.025) 70%,
+        rgba(247, 245, 241, 0) 100%
+    );
+}
+
+html:not(.dark) .services > ul > li:nth-child(odd):hover {
+    box-shadow: 0 10px 32px rgba(226, 168, 41, 0.2);
+}
+
+html:not(.dark) .services > ul > li:nth-child(even):hover {
+    box-shadow: 0 10px 28px rgba(26, 26, 26, 0.1);
+}
+
+html.dark .services > ul > li:nth-child(odd) {
+    background: linear-gradient(
+        105deg,
+        rgba(245, 200, 76, 0.12) 0%,
+        rgba(245, 200, 76, 0.04) 55%,
+        transparent 100%
+    );
+}
+
+html.dark .services > ul > li:nth-child(even) {
+    background: linear-gradient(
+        105deg,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.22) 65%,
+        transparent 100%
+    );
+}
+
+html.dark .services > ul > li:nth-child(odd):hover {
+    box-shadow: 0 12px 36px rgba(245, 200, 76, 0.14);
+}
+
+html.dark .services > ul > li:nth-child(even):hover {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+.services > ul > li:hover svg,
+.services > ul > li:hover .icon i {
+    color: var(--ensor-accent) !important;
+}
+
+html.dark .services > ul > li:hover svg,
+html.dark .services > ul > li:hover .icon i {
+    color: var(--ensor-accent-on-dark) !important;
+}
