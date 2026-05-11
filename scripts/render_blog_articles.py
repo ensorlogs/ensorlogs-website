@@ -1,8 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Genera las 6 páginas de artículo del blog (HTML estático). Ejecutar desde la raíz del repo."""
+"""
+Generador de artículos del blog (HTML estático) — Ensorlogs Web
+==============================================================
+
+¿Qué problema resuelve?
+    Evitar copiar y pegar a mano 6+ páginas casi idénticas (mismo header, nav, footer).
+    Cada artículo comparte la “carcasa” de ``blogs-details.html`` y solo cambia el
+    bloque central (metas, H1, cuerpo, tags, “relacionados”).
+
+¿Cómo funciona a grandes rasgos?
+    1. Se lee ``blogs-details.html`` como un string gigante.
+    2. Se corta en tres trozos: ``head`` (hasta </head>), ``header`` (body hasta main),
+       ``footer`` (desde el comentario de fin de main hasta el final).
+    3. La función ``page()`` ensambla esos trozos + datos del diccionario ``ARTICLES``.
+    4. Se escribe un archivo ``articulo-....html`` por entrada.
+
+Cómo ejecutarlo (siempre desde la RAÍZ del repo, no desde ``scripts/``)::
+
+    python3 scripts/render_blog_articles.py
+
+Advertencia pedagógica / práctica:
+    Si editas un ``articulo-*.html`` a mano y vuelves a correr este script,
+    **perderás** esos cambios. La “fuente de verdad” hoy es este archivo + la plantilla.
+    Para un flujo tipo CMS, el siguiente paso sería Markdown + front matter.
+
+Ver también: ``docs/GUIA-ESTUDIANTES.md`` y ``docs/ARQUITECTURA.md``.
+"""
 from pathlib import Path
 
+# Raíz del repositorio (padre de la carpeta ``scripts/``)
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "blogs-details.html"
 OUT = ROOT
@@ -15,6 +42,7 @@ header = text[body_start : text.index('<div class="main-content mt-28')]
 
 
 def meta_block(title, desc, keywords, canonical_path, og_title=None):
+    """Devuelve el bloque de <meta> + <title> sustituyendo el bloque genérico de la plantilla."""
     og_title = og_title or title
     return f"""    <meta name="keywords"
         content="{keywords}">
@@ -68,6 +96,7 @@ def comments_short():
 
 
 def page(article):
+    """Construye y escribe un HTML completo para un elemento de ``ARTICLES``."""
     mh = head
     i0 = mh.index('<meta name="keywords"')
     i1 = mh.index("<!-- Site Favicon", i0)
@@ -490,6 +519,7 @@ def build_related(current_fn, other):
 
 
 def main():
+    """Itera todos los artículos, genera HTML relacionado y escribe archivos."""
     n = len(ARTICLES)
     for i, art in enumerate(ARTICLES):
         others = [ARTICLES[(i + 1) % n], ARTICLES[(i + 2) % n]]

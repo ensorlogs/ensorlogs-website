@@ -1,10 +1,31 @@
 /**
- * Filtra la rejilla del blog por tema (?tema=slug en la URL, sin recargar al hacer clic).
- * Cada .blog-item debe llevar data-temas="slug1 slug2" (espacios, minúsculas).
+ * =============================================================================
+ * Filtro del blog por tema — ``blog.html?tema=slug`` (SPA ligera)
+ * =============================================================================
  *
- * Slugs: linux, ia, database, wordpress, crm, marketing, python, google, servidores, it, windows, mac (+ automatizacion en entradas antiguas).
+ * Objetivo pedagógico
+ * -------------------
+ * Mostrar cómo se puede **filtrar contenido en el cliente** sin frameworks:
+ * leer la query string, togglear clases CSS y actualizar la barra de URL con
+ * ``history.replaceState`` (sin recargar la página al hacer clic en un filtro).
+ *
+ * Contrato con el HTML
+ * ----------------------
+ * - Contenedor de tarjetas: ``.blog-wrapper``
+ * - Cada tarjeta: ``.blog-item`` con atributo ``data-temas="linux ia"`` (slugs en
+ *   minúsculas separados por espacio).
+ * - Nave de filtros: ``.ensor-blog-temas`` con enlaces ``href="blog.html?tema=..."``
+ *   y un enlace “ver todos” con clase ``ensor-blog-tema--todos``.
+ *
+ * Slugs reconocidos (deben coincidir con los del HTML)
+ * -----------------------------------------------------
+ * linux, ia, database, wordpress, crm, marketing, python, google, servidores,
+ * it, windows, mac (y a veces ``automatizacion`` en entradas antiguas).
+ *
+ * CSS: la clase ``.ensor-blog-item--hidden`` se define en ``ensor-brand.css``.
  */
 (function () {
+    /** Normaliza string: minúsculas y sin espacios extremos. */
     function norm(s) {
         return String(s || '')
             .toLowerCase()
@@ -32,6 +53,7 @@
         return getTemaFromSearch(window.location.search);
     }
 
+    /** Marca la pastilla activa según ``tema`` (vacío = “ver todos”). */
     function markActivePills(tema) {
         var nav = document.querySelector('.ensor-blog-temas');
         if (!nav) {
@@ -54,11 +76,12 @@
                     a.classList.add('ensor-blog-tema--active');
                 }
             } catch (e) {
-                /* ignore */
+                /* href inválido: ignorar */
             }
         });
     }
 
+    /** Oculta tarjetas cuyo ``data-temas`` no contenga el slug seleccionado. */
     function applyFilter(tema) {
         var items = blogItems();
         if (!items.length) {
@@ -83,6 +106,7 @@
         }
     }
 
+    /** Sincroniza la URL visible sin recargar (útil para compartir enlace filtrado). */
     function syncUrl(tema) {
         var next = 'blog.html';
         if (tema) {
@@ -91,10 +115,11 @@
         try {
             history.replaceState({}, '', next);
         } catch (e) {
-            /* ignore */
+            /* entornos file:// u otros: ignorar */
         }
     }
 
+    /** Intercepta clics solo en enlaces que apuntan a ``blog.html?...``. */
     function initNavClicks() {
         var nav = document.querySelector('.ensor-blog-temas');
         if (!nav || !hasFilterableGrid()) {

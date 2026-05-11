@@ -1,11 +1,22 @@
 /*------------------------------------------------------------------
-[Custom Script JS]
+  Ensorlogs Web — script principal (jQuery + plugins de la plantilla)
+  ------------------------------------------------------------------
+  ¿Qué es este archivo?
+    Lógica “de página” heredada del tema: preloader, scroll suave a anclas,
+    menú móvil, cabecera fija, carrusel Swiper (si existe en el DOM), AOS,
+    botón “volver arriba”, tilt en widgets.
 
-Project Name  :     Ensorlogs Web (ensorlogsweb)
-Version       :     1.0.0
-Last Update   :     19 May 2024
-Author	      :	    Themearray
-Support	      :	    themearray@gmail.com
+  Dependencias (deben cargarse ANTES en el HTML, con ``defer`` en orden):
+    jQuery → waypoints / tw-elements / swiper / aos / tilt → este archivo.
+
+  Para estudiantes
+    - Busca ``(function($) {`` al final verás ``})(jQuery);`` → patrón IIFE que recibe
+      jQuery como ``$`` y no ensucia el scope global.
+    - ``AOS.init`` anima elementos con ``data-aos`` cuando entran en viewport.
+    - El preloader fuerza un tiempo mínimo visible: equilibrio UX / performance.
+
+  Project Name  : Ensorlogs Web (ensorlogsweb)
+  Basado en     : plantilla Themearray (portfolio)
 ------------------------------------------------------------------*/
 
 (function($) {
@@ -48,7 +59,7 @@ Support	      :	    themearray@gmail.com
     /* ============================================================ */
     (function preloaderHide() {
         var done = false;
-        /* Tiempo mínimo visible: animación del logo + lectura del mensaje geek */
+        /* Tiempo mínimo visible (ms): da aire a la animación del logo; demasiado alto penaliza LCP */
         var MIN_VISIBLE_MS = 1200;
         var FADE_OUT_MS = 500;
         var t0 =

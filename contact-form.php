@@ -2,8 +2,31 @@
 declare(strict_types=1);
 
 /**
- * Procesa el formulario de contact.html y envía el mensaje a hello@ensorlogs.com
- * Requiere PHP con mail() configurado en el servidor (hosting con envío SMTP/sendmail).
+ * =============================================================================
+ * Formulario de contacto — Ensorlogs (modo enseñanza / producción)
+ * =============================================================================
+ *
+ * Flujo HTTP
+ * -----------
+ * 1. ``contact.html`` envía un POST a este script.
+ * 2. Si el método no es POST, redirigimos a la página del formulario (evita GET directo).
+ * 3. Validamos datos (honeypot, captcha sencillo, email, longitudes, patrones raros).
+ * 4. Si todo va bien, llamamos a ``mail()`` del hosting y mostramos una página HTML
+ *    de resultado (éxito o error). No devolvemos JSON: es a posta, para hosting compartido.
+ *
+ * Seguridad (conceptos que puedes buscar en libros / MDN)
+ * -------------------------------------------------------
+ * - **Honeypot**: campo oculto que los humanos no rellenan; los bots a veces sí.
+ * - **Header injection**: nunca concatenar entrada del usuario en cabeceras de correo
+ *   sin quitar saltos de línea (``\\r``, ``\\n``). Por eso ``ensor_strip_crlf()``.
+ * - **XSS en la salida**: todo lo que mostramos en HTML pasa por ``htmlspecialchars()``.
+ * - **Cabeceras HTTP** (``ensor_security_headers``): endurecen al navegador (nosniff, etc.).
+ *
+ * Requisitos en el servidor
+ * -------------------------
+ * PHP con ``mail()`` funcional o canal SMTP según SiteGround / tu proveedor.
+ *
+ * Ver también: ``README.md``, ``docs/ARQUITECTURA.md``.
  */
 
 function ensor_security_headers(): void
@@ -15,16 +38,19 @@ function ensor_security_headers(): void
     header('Referrer-Policy: strict-origin-when-cross-origin');
 }
 
+/** Quita caracteres que podrían inyectar cabeceras SMTP adicionales si se copian tal cual. */
 function ensor_strip_crlf(string $s): string
 {
     return str_replace(["\r", "\n", "\0"], '', $s);
 }
 
+/** Longitud de string UTF-8 segura aunque ``mbstring`` no esté instalada (fallback a ``strlen``). */
 function ensor_len(string $s): int
 {
     return function_exists('mb_strlen') ? mb_strlen($s, 'UTF-8') : strlen($s);
 }
 
+/** Comprobación heurística heredada de la plantilla: tab/saltos codificados en URL. */
 function isInjected(string $str): bool
 {
     $injections = ['(\n+)', '(\r+)', '(\t+)', '(%0A+)', '(%0D+)', '(%08+)', '(%09+)'];

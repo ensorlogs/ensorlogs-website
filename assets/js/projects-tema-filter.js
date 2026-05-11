@@ -1,6 +1,20 @@
 /**
- * Filtra la rejilla de proyectos por stack (?tema=slug, sin recargar al hacer clic).
- * Cada .project-item debe llevar data-temas="slug1 slug2" (mismos slugs que el blog).
+ * =============================================================================
+ * Filtro de proyectos por stack — ``projects.html?tema=slug``
+ * =============================================================================
+ *
+ * Es el **mismo patrón** que ``blog-tema-filter.js``, pero:
+ *   - Lee/escribe ``projects.html`` en la URL.
+ *   - Usa el nav ``.ensor-proyectos-temas`` y tarjetas ``.projects-wrapper .project-item``.
+ *
+ * Así puedes comparar dos archivos casi paralelos y ver qué habría que
+ * parametrizar si quisieras una sola función reutilizable (refactor típico
+ * cuando crece un proyecto).
+ *
+ * Contrato HTML
+ * --------------
+ * Cada ``.project-item`` debe tener ``data-temas="wordpress crm it"`` con los
+ * mismos slugs que en el blog para que los filtros sean coherentes en todo el sitio.
  */
 (function () {
     function norm(s) {

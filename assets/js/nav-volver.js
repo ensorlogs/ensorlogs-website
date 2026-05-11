@@ -1,6 +1,24 @@
 /**
- * Oculta el enlace "Volver" (a inicio) en la portada; visible en el resto de páginas.
- * Marca aria-hidden cuando está oculto.
+ * =============================================================================
+ * Navegación: ocultar “Volver” en la portada (Ensorlogs)
+ * =============================================================================
+ *
+ * Problema de UX
+ * ---------------
+ * En ``index.html`` el enlace “Volver” no tiene sentido (ya estás en inicio).
+ * En el resto de páginas sí: vuelves al home.
+ *
+ * Implementación
+ * ---------------
+ * Detectamos si la URL actual es la raíz o ``index.html`` (también con ``file://``
+ * para quien abre el HTML en local). Si es portada, añadimos ``.hidden`` y
+ * ``aria-hidden`` a todos los ``a.ensor-nav-volver``.
+ *
+ * CSS relacionado: ``ensor-brand.css`` fuerza ``display: none`` en ese enlace
+ * cuando lleva ``.hidden`` (el menú móvil usa flex y anula utilidades Tailwind).
+ *
+ * Patrón de código: IIFE (función anónima ejecutada al cargar el script) para no
+ * declarar variables globales.
  */
 (function () {
     function isHomePage() {

@@ -1,6 +1,25 @@
 /**
- * ENSOR.LOGS — marca (acento oro / amarillo + verde apoyo + fondos neutros cálidos)
- * Carga después de style.min.css
+ * =============================================================================
+ * ENSOR.LOGS — capa de marca y ajustes sobre la plantilla base
+ * =============================================================================
+ *
+ * Orden de carga en el HTML
+ * -------------------------
+ *   1. ``fontAwesome5Pro.css`` (iconos)
+ *   2. ``style.min.css``       (Tailwind + estilos del tema comprados / compilados)
+ *   3. ``ensor-brand.css``     (este archivo) ← aquí solo ponemos lo que **diferencia**
+ *      a Ensorlogs: variables ``--ensor-*``, botones, preloader, filtros del blog, etc.
+ *
+ * Cómo leer este archivo con intención pedagógica
+ * -----------------------------------------------
+ *   - Empieza por ``:root``: son **tokens de diseño** (color acento, fondos, sombras).
+ *   - Busca comentarios ``/* ----------``: marcan bloques grandes (preloader, servicios, …).
+ *   - Si cambias un valor, recarga con **hard refresh** (Ctrl+F5) para saltar caché del CDN local.
+ *
+ * Relación con JavaScript
+ * -----------------------
+ *   Algunas reglas existen solo porque un script añade una clase (ej. ``nav-volver.js``
+ *   pone ``.hidden`` en el enlace “Volver” en la portada).
  */
 :root {
     --ensor-accent: #d9a300;

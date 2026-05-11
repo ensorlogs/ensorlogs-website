@@ -1,3 +1,20 @@
+# =============================================================================
+# .htaccess — qué es y cómo leer este archivo (modo enseñanza)
+# =============================================================================
+#
+# Apache busca ".htaccess" en cada carpeta y aplica reglas **solo a esa rama**
+# del sitio (a diferencia de httpd.conf, que es global del servidor).
+#
+# Convención en este proyecto:
+#   1) Cabeceras HTTP de seguridad (mod_headers).
+#   2) Opciones de carpeta (Options -Indexes).
+#   3) Redirección HTTPS en producción (mod_rewrite).
+#   4) Compresión gzip/deflate (mod_deflate).
+#   5) Caché del navegador con Expires (mod_expires).
+#
+# Los bloques <IfModule nombre.c> ... </IfModule> evitan errores 500 si el
+# hosting no carga ese módulo: Apache simplemente **omite** el bloque.
+#
 # Ensorlogs Web — rendimiento y seguridad (Apache / SiteGround)
 # Si algo no aplica en tu plan, Apache ignora bloques <IfModule> vacíos.
 
