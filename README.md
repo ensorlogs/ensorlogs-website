@@ -22,9 +22,3 @@ python3 scripts/render_blog_articles.py
 ```
 
 Eso vuelve a escribir los HTML en `articulos/`. Si tocas esos archivos a mano y luego corres el script, se pisan.
-
-## Subir a hosting
-
-Sube el contenido de la raíz (incluido `.htaccess` en la carpeta pública del dominio). El formulario necesita PHP. En `ensorlogs.com` el `.htaccess` fuerza HTTPS y redirige URLs viejas de artículos/proyectos en la raíz hacia `articulos/` y `proyectos/`.
-
-La base visual partió de una plantilla tipo portfolio; el resto (marca, textos, blog, scripts) es propio del proyecto.
