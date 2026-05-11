@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 [Custom Script JS]
 
-Project Name  :     BentoMan - Personal portfolio resume template
+Project Name  :     Ensorlogs Web (ensorlogsweb)
 Version       :     1.0.0
 Last Update   :     19 May 2024
 Author	      :	    Themearray
