@@ -2,12 +2,10 @@
 
 ## `render_blog_articles.py`
 
-Lee `blogs-details.html` y la lista `ARTICLES` en el mismo script; escribe los HTML en `articulos/`.
-
-Desde la raíz del repo:
+Lee `blogs-details.html` y los `.md` de `content/articulos/` (front matter YAML + cuerpo Markdown/HTML); escribe `articulos/*.html`.
 
 ```bash
-python3 scripts/render_blog_articles.py
+.venv/bin/python scripts/render_blog_articles.py
 ```
 
-Detalle: [`../docs/ARQUITECTURA.md`](../docs/ARQUITECTURA.md).
+Campos del front matter: [`../content/articulos/README.md`](../content/articulos/README.md).

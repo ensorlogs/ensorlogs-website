@@ -22,7 +22,7 @@ Carpetas, flujos (blog, contacto, generador de artículos) y qué depende de qu�
 └──────────────────┘     └─────────────────────────────┘
 
 [Desarrollador] ──▶ python3 scripts/render_blog_articles.py ──▶ articulos/*.html
-                      (lee blogs-details.html + datos)
+                      (lee blogs-details.html + content/articulos/*.md)
 ```
 
 ---
@@ -32,7 +32,8 @@ Carpetas, flujos (blog, contacto, generador de artículos) y qué depende de qu�
 | Ruta | Contenido |
 |------|-----------|
 | `/` | Páginas `.html` de sección (index, blog, projects…), `.htaccess`, `README.md`. |
-| `articulos/` | Artículos largos del blog (`articulo-*.html`), generados por Python. |
+| `content/articulos/` | Fuente Markdown (`.md`) de cada artículo. |
+| `articulos/` | HTML generado (`articulo-*.html`) a partir de los `.md`. |
 | `proyectos/` | Fichas de detalle de cada caso (`proyecto-*.html`). |
 | `assets/css/` | Hojas de estilo; `ensor-brand.css` es la capa de marca. |
 | `assets/js/` | Scripts del front; filtros y utilidades Ensor. |
@@ -87,4 +88,4 @@ Si cambias de dominio, revisa las reglas `RewriteCond` del host.
 
 - Nuevas páginas: copia el `<head>` de `index.html`, ajusta `<title>` y canonical, enlaza CSS/JS en el mismo orden.
 - Nuevo filtro: copia `blog-tema-filter.js`, cambia selectores y nombre del parámetro URL, añade CSS de ocultación si usas otra clase.
-- Nuevo artículo generado: añade entrada en `ARTICLES` dentro de `render_blog_articles.py` y ejecuta el script (salida en `articulos/`).
+- Nuevo artículo: copia un `.md` en `content/articulos/`, ajusta front matter y `order`, ejecuta el script.

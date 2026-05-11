@@ -64,13 +64,13 @@ En la salida HTML del PHP conviene escapar textos que vienen del usuario (`htmls
 
 ## 5. Python: plantilla + datos → HTML
 
-**Archivos:** `scripts/render_blog_articles.py`, plantilla `blogs-details.html`.
+**Archivos:** `content/articulos/*.md`, `scripts/render_blog_articles.py`, plantilla `blogs-details.html`.
 
 **Ideas de programación que aparecen:**
 
 - Leer un archivo grande como **texto** y cortar por “marcadores” (`index`, slicing).
 - **f-strings** con HTML embebido (rápido de leer; en proyectos grandes a veces se prefiere un motor de plantillas).
-- Una **lista de diccionarios** (`articles`) donde cada dict describe un artículo.
+- **YAML** en cabecera de cada `.md` y cuerpo en **Markdown** (el script usa la librería `markdown`).
 
 Tras ejecutar el script, abre un `articulos/articulo-*.html` generado y compáralo con `blogs-details.html`.
 
