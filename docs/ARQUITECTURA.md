@@ -11,7 +11,7 @@ Vista **técnica** del repositorio: carpetas, flujos de datos y dependencias ent
      │
      ▼
 ┌─────────────────────────────────────────────────────────┐
-│  HTML estático (index, blog, projects, articulo-*, …)   │
+│  HTML estático (index, blog, projects, articulos/, proyectos/) │
 │  + CSS (style.min + ensor-brand + fonts)               │
 │  + JS (jQuery + AOS + script.js + filtros + tema)     │
 └─────────────────────────────────────────────────────────┘
@@ -21,7 +21,7 @@ Vista **técnica** del repositorio: carpetas, flujos de datos y dependencias ent
 │ contact-form.php │────▶│ mail() / SMTP del hosting   │
 └──────────────────┘     └─────────────────────────────┘
 
-[Desarrollador] ──▶ python3 scripts/render_blog_articles.py ──▶ articulo-*.html
+[Desarrollador] ──▶ python3 scripts/render_blog_articles.py ──▶ articulos/*.html
                       (lee blogs-details.html + datos)
 ```
 
@@ -31,7 +31,9 @@ Vista **técnica** del repositorio: carpetas, flujos de datos y dependencias ent
 
 | Ruta | Contenido |
 |------|-----------|
-| `/` | Páginas `.html` públicas, `.htaccess`, `README.md`. |
+| `/` | Páginas `.html` de sección (index, blog, projects…), `.htaccess`, `README.md`. |
+| `articulos/` | Artículos largos del blog (`articulo-*.html`), generados por Python. |
+| `proyectos/` | Fichas de detalle de cada caso (`proyecto-*.html`). |
 | `assets/css/` | Hojas de estilo; `ensor-brand.css` es la capa de marca. |
 | `assets/js/` | Scripts del front; filtros y utilidades Ensor. |
 | `assets/img/` | Imágenes y logos. |
@@ -75,6 +77,7 @@ Solo aplica en servidores **Apache** con `AllowOverride` adecuado (típico en Si
 - Cabeceras de seguridad (`X-Frame-Options`, `Referrer-Policy`, etc.).
 - Compresión y caché de estáticos.
 - Redirección HTTP→HTTPS condicionada al host `ensorlogs.com`.
+- **301** de URLs antiguas en la raíz (`/articulo-….html`, `/proyecto-….html`) hacia `articulos/` y `proyectos/` (enlaces externos y buscadores conservan autoridad).
 
 Si cambias de dominio, revisa las reglas `RewriteCond` del host.
 
@@ -84,4 +87,4 @@ Si cambias de dominio, revisa las reglas `RewriteCond` del host.
 
 - Nuevas páginas: copia el `<head>` de `index.html`, ajusta `<title>` y canonical, enlaza CSS/JS en el mismo orden.
 - Nuevo filtro: copia `blog-tema-filter.js`, cambia selectores y nombre del parámetro URL, añade CSS de ocultación si usas otra clase.
-- Nuevo artículo generado: añade entrada en `ARTICLES` dentro de `render_blog_articles.py` y ejecuta el script.
+- Nuevo artículo generado: añade entrada en `ARTICLES` dentro de `render_blog_articles.py` y ejecuta el script (salida en `articulos/`).

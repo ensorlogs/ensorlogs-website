@@ -15,7 +15,8 @@ Sitio web **estático** de **Ensorlogs** (portfolio, blog, proyectos y contacto)
 | Modo oscuro con `localStorage` + `class` en `<html>` | Cabecera de cada `.html` + `assets/js/theme-mode.js` |
 | Formulario → servidor → respuesta HTML | `contact.html` + `contact-form.php` |
 | Marca y tokens CSS (`:root`, variables) | `assets/css/ensor-brand.css` |
-| Generar muchas páginas desde una plantilla | `scripts/render_blog_articles.py` + `blogs-details.html` |
+| Generar muchas páginas desde una plantilla | `scripts/render_blog_articles.py` → `articulos/*.html` (plantilla `blogs-details.html`) |
+| Casos de proyecto (detalle) | `proyectos/proyecto-*.html` |
 
 Guía paso a paso para estudiantes: **[`docs/GUIA-ESTUDIANTES.md`](docs/GUIA-ESTUDIANTES.md)**.  
 Mapa técnico un poco más denso: **[`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md)**.
@@ -46,16 +47,18 @@ No hace falta Node ni bundler para **ver** el sitio: los CSS ya están compilado
 
 ---
 
-## Blog: generar las páginas de artículo (`articulo-*.html`)
+## Blog: generar las páginas de artículo (`articulos/articulo-*.html`)
 
-Los artículos largos se generan desde **`blogs-details.html`** (plantilla) y datos en **`scripts/render_blog_articles.py`**.
+Los artículos largos se escriben en la carpeta **`articulos/`** desde **`blogs-details.html`** (plantilla) y datos en **`scripts/render_blog_articles.py`**.
 
 ```bash
 cd /ruta/al/repo
 python3 scripts/render_blog_articles.py
 ```
 
-**Importante:** si editas a mano un `articulo-*.html` y luego vuelves a ejecutar el script, **se sobrescribirá** ese archivo. Para flujo “fuente única”, edita el script o evita regenerar hasta migrar a Markdown (ver `docs/ARQUITECTURA.md`).
+**Importante:** si editas a mano un archivo en `articulos/` y luego vuelves a ejecutar el script, **se sobrescribirá**. Para flujo “fuente única”, edita el script o evita regenerar hasta migrar a Markdown (ver `docs/ARQUITECTURA.md`).
+
+En producción, las URLs antiguas `/articulo-….html` y `/proyecto-….html` en la raíz redirigen con **301** a `/articulos/…` y `/proyectos/…` (ver `.htaccess`).
 
 ---
 

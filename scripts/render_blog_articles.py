@@ -14,14 +14,15 @@ Generador de artículos del blog (HTML estático) — Ensorlogs Web
     2. Se corta en tres trozos: ``head`` (hasta </head>), ``header`` (body hasta main),
        ``footer`` (desde el comentario de fin de main hasta el final).
     3. La función ``page()`` ensambla esos trozos + datos del diccionario ``ARTICLES``.
-    4. Se escribe un archivo ``articulo-....html`` por entrada.
+    4. Se escribe un archivo en ``articulos/articulo-....html`` por entrada (rutas
+       relativas se ajustan con ``..`` para seguir cargando ``assets/`` desde la raíz).
 
 Cómo ejecutarlo (siempre desde la RAÍZ del repo, no desde ``scripts/``)::
 
     python3 scripts/render_blog_articles.py
 
 Advertencia pedagógica / práctica:
-    Si editas un ``articulo-*.html`` a mano y vuelves a correr este script,
+    Si editas un ``articulos/articulo-*.html`` a mano y vuelves a correr este script,
     **perderás** esos cambios. La “fuente de verdad” hoy es este archivo + la plantilla.
     Para un flujo tipo CMS, el siguiente paso sería Markdown + front matter.
 
@@ -32,13 +33,34 @@ from pathlib import Path
 # Raíz del repositorio (padre de la carpeta ``scripts/``)
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "blogs-details.html"
-OUT = ROOT
+# Salida: carpeta dedicada (URLs públicas /articulos/…)
+OUT = ROOT / "articulos"
 
 text = SRC.read_text(encoding="utf-8")
 body_start = text.index("<body")
 head = text[: text.index("</head>") + len("</head>")]
 footer = text[text.index("<!--~~./ end Main Content") :]
 header = text[body_start : text.index('<div class="main-content mt-28')]
+
+
+def apply_rebase_for_articulos(html: str) -> str:
+    """Ajusta rutas relativas: el HTML vive en ``articulos/``, la raíz del sitio es un nivel arriba."""
+    pairs = (
+        ('href="assets/', 'href="../assets/'),
+        ('src="assets/', 'src="../assets/'),
+        ('href="index.html', 'href="../index.html'),
+        ('href="blog.html', 'href="../blog.html'),
+        ('href="blog-2.html', 'href="../blog-2.html'),
+        ('href="projects.html', 'href="../projects.html'),
+        ('href="contact.html', 'href="../contact.html'),
+        ('href="about.html', 'href="../about.html'),
+        ('href="services.html', 'href="../services.html'),
+        ('href="credentials.html', 'href="../credentials.html'),
+        ('href="blogs-details.html', 'href="../blogs-details.html'),
+    )
+    for old, new in pairs:
+        html = html.replace(old, new)
+    return html
 
 
 def meta_block(title, desc, keywords, canonical_path, og_title=None):
@@ -162,6 +184,8 @@ def page(article):
     </div>
 """
     out = mh + "\n" + header + body + footer
+    out = apply_rebase_for_articulos(out)
+    OUT.mkdir(parents=True, exist_ok=True)
     (OUT / article["filename"]).write_text(out, encoding="utf-8")
 
 
@@ -185,7 +209,7 @@ ARTICLES = [
             "title": "Linux en Caracas 2026: terminal, WSL e IA para estudiantes IT",
             "desc": "Guía práctica para estudiar Linux desde Venezuela en 2026: WSL, flujo de terminal, productividad con IA y qué priorizar si buscas trabajo remoto o enseñar IT en Caracas.",
             "keywords": "Linux Caracas, estudiar Linux Venezuela 2026, WSL, terminal bash, IT Caracas, trabajo remoto Venezuela, cursores IA desarrollo",
-            "canonical_path": "articulo-linux-terminal-ia-caracas-2026.html",
+            "canonical_path": "articulos/articulo-linux-terminal-ia-caracas-2026.html",
         },
         "hero": {
             "src": "https://images.unsplash.com/photo-1629654298833-01dc4cda8337?auto=format&fit=crop&w=1600&q=82",
@@ -241,7 +265,7 @@ ARTICLES = [
             "title": "WordPress 2026 Caracas: bloques, seguridad y enseñanza práctica",
             "desc": "Reflexión técnica y pedagógica sobre WordPress en 2026: editor de bloques, seguridad básica, rendimiento y cómo acercarlo a estudiantes y pymes en Caracas.",
             "keywords": "WordPress Caracas, Gutenberg 2026, seguridad WordPress Venezuela, enseñanza WordPress, sitios web Venezuela, SEO Caracas",
-            "canonical_path": "articulo-wordpress-bloques-seguridad-caracas-2026.html",
+            "canonical_path": "articulos/articulo-wordpress-bloques-seguridad-caracas-2026.html",
         },
         "hero": {
             "src": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=82",
@@ -293,7 +317,7 @@ ARTICLES = [
             "title": "Python e IA 2026 Venezuela: guía de estudio y trabajo remoto",
             "desc": "Cómo estudiar Python en 2026 con herramientas de IA sin perder fundamentos: rutas de aprendizaje, proyectos portafolio y perspectiva desde Caracas y Venezuela.",
             "keywords": "Python Venezuela 2026, estudiar Python Caracas, IA para programadores, trabajo remoto Python, portafolio desarrollador Venezuela",
-            "canonical_path": "articulo-python-ia-estudio-trabajo-2026-venezuela.html",
+            "canonical_path": "articulos/articulo-python-ia-estudio-trabajo-2026-venezuela.html",
         },
         "hero": {
             "src": "https://images.unsplash.com/photo-1526379095098-d400fd11bf52?auto=format&fit=crop&w=1600&q=82",
@@ -345,7 +369,7 @@ ARTICLES = [
             "title": "CRM y trabajo remoto Caracas 2026: pipelines y confianza",
             "desc": "Artículo largo sobre CRM aplicado a búsqueda de trabajo remoto desde Venezuela: organización de leads, seguimiento, pruebas técnicas y comunicación con clientes internacionales.",
             "keywords": "CRM Caracas, trabajo remoto Venezuela, ventas digitales, pipeline leads, freelance Caracas, operaciones comerciales",
-            "canonical_path": "articulo-crm-trabajo-remoto-caracas-2026.html",
+            "canonical_path": "articulos/articulo-crm-trabajo-remoto-caracas-2026.html",
         },
         "hero": {
             "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=82",
@@ -397,7 +421,7 @@ ARTICLES = [
             "title": "SQL y bases de datos 2026: estudiante y trabajo real Venezuela",
             "desc": "Guía extensa sobre aprendizaje de SQL y bases de datos en 2026: diferencias entre teoría académica, proyectos personales y desafíos reales en servidores y aplicaciones.",
             "keywords": "SQL Venezuela, bases de datos Caracas, PostgreSQL, estudiante IT, performance consultas, trabajo remoto database",
-            "canonical_path": "articulo-sql-bases-datos-estudiante-trabajo-2026.html",
+            "canonical_path": "articulos/articulo-sql-bases-datos-estudiante-trabajo-2026.html",
         },
         "hero": {
             "src": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=1600&q=82",
@@ -449,7 +473,7 @@ ARTICLES = [
             "title": "WordPress optimización y caché 2026 Caracas Venezuela",
             "desc": "Segundo artículo WordPress: rendimiento web, plugins de caché, hosting y buenas prácticas para sitios en Venezuela con foco SEO local Caracas.",
             "keywords": "WordPress rápido Venezuela, caché WordPress, optimización web Caracas, Core Web Vitals, plugins WordPress rendimiento",
-            "canonical_path": "articulo-wordpress-optimizacion-cache-caracas-2026.html",
+            "canonical_path": "articulos/articulo-wordpress-optimizacion-cache-caracas-2026.html",
         },
         "hero": {
             "src": "https://images.unsplash.com/photo-1504639725590-cec6a9de3e12?auto=format&fit=crop&w=1600&q=82",

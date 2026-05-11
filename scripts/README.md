@@ -2,7 +2,7 @@
 
 ## `render_blog_articles.py`
 
-Genera las páginas **`articulo-*.html`** a partir de:
+Genera las páginas **`articulos/articulo-*.html`** a partir de:
 
 - **`blogs-details.html`**: plantilla HTML compartida (cabecera, nav, footer).
 - **Lista `ARTICLES`** dentro del propio script: metadatos, cuerpo HTML del post y tarjetas “relacionadas”.

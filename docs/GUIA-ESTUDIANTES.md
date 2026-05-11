@@ -72,7 +72,7 @@ La plantilla original usa **jQuery** (`assets/js/script.js`). Es código imperat
 - **f-strings** con HTML embebido (rápido de leer; en proyectos grandes a veces se prefiere un motor de plantillas).
 - Una **lista de diccionarios** (`articles`) donde cada dict describe un artículo.
 
-Tras ejecutar el script, abre un `articulo-*.html` generado y compáralo con `blogs-details.html`.
+Tras ejecutar el script, abre un `articulos/articulo-*.html` generado y compáralo con `blogs-details.html`.
 
 ---
 
@@ -86,7 +86,7 @@ En local, si usas `python3 -m http.server`, **`.htaccess` no se aplica** (no es 
 
 ## 7. Siguiente nivel (cuando domines lo anterior)
 
-- Añadir **tests** (p. ej. validar que cada `articulo-*.html` tiene un `<h1>`).
+- Añadir **tests** (p. ej. validar que cada `articulos/articulo-*.html` tiene un `<h1>`).
 - Mover contenidos del blog a **Markdown** + un generador (menos HTML repetido en Python).
 - **CSP** (Content-Security-Policy) con nonces para scripts inline (requiere build o servidor que inyecte nonces).
 

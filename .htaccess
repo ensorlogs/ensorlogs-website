@@ -30,9 +30,15 @@
 # Sin listado de directorios
 Options -Indexes
 
-# HTTPS solo en dominio de producción (no afecta localhost / preview local)
+# HTTPS + redirecciones de URLs antiguas (misma regla mod_rewrite)
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # Enlaces antiguos en la raíz → carpetas (301 + HTTPS en un solo salto)
+    RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
+    RewriteRule ^articulo-(.+\.html)$ https://%{HTTP_HOST}/articulos/articulo-$1 [R=301,L]
+    RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
+    RewriteRule ^proyecto-(.+\.html)$ https://%{HTTP_HOST}/proyectos/proyecto-$1 [R=301,L]
+    # HTTPS solo en dominio de producción (no afecta localhost / preview local)
     RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
     RewriteCond %{HTTPS} !=on
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
