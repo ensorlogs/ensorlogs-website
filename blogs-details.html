@@ -5,6 +5,7 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
+    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
@@ -53,16 +54,18 @@
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Preloader
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-    <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex items-center justify-center bg-seashell dark:bg-darkGray">
-        <h2 class="load-text z-20 text-xl font-light tracking-[15px] uppercase">
-            <span class="![animation-delay:_0s]">L</span>
-            <span class="![animation-delay:_0.1s]">o</span>
-            <span class="![animation-delay:_0.2s]">a</span>
-            <span class="![animation-delay:_0.3s]">d</span>
-            <span class="![animation-delay:_0.4s]">i</span>
-            <span class="![animation-delay:_0.5s]">n</span>
-            <span class="![animation-delay:_0.6s]">g</span>
-        </h2>
+    <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex flex-col items-center justify-center bg-white dark:bg-powerBlack" role="status" aria-live="polite" aria-busy="true">
+        <div class="ensor-preloader-inner flex flex-col items-center gap-7 px-6">
+            <div class="ensor-preloader-logo">
+                <div class="ensor-preloader-logo-zoom" aria-hidden="true">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
+                    <div class="ensor-preloader-fill">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                    </div>
+                </div>
+            </div>
+            <p class="ensor-preloader-loading text-center text-[11px] font-semibold text-powerBlack md:text-xs dark:text-pastelGrey"></p>
+        </div>
     </div>
     <!--~~./ end Preloader ~~-->
 
@@ -74,30 +77,36 @@
     <header class="my-4 lg:my-6 fixed top-0 w-full left-0 z-50 transition-all duration-300 [&.is-sticky]:mt-0">
         <div class="container">
             <div class="nav max-md:py-3 py-5 px-4 lg:px-6 xl:px-8 flex items-center justify-between bg-white dark:bg-[#1B1C1C] rounded-xl shadow-lg shadow-black/5">
-                <a href="index.html" class="inline-flex items-center gap-2.5">
-                    <span class="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0">
-                        <img src="assets/img/Ensor CV Test.jpg" alt="Ensor Logs" class="w-full h-full object-cover">
+                <a href="index.html" class="inline-flex items-center gap-3 min-w-0">
+                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 grid place-content-center p-1.5">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                     </span>
-                    <span class="text-lg md:text-xl font-extrabold tracking-tight text-powerBlack dark:text-white leading-none">
-                        ENSOR<span class="text-[#E2A829]">.LOGS</span>
+                    <span class="flex flex-col justify-center min-w-0 leading-none">
+                        <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
+                            ENSOR.<span class="ensor-logo-accent">LOGS</span>
+                        </span>
+                        <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
+                            Bitácora de un geek
+                        </span>
+                        <span class="ensor-tagline-rule mt-1.5 h-0.5 max-w-[12rem] rounded-full" aria-hidden="true"></span>
                     </span>
                 </a>
                 <div class="main-menu *:transition-all *:text-darkGray *:inline-flex *:items-center dark:*:text-pastelGrey *:border *:border-transparent *:duration-300 *:px-6 *:py-2 *:leading-normal *:rounded-4xl *:font-semibold max-lg:hidden">
 
-                    <a href="index.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Home
-                    </a>
-                    <a href="about.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        About
-                    </a>
-                    <a href="projects.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Projects
+                    <a href="index.html" class="ensor-nav-volver dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Volver
                     </a>
                     <a href="blog.html" class="active dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Blog
+                        Hablemos de…
                     </a>
-                    <a href="contact.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Contact
+                    <a href="about.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Sobre mi
+                    </a>
+                    <a href="projects.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Proyectos
+                    </a>
+                    <a href="services.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        ¿Cómo puedo ayudarte?
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
@@ -110,8 +119,8 @@
                             <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <a href="contact.html" class="text-darkGray dark:text-pastelGrey font-semibold py-2.5 px-8 max-md:hidden leading-1.75 rounded-3xl">
-                        Hablemos
+                    <a href="contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
+                        <span>Hablemos</span>
                     </a>
                     <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
                         <i class="fal fa-bars"></i>
@@ -123,12 +132,18 @@
     <!-- Mobile Menu Start -->
     <div class="mobile_menu fixed transition-all duration-300 top-0 -left-96 h-full bg-white dark:bg-powerBlack z-999 p-6 w-80 shadow-lg [&.is-menu-open]:left-0 flex flex-col lg:hidden">
         <div class="relative">
-            <a href="index.html" class="inline-flex items-center gap-2.5">
-                <span class="w-9 h-9 rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0">
-                    <img src="assets/img/Ensor CV Test.jpg" alt="Ensor Logs" class="w-full h-full object-cover">
+            <a href="index.html" class="inline-flex items-center gap-2.5 pr-10">
+                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 grid place-content-center p-1.5">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                 </span>
-                <span class="text-lg font-extrabold tracking-tight text-powerBlack dark:text-white leading-none">
-                    ENSOR<span class="text-[#E2A829]">.LOGS</span>
+                <span class="flex flex-col justify-center min-w-0 leading-none">
+                    <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">
+                        ENSOR.<span class="ensor-logo-accent">LOGS</span>
+                    </span>
+                    <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
+                        Bitácora de un geek
+                    </span>
+                    <span class="ensor-tagline-rule mt-1 h-0.5 max-w-[10rem] rounded-full" aria-hidden="true"></span>
                 </span>
             </a>
             <button class="close_menu absolute right-0 top-0 w-8 h-8 bg-powerBlack dark:bg-pastelGrey text-white dark:text-black flex items-center justify-center text-sm rounded-sm">
@@ -136,32 +151,29 @@
             </button>
         </div>
         <div class="my-12 h-calc(100vh_-_16rem) overflow-y-scroll space-y-2 *:text-powerBlack *:bg-slate-50 dark:*:bg-metalBlack dark:*:text-white *:flex *:items-center *:justify-between *:py-2.5 *:px-4 *:rounded-md *:text-regular">
-            <a href="index.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Home
-            </a>
-            <a href="about.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                About
-            </a>
-            <a href="projects.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Projects
-            </a>
-            <a href="services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Services
+            <a href="index.html" class="ensor-nav-volver [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Volver
             </a>
             <a href="blog.html" class="active [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Blog
+                Hablemos de…
             </a>
-            <a href="contact.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Contact
+            <a href="about.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Sobre mi
+            </a>
+            <a href="projects.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Proyectos
+            </a>
+            <a href="services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                ¿Cómo puedo ayudarte?
             </a>
         </div>
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
                 <p  class="font-medium">
-                    Have an idea?
+                    Tienes una propuesta?
                 </p>
-                <a href="#" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
-                    Let's Talk
+                <a href="contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
+                    Contactar
                 </a>
             </div>
         </div>
@@ -635,6 +647,7 @@
     <script src="assets/js/aos.js"></script>
     <script src="assets/js/tilt.jquery.min.js"></script>
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/nav-volver.js"></script>
     <script src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
 </body>

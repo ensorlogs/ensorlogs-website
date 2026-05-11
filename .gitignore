@@ -1,2 +1,6 @@
 .DS_Store
 .venv/
+.venv-img/
+__pycache__/
+*.py[cod]
+.python-version

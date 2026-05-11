@@ -5,6 +5,7 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
+    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
@@ -38,7 +39,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
-    <link rel="preload" as="image" href="assets/img/Logo-EnsorLogs.png">
+    <link rel="preload" as="image" href="assets/img/Logos/ensorlogs2.png">
 
     <!-- All CSS Here
     ================================================== -->
@@ -57,12 +58,14 @@
     <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex flex-col items-center justify-center bg-white dark:bg-powerBlack" role="status" aria-live="polite" aria-busy="true">
         <div class="ensor-preloader-inner flex flex-col items-center gap-7 px-6">
             <div class="ensor-preloader-logo">
-                <img src="assets/img/Logo-EnsorLogs.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
-                <div class="ensor-preloader-fill">
-                    <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                <div class="ensor-preloader-logo-zoom" aria-hidden="true">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
+                    <div class="ensor-preloader-fill">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                    </div>
                 </div>
             </div>
-            <p class="ensor-preloader-loading text-center text-[11px] font-semibold uppercase text-powerBlack md:text-xs dark:text-pastelGrey">Loading</p>
+            <p class="ensor-preloader-loading text-center text-[11px] font-semibold text-powerBlack md:text-xs dark:text-pastelGrey"></p>
         </div>
     </div>
     <!--~~./ end Preloader ~~-->
@@ -76,8 +79,8 @@
         <div class="container">
             <div class="nav max-md:py-3 py-5 px-4 lg:px-6 xl:px-8 flex items-center justify-between bg-white dark:bg-[#1B1C1C] rounded-xl shadow-lg shadow-black/5">
                 <a href="index.html" class="inline-flex items-center gap-3 min-w-0">
-                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 bg-white grid place-content-center p-1.5">
-                        <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full object-contain">
+                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 grid place-content-center p-1.5">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                     </span>
                     <span class="flex flex-col justify-center min-w-0 leading-none">
                         <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
@@ -91,8 +94,11 @@
                 </a>
                 <div class="main-menu *:transition-all *:text-darkGray *:inline-flex *:items-center dark:*:text-pastelGrey *:border *:border-transparent *:duration-300 *:px-6 *:py-2 *:leading-normal *:rounded-4xl *:font-semibold max-lg:hidden">
 
-                    <a href="index.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Inicio
+                    <a href="index.html" class="ensor-nav-volver dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Volver
+                    </a>
+                    <a href="blog.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Hablemos de…
                     </a>
                     <a href="about.html" class="active dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
                         Sobre mi
@@ -101,10 +107,7 @@
                         Proyectos
                     </a>
                     <a href="services.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Servicios
-                    </a>
-                    <a href="blog.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white hover:text-smokeGray dark:hover:text-white">
-                        Logs
+                        ¿Cómo puedo ayudarte?
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
@@ -117,8 +120,8 @@
                             <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <a href="contact.html" class="text-darkGray dark:text-pastelGrey font-semibold py-2.5 px-8 max-md:hidden leading-1.75 rounded-3xl">
-                        Hablemos
+                    <a href="contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
+                        <span>Hablemos</span>
                     </a>
                     <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
                         <i class="fal fa-bars"></i>
@@ -131,8 +134,8 @@
     <div class="mobile_menu fixed transition-all duration-300 top-0 -left-96 h-full bg-white dark:bg-powerBlack z-999 p-6 w-80 shadow-lg [&.is-menu-open]:left-0 flex flex-col lg:hidden">
         <div class="relative">
             <a href="index.html" class="inline-flex items-center gap-2.5 pr-10">
-                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 bg-white grid place-content-center p-1.5">
-                    <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full object-contain">
+                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 grid place-content-center p-1.5">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                 </span>
                 <span class="flex flex-col justify-center min-w-0 leading-none">
                     <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">
@@ -149,8 +152,11 @@
             </button>
         </div>
         <div class="my-12 h-calc(100vh_-_16rem) overflow-y-scroll space-y-2 *:text-powerBlack *:bg-slate-50 dark:*:bg-metalBlack dark:*:text-white *:flex *:items-center *:justify-between *:py-2.5 *:px-4 *:rounded-md *:text-regular">
-            <a href="index.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Inicio
+            <a href="index.html" class="ensor-nav-volver [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Volver
+            </a>
+            <a href="blog.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Hablemos de…
             </a>
             <a href="about.html" class="active [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
                 Sobre mi
@@ -159,10 +165,7 @@
                 Proyectos
             </a>
             <a href="services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Servicios
-            </a>
-            <a href="blog.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Logs
+                ¿Cómo puedo ayudarte?
             </a>
         </div>
         <div class="mt-auto">
@@ -246,7 +249,7 @@
                             <div class="sm:flex flex-wrap gap-6 ">
                                 <div class="icon w-18 h-18 flex-[0_0_4.5rem] rounded-full flex-center max-sm:mb-4 border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">
                                     <img 
-                                        src="assets/img/envato-icon.svg" 
+                                        src="assets/img/Logos/apycalogo.png" 
                                         alt="APYCA Developers"
                                     >
                                 </div>
@@ -270,7 +273,7 @@
                             <div class="sm:flex flex-wrap gap-6 ">
                                 <div class="icon w-18 h-18 flex-[0_0_4.5rem] rounded-full flex-center max-sm:mb-4 border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">
                                     <img 
-                                        src="assets/img/meta.svg" 
+                                        src="assets/img/Logos/Logo Snap Transparente.avif" 
                                         alt="Grupo Snap Publicidad"
                                     >
                                 </div>
@@ -294,7 +297,7 @@
                             <div class="sm:flex flex-wrap gap-6 ">
                                 <div class="icon w-18 h-18 flex-[0_0_4.5rem] rounded-full flex-center max-sm:mb-4 border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">
                                     <img 
-                                        src="assets/img/figma.svg" 
+                                        src="assets/img/Logos/DTPClogo.png" 
                                         alt="Downtown Punta Cana"
                                     >
                                 </div>
@@ -317,7 +320,14 @@
                         <li>
                             <div class="sm:flex flex-wrap gap-6 ">
                                 <div class="icon w-18 h-18 flex-[0_0_4.5rem] rounded-full flex-center max-sm:mb-4 border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">
-                                    <i class="fab fa-wordpress text-[2rem] leading-none text-darkGray dark:text-pastelGrey" aria-hidden="true"></i>
+                                    <img
+                                        src="assets/img/Logos/i24weblogo.jpg"
+                                        alt="I24 web"
+                                        width="40"
+                                        height="40"
+                                        decoding="async"
+                                        class="max-h-10 w-auto object-contain"
+                                    >
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="font-bold text-lg text-metalBlack dark:text-pastelGrey mb-2">
@@ -342,8 +352,8 @@
                             <div class="sm:flex flex-wrap gap-6 ">
                                 <div class="icon w-18 h-18 flex-[0_0_4.5rem] rounded-full flex-center max-sm:mb-4 border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">
                                     <img 
-                                        src="assets/img/atlasian.svg" 
-                                        alt="PDVSA"
+                                        src="assets/img/Logos/pdvsalogo.png" 
+                                        alt="PDVSA Venezuela"
                                     >
                                 </div>
                                 <div class="flex-1">
@@ -564,7 +574,7 @@
                     Activismo de software libre
                 </h3>
                 <p class="text-smokeGray dark:text-regentGray text-base lg:text-lg max-w-3xl mb-8">
-                    Galería de encuentros en los que participé con comunidades de software libre: <strong class="text-metalBlack dark:text-pastelGrey font-medium">Ubuntu</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Fedora</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Mozilla</strong>, instalaciones, FLISOL y jornadas de difusión en universidades y espacios ciudadanos. Objetivo común: acercar Linux y herramientas abiertas a más personas.
+                    Galería de encuentros en los que participé con comunidades de software libre: <strong class="text-metalBlack dark:text-pastelGrey font-medium">Ubuntu</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Fedora</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Mozilla</strong>, instalaciones, FLISOL y jornadas de difusión en universidades y espacios ciudadanos. Además he sido <strong class="text-metalBlack dark:text-pastelGrey font-medium">profesor</strong> y he <strong class="text-metalBlack dark:text-pastelGrey font-medium">impartido cursos</strong> en aula y en talleres; varias de estas fotos corresponden a esos entornos docentes, no solo a stands o festivales abiertos. Objetivo común: acercar Linux y herramientas abiertas a más personas.
                 </p>
                 <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
@@ -609,7 +619,7 @@
                         </div>
                         <figcaption class="p-4">
                             <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Taller práctico</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Demostraciones en vivo: escritorio, terminal y primeros pasos con Ubuntu.</p>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Demostraciones en vivo en cursos y jornadas: escritorio, terminal y primeros pasos con Ubuntu.</p>
                         </figcaption>
                     </figure>
                     <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
@@ -627,7 +637,7 @@
                         </div>
                         <figcaption class="p-4">
                             <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Educación y SL</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Acercar herramientas libres al ámbito académico y a estudiantes.</p>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Docencia y charlas en aula para acercar herramientas libres al ámbito académico y a estudiantes.</p>
                         </figcaption>
                     </figure>
                     <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
@@ -999,6 +1009,7 @@
     <script src="assets/js/aos.js"></script>
     <script src="assets/js/tilt.jquery.min.js"></script>
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/nav-volver.js"></script>
     <script src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
 </body>

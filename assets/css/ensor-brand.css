@@ -1,15 +1,24 @@
 /**
- * ENSOR.LOGS — marca (acento ámbar + verde apoyo + fondos cálidos)
+ * ENSOR.LOGS — marca (acento oro / amarillo + verde apoyo + fondos neutros cálidos)
  * Carga después de style.min.css
  */
 :root {
-    --ensor-accent: #e2a829;
-    --ensor-accent-hover: #c99216;
-    --ensor-accent-on-dark: #f5c84c;
-    --ensor-accent-soft: rgba(226, 168, 41, 0.14);
+    --ensor-accent: #d9a300;
+    --ensor-accent-hover: #b8890f;
+    --ensor-accent-on-dark: #f0c14e;
+    --ensor-accent-rgb: 217, 163, 0;
+    --ensor-accent-on-dark-rgb: 240, 193, 78;
+    --ensor-accent-soft: rgba(var(--ensor-accent-rgb), 0.14);
     --ensor-green: #6b8e78;
-    --ensor-page-bg: #f7f5f1;
+    /* Fondo círculo logo header (gris carbón, referencia marca) */
+    --ensor-header-logo-bg: #33363b;
+    --ensor-page-bg: #faf8f3;
     --ensor-ink: #1a1a1a;
+    /* CTA pill marca: texto tinta sobre oro (mejor lectura que blanco en amarillo vivo) */
+    --ensor-cta-hablemos-text: var(--ensor-ink);
+    --ensor-cta-hablemos-border: rgba(74, 52, 0, 0.35);
+    --ensor-cta-hablemos-shadow: rgba(var(--ensor-accent-rgb), 0.32);
+    --ensor-cta-hablemos-shadow-deep: rgba(120, 82, 0, 0.22);
 }
 
 /* Fondo página (modo claro): crema suave alineado al branding */
@@ -25,6 +34,13 @@ html:not(.dark) body {
 html.dark ::selection {
     background-color: var(--ensor-accent-on-dark);
     color: var(--ensor-ink);
+}
+
+/*
+ * "Volver" en portada: nav-volver.js añade .hidden; el drawer móvil usa *:flex y anula display:none de Tailwind.
+ */
+a.ensor-nav-volver.hidden {
+    display: none !important;
 }
 
 /* Logo wordmark */
@@ -72,23 +88,30 @@ header .nav > a[href="index.html"] .ensor-wordmark {
 }
 
 .ensor-header-logo-wrap {
-    width: 4.25rem;
-    height: 4.25rem;
+    width: 4.6rem;
+    height: 4.6rem;
     animation: ensor-logo-bob 5.5s ease-in-out infinite;
     will-change: transform;
+    background-color: var(--ensor-header-logo-bg) !important;
+    padding: 0;
+}
+
+html.dark header .ensor-header-logo-wrap,
+html.dark .mobile_menu .ensor-header-logo-wrap {
+    background-color: var(--ensor-header-logo-bg) !important;
 }
 
 @media (min-width: 768px) {
     .ensor-header-logo-wrap {
-        width: 5rem;
-        height: 5rem;
+        width: 5.35rem;
+        height: 5.35rem;
     }
 }
 
 @media (min-width: 1024px) {
     .ensor-header-logo-wrap {
-        width: 5.5rem;
-        height: 5.5rem;
+        width: 5.9rem;
+        height: 5.9rem;
     }
 }
 
@@ -105,11 +128,16 @@ header .nav > a[href="index.html"] .ensor-wordmark {
 }
 
 /*
- * Personaje mirando a la derecha: si el PNG ya mira a la derecha,
- * comenta la siguiente regla o elimina la clase en el HTML.
+ * Header: ensorlogs2.png — espejo horizontal; anclado arriba para recortar abajo (hasta camisa/mano).
  */
 .ensor-header-logo-img {
-    transform: scaleX(-1);
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center top;
+    transform: scaleX(-1) scale(1.14);
+    transform-origin: center top;
 }
 
 /* Subrayado solo bajo “Bitácora” (como referencia de marca) */
@@ -191,6 +219,17 @@ html.dark a.ensor-widget-cover-16-10 img {
 }
 
 /* Navegación principal */
+/* Espacio para sombras/borde del CTA — evita que el pill “Hablemos” se vea recortado */
+header .nav,
+header .button-groups {
+    overflow: visible;
+}
+
+header .button-groups {
+    align-items: center;
+    padding-block: 0.375rem;
+}
+
 header .main-menu a.active {
     border-color: var(--ensor-accent) !important;
 }
@@ -203,25 +242,95 @@ html.dark header .main-menu a:hover {
     color: var(--ensor-accent-on-dark) !important;
 }
 
-/* CTA “Hablemos” */
-header .button-groups > a[href="contact.html"] {
-    border: 1px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-}
-
-html:not(.dark) header .button-groups > a[href="contact.html"]:hover {
-    border-color: var(--ensor-accent);
-    color: var(--ensor-accent) !important;
+/* CTA “Hablemos” — oro de marca, sombra nítida, sin halo difuso */
+header .button-groups > a.ensor-cta-hablemos {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+    box-sizing: border-box;
+    line-height: 1.25;
+    min-height: 2.75rem;
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    border: 1px solid var(--ensor-cta-hablemos-border) !important;
+    color: var(--ensor-cta-hablemos-text) !important;
     background: linear-gradient(
-        to bottom,
-        var(--ensor-accent-soft),
-        rgba(226, 168, 41, 0.06)
+        180deg,
+        #f5b027 0%,
+        #f0a812 48%,
+        var(--ensor-accent) 100%
     ) !important;
+    box-shadow:
+        0 1px 2px rgba(26, 26, 26, 0.07),
+        0 4px 14px var(--ensor-cta-hablemos-shadow);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
 
-html.dark header .button-groups > a[href="contact.html"]:hover {
-    border-color: var(--ensor-accent-on-dark);
-    color: var(--ensor-accent-on-dark) !important;
+html.dark header .button-groups > a.ensor-cta-hablemos {
+    border-color: rgba(255, 230, 170, 0.22) !important;
+    color: var(--ensor-cta-hablemos-text) !important;
+    background: linear-gradient(
+        180deg,
+        #fde68a 0%,
+        #f5b027 45%,
+        #d9a300 100%
+    ) !important;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.45),
+        0 5px 16px rgba(0, 0, 0, 0.35),
+        0 4px 14px var(--ensor-cta-hablemos-shadow);
+}
+
+header .button-groups > a.ensor-cta-hablemos:hover {
+    transform: translateY(-1px);
+    border-color: rgba(50, 36, 0, 0.42) !important;
+    color: var(--ensor-cta-hablemos-text) !important;
+    background: linear-gradient(
+        180deg,
+        #fcd34d 0%,
+        #eab308 45%,
+        var(--ensor-accent-hover) 100%
+    ) !important;
+    box-shadow:
+        0 2px 4px rgba(26, 26, 26, 0.1),
+        0 8px 22px var(--ensor-cta-hablemos-shadow),
+        0 12px 28px var(--ensor-cta-hablemos-shadow-deep);
+}
+
+html.dark header .button-groups > a.ensor-cta-hablemos:hover {
+    border-color: rgba(255, 224, 160, 0.28) !important;
+    color: var(--ensor-cta-hablemos-text) !important;
+    background: linear-gradient(
+        180deg,
+        #fff7c2 0%,
+        #f5b027 42%,
+        #b8890f 100%
+    ) !important;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.5),
+        0 10px 26px rgba(0, 0, 0, 0.42),
+        0 6px 18px rgba(var(--ensor-accent-rgb), 0.35);
+}
+
+header .button-groups > a.ensor-cta-hablemos:focus-visible {
+    outline: 2px solid var(--ensor-accent);
+    outline-offset: 2px;
+}
+
+html.dark header .button-groups > a.ensor-cta-hablemos:focus-visible {
+    outline-color: var(--ensor-accent-on-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    header .button-groups > a.ensor-cta-hablemos,
+    header .button-groups > a.ensor-cta-hablemos:hover {
+        transform: none !important;
+    }
 }
 
 /* Menú móvil: acento en ítem activo */
@@ -293,9 +402,9 @@ html.dark #scroll-top:hover {
     color: var(--ensor-ink) !important;
 }
 
-/* Sombras de tarjeta: ligero tinte ámbar */
+/* Sombras de tarjeta: ligero tinte oro */
 .widget:hover {
-    box-shadow: 0 12px 28px rgba(226, 168, 41, 0.07);
+    box-shadow: 0 12px 28px rgba(var(--ensor-accent-rgb), 0.07);
 }
 
 html.dark .widget:hover {
@@ -320,6 +429,14 @@ html.dark textarea:focus {
 
 .ensor-preloader-inner {
     animation: ensor-preloader-fade-in 0.45s ease-out both;
+    /* Más aire entre el círculo y el mensaje (sustituye el gap-7 de Tailwind) */
+    gap: 2.75rem;
+}
+
+@media (min-width: 768px) {
+    .ensor-preloader-inner {
+        gap: 3.25rem;
+    }
 }
 
 @keyframes ensor-preloader-fade-in {
@@ -333,7 +450,7 @@ html.dark textarea:focus {
     }
 }
 
-/* Caja del logo: dimensiones fijas (no depender de utilidades arbitrarias de Tailwind) */
+/* Caja del logo: el círculo recorta; el zoom interno amplía el PNG para llenar el círculo (sin aro blanco / rejilla) */
 .ensor-preloader-logo {
     position: relative;
     width: 9rem;
@@ -342,6 +459,9 @@ html.dark textarea:focus {
     margin-right: auto;
     flex-shrink: 0;
     filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.08));
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #d8d8dc;
 }
 
 @media (min-width: 768px) {
@@ -353,27 +473,31 @@ html.dark textarea:focus {
 
 html.dark .ensor-preloader-logo {
     filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.45));
-    /* PNG con fondo blanco: fundir con bg del preloader (sin bloque blanco sólido) */
-    mix-blend-mode: multiply;
+    background-color: #1e1f22;
+}
+
+/* Escala común: base + revelado se mueven juntos (alineación del wipe).
+   Origen arriba + object-position top: prioriza coronilla; zoom algo menor para no perder pelo al clip circular. */
+.ensor-preloader-logo-zoom {
+    position: absolute;
+    inset: 0;
+    transform: scale(1.38);
+    transform-origin: center top;
 }
 
 /* Capa inferior: mismo PNG, siempre visible */
 .ensor-preloader-base-img {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
+    inset: 0;
     display: block;
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
     opacity: 0.42;
     pointer-events: none;
     z-index: 0;
+    transform: none;
 }
 
 html.dark .ensor-preloader-base-img {
@@ -391,33 +515,23 @@ html.dark .ensor-preloader-base-img {
 
 .ensor-preloader-fill {
     position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    inset: 0;
     width: 0%;
     overflow: hidden;
     z-index: 1;
-    animation: ensor-preloader-widen 1.85s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: ensor-preloader-widen 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
-/* Imagen de color: ancho fijo = caja del logo (la franja solo recorta) */
 .ensor-preloader-fill-img {
     position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    inset: 0;
     display: block;
+    width: 100%;
     height: 100%;
-    width: 9rem;
-    max-width: none;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center top;
     pointer-events: none;
-}
-
-@media (min-width: 768px) {
-    .ensor-preloader-fill-img {
-        width: 11rem;
-    }
+    transform: none;
 }
 
 @keyframes ensor-preloader-loading-pulse {
@@ -431,7 +545,15 @@ html.dark .ensor-preloader-base-img {
 }
 
 .ensor-preloader-loading {
-    letter-spacing: 0.45em;
+    min-height: 2.75em;
+    max-width: min(22rem, 90vw);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.35rem;
+    line-height: 1.35;
+    text-transform: none;
+    letter-spacing: 0.06em;
+    font-weight: 600;
     animation: ensor-preloader-loading-pulse 1.15s ease-in-out infinite;
 }
 
@@ -475,6 +597,426 @@ img.ensor-simple-icon {
 html.dark img.ensor-simple-icon {
     filter: invert(1) brightness(1.08);
     opacity: 0.92;
+}
+
+/* Filtro por ?tema= en blog y en proyectos */
+.blog-wrapper .blog-item.ensor-blog-item--hidden,
+.projects-wrapper .project-item.ensor-blog-item--hidden {
+    display: none !important;
+}
+
+/* Accesos del home “Hablemos de…” → categorías del blog */
+a.ensor-home-tema-pill {
+    text-decoration: none;
+    color: inherit;
+    border-radius: 0.75rem;
+    outline-offset: 2px;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+a.ensor-home-tema-pill:hover {
+    background-color: rgba(var(--ensor-accent-rgb), 0.1);
+}
+
+html.dark a.ensor-home-tema-pill:hover {
+    background-color: rgba(var(--ensor-accent-on-dark-rgb), 0.12);
+}
+
+a.ensor-home-tema-pill:focus-visible {
+    outline: 2px solid var(--ensor-accent);
+}
+
+/* Blog: categoría activa (?tema=) */
+a.ensor-home-tema-pill.ensor-blog-tema--active {
+    border-color: rgba(var(--ensor-accent-rgb), 0.38) !important;
+    background-color: rgba(var(--ensor-accent-rgb), 0.12);
+    transform: translateY(-1px);
+}
+
+html.dark a.ensor-home-tema-pill.ensor-blog-tema--active {
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.35) !important;
+    background-color: rgba(var(--ensor-accent-on-dark-rgb), 0.1);
+}
+
+a.ensor-blog-tema--todos.ensor-blog-tema--active {
+    text-decoration: none;
+    color: var(--ensor-accent);
+}
+
+html.dark a.ensor-blog-tema--todos.ensor-blog-tema--active {
+    color: var(--ensor-accent-on-dark);
+}
+
+/* Grid fijo 3x2 para el bloque "Hablemos de..." (evita depender de utilidades no compiladas) */
+.ensor-home-temas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* 12 categorías: 3 columnas móvil, 4 a partir de md */
+.ensor-home-temas-grid--12 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+    .ensor-home-temas-grid--12 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* Home: 6 temas — siempre 3×2 (tres arriba, tres abajo) para que las etiquetas no se pisen */
+.ensor-home-temas-grid--6 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Enlaces “Solicitar información” en services.html (hover con tokens de marca) */
+a.ensor-servicio-cta {
+    transition: color 0.2s ease;
+}
+
+a.ensor-servicio-cta:hover {
+    color: var(--ensor-accent);
+}
+
+html.dark a.ensor-servicio-cta:hover {
+    color: var(--ensor-accent-on-dark);
+}
+
+/* ---------- Servicios: columna lateral + índice (services.html) ---------- */
+.ensor-services-sidebar {
+    background: linear-gradient(
+        175deg,
+        #fdfcfa 0%,
+        rgba(255, 244, 210, 0.22) 38%,
+        rgba(247, 248, 247, 0.98) 72%,
+        #f3f4f2 100%
+    );
+    border-color: rgba(var(--ensor-accent-rgb), 0.12) !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
+}
+
+html.dark .ensor-services-sidebar {
+    background: linear-gradient(
+        175deg,
+        #2c2d2f 0%,
+        rgba(48, 42, 26, 0.35) 42%,
+        #1d1d1e 100%
+    );
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.14) !important;
+    box-shadow: none;
+}
+
+.ensor-service-mindmap {
+    margin-top: 0.1rem;
+}
+
+.ensor-service-mindmap__branches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+}
+
+.ensor-service-mindmap__branch--span {
+    grid-column: 1 / -1;
+}
+
+.ensor-service-mindmap__branch--span .ensor-mindmap-branch {
+    justify-content: center;
+}
+
+.ensor-mindmap-branch {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.55rem;
+    min-height: 2.65rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(var(--ensor-accent-rgb), 0.1);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(255, 248, 228, 0.18) 100%
+    );
+    backdrop-filter: blur(4px);
+    text-decoration: none;
+    color: inherit;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+html.dark .ensor-mindmap-branch {
+    background: linear-gradient(
+        135deg,
+        rgba(40, 41, 42, 0.65) 0%,
+        rgba(55, 48, 28, 0.2) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.ensor-mindmap-branch__icon {
+    flex-shrink: 0;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background: rgba(var(--ensor-accent-rgb), 0.09);
+    color: var(--ensor-accent);
+}
+
+html.dark .ensor-mindmap-branch__icon {
+    background: rgba(var(--ensor-accent-on-dark-rgb), 0.1);
+    color: var(--ensor-accent-on-dark);
+}
+
+.ensor-mindmap-branch__icon i {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.ensor-mindmap-branch__label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #2f3236;
+}
+
+html.dark .ensor-mindmap-branch__label {
+    color: #d7dae2;
+}
+
+.ensor-mindmap-branch:hover {
+    border-color: rgba(var(--ensor-accent-rgb), 0.28);
+    box-shadow: 0 4px 14px rgba(var(--ensor-accent-rgb), 0.12);
+    transform: translateY(-2px);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.85) 0%,
+        rgba(255, 240, 200, 0.28) 100%
+    );
+}
+
+html.dark .ensor-mindmap-branch:hover {
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.22);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    background: linear-gradient(
+        135deg,
+        rgba(52, 52, 54, 0.88) 0%,
+        rgba(70, 58, 28, 0.35) 100%
+    );
+}
+
+.ensor-mindmap-branch:focus-visible {
+    outline: 2px solid var(--ensor-accent);
+    outline-offset: 2px;
+}
+
+html.dark .ensor-mindmap-branch:focus-visible {
+    outline-color: var(--ensor-accent-on-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-mindmap-branch {
+        transition: none;
+    }
+
+    .ensor-mindmap-branch:hover {
+        transform: none;
+    }
+}
+
+/* ---------- Servicios: tarjetas apiladas (mazo / escalera) + acento oro ---------- */
+.ensor-services-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 0.35rem;
+    padding-bottom: 4rem;
+}
+
+.ensor-services-stack .ensor-service-card {
+    position: relative;
+    z-index: 1;
+    transform-origin: top center;
+    background: linear-gradient(
+        168deg,
+        #fffefb 0%,
+        rgba(255, 232, 168, 0.32) 22%,
+        rgba(255, 244, 210, 0.38) 48%,
+        rgba(248, 245, 236, 0.98) 78%,
+        #f3f1ec 100%
+    );
+    border-color: rgba(var(--ensor-accent-rgb), 0.26) !important;
+    border-left-width: 5px;
+    border-left-color: var(--ensor-accent) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        0 3px 0 rgba(var(--ensor-accent-rgb), 0.12),
+        0 8px 18px rgba(26, 26, 26, 0.06),
+        0 16px 36px rgba(var(--ensor-accent-rgb), 0.14);
+    transition:
+        transform 0.34s cubic-bezier(0.34, 1.1, 0.52, 1),
+        box-shadow 0.34s ease,
+        filter 0.34s ease;
+}
+
+html.dark .ensor-services-stack .ensor-service-card {
+    background: linear-gradient(
+        168deg,
+        #323334 0%,
+        rgba(62, 54, 28, 0.55) 28%,
+        rgba(40, 36, 26, 0.42) 52%,
+        #1f1f20 100%
+    );
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.24) !important;
+    border-left-color: var(--ensor-accent-on-dark) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 3px 0 rgba(var(--ensor-accent-rgb), 0.15),
+        0 10px 28px rgba(0, 0, 0, 0.42),
+        0 18px 44px rgba(var(--ensor-accent-rgb), 0.08);
+}
+
+/* Más solapamiento = lectura más clara del “mazo” */
+.ensor-services-stack .ensor-service-card + .ensor-service-card {
+    margin-top: -2.15rem;
+}
+
+@media (min-width: 640px) {
+    .ensor-services-stack .ensor-service-card + .ensor-service-card {
+        margin-top: -2.85rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .ensor-services-stack .ensor-service-card + .ensor-service-card {
+        margin-top: -3.6rem;
+    }
+}
+
+/* Escalera: cada tarjeta inferior luce un poco más “lejos” hasta interactuar */
+.ensor-services-stack .ensor-service-card:nth-child(1) {
+    z-index: 1;
+    transform: translateY(0) scale(1);
+    filter: saturate(1.02);
+}
+
+.ensor-services-stack .ensor-service-card:nth-child(2) {
+    z-index: 2;
+    transform: translateY(0) scale(0.988);
+    filter: saturate(1) brightness(0.995);
+}
+
+.ensor-services-stack .ensor-service-card:nth-child(3) {
+    z-index: 3;
+    transform: translateY(0) scale(0.976);
+    filter: brightness(0.99);
+}
+
+.ensor-services-stack .ensor-service-card:nth-child(4) {
+    z-index: 4;
+    transform: translateY(0) scale(0.964);
+    filter: brightness(0.985);
+}
+
+.ensor-services-stack .ensor-service-card:nth-child(5) {
+    z-index: 5;
+    transform: translateY(0) scale(0.952);
+    filter: brightness(0.98);
+}
+
+@media (max-width: 639px) {
+    .ensor-services-stack .ensor-service-card:nth-child(2) {
+        transform: translateY(0) scale(0.993);
+    }
+
+    .ensor-services-stack .ensor-service-card:nth-child(3) {
+        transform: translateY(0) scale(0.986);
+    }
+
+    .ensor-services-stack .ensor-service-card:nth-child(4) {
+        transform: translateY(0) scale(0.979);
+    }
+
+    .ensor-services-stack .ensor-service-card:nth-child(5) {
+        transform: translateY(0) scale(0.972);
+    }
+}
+
+.ensor-services-stack .ensor-service-card:hover {
+    transform: translateY(-16px) scale(1) !important;
+    z-index: 40 !important;
+    filter: saturate(1.05) brightness(1) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.85),
+        0 4px 0 rgba(var(--ensor-accent-rgb), 0.2),
+        0 12px 28px rgba(26, 26, 26, 0.1),
+        0 28px 56px rgba(var(--ensor-accent-rgb), 0.28);
+}
+
+html.dark .ensor-services-stack .ensor-service-card:hover {
+    filter: brightness(1.04) saturate(1.05) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 4px 0 rgba(var(--ensor-accent-on-dark-rgb), 0.25),
+        0 14px 32px rgba(0, 0, 0, 0.5),
+        0 32px 64px rgba(var(--ensor-accent-rgb), 0.22);
+}
+
+.ensor-services-stack .ensor-service-card h5 {
+    position: relative;
+    padding-bottom: 0.35rem;
+}
+
+.ensor-services-stack .ensor-service-card h5::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 3rem;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--ensor-accent), rgba(var(--ensor-accent-rgb), 0.25));
+}
+
+html.dark .ensor-services-stack .ensor-service-card h5::after {
+    background: linear-gradient(90deg, var(--ensor-accent-on-dark), rgba(var(--ensor-accent-on-dark-rgb), 0.25));
+}
+
+.ensor-services-stack .ensor-service-card ul .fa-check-circle {
+    color: var(--ensor-accent);
+}
+
+html.dark .ensor-services-stack .ensor-service-card ul .fa-check-circle {
+    color: var(--ensor-accent-on-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    a.ensor-home-tema-pill {
+        transition: none;
+    }
+
+    .ensor-services-stack .ensor-service-card {
+        transition: none;
+        transform: none !important;
+        filter: none !important;
+    }
+
+    .ensor-services-stack .ensor-service-card:hover {
+        transform: none !important;
+        filter: none !important;
+    }
 }
 
 /* ---------- Widget “¿Tienes una propuesta?” — franja marquee compacta ---------- */
@@ -763,49 +1305,66 @@ html.dark .ensor-btn:focus-visible {
 
 .ensor-btn-primary {
     color: var(--ensor-ink);
-    background: linear-gradient(180deg, var(--ensor-accent) 0%, var(--ensor-accent-hover) 100%);
-    border-color: rgba(26, 26, 26, 0.1);
+    background: linear-gradient(
+        180deg,
+        #f5b027 0%,
+        #f0a812 48%,
+        var(--ensor-accent) 100%
+    );
+    border-color: rgba(74, 52, 0, 0.32);
     box-shadow:
-        0 4px 18px rgba(226, 168, 41, 0.38),
-        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        0 1px 2px rgba(26, 26, 26, 0.07),
+        0 4px 14px rgba(var(--ensor-accent-rgb), 0.3);
 }
 
 .ensor-btn-primary:hover {
-    filter: brightness(1.06);
+    background: linear-gradient(
+        180deg,
+        #fcd34d 0%,
+        #eab308 45%,
+        var(--ensor-accent-hover) 100%
+    );
     box-shadow:
-        0 8px 26px rgba(226, 168, 41, 0.48),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32);
+        0 2px 4px rgba(26, 26, 26, 0.1),
+        0 8px 22px rgba(var(--ensor-accent-rgb), 0.34),
+        0 12px 28px rgba(120, 82, 0, 0.2);
     transform: translateY(-1px);
 }
 
 .ensor-btn-primary:active {
     transform: translateY(0);
-    filter: brightness(0.98);
+    filter: brightness(0.97);
 }
 
 html.dark .ensor-btn-primary {
-    background: linear-gradient(180deg, var(--ensor-accent-on-dark) 0%, var(--ensor-accent) 100%);
-    border-color: rgba(255, 255, 255, 0.14);
+    color: var(--ensor-ink);
+    background: linear-gradient(180deg, #fde68a 0%, #f5b027 45%, #d9a300 100%);
+    border-color: rgba(255, 230, 170, 0.22);
     box-shadow:
-        0 4px 22px rgba(245, 200, 76, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        0 1px 2px rgba(0, 0, 0, 0.45),
+        0 5px 16px rgba(0, 0, 0, 0.32),
+        0 4px 14px rgba(var(--ensor-accent-rgb), 0.28);
 }
 
 html.dark .ensor-btn-primary:hover {
-    filter: brightness(1.07);
+    background: linear-gradient(180deg, #fff7c2 0%, #f5b027 42%, #b8890f 100%);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.5),
+        0 10px 26px rgba(0, 0, 0, 0.4),
+        0 6px 18px rgba(var(--ensor-accent-rgb), 0.32);
 }
 
 .ensor-btn-outline {
     color: var(--ensor-ink);
     background: rgba(255, 255, 255, 0.72);
     border-color: var(--ensor-accent);
-    box-shadow: 0 2px 14px rgba(226, 168, 41, 0.14);
+    box-shadow: 0 2px 14px rgba(var(--ensor-accent-rgb), 0.12);
 }
 
 html:not(.dark) .ensor-btn-outline:hover {
     background: var(--ensor-accent-soft);
     border-color: var(--ensor-accent-hover);
-    box-shadow: 0 5px 20px rgba(226, 168, 41, 0.26);
+    box-shadow: 0 5px 20px rgba(var(--ensor-accent-rgb), 0.22);
     transform: translateY(-1px);
 }
 
@@ -813,13 +1372,13 @@ html.dark .ensor-btn-outline {
     color: #e2e4e8;
     background: rgba(22, 22, 24, 0.65);
     border-color: var(--ensor-accent-on-dark);
-    box-shadow: 0 2px 16px rgba(245, 200, 76, 0.12);
+    box-shadow: 0 2px 16px rgba(var(--ensor-accent-on-dark-rgb), 0.12);
 }
 
 html.dark .ensor-btn-outline:hover {
-    background: rgba(245, 200, 76, 0.14);
+    background: rgba(var(--ensor-accent-on-dark-rgb), 0.14);
     border-color: var(--ensor-accent-on-dark);
-    box-shadow: 0 6px 22px rgba(245, 200, 76, 0.22);
+    box-shadow: 0 6px 22px rgba(var(--ensor-accent-on-dark-rgb), 0.2);
     transform: translateY(-1px);
 }
 
@@ -845,9 +1404,9 @@ html.dark .ensor-btn-outline:hover {
 html:not(.dark) .services > ul > li:nth-child(odd) {
     background: linear-gradient(
         105deg,
-        rgba(226, 168, 41, 0.16) 0%,
-        rgba(226, 168, 41, 0.05) 55%,
-        rgba(247, 245, 241, 0) 100%
+        rgba(var(--ensor-accent-rgb), 0.12) 0%,
+        rgba(var(--ensor-accent-rgb), 0.04) 55%,
+        rgba(244, 248, 247, 0) 100%
     );
 }
 
@@ -856,12 +1415,12 @@ html:not(.dark) .services > ul > li:nth-child(even) {
         105deg,
         rgba(26, 26, 26, 0.06) 0%,
         rgba(26, 26, 26, 0.025) 70%,
-        rgba(247, 245, 241, 0) 100%
+        rgba(244, 248, 247, 0) 100%
     );
 }
 
 html:not(.dark) .services > ul > li:nth-child(odd):hover {
-    box-shadow: 0 10px 32px rgba(226, 168, 41, 0.2);
+    box-shadow: 0 10px 32px rgba(var(--ensor-accent-rgb), 0.16);
 }
 
 html:not(.dark) .services > ul > li:nth-child(even):hover {
@@ -871,8 +1430,8 @@ html:not(.dark) .services > ul > li:nth-child(even):hover {
 html.dark .services > ul > li:nth-child(odd) {
     background: linear-gradient(
         105deg,
-        rgba(245, 200, 76, 0.12) 0%,
-        rgba(245, 200, 76, 0.04) 55%,
+        rgba(var(--ensor-accent-on-dark-rgb), 0.1) 0%,
+        rgba(var(--ensor-accent-on-dark-rgb), 0.035) 55%,
         transparent 100%
     );
 }
@@ -887,7 +1446,7 @@ html.dark .services > ul > li:nth-child(even) {
 }
 
 html.dark .services > ul > li:nth-child(odd):hover {
-    box-shadow: 0 12px 36px rgba(245, 200, 76, 0.14);
+    box-shadow: 0 12px 36px rgba(var(--ensor-accent-on-dark-rgb), 0.12);
 }
 
 html.dark .services > ul > li:nth-child(even):hover {

@@ -1,25 +1,29 @@
-if (localStorage.theme === 'dark' ) {
-    document.documentElement.classList.add('dark');
-    $('.btn_theme_switch').removeClass('btn-light').addClass('btn-dark');
-} else {
-    document.documentElement.classList.remove('dark');
-    $('.btn_theme_switch').removeClass('btn-dark').addClass('btn-light');
-}
-// Function to set dark theme
+/** Tema: por defecto oscuro; solo modo claro si el usuario eligió explícitamente `light`. */
+(function syncThemeOnLoad() {
+    if (typeof jQuery === 'undefined') {
+        return;
+    }
+    if (localStorage.theme !== 'light') {
+        document.documentElement.classList.add('dark');
+        $('.btn_theme_switch').removeClass('btn-light').addClass('btn-dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        $('.btn_theme_switch').removeClass('btn-dark').addClass('btn-light');
+    }
+})();
+
 function setDarkTheme() {
-    document.documentElement.classList.add("dark");
+    document.documentElement.classList.add('dark');
     localStorage.theme = 'dark';
     $('.btn_theme_switch').removeClass('btn-light').addClass('btn-dark');
 }
 
-// Function to set light theme
 function setLightTheme() {
-    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.remove('dark');
     localStorage.theme = 'light';
     $('.btn_theme_switch').removeClass('btn-dark').addClass('btn-light');
 }
 
-// Function to get URL parameters
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
@@ -35,20 +39,20 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
     return false;
 };
-// Check if version parameter is provided in the URL and apply the theme accordingly
+
 var version = getUrlParameter('version');
 if (version) {
     if (version === 'dark') {
         setDarkTheme();
     } else if (version === 'light') {
-        setLightTheme(); 
+        setLightTheme();
     }
 }
-// Event listener for clicks on the theme switch button
-$(".btn_theme_switch").on("click", function() {
-    if (localStorage.theme === 'dark') {
-        setLightTheme(); // Switch to light theme if currently dark
+
+$('.btn_theme_switch').on('click', function () {
+    if (localStorage.theme === 'light') {
+        setDarkTheme();
     } else {
-        setDarkTheme(); // Switch to dark theme if currently light
+        setLightTheme();
     }
 });

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="es" class="">
+<html lang="es" class="dark">
 
 <head>
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
+    <script>(function(){try{if(localStorage.theme==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){document.documentElement.classList.add('dark')}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
@@ -58,7 +59,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
-    <link rel="preload" as="image" href="assets/img/Logo-EnsorLogs.png">
+    <link rel="preload" as="image" href="assets/img/Logos/ensorlogs2.png">
 
     <!-- All CSS Here
     ================================================== -->
@@ -76,12 +77,14 @@
     <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex flex-col items-center justify-center bg-white dark:bg-powerBlack" role="status" aria-live="polite" aria-busy="true">
         <div class="ensor-preloader-inner flex flex-col items-center gap-7 px-6">
             <div class="ensor-preloader-logo">
-                <img src="assets/img/Logo-EnsorLogs.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
-                <div class="ensor-preloader-fill">
-                    <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                <div class="ensor-preloader-logo-zoom" aria-hidden="true">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
+                    <div class="ensor-preloader-fill">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                    </div>
                 </div>
             </div>
-            <p class="ensor-preloader-loading text-center text-[11px] font-semibold uppercase text-powerBlack md:text-xs dark:text-pastelGrey">Loading</p>
+            <p class="ensor-preloader-loading text-center text-[11px] font-semibold text-powerBlack md:text-xs dark:text-pastelGrey"></p>
         </div>
     </div>
     <!--~~./ end Preloader ~~-->
@@ -95,8 +98,8 @@
         <div class="container">
             <div class="nav max-md:py-3 py-5 px-4 lg:px-6 xl:px-8 flex items-center justify-between bg-white dark:bg-[#1B1C1C] rounded-xl shadow-lg shadow-black/5">
                 <a href="index.html" class="inline-flex items-center gap-3 min-w-0">
-                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 bg-white grid place-content-center p-1.5">
-                        <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full object-contain">
+                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 grid place-content-center p-1.5">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                     </span>
                     <span class="flex flex-col justify-center min-w-0 leading-none">
                         <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
@@ -110,8 +113,11 @@
                 </a>
                 <div class="main-menu *:transition-all *:text-darkGray *:inline-flex *:items-center dark:*:text-pastelGrey *:border *:border-transparent *:duration-300 *:px-6 *:py-2 *:leading-normal *:rounded-4xl *:font-semibold max-lg:hidden">
 
-                    <a href="index.html" class="active dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Inicio
+                    <a href="index.html" class="ensor-nav-volver dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Volver
+                    </a>
+                    <a href="blog.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Hablemos de…
                     </a>
                     <a href="about.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
                         Sobre mi
@@ -120,14 +126,11 @@
                         Proyectos
                     </a>
                     <a href="services.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Servicios
-                    </a>
-                    <a href="blog.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white hover:text-smokeGray dark:hover:text-white">
-                        Logs
+                        ¿Cómo puedo ayudarte?
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
-                    <button class="btn_theme_switch w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <button class="btn_theme_switch btn-dark w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
                         <svg  class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -136,8 +139,8 @@
                             <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <a href="contact.html" class="text-darkGray dark:text-pastelGrey font-semibold py-2.5 px-8 max-md:hidden leading-1.75 rounded-3xl">
-                        Hablemos
+                    <a href="contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
+                        <span>Hablemos</span>
                     </a>
                     <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
                         <i class="fal fa-bars"></i>
@@ -150,8 +153,8 @@
     <div class="mobile_menu fixed transition-all duration-300 top-0 -left-96 h-full bg-white dark:bg-powerBlack z-999 p-6 w-80 shadow-lg [&.is-menu-open]:left-0 flex flex-col lg:hidden">
         <div class="relative">
             <a href="index.html" class="inline-flex items-center gap-2.5 pr-10">
-                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 bg-white grid place-content-center p-1.5">
-                    <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full object-contain">
+                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 grid place-content-center p-1.5">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                 </span>
                 <span class="flex flex-col justify-center min-w-0 leading-none">
                     <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">
@@ -168,8 +171,11 @@
             </button>
         </div>
         <div class="my-12 h-calc(100vh_-_16rem) overflow-y-scroll space-y-2 *:text-powerBlack *:bg-slate-50 dark:*:bg-metalBlack dark:*:text-white *:flex *:items-center *:justify-between *:py-2.5 *:px-4 *:rounded-md *:text-regular">
-            <a href="index.html" class="active [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Inicio
+            <a href="index.html" class="ensor-nav-volver [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Volver
+            </a>
+            <a href="blog.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Hablemos de…
             </a>
             <a href="about.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
                 Sobre mi
@@ -178,11 +184,8 @@
                 Proyectos
             </a>
                             <a href="services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                                Servicios
+                                ¿Cómo puedo ayudarte?
                             </a>
-            <a href="blog.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Logs
-            </a>
         </div>
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
@@ -205,9 +208,9 @@
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Main Content
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-    <div class="main-content mt-28 md:mt-32 lg:mt-36 xl:mt-48">
+    <div class="main-content mt-36 md:mt-36 lg:mt-36 xl:mt-48">
         <div class="container">
-            <div class="md:grid md:grid-cols-2 xl:grid-cols-3 gap-6 justify-center">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 justify-center">
                 <!-- First Column -->
                 <div class="space-y-6 *:rounded-2xl max-md:*:p-4 *:p-6 xl:*:px-10 *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack *:border *:border-flasWhite dark:*:border-flasBlack">
 
@@ -235,11 +238,11 @@
                             Ensor Logs
                         </div>
                         <p class="my-3">
-                            Consultoría y servicios IT para equipos que necesitan orden en datos, CRM y automatización. Más de 10 años uniendo infraestructura, desarrollo web y PropTech: contratas con alcance definido, entregables claros y seguimiento técnico sin improvisaciones.
+                            Esta es mi bitácora de documentación sobre la trayectoria que voy recorriendo en tecnología, pruebas y reflexiones de lo que me gusta del mundillo (datos, automatización, infra, web, PropTech y el buen caos cuando toca resolverlo).
                         </p>
                         <h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group mt-5">
                             <a href="about.html" class="flex items-center justify-between">
-                                Perfil profesional
+                                ¿A que me dedico? 
                                 <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -359,45 +362,55 @@
                     <!-- Widget Item End -->
                     <!-- Widget Item Start -->
                     <div class="widget" data-aos="fade-up" data-aos-delay="100">
-                        <div class="flex flex-wrap items-center justify-between">
-                            <div class="space-y-2 text-center flex-1 p-4">
-                                <div class="icon h-12 grid place-content-center">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/wordpress.svg" alt="WordPress" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon">
-                                </div>
-                                <p>
-                                    WordPress
-                                </p>
-                            </div>
-                            <div class="space-y-2 text-center flex-1 p-4">
-                                <div class="icon h-12 grid place-content-center">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/python.svg" alt="Python" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon">
-                                </div>
-                                <p>
-                                    Python
-                                </p>
-                            </div>
-                            <div class="space-y-2 text-center flex-1 p-4">
-                                <div class="icon h-12 grid place-content-center">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/googleanalytics.svg" alt="Google Analytics" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon">
-                                </div>
-                                <p>
-                                    Google Analytics
-                                </p>
-                            </div>
-                        </div>
-                        <div class="mt-8">
-                            <p class="text-sm opacity-70">
-                                STACK Y HERRAMIENTAS
-                            </p>
-                            <h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group">
-                                <a href="credentials.html" class="flex items-center justify-between">
-                                    WordPress, Shopify, PrestaShop, CRM y BI
-                                    <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </a>
-                            </h6>
+                        <p class="text-sm opacity-70 mb-3">
+                            Hablemos de…
+                        </p>
+                        <nav class="ensor-home-temas-grid ensor-home-temas-grid--6 gap-2 md:gap-3" aria-label="Ir al blog por tema">
+                            <a href="blog.html?tema=linux" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Artículos sobre Linux">
+                                <span class="icon h-12 grid place-content-center" aria-hidden="true">
+                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/linux.svg" alt="" width="44" height="44" decoding="async" class="w-11 h-11 ensor-simple-icon">
+                                </span>
+                                <p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Linux</p>
+                            </a>
+                            <a href="blog.html?tema=wordpress" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Artículos sobre WordPress">
+                                <span class="icon h-12 grid place-content-center" aria-hidden="true">
+                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/wordpress.svg" alt="" width="44" height="44" decoding="async" class="w-11 h-11 ensor-simple-icon">
+                                </span>
+                                <p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">WordPress</p>
+                            </a>
+                            <a href="blog.html?tema=database" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Artículos sobre bases de datos">
+                                <span class="icon h-12 grid place-content-center text-3xl text-powerBlack dark:text-pastelGrey" aria-hidden="true">
+                                    <i class="fal fa-database"></i>
+                                </span>
+                                <p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Database</p>
+                            </a>
+                            <a href="blog.html?tema=ia" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Artículos sobre IA">
+                                <span class="icon h-12 grid place-content-center" aria-hidden="true">
+                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/openai.svg" alt="" width="44" height="44" decoding="async" class="w-11 h-11 ensor-simple-icon">
+                                </span>
+                                <p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">IA</p>
+                            </a>
+                            <a href="blog.html?tema=python" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Artículos sobre Python">
+                                <span class="icon h-12 grid place-content-center" aria-hidden="true">
+                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/python.svg" alt="" width="44" height="44" decoding="async" class="w-11 h-11 ensor-simple-icon">
+                                </span>
+                                <p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Python</p>
+                            </a>
+                            <a href="blog.html?tema=mac" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Artículos sobre Mac">
+                                <span class="icon h-12 grid place-content-center" aria-hidden="true">
+                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/apple.svg" alt="" width="44" height="44" decoding="async" class="w-11 h-11 ensor-simple-icon">
+                                </span>
+                                <p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Mac</p>
+                            </a>
+                        </nav>
+                        <div class="mt-6 flex justify-center">
+                            <a href="blog.html" class="inline-flex items-center gap-2 rounded-full border border-flasWhite dark:border-flasBlack px-4 py-2.5 text-sm font-semibold text-powerBlack dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors" aria-label="Todos los temas: ver el blog">
+                                <span>Todos los temas</span>
+                                <svg class="w-9 shrink-0 text-nobelGray hover:text-darkGray dark:text-slateGray dark:hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
                         </div>
                     </div>
                     <!-- Widget Item End -->
@@ -420,7 +433,7 @@
                             </p>
                             <h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group">
                                 <a href="projects.html" class="flex items-center justify-between">
-                                    Ver proyectos PropTech e IT
+                                    Como se aplica en el mundo real
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -441,9 +454,9 @@
                             </div>
                             <div class="flex-1">
                                 <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-5xl mb-2">
-                                    40+
+                                    60+
                                 </h5>
-                                <p>Entregas en web, CRM y automatización</p>
+                                <p>Proyectos realizados</p>
                             </div>
                         </div>
                         <div class="mt-8">
@@ -503,16 +516,16 @@
                                 <p class="!leading-none">Shopify</p>
                             </div>
                             <div>
-                                <i class="fas fa-store text-darkGray dark:text-pastelGrey text-4xl"></i>
-                                <p class="!leading-none">PrestaShop</p>
+                                <i class="fas fa-database text-darkGray dark:text-pastelGrey text-4xl"></i>
+                                <p class="!leading-none">SQL</p>
                             </div>
                             <div>
                                 <i class="fab fa-google text-darkGray dark:text-pastelGrey text-4xl"></i>
                                 <p class="!leading-none">Google Ads</p>
                             </div>
                             <div>
-                                <i class="fal fa-briefcase text-darkGray dark:text-pastelGrey text-4xl"></i>
-                                <p class="!leading-none">Google Workspace</p>
+                                <i class="fab fa-wordpress text-darkGray dark:text-pastelGrey text-4xl"></i>
+                                <p class="!leading-none">WordPress</p>
                             </div>
                         </div>
 
@@ -545,11 +558,11 @@
     <footer class="mt-24 pb-8" data-aos="fade-up">
         <div class="container text-center space-y-6">
             <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-6xl">
-                Escríbeme para impulsar tu negocio
+                Impulta tu proyecto  <br> conmigo
             </h5>
             <p>
-                <a href="#" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
-                    hello@ensorlogs.com
+                <a href="contact.html" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
+                    Contactame 
                 </a>
             </p>
             <p>
@@ -578,6 +591,7 @@
     <script src="assets/js/aos.js"></script>
     <script src="assets/js/tilt.jquery.min.js"></script>
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/nav-volver.js"></script>
     <script src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
 </body>

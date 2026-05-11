@@ -11,22 +11,71 @@ Support	      :	    themearray@gmail.com
 (function($) {
 'use strict';
 
+    /* Mensaje aleatorio bajo el logo del preloader (estilo geek) */
+    (function preloaderRandomMessage() {
+        var messages = [
+            'Que la fuerza te acompañe',
+            'Compilando el universo…',
+            'sudo make me a sandwich',
+            'There is no place like 127.0.0.1',
+            'La respuesta es 42. ¿Cuál era la pregunta?',
+            'rm -rf /  — mejor no, ¿no?',
+            'git commit -m "arreglo_final_definitivo_v3"',
+            'No es un bug, es una feature no documentada',
+            'En producción sí confío… en los backups',
+            'Cargando píxeles con amor y cafeína',
+            'Hello, World! (pero en serio)',
+            '*ping* *ping* ¿Hay alguien en el servidor?',
+            'Alineando los satélites…',
+            'Importando conocimiento desde la nube',
+            'Respawning en 3… 2…',
+            'May the source be with you',
+            'Estado: pensando en binario',
+            'Optimizando la matriz…',
+            'wget la paciencia — conexión lenta',
+            'chmod +x ./vida && ./vida'
+        ];
+        var el = document.querySelector('.ensor-preloader-loading');
+        if (!el || !messages.length) {
+            return;
+        }
+        var i = Math.floor(Math.random() * messages.length);
+        el.textContent = messages[i];
+    })();
+
     /* ============================================================ */
     /* PRELOADER START
     /* ============================================================ */
     (function preloaderHide() {
         var done = false;
+        /* Tiempo mínimo visible: animación del logo + lectura del mensaje geek */
+        var MIN_VISIBLE_MS = 4500;
+        var FADE_OUT_MS = 500;
+        var t0 =
+            typeof performance !== 'undefined' &&
+            performance.timing &&
+            performance.timing.navigationStart
+                ? performance.timing.navigationStart
+                : Date.now();
+
         function hide() {
             if (done) {
                 return;
             }
-            done = true;
-            $(".preloader").fadeOut(260);
+            var elapsed = Date.now() - t0;
+            var wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
+            setTimeout(function () {
+                if (done) {
+                    return;
+                }
+                done = true;
+                $('.preloader').fadeOut(FADE_OUT_MS);
+            }, wait);
         }
         $(window).on('load', hide);
         /* file://, iframes o recursos bloqueados: load puede no dispararse */
         $(function () {
-            setTimeout(hide, 1400);
+            setTimeout(hide, 14000);
         });
     })();
     /* Preloader End */

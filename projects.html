@@ -5,6 +5,7 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
+    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
@@ -14,7 +15,7 @@
     <meta name="keywords"
         content="portfolio IT, proyectos PropTech, casos CRM, automatización, desarrollo web, Ensor Sánchez, Ensorlogs">
     <meta name="description"
-        content="Proyectos y casos reales: IT, PropTech, CRM y digitalización. Ejemplos del trabajo de Ensor Sánchez para equipos que buscan referencias antes de contratar.">
+        content="Portfolio Ensorlogs: stack tecnológico en proyectos reales (IT, PropTech, CRM, WordPress, datos, cloud). Casos filtrables por herramienta y entregables con contexto.">
     <meta name="author" content="Ensor Sánchez · Ensorlogs">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://ensorlogs.com/projects.html">
@@ -22,7 +23,7 @@
     <meta property="og:site_name" content="Ensorlogs">
     <meta property="og:locale" content="es_ES">
     <meta property="og:title" content="Proyectos IT y PropTech | Portfolio Ensorlogs">
-    <meta property="og:description" content="Casos y entregables en CRM, automatización y operaciones digitales.">
+    <meta property="og:description" content="Cómo aplico mi stack en proyectos reales: casos IT y PropTech filtrables por tecnología.">
     <meta property="og:url" content="https://ensorlogs.com/projects.html">
 
     <!-- Site Title
@@ -53,16 +54,18 @@
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Preloader
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-    <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex items-center justify-center bg-seashell dark:bg-darkGray">
-        <h2 class="load-text z-20 text-xl font-light tracking-[15px] uppercase">
-            <span class="![animation-delay:_0s]">L</span>
-            <span class="![animation-delay:_0.1s]">o</span>
-            <span class="![animation-delay:_0.2s]">a</span>
-            <span class="![animation-delay:_0.3s]">d</span>
-            <span class="![animation-delay:_0.4s]">i</span>
-            <span class="![animation-delay:_0.5s]">n</span>
-            <span class="![animation-delay:_0.6s]">g</span>
-        </h2>
+    <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex flex-col items-center justify-center bg-white dark:bg-powerBlack" role="status" aria-live="polite" aria-busy="true">
+        <div class="ensor-preloader-inner flex flex-col items-center gap-7 px-6">
+            <div class="ensor-preloader-logo">
+                <div class="ensor-preloader-logo-zoom" aria-hidden="true">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
+                    <div class="ensor-preloader-fill">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                    </div>
+                </div>
+            </div>
+            <p class="ensor-preloader-loading text-center text-[11px] font-semibold text-powerBlack md:text-xs dark:text-pastelGrey"></p>
+        </div>
     </div>
     <!--~~./ end Preloader ~~-->
 
@@ -75,8 +78,8 @@
         <div class="container">
             <div class="nav max-md:py-3 py-5 px-4 lg:px-6 xl:px-8 flex items-center justify-between bg-white dark:bg-[#1B1C1C] rounded-xl shadow-lg shadow-black/5">
                 <a href="index.html" class="inline-flex items-center gap-3 min-w-0">
-                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 bg-white grid place-content-center p-1.5">
-                        <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full object-contain">
+                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 grid place-content-center p-1.5">
+                        <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                     </span>
                     <span class="flex flex-col justify-center min-w-0 leading-none">
                         <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
@@ -90,8 +93,11 @@
                 </a>
                 <div class="main-menu *:transition-all *:text-darkGray *:inline-flex *:items-center dark:*:text-pastelGrey *:border *:border-transparent *:duration-300 *:px-6 *:py-2 *:leading-normal *:rounded-4xl *:font-semibold max-lg:hidden">
 
-                    <a href="index.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Inicio
+                    <a href="index.html" class="ensor-nav-volver dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Volver
+                    </a>
+                    <a href="blog.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Hablemos de…
                     </a>
                     <a href="about.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
                         Sobre mi
@@ -100,10 +106,7 @@
                         Proyectos
                     </a>
                     <a href="services.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
-                        Servicios
-                    </a>
-                    <a href="blog.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white hover:text-smokeGray dark:hover:text-white">
-                        Logs
+                        ¿Cómo puedo ayudarte?
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
@@ -116,8 +119,8 @@
                             <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <a href="contact.html" class="text-darkGray dark:text-pastelGrey font-semibold py-2.5 px-8 max-md:hidden leading-1.75 rounded-3xl">
-                        Hablemos
+                    <a href="contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
+                        <span>Hablemos</span>
                     </a>
                     <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
                         <i class="fal fa-bars"></i>
@@ -130,8 +133,8 @@
     <div class="mobile_menu fixed transition-all duration-300 top-0 -left-96 h-full bg-white dark:bg-powerBlack z-999 p-6 w-80 shadow-lg [&.is-menu-open]:left-0 flex flex-col lg:hidden">
         <div class="relative">
             <a href="index.html" class="inline-flex items-center gap-2.5 pr-10">
-                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 bg-white grid place-content-center p-1.5">
-                    <img src="assets/img/Logo-EnsorLogs.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full object-contain">
+                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 grid place-content-center p-1.5">
+                    <img src="assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                 </span>
                 <span class="flex flex-col justify-center min-w-0 leading-none">
                     <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">
@@ -148,8 +151,11 @@
             </button>
         </div>
         <div class="my-12 h-calc(100vh_-_16rem) overflow-y-scroll space-y-2 *:text-powerBlack *:bg-slate-50 dark:*:bg-metalBlack dark:*:text-white *:flex *:items-center *:justify-between *:py-2.5 *:px-4 *:rounded-md *:text-regular">
-            <a href="index.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Inicio
+            <a href="index.html" class="ensor-nav-volver [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Volver
+            </a>
+            <a href="blog.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Hablemos de…
             </a>
             <a href="about.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
                 Sobre mi
@@ -158,10 +164,7 @@
                 Proyectos
             </a>
             <a href="services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Servicios
-            </a>
-            <a href="blog.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
-                Logs
+                ¿Cómo puedo ayudarte?
             </a>
         </div>
         <div class="mt-auto">
@@ -185,29 +188,71 @@
     Start Main Content
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <div class="main-content mt-28 md:mt-32 lg:mt-36 xl:mt-48">
-        <div class="container">
+        <div class="container space-y-6">
+            <section class="mb-2 md:mb-4" aria-labelledby="proyectos-temas-heading" data-aos="fade-up">
+                <div class="rounded-2xl p-5 md:p-7 xl:p-9 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack">
+                    <h1 id="proyectos-temas-heading" class="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold text-powerBlack dark:text-pastelGrey tracking-tight text-balance max-w-4xl leading-tight">
+                        Cómo he aplicado los stacks en la vida real
+                    </h1>
+                    <span class="ensor-tagline-rule mt-4 h-0.5 max-w-[14rem] rounded-full block" aria-hidden="true"></span>
+                    <p class="mt-4 text-sm md:text-base text-darkGray dark:text-pastelGrey max-w-3xl leading-relaxed">
+                        Aquí encontrarás implementaciones con Linux, WordPress, CRM, bases de datos, Google Workspace, automatización y otras herramientas que forman parte de mi día a día.
+                    </p>
+                    <nav class="ensor-proyectos-temas mt-6 md:mt-8" aria-label="Filtrar proyectos por stack">
+                        <div class="ensor-home-temas-grid ensor-home-temas-grid--12 gap-2 md:gap-3">
+                            <a href="projects.html?tema=linux" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Linux"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/linux.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Linux</p></a>
+                            <a href="projects.html?tema=ia" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="IA"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/openai.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">IA</p></a>
+                            <a href="projects.html?tema=database" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Database"><div class="icon h-12 grid place-content-center text-3xl text-powerBlack dark:text-pastelGrey"><i class="fal fa-database" aria-hidden="true"></i></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Database</p></a>
+                            <a href="projects.html?tema=wordpress" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="WordPress"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/wordpress.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">WordPress</p></a>
+                            <a href="projects.html?tema=crm" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="CRM"><div class="icon h-12 grid place-content-center text-3xl text-powerBlack dark:text-pastelGrey"><i class="fal fa-users" aria-hidden="true"></i></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">CRM</p></a>
+                            <a href="projects.html?tema=marketing" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Marketing"><div class="icon h-12 grid place-content-center text-3xl text-powerBlack dark:text-pastelGrey"><i class="fal fa-bullhorn" aria-hidden="true"></i></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Marketing</p></a>
+                            <a href="projects.html?tema=python" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Python"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/python.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Python</p></a>
+                            <a href="projects.html?tema=google" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Google"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/google.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Google</p></a>
+                            <a href="projects.html?tema=servidores" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Servidores"><div class="icon h-12 grid place-content-center text-3xl text-powerBlack dark:text-pastelGrey"><i class="fal fa-server" aria-hidden="true"></i></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Servidores</p></a>
+                            <a href="projects.html?tema=it" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="IT"><div class="icon h-12 grid place-content-center text-3xl text-powerBlack dark:text-pastelGrey"><i class="fal fa-laptop-code" aria-hidden="true"></i></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">IT</p></a>
+                            <a href="projects.html?tema=windows" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Windows"><div class="icon h-12 grid place-content-center"><i class="fab fa-windows text-3xl text-powerBlack dark:text-pastelGrey" aria-hidden="true"></i></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Windows</p></a>
+                            <a href="projects.html?tema=mac" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Mac"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/apple.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Mac</p></a>
+                        </div>
+                        <p class="mt-5 text-center md:text-left">
+                            <a href="projects.html" class="ensor-blog-tema--todos inline-flex items-center gap-2 text-sm font-semibold text-powerBlack dark:text-pastelGrey underline-offset-2 hover:underline">
+                                <i class="fal fa-th-large text-xs opacity-80" aria-hidden="true"></i>
+                                Ver todos los proyectos
+                            </a>
+                        </p>
+                    </nav>
+                </div>
+            </section>
 
             <div class="projects-wrapper grid sm:grid-cols-2 lg:grid-cols-3 gap-6 *:rounded-2xl *:p-2 *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack *:border *:border-flasWhite dark:*:border-flasBlack" data-aos="fade-up">
                 
                 <!-- Project Item Starts -->
-                <div class="project-item group sm:col-span-2">
+                <div class="project-item group sm:col-span-2" data-temas="wordpress crm database it google marketing servidores">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img1.png" 
-                                alt="Brand Identity Design"
+                        <a href="proyecto-villa-martina-residences.html">
+                            <img
+                                src="assets/img/projects/img1.png"
+                                alt="Villa Martina Residences — proyecto PropTech"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            PROPTECH + OPERACIONES DIGITALES
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            PropTech · operaciones digitales
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=wordpress" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">WordPress</a>
+                        <a href="projects.html?tema=crm" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">CRM</a>
+                        <a href="projects.html?tema=database" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Database</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        <a href="projects.html?tema=google" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Google</a>
+                        <a href="projects.html?tema=marketing" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Marketing</a>
+                        <a href="projects.html?tema=servidores" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Servidores</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
-                                Villa Martina Residences: implementacion end-to-end para 110 unidades
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                            <a href="proyecto-villa-martina-residences.html" class="flex items-start gap-4 justify-between">
+                                Villa Martina Residences: implementación end-to-end para 110 unidades
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -220,24 +265,31 @@
                 <!-- Projects Item End -->
 
                 <!-- Project Item Starts -->
-                <div class="project-item group">
+                <div class="project-item group" data-temas="wordpress it servidores linux google">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img2.png" 
+                        <a href="proyecto-sport-city-club.html">
+                            <img
+                                src="assets/img/projects/img2.png"
+                                alt="Sport City Club — ecosistema digital"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
-                                alt="Cloths for real life"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            ECOSISTEMA DIGITAL
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            Ecosistema digital · club deportivo
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=wordpress" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">WordPress</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        <a href="projects.html?tema=servidores" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Servidores</a>
+                        <a href="projects.html?tema=linux" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Linux</a>
+                        <a href="projects.html?tema=google" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Google</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
-                                Sport City Club: tecnologia operativa desde anteproyecto
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                            <a href="proyecto-sport-city-club.html" class="flex items-start gap-4 justify-between">
+                                Sport City Club: tecnología operativa desde anteproyecto
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -250,24 +302,31 @@
                 <!-- Projects Item End -->
 
                 <!-- Project Item Starts -->
-                <div class="project-item group">
+                <div class="project-item group" data-temas="wordpress servidores database it mac">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img3.png" 
+                        <a href="proyecto-solana-residences.html">
+                            <img
+                                src="assets/img/projects/img3.png"
+                                alt="Solana Residences — web e infraestructura"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
-                                alt="Cloths for real life"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            TRANSFORMACION DIGITAL
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            Transformación digital · residencial
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=wordpress" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">WordPress</a>
+                        <a href="projects.html?tema=servidores" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Servidores</a>
+                        <a href="projects.html?tema=database" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Database</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        <a href="projects.html?tema=mac" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Mac</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
+                            <a href="proyecto-solana-residences.html" class="flex items-start gap-4 justify-between">
                                 Solana Residences: infraestructura, web y soporte operativo
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -280,24 +339,31 @@
                 <!-- Projects Item End -->
 
                 <!-- Project Item Starts -->
-                <div class="project-item group sm:col-span-2">
+                <div class="project-item group sm:col-span-2" data-temas="crm it marketing python database">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img4.png" 
+                        <a href="proyecto-apyca-developers.html">
+                            <img
+                                src="assets/img/projects/img4.png"
+                                alt="APYCA Developers — eficiencia operativa"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
-                                alt="Cloths for real life"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            OPERACIONES IT + PROPTECH
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            Operaciones IT · PropTech
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=crm" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">CRM</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        <a href="projects.html?tema=marketing" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Marketing</a>
+                        <a href="projects.html?tema=python" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Python</a>
+                        <a href="projects.html?tema=database" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Database</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
+                            <a href="proyecto-apyca-developers.html" class="flex items-start gap-4 justify-between">
                                 APYCA Developers: +40% en eficiencia operativa
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -310,24 +376,30 @@
                 <!-- Projects Item End -->
 
                 <!-- Project Item Starts -->
-                <div class="project-item group">
+                <div class="project-item group" data-temas="crm google marketing it">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img5.png" 
+                        <a href="proyecto-flujos-crm-captacion.html">
+                            <img
+                                src="assets/img/projects/img5.png"
+                                alt="Flujos de captación y CRM"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
-                                alt="Cloths for real life"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            AUTOMATIZACION CRM
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            Automatización CRM
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=crm" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">CRM</a>
+                        <a href="projects.html?tema=google" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Google</a>
+                        <a href="projects.html?tema=marketing" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Marketing</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
-                                Flujos de captacion y seguimiento comercial
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                            <a href="proyecto-flujos-crm-captacion.html" class="flex items-start gap-4 justify-between">
+                                Flujos de captación y seguimiento comercial
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -340,24 +412,31 @@
                 <!-- Projects Item End -->
 
                 <!-- Project Item Starts -->
-                <div class="project-item group">
+                <div class="project-item group" data-temas="database google it python marketing">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img6.png" 
+                        <a href="proyecto-dashboards-reporting.html">
+                            <img
+                                src="assets/img/projects/img6.png"
+                                alt="Dashboards y reporting de negocio"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
-                                alt="Cloths for real life"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            ANALITICA DE NEGOCIO
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            Analítica de negocio
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=database" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Database</a>
+                        <a href="projects.html?tema=google" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Google</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        <a href="projects.html?tema=python" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Python</a>
+                        <a href="projects.html?tema=marketing" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Marketing</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
+                            <a href="proyecto-dashboards-reporting.html" class="flex items-start gap-4 justify-between">
                                 Dashboards y reporting para decisiones operativas
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -370,24 +449,31 @@
                 <!-- Projects Item End -->
 
                 <!-- Project Item Starts -->
-                <div class="project-item group">
+                <div class="project-item group" data-temas="linux servidores it windows mac">
                     <div class="thumbnail rounded-lg overflow-hidden">
-                        <a href="projects-details.html">
-                            <img 
-                                src="assets/img/projects/img7.png" 
+                        <a href="proyecto-infraestructura-soporte-it.html">
+                            <img
+                                src="assets/img/projects/img7.png"
+                                alt="Infraestructura IT y soporte"
                                 class="h-56 sm:h-64 lg:h-72 xl:h-96 w-full object-cover object-center transition-all duration-300 group-hover:scale-110"
-                                alt="Cloths for real life"
                             >
                         </a>
                     </div>
                     <div class="description px-4 py-6 pb-4 space-y-2">
-                        <h6 class="text-sm text-nobelGray dark:text-slateGray font-medium">
-                            INFRAESTRUCTURA IT
-                        </h6>
+                        <p class="text-xs uppercase tracking-wide text-nobelGray dark:text-slateGray font-medium">
+                            Infraestructura IT
+                        </p>
+                        <div class="flex flex-wrap gap-1.5" aria-label="Stacks del proyecto">
+                        <a href="projects.html?tema=linux" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Linux</a>
+                        <a href="projects.html?tema=servidores" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Servidores</a>
+                        <a href="projects.html?tema=it" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">IT</a>
+                        <a href="projects.html?tema=windows" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Windows</a>
+                        <a href="projects.html?tema=mac" class="text-xs font-medium px-2 py-0.5 rounded-full border border-flasWhite dark:border-flasBlack bg-white/65 dark:bg-black/25 text-darkGray dark:text-pastelGrey hover:border-[var(--ensor-accent)] transition-colors">Mac</a>
+                        </div>
                         <h4 class="text-lg xl:text-xl 2xl:text-2xl font-semibold text-darkGray dark:text-pastelGrey">
-                            <a href="projects-details.html" class="flex items-start gap-4 justify-between">
-                                Servidores, redes y soporte tecnico avanzado
-                                <span class="ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey">
+                            <a href="proyecto-infraestructura-soporte-it.html" class="flex items-start gap-4 justify-between">
+                                Servidores, redes y soporte técnico avanzado
+                                <span class="ml-auto max-md:hidden shrink-0 group-hover:text-darkGray dark:group-hover:text-pastelGrey">
                                     <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -398,12 +484,13 @@
                     </div>
                 </div>
                 <!-- Projects Item End -->
+
             </div>
 
-            <div class="text-center pt-16">
-                <button type="button" class="ensor-btn ensor-btn-primary text-regular py-2 lg:py-3 px-7 lg:px-10">
-                    Load More Projects
-                </button>
+            <div class="text-center pt-12 pb-4" data-aos="fade-up">
+                <p class="text-sm text-darkGray dark:text-pastelGrey max-w-xl mx-auto">
+                    ¿Necesitas un caso parecido? <a href="contact.html" class="font-semibold underline underline-offset-2">Escríbeme</a> y revisamos alcance y stack.
+                </p>
             </div>
 
         </div>
@@ -454,6 +541,8 @@
     <script src="assets/js/aos.js"></script>
     <script src="assets/js/tilt.jquery.min.js"></script>
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/projects-tema-filter.js"></script>
+    <script src="assets/js/nav-volver.js"></script>
     <script src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
 </body>
