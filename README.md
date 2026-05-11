@@ -7,7 +7,7 @@ Más detalle de estructura y flujos: [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.
 ## Ver en local
 
 ```bash
-cd bentoman-html   # o la carpeta donde clonaste el repo
+cd ruta/del/repo
 python3 -m http.server 8080
 ```
 
