@@ -34,7 +34,14 @@ var getUrlParameter = function getUrlParameter(sParam) {
         sParameterName = sURLVariables[i].split('=');
 
         if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            if (sParameterName[1] === undefined) {
+                return true;
+            }
+            try {
+                return decodeURIComponent(sParameterName[1].replace(/\+/g, ' '));
+            } catch (e) {
+                return false;
+            }
         }
     }
     return false;

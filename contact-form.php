@@ -6,9 +6,23 @@ declare(strict_types=1);
  * Requiere PHP con mail() configurado en el servidor (hosting con envío SMTP/sendmail).
  */
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: contact.html', true, 302);
-    exit;
+function ensor_security_headers(): void
+{
+    if (headers_sent()) {
+        return;
+    }
+    header('X-Content-Type-Options: nosniff');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+}
+
+function ensor_strip_crlf(string $s): string
+{
+    return str_replace(["\r", "\n", "\0"], '', $s);
+}
+
+function ensor_len(string $s): int
+{
+    return function_exists('mb_strlen') ? mb_strlen($s, 'UTF-8') : strlen($s);
 }
 
 function isInjected(string $str): bool
@@ -19,8 +33,18 @@ function isInjected(string $str): bool
     return preg_match($inject, $str) === 1;
 }
 
+ensor_security_headers();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: contact.html', true, 302);
+    exit;
+}
+
 const WEBMASTER_EMAIL = 'hello@ensorlogs.com';
 const EXPECTED_CAPTCHA = 11;
+const MAX_NAME_LEN = 200;
+const MAX_SUBJECT_LEN = 300;
+const MAX_MESSAGE_LEN = 30000;
 
 $name = trim($_POST['clientName'] ?? '');
 $email_address = trim($_POST['clientEmail'] ?? '');
@@ -43,6 +67,10 @@ if ($honeypot !== '') {
     $result = 'missing';
     $page_heading = 'Faltan datos';
     $page_message = 'Completa todos los campos obligatorios antes de enviar el formulario.';
+} elseif (ensor_len($name) > MAX_NAME_LEN || ensor_len($subject) > MAX_SUBJECT_LEN || ensor_len($message) > MAX_MESSAGE_LEN) {
+    $result = 'too_long';
+    $page_heading = 'Texto demasiado largo';
+    $page_message = 'Acorta el nombre, el asunto o el mensaje e inténtalo de nuevo.';
 } elseif (! filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
     $result = 'bad_email';
     $page_heading = 'Correo no válido';
@@ -50,14 +78,19 @@ if ($honeypot !== '') {
 } elseif (isInjected($email_address) || isInjected($name) || isInjected($subject) || isInjected($message)) {
     $result = 'injection';
 } else {
+    $reply_safe = ensor_strip_crlf($email_address);
+    $subject_safe = ensor_strip_crlf($subject);
+    if ($subject_safe === '') {
+        $subject_safe = '(sin asunto)';
+    }
     $body = "Nombre: {$name}\r\n"
         . "Email: {$email_address}\r\n"
         . "Asunto: {$subject}\r\n\r\n"
         . "Mensaje:\r\n{$message}";
 
-    $subject_line = '[Contacto ensorlogs.com] ' . $subject;
+    $subject_line = '[Contacto ensorlogs.com] ' . $subject_safe;
     $headers = 'From: Ensorlogs <' . WEBMASTER_EMAIL . '>' . "\r\n"
-        . 'Reply-To: ' . $email_address . "\r\n"
+        . 'Reply-To: ' . $reply_safe . "\r\n"
         . 'MIME-Version: 1.0' . "\r\n"
         . 'Content-Type: text/plain; charset=UTF-8' . "\r\n"
         . 'Content-Transfer-Encoding: 8bit' . "\r\n"
@@ -79,6 +112,10 @@ if ($honeypot !== '') {
 }
 
 $page_title = $result === 'ok' ? 'Mensaje enviado | Ensorlogs' : 'Envío de formulario | Ensorlogs';
+
+if (! headers_sent()) {
+    header('Content-Type: text/html; charset=UTF-8');
+}
 ?>
 <!DOCTYPE html>
 <html lang="es" class="">

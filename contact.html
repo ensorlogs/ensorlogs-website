@@ -45,7 +45,7 @@
     ================================================== -->
     <link rel="stylesheet" href="assets/css/fontAwesome5Pro.css">
     <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/aos-2.3.1.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css">
     <link rel="stylesheet" href="assets/css/ensor-brand.css">
 
@@ -269,29 +269,29 @@
                     </p>
 
                     <!-- Main Contact Form Starts -->
-                    <form action="contact-form.php" method="post" class="relative mt-8 grid sm:grid-cols-2 gap-6">
+                    <form action="contact-form.php" method="post" class="relative mt-8 grid sm:grid-cols-2 gap-6" autocomplete="on">
                         <!-- Anti-spam: no rellenar (honeypot) -->
                         <div class="absolute -left-[9999px] top-auto h-0 overflow-hidden" aria-hidden="true">
                             <label for="website">Sitio web</label>
                             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" value="">
                         </div>
                         <div class="input-item">
-                            <input type="text" id="clientName" name="clientName" class="rounded-4xl" placeholder="Nombre" required aria-label="Nombre">
+                            <input type="text" id="clientName" name="clientName" class="rounded-4xl" placeholder="Nombre" required aria-label="Nombre" maxlength="200" autocomplete="name">
                         </div>
                         <div class="input-item">
-                            <input type="email" id="clientEmail" name="clientEmail" class="rounded-4xl" placeholder="Correo electrónico" required aria-label="Correo electrónico">
+                            <input type="email" id="clientEmail" name="clientEmail" class="rounded-4xl" placeholder="Correo electrónico" required aria-label="Correo electrónico" maxlength="254" autocomplete="email">
                         </div>
                         <div class="input-item sm:col-span-2">
-                            <input type="text" id="contactSubject" name="contactSubject" class="rounded-4xl" placeholder="Asunto" required aria-label="Asunto">
+                            <input type="text" id="contactSubject" name="contactSubject" class="rounded-4xl" placeholder="Asunto" required aria-label="Asunto" maxlength="300" autocomplete="off">
                         </div>
                         <div class="input-item sm:col-span-2">
-                            <textarea id="contact_message" name="contact__message" rows="10" class="rounded-2xl resize-none" placeholder="Escribe tu mensaje..." required aria-label="Mensaje"></textarea>
+                            <textarea id="contact_message" name="contact__message" rows="10" class="rounded-2xl resize-none" placeholder="Escribe tu mensaje..." required aria-label="Mensaje" maxlength="30000"></textarea>
                         </div>
                         <div class="input-item sm:col-span-2">
                             <label for="contact_captcha" class="block text-sm text-darkGray dark:text-pastelGrey mb-2">
                                 Verificación anti-spam: ¿Cuánto es 5 + 6?
                             </label>
-                            <input type="text" id="contact_captcha" name="contact_captcha" class="rounded-4xl max-w-xs" placeholder="Respuesta numérica" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required aria-describedby="captcha-hint">
+                            <input type="text" id="contact_captcha" name="contact_captcha" class="rounded-4xl max-w-xs" placeholder="Respuesta numérica" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required aria-describedby="captcha-hint" maxlength="4">
                             <p id="captcha-hint" class="text-xs text-nobelGray dark:text-slateGray mt-1">Necesario para evitar envíos automáticos.</p>
                         </div>
                         <div class="input-item sm:col-span-2 text-center lg:text-end">
@@ -347,15 +347,15 @@
     <!--~~ End Scroll to Top ~~-->
 
     <!-- Js Library Start -->
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/waypoints.min.js"></script>
-    <script src="assets/js/tw-elements.umd.min.js"></script>
-    <script src="assets/js/swiper-bundle.min.js"></script>
-    <script src="assets/js/aos.js"></script>
-    <script src="assets/js/tilt.jquery.min.js"></script>
-    <script src="assets/js/script.js"></script>
-    <script src="assets/js/nav-volver.js"></script>
-    <script src="assets/js/theme-mode.js"></script>
+    <script defer src="assets/js/jquery-3.6.0.min.js"></script>
+    <script defer src="assets/js/waypoints.min.js"></script>
+    <script defer src="assets/js/tw-elements.umd.min.js"></script>
+    <script defer src="assets/js/swiper-bundle.min.js"></script>
+    <script defer src="assets/js/aos.js"></script>
+    <script defer src="assets/js/tilt.jquery.min.js"></script>
+    <script defer src="assets/js/script.js"></script>
+    <script defer src="assets/js/nav-volver.js"></script>
+    <script defer src="assets/js/theme-mode.js"></script>
     <script>
     (function () {
         var params = new URLSearchParams(window.location.search);

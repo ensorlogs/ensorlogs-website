@@ -49,7 +49,7 @@ Support	      :	    themearray@gmail.com
     (function preloaderHide() {
         var done = false;
         /* Tiempo mínimo visible: animación del logo + lectura del mensaje geek */
-        var MIN_VISIBLE_MS = 4500;
+        var MIN_VISIBLE_MS = 1200;
         var FADE_OUT_MS = 500;
         var t0 =
             typeof performance !== 'undefined' &&

@@ -1,0 +1,42 @@
+# Ensorlogs Web — rendimiento y seguridad (Apache / SiteGround)
+# Si algo no aplica en tu plan, Apache ignora bloques <IfModule> vacíos.
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+    # Evita sniffing de MIME en descargas desde esta carpeta
+</IfModule>
+
+# Sin listado de directorios
+Options -Indexes
+
+# HTTPS solo en dominio de producción (no afecta localhost / preview local)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE application/javascript application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType image/svg+xml "access plus 14 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/gif "access plus 30 days"
+    ExpiresByType font/woff2 "access plus 180 days"
+    ExpiresByType font/woff "access plus 180 days"
+    ExpiresDefault "access plus 3 days"
+</IfModule>
