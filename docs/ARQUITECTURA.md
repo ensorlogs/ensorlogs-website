@@ -1,6 +1,6 @@
-# Arquitectura del sitio Ensorlogs Web
+# Arquitectura
 
-Vista **técnica** del repositorio: carpetas, flujos de datos y dependencias entre piezas.
+Carpetas, flujos (blog, contacto, generador de artículos) y qué depende de qué.
 
 ---
 

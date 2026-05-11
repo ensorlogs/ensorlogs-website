@@ -1,6 +1,6 @@
-# Guía para estudiantes — recorrido por el código Ensorlogs
+# Guía de lectura del repo
 
-Esta guía es un **itinerario de lectura**, no un curso completo de HTML/CSS/JS. Cada bloque tiene una **meta de aprendizaje** y archivos concretos.
+Orden sugerido para entender cómo está montado el sitio (HTML, CSS, JS, PHP y el script de artículos). Cada sección apunta a archivos concretos.
 
 ---
 
@@ -15,7 +15,7 @@ Esta guía es un **itinerario de lectura**, no un curso completo de HTML/CSS/JS.
 3. `<body>`: preloader, `<header>`, `<main>`, `<footer>`.
 4. Al final del `<body>`, scripts con **`defer`**: se descargan en paralelo al HTML y se ejecutan **en orden** cuando el documento está parseado.
 
-**Pregunta para ti:** ¿Por qué el tema se decide en dos sitios (inline en `<head>` y `theme-mode.js`)? Pista: uno es mínimo y síncrono; el otro sincroniza botones con jQuery.
+El tema claro/oscuro aparece en dos sitios: un script mínimo en `<head>` (evita flash) y `theme-mode.js` para el interruptor y el resto.
 
 ---
 
@@ -27,7 +27,7 @@ Esta guía es un **itinerario de lectura**, no un curso completo de HTML/CSS/JS.
 | `assets/css/style.min.css` | Plantilla + Tailwind **compilado** (no edites a mano; el fuente Tailwind está en `src/tailwind.css` si lo usas en tu flujo). |
 | `assets/css/ensor-brand.css` | **Marca Ensorlogs**: variables `--ensor-*`, botones, preloader, filtros del blog, etc. |
 
-**Ejercicio:** en `ensor-brand.css`, busca `:root` y cambia solo `--ensor-accent` en local; recarga y observa qué piezas heredan el color.
+En `ensor-brand.css`, `:root` define variables como `--ensor-accent`; buena referencia para ver qué toca la marca.
 
 ---
 
@@ -58,7 +58,7 @@ La plantilla original usa **jQuery** (`assets/js/script.js`). Es código imperat
 3. Construye cabeceras de correo **sin saltos de línea** en campos que van a cabeceras (evita inyección de cabeceras).
 4. Responde con **una página HTML** (mismo estilo visual) según éxito o error.
 
-**Pregunta para ti:** ¿Por qué `htmlspecialchars()` al imprimir textos en la respuesta?
+En la salida HTML del PHP conviene escapar textos que vienen del usuario (`htmlspecialchars`).
 
 ---
 
