@@ -1,5 +1,7 @@
 # Ensorlogs Web (`ensorlogsweb`)
 
+_Repositorio en GitHub:_ [ensorlogs/ensorlogs-website](https://github.com/ensorlogs/ensorlogs-website) — sitio principal del blog Ensorlogs.
+
 Sitio web **estático** de **Ensorlogs** (portfolio, blog, proyectos y contacto). Este repositorio está pensado para **leerlo en GitHub** y para **aprender**: el código mezcla HTML “clásico”, utilidades **Tailwind** compiladas en `style.min.css`, capa de marca **`ensor-brand.css`**, **JavaScript** sin framework en el front, un poco de **PHP** para el formulario y **Python** opcional para generar artículos.
 
 ---
