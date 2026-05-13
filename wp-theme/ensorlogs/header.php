@@ -59,6 +59,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                     </span>
                     <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
                         <?php echo esc_html(function_exists('ensorlogs_get_tagline') ? ensorlogs_get_tagline() : __('Bitácora de un geek', 'ensorlogs')); ?>
+                        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                     </span>
                     <span class="ensor-tagline-rule mt-1.5 h-0.5 max-w-[12rem] rounded-full" aria-hidden="true"></span>
                 </span>
@@ -113,6 +114,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                 </span>
                 <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
                     <?php echo esc_html(function_exists('ensorlogs_get_tagline') ? ensorlogs_get_tagline() : __('Bitácora de un geek', 'ensorlogs')); ?>
+                    <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                 </span>
                 <span class="ensor-tagline-rule mt-1 h-0.5 max-w-[10rem] rounded-full" aria-hidden="true"></span>
             </span>

@@ -1,7 +1,19 @@
 Instalación del tema Ensorlogs (WordPress)
 ==========================================
 
-Versión: 1.7.7
+Versión: 1.7.8
+
+Novedades 1.7.8
+---------------
+   - Bandera de Venezuela junto al tagline "Bitácora de un geek" en el
+     header (versión escritorio + menú móvil). SVG vectorial con las 8
+     estrellas oficiales en arco, bordes redondeados, sombra sutil y
+     micro-animación de "ondear" al hacer hover sobre el logo.
+   - Pequeño guiño de origen presente en las 40 páginas (estáticas + WP).
+   - Respeta `prefers-reduced-motion` (sin animación si el usuario lo
+     prefiere).
+
+Versión anterior: 1.7.7
 
 Novedades 1.7.7
 ---------------
@@ -29,7 +41,7 @@ Novedades 1.7.7
      que se había perdido en pasadas anteriores. El script ahora
      reconstruye el `<footer>` completo de forma idempotente.
 
-Versión anterior: 1.7.6
+Versión anterior: 1.7.6 (referencia histórica)
 
 1) Instalación o actualización
 ------------------------------
