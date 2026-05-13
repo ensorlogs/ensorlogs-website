@@ -1,0 +1,251 @@
+Instalación del tema Ensorlogs (WordPress)
+==========================================
+
+Versión: 1.7.7
+
+Novedades 1.7.7
+---------------
+   - Página "Sobre mí" reordenada: ahora muestra **primero** el bloque
+     "Activismo de software libre" (Ubuntu, Fedora, Mozilla, FLISOL,
+     LibreOffice Comunidad Venezuela, aula docente) y luego la
+     Experiencia Profesional + Formación. La intención es contar primero
+     la historia humana antes de los años/empresas/títulos.
+   - Footer global: micro-firma final "Hecho con ❤️ y WordPress"
+     (latido sutil, WordPress enlaza a wordpress.org, dark-mode listo).
+   - Footer global: enlace secundario a Calendly bajo el lead
+     ("¿Prefieres una llamada? Reserva 30 min en Calendly").
+   - Calendly integrado en home (tarjeta "Reserva una llamada · 30 min"
+     en el widget lateral + pill "Disponible · agenda 30 min" en el hero)
+     y en contact (icono Calendly en la fila de redes + tarjeta
+     destacada "¿Prefieres hablar directamente?").
+   - Página "Servicios" estrena portada destacada: imagen 16:9 con
+     escena de workshop, título "Lo que puedo hacer por ti", pills de
+     áreas y CTAs (contacto + Calendly).
+   - Bio reescrita en voz personal con los tres pilares: **documentar**,
+     **conectar**, **ayudar**.
+   - Voz personal extendida a Servicios, Proyectos, Blog y al menú
+     móvil ("¿Hablamos?" en lugar de "Tienes una propuesta?").
+   - Bug fix grave: el inyector de footer recuperó el `ensor-legal-row`
+     que se había perdido en pasadas anteriores. El script ahora
+     reconstruye el `<footer>` completo de forma idempotente.
+
+Versión anterior: 1.7.6
+
+1) Instalación o actualización
+------------------------------
+
+A) Subida por escritorio (recomendada)
+   - Apariencia → Temas → Añadir nuevo → Subir tema → ensorlogs.zip.
+   - Activa el tema. Si tenías una versión anterior, esta sustituye los
+     archivos del tema pero NO toca tu contenido (artículos, proyectos,
+     páginas, ajustes, Customizer).
+
+B) Por FTP/SFTP
+   - Copia la carpeta `ensorlogs/` completa a `wp-content/themes/ensorlogs/`.
+   - Apariencia → Temas → Activa «EnsorLogs Theme».
+
+C) Actualizaciones automáticas desde GitHub
+   - El tema consulta `https://api.github.com/repos/<repo>/releases/latest`
+     cada 6 horas.
+   - El repo por defecto es `heyensor/bentoman-html`. Para cambiarlo, define
+     en `wp-config.php`:
+         define('ENSORLOGS_GITHUB_REPO', 'tu-usuario/tu-repo');
+   - Para repos privados añade un token con scope `repo`:
+         define('ENSORLOGS_GITHUB_TOKEN', 'ghp_xxx...');
+   - El asset esperado en cada release es `ensorlogs.zip`. Si lo nombras
+     distinto, define `ENSORLOGS_GITHUB_ASSET`.
+   - Forzar comprobación ahora: Apariencia → Ensorlogs · Seed → «Buscar
+     actualizaciones ahora».
+
+2) Primera activación
+---------------------
+
+   - El tema crea, una sola vez, las páginas estructurales (slug: inicio,
+     about, blog, projects, services, contact, credentials) y los artículos
+     / proyectos definidos en el manifest.
+   - Reglas clave del seed:
+       · Si un slug ya existe (cualquier estado, incluida la papelera),
+         se respeta y se omite.
+       · Nunca sobrescribe contenido existente en la base de datos.
+       · La portada estática se fija a la página «Inicio» solo si no se
+         había definido otra.
+   - Ajustes → Enlaces permanentes → «Nombre de la entrada» → Guardar.
+     Refresca las reglas de las URLs `.html` y `/tema/...`.
+
+3) Personalización (Customizer)
+-------------------------------
+
+Apariencia → Personalizar → sección **Ensorlogs**, paneles:
+
+   - Identidad: eslogan corto, frase del CTA del pie, nombre y cargo del
+     autor (alimentan JSON-LD schema.org).
+   - Redes sociales: LinkedIn, GitHub, X, Instagram, YouTube, Mastodon,
+     Bluesky. Las URLs que rellenes entran como `sameAs` en JSON-LD.
+   - SEO y tarjetas sociales: descripción por defecto + imagen Open Graph.
+   - Apariencia: color de acento y modo (claro / oscuro / sistema).
+     · Por defecto el sitio carga en **modo claro** y deja al visitante la
+       opción de cambiar a oscuro desde el botón del header. La preferencia
+       se guarda en `localStorage.theme` y persiste en cada visita.
+
+Si no tocas el Customizer, el sitio se ve exactamente igual que antes (los
+defaults coinciden con los strings hardcoded que había).
+
+4) Taxonomía «Tema» (filtros del blog y proyectos)
+--------------------------------------------------
+
+   - Cada artículo / proyecto puede llevar varios temas. Slugs válidos:
+     `wordpress`, `linux`, `ia`, `database`, `crm`, `marketing`, `python`,
+     `google`, `servidores`, `it`, `windows`, `mac`.
+   - Puedes editarlos de dos formas:
+       a) En el metabox de la tarjeta del listado (campo «Temas»): texto
+          plano, slugs separados por espacios. El tema lo sincroniza
+          automáticamente con la taxonomía.
+       b) En la UI nativa de la taxonomía «Temas» del menú del CPT.
+   - URLs automáticas tipo `/tema/wordpress/` con archivo paginado.
+
+5) Edición del contenido
+------------------------
+
+   - Logs / proyectos: «Logs» y «Proyectos (casos)» en el escritorio.
+     Cada uno tiene editor de bloques + metabox con los campos de la tarjeta.
+   - Páginas estáticas: renderizadas desde fragmentos HTML estáticos
+     (`partials/*.fragment.html`). Si quieres editar una desde el escritorio
+     o con Elementor, cambia la plantilla a «Página por defecto» en el
+     sidebar del editor.
+
+   Resaltar palabras clave (`<mark>`)
+       - Editor clásico: barra superior → botón «Marker». Toggle: si la
+         selección ya está dentro de `<mark>`, lo retira.
+       - Editor de bloques (Gutenberg): selecciona texto → flecha del menú
+         contextual → «Resaltado». También puedes pegar `<mark>palabra</mark>`
+         desde el bloque HTML.
+
+6) Importación manual (no destructiva)
+--------------------------------------
+
+Apariencia → Ensorlogs · Seed → «Ejecutar seed (no destructivo)». Crea solo
+los elementos del manifest que falten. Útil tras restaurar la base de datos
+o si añadiste nuevos artículos al manifest sin tocar la versión del seed.
+
+7) SEO
+------
+
+   - El tema añade meta description, Open Graph, Twitter Cards y JSON-LD
+     SOLO si NO detecta plugin SEO (Yoast / Rank Math / AIOSEO / SEOPress /
+     WP Meta SEO). Con plugin SEO activo, el tema se silencia.
+
+8) Rendimiento
+--------------
+
+   - Scripts del tema con `defer` (excepto jQuery).
+   - Emojis, generador, RSD/WLW manifest, shortlinks fuera del head.
+   - CSS de bloques nativos se carga solo cuando hay bloques en uso.
+   - Imágenes del contenido reciben `loading="lazy"` y `decoding="async"`.
+   - Listados (blog y proyectos): HTML cacheado 6 h en transient, con
+     invalidación automática al guardar / publicar / eliminar cualquier
+     artículo o proyecto, al cambiar términos de la taxonomía «Tema» o al
+     guardar el Customizer.
+   - Fuentes: por defecto se cargan desde fonts.bunny.net (mirror
+     privacy-friendly de Google Fonts, no recoge IPs, compatible RGPD).
+
+   Self-host total de fuentes (opcional):
+       1. Descarga «Bricolage Grotesque» de https://gwfh.mranftl.com/fonts/bricolage-grotesque
+          (formato WOFF2, sólo los pesos que uses: 300, 400, 600, 700).
+       2. Coloca los archivos en `wp-content/themes/ensorlogs/assets/fonts/bricolage/`.
+       3. Crea `assets/fonts/bricolage/bricolage.css` con `@font-face` apuntando
+          a los `.woff2` locales (relativos).
+       4. Recarga el sitio. El tema detecta el archivo y deja de hacer
+          peticiones externas.
+
+9bis) Comentario del autor (audio)
+----------------------------------
+
+Cada log puede llevar un audio narrado por ti, estilo "comentarios del
+director", para acompañar la lectura.
+
+   - Editor del log → metabox "Comentario del autor (audio)":
+       · URL del .mp3 (puedes subirlo a la Mediateca).
+       · Título mostrado en la card y el reproductor (opcional).
+       · Duración (opcional, formato mm:ss).
+       · Capítulos: una línea por capítulo en formato "0:00 Título"
+         (también admite "0:01:23 Título" para audios largos).
+       · Invitados: una línea por invitado, "Nombre · Rol".
+   - El front muestra una card "Comentario del autor" bajo la cabecera
+     del log y un mini-reproductor sticky abajo (±15 s, velocidad 0.75x–2x).
+
+9ter) Quiz de comprensión del log
+---------------------------------
+
+   - Editor del log → metabox "Quiz de comprensión del log". Una pregunta
+     por bloque, separados por "---":
+
+         Q: ¿Pregunta?
+         A: Opción 1
+         B: Opción 2 *        ← * marca la opción correcta
+         C: Opción 3
+         D: Opción 4
+         E: Explicación (opcional, se muestra al verificar).
+         ---
+         Q: ¿Otra pregunta?
+         A: ...
+
+   - Si hay quiz, en la cabecera del log aparece un badge amarillo
+     "Pendiente · quiz al final". Al completarlo, pasa a verde
+     "Log completado".
+   - Al final del log se muestra el botón "He leído y comprendido el log",
+     que se desbloquea al acertar todas las preguntas y guarda el estado
+     en localStorage (sin necesidad de login).
+   - En el header del sitio aparece un contador "Logs Completados" debajo
+     del tagline.
+   - Reseteo manual del usuario (consola del navegador):
+         EnsorLogsCompleted.clear()
+
+10) Accesibilidad y cookies (RGPD / LOPDGDD)
+--------------------------------------------
+
+   - El tema incluye en TODAS las páginas:
+       · Enlace "Saltar al contenido principal" (visible al pulsar Tab).
+       · Toolbar flotante con tamaño de texto, espaciado de lectura y
+         modo alto contraste. Preferencias persistentes por dispositivo.
+       · Banner de cookies con 3 opciones (aceptar / rechazar / personalizar)
+         y modal de preferencias por categoría. El consentimiento se guarda
+         12 meses en localStorage + cookie técnica `ensorlogs_consent`.
+       · Enlaces legales en el footer (aviso, privacidad, cookies,
+         accesibilidad) y botón "Preferencias de cookies".
+   - Páginas legales seedeadas como hijas de `legal/`. Edítalas desde el
+     escritorio para añadir tus datos reales (busca los `[CORCHETES]`).
+   - Para condicionar scripts a consentimiento, márcalos así:
+         <script type="text/plain" data-ensor-consent="analytics">
+           // tu script de analítica aquí
+         </script>
+     Se ejecutará cuando el usuario acepte la categoría correspondiente.
+
+11) Seguridad (endurecimiento aplicado)
+--------------------------------------
+
+   - XML-RPC deshabilitado. Si necesitas Jetpack:
+         define('ENSORLOGS_ALLOW_XMLRPC', true);
+   - REST API `/wp/v2/users` bloqueado para anónimos.
+   - Enumeración por `?author=N` redirigida al inicio.
+   - Cabeceras de seguridad: `X-Content-Type-Options`, `Referrer-Policy`,
+     `X-Frame-Options`, `Permissions-Policy`, HSTS en HTTPS.
+   - Limitador suave de intentos de login: 15 min de bloqueo tras 6 fallos
+     por IP. Desactivable con el filtro `ensorlogs_throttle_login`.
+   - Versión de WordPress eliminada de RSS y meta `generator`.
+
+12) Compatibilidad
+-------------------
+
+   - WordPress: requiere 6.0+, probado en 6.8.
+   - PHP: 8.0 o superior.
+   - `theme.json` configurado: paleta cerrada, fuente Bricolage, tamaños S/M/L/XL/2XL,
+     layout content 780 / wide 1180 px.
+   - Compatible con Elementor en páginas genéricas (`page.php`).
+
+13) Resumen de constantes opcionales (wp-config.php)
+----------------------------------------------------
+
+   define('ENSORLOGS_GITHUB_REPO',   'usuario/repo');   // por defecto: heyensor/bentoman-html
+   define('ENSORLOGS_GITHUB_ASSET',  'ensorlogs.zip');  // nombre del zip en el release
+   define('ENSORLOGS_GITHUB_TOKEN',  'ghp_xxxxxxxxx');  // sólo si tu repo es privado
+   define('ENSORLOGS_ALLOW_XMLRPC',  true);             // re-habilita XML-RPC

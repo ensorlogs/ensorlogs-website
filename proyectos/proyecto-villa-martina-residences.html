@@ -5,13 +5,13 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
-    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
+    <script>(function(){try{if(localStorage.theme==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
     ================================================== -->
     <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
     <meta name="keywords"
         content="caso estudio IT, proyecto Ensorlogs, PropTech, CRM, portfolio técnico">
     <meta name="description"
@@ -48,6 +48,10 @@
     <link rel="stylesheet" href="../assets/css/style.min.css">
     <link rel="stylesheet" href="../assets/css/ensor-brand.css">
 
+    <link rel="stylesheet" href="../assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="../assets/css/ensor-cookies.css">
+    <meta name="ensor-cookies-url" content="../legal/cookies.html">
+    <link rel="stylesheet" href="../assets/css/ensor-quiz.css">
 </head>
 
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
@@ -170,7 +174,7 @@
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
                 <p  class="font-medium">
-                    Tienes una propuesta?
+                    ¿Hablamos?
                 </p>
                 <a href="../contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
                     Contactar
@@ -382,20 +386,45 @@
     Start Footer
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <footer class="mt-24 pb-8" data-aos="fade-up">
-        <div class="container text-center space-y-6">
-            <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-6xl">
-                Contacto
-            </h5>
-            <p>
-                <a href="mailto:hello@ensorlogs.com" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
-                    hello@ensorlogs.com
-                </a>
-            </p>
-            <p>
-                &copy;2026 <a href="#" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
-            </p>
+        <div class="container text-center">
+            <div class="ensor-footer-cta" data-aos="fade-up">
+                <span class="ensor-footer-cta__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
+                    </svg>
+                </span>
+                <h5 class="ensor-footer-cta__heading">
+                    ¿Interesado en trabajar conmigo? <a href="../contact.html" class="ensor-footer-cta__link">Contáctame</a>
+                </h5>
+                <p class="ensor-footer-cta__lead">
+                    Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
+                </p>
+                <p class="ensor-footer-cta__alt">
+                    <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
+                        <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="ensor-footer-cta__copy">
+                    &copy;2026 <a href="#top" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
+                    <span class="ensor-footer-cta__love" aria-label="Hecho con amor y WordPress">
+                        · Hecho con <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span> y <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
+                    </span>
+                </p>
+            </div>
         </div>
-    </footer>
+    <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
+            <a href="../legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
+            <a href="../legal/privacidad.html" class="hover:underline">Privacidad</a>
+            <a href="../legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="../legal/accesibilidad.html" class="hover:underline">Accesibilidad</a>
+            <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Preferencias de cookies</button>
+        </nav>
+    </div>
+</footer>
     <!--~~ Footer End ~~-->
 
     </main>
@@ -422,6 +451,9 @@
     <script defer src="../assets/js/nav-volver.js"></script>
     <script defer src="../assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
+    <script defer src="../assets/js/ensor-a11y.js"></script>
+    <script defer src="../assets/js/ensor-cookies.js"></script>
+    <script defer src="../assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

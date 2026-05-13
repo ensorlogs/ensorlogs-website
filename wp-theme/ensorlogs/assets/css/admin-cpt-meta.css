@@ -1,0 +1,86 @@
+/* Panel meta: artículos y proyectos Ensorlogs */
+.ensor-cpt-meta {
+    max-width: 56rem;
+    background: #fdfdfd;
+    border: 1px solid #dcdcde;
+    border-radius: 10px;
+    padding: 1rem 1.25rem 0.25rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.ensor-cpt-meta__section {
+    margin: 0 0 1.25rem;
+    padding: 0 0 1rem;
+    border-bottom: 1px solid #dcdcde;
+}
+
+.ensor-cpt-meta__section:last-of-type {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.ensor-cpt-meta__title {
+    margin: 0 0 0.5rem;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #1d2327;
+}
+
+.ensor-cpt-meta__help {
+    margin: 0 0 0.75rem;
+    font-size: 13px;
+    color: #50575e;
+    line-height: 1.5;
+}
+
+.ensor-cpt-meta__row {
+    margin-bottom: 0.75rem;
+}
+
+.ensor-cpt-meta__row label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 13px;
+}
+
+.ensor-cpt-meta__row input[type="text"],
+.ensor-cpt-meta__row input[type="url"],
+.ensor-cpt-meta__row textarea,
+.ensor-cpt-meta__row select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.ensor-cpt-meta__row textarea {
+    min-height: 5em;
+    line-height: 1.5;
+}
+
+.ensor-cpt-meta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.ensor-cpt-meta__preview {
+    margin-top: 10px;
+    max-width: min(100%, 360px);
+    border-radius: 10px;
+    border: 1px solid #c3c4c7;
+    overflow: hidden;
+    background: linear-gradient(145deg, #f6f6f7 0%, #ececec 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.ensor-cpt-meta__preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+}

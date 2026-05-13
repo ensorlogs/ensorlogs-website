@@ -1,0 +1,154 @@
+/**
+ * Estilos del editor (Gutenberg) alineados con Ensorlogs — tipografía, ritmo y legibilidad.
+ */
+:root {
+    --ensor-accent: #d9a300;
+    --ensor-ink: #1a1a1a;
+    --ensor-page-bg: #faf8f3;
+    --ensor-muted: #4a4a4a;
+}
+
+.editor-styles-wrapper,
+.block-editor-block-preview__content {
+    font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ensor-ink);
+    background-color: var(--ensor-page-bg);
+}
+
+/* Aire alrededor del contenido (más cómodo al escribir largo). */
+.editor-styles-wrapper .block-editor-writing-flow {
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(0.75rem, 2vw, 1.5rem);
+    padding-right: clamp(0.75rem, 2vw, 1.5rem);
+    padding-bottom: 3rem;
+}
+
+.editor-styles-wrapper .block-editor-block-list__layout {
+    padding-top: 0.5rem;
+}
+
+.editor-styles-wrapper .wp-block {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+}
+
+.editor-styles-wrapper .wp-block-heading h1,
+.editor-styles-wrapper h1.wp-block-heading {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+}
+
+.editor-styles-wrapper .wp-block-heading h2,
+.editor-styles-wrapper h2.wp-block-heading {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.editor-styles-wrapper .wp-block-heading h3,
+.editor-styles-wrapper h3.wp-block-heading {
+    font-weight: 650;
+}
+
+.editor-styles-wrapper a {
+    color: var(--ensor-accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+/* Marker (botón Marker o etiqueta <mark>): mismo look que en el front.
+ * Lo declaramos también sin el prefijo `.editor-styles-wrapper` para que
+ * funcione dentro del iframe de TinyMCE en el editor clásico.
+ */
+.editor-styles-wrapper mark,
+mark {
+    background: linear-gradient(180deg, transparent 60%, rgba(255, 224, 102, 0.95) 60%);
+    color: inherit;
+    padding: 0 0.1em;
+    border-radius: 2px;
+}
+
+.editor-styles-wrapper .wp-block-quote {
+    border-left: 4px solid var(--ensor-accent);
+    padding-left: 1em;
+}
+
+.editor-styles-wrapper .wp-block-pullquote {
+    border-top: 3px solid var(--ensor-accent);
+    border-bottom: 3px solid var(--ensor-accent);
+}
+
+.editor-styles-wrapper .wp-block-separator {
+    border-color: rgba(26, 26, 26, 0.12);
+}
+
+.editor-styles-wrapper .wp-block-list {
+    padding-left: 1.35em;
+}
+
+.editor-styles-wrapper .wp-block-list li {
+    margin-top: 0.35em;
+    margin-bottom: 0.35em;
+}
+
+.editor-styles-wrapper figcaption,
+.editor-styles-wrapper .wp-element-caption {
+    font-size: 0.9em;
+    color: var(--ensor-muted);
+    margin-top: 0.5em;
+}
+
+.editor-styles-wrapper .wp-block-code,
+.editor-styles-wrapper .wp-block-preformatted pre {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    line-height: 1.55;
+    background: rgba(26, 26, 26, 0.06);
+    border-radius: 8px;
+    padding: 1em 1.1em;
+    border: 1px solid rgba(26, 26, 26, 0.08);
+}
+
+.editor-styles-wrapper .wp-block-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.editor-styles-wrapper .wp-block-table th,
+.editor-styles-wrapper .wp-block-table td {
+    border: 1px solid rgba(26, 26, 26, 0.12);
+    padding: 0.5em 0.65em;
+}
+
+.editor-styles-wrapper .wp-block-columns {
+    gap: 1.5rem;
+}
+
+/* Bloque HTML importado: marco suave para distinguirlo del resto. */
+.editor-styles-wrapper .wp-block-html {
+    border: 1px dashed rgba(217, 163, 0, 0.55);
+    border-radius: 8px;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.editor-styles-wrapper .wp-block-html textarea {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Alineación amplia: un poco más de ancho visual en el lienzo. */
+.editor-styles-wrapper .alignwide {
+    max-width: min(72rem, 100%);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.editor-styles-wrapper .alignfull {
+    max-width: none;
+}

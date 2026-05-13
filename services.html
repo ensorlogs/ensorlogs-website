@@ -5,13 +5,13 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
-    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
+    <script>(function(){try{if(localStorage.theme==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
     ================================================== -->
     <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
     <meta name="keywords"
         content="servicios IT, consultoría CRM, automatización empresas, desarrollo web profesional, Microsoft 365, integraciones, Ensor Sánchez, Ensorlogs">
     <meta name="description"
@@ -48,6 +48,10 @@
     <link rel="stylesheet" href="assets/css/style.min.css">
     <link rel="stylesheet" href="assets/css/ensor-brand.css">
 
+    <link rel="stylesheet" href="assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="assets/css/ensor-cookies.css">
+    <meta name="ensor-cookies-url" content="legal/cookies.html">
+    <link rel="stylesheet" href="assets/css/ensor-quiz.css">
 </head>
 
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
@@ -170,7 +174,7 @@
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
                 <p  class="font-medium">
-                    Tienes una propuesta?
+                    ¿Hablamos?
                 </p>
                 <a href="contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
                     Contactar
@@ -190,13 +194,60 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <div class="main-content mt-28 md:mt-32 lg:mt-36 xl:mt-48">
         <div class="container">
+            <section class="ensor-services-hero rounded-2xl overflow-hidden border border-flasWhite dark:border-flasBlack mb-6 lg:mb-8" data-aos="fade-up" aria-labelledby="services-hero-title">
+                <figure class="ensor-services-hero__media">
+                    <img
+                        src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=82"
+                        srcset="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80 800w, https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=82 1200w, https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=82 1600w"
+                        sizes="(max-width: 1024px) 100vw, 1180px"
+                        alt="Sesión de trabajo colaborativa con notas, planos y café — clima de taller técnico"
+                        width="1600"
+                        height="900"
+                        loading="eager"
+                        fetchpriority="high"
+                        decoding="async"
+                    >
+                    <figcaption class="sr-only">Sesión de trabajo colaborativa — Ensorlogs servicios y formación</figcaption>
+                </figure>
+                <div class="ensor-services-hero__content">
+                    <p class="ensor-services-hero__eyebrow">
+                        <span class="ensor-services-hero__dot" aria-hidden="true"></span>
+                        Servicios · Ensorlogs
+                    </p>
+                    <h1 id="services-hero-title" class="ensor-services-hero__title">
+                        Lo que puedo hacer por ti
+                    </h1>
+                    <p class="ensor-services-hero__lead">
+                        Acompaño a equipos y proyectos en <strong class="font-semibold">tecnología, datos, web e IT</strong> — y también dando <strong class="font-semibold">talleres y cursos</strong>. Trabajo con criterio de negocio, entregables concretos y, sobre todo, <em>documentando</em> todo lo que hago para que tu equipo lo pueda mantener y replicar.
+                    </p>
+                    <ul class="ensor-services-hero__pills" aria-label="Áreas de trabajo">
+                        <li><i class="fal fa-code" aria-hidden="true"></i><span>Consultoría IT</span></li>
+                        <li><i class="fal fa-chart-line" aria-hidden="true"></i><span>Datos &amp; Reporting</span></li>
+                        <li><i class="fal fa-users-cog" aria-hidden="true"></i><span>CRM &amp; automatización</span></li>
+                        <li><i class="fal fa-chalkboard-teacher" aria-hidden="true"></i><span>Formación / Talleres</span></li>
+                    </ul>
+                    <div class="ensor-services-hero__cta">
+                        <a href="contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
+                            <span>Hablemos de tu caso</span>
+                        </a>
+                        <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-services-hero__alt-link">
+                            <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                            <span>O reserva 30 min en Calendly</span>
+                            <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
             <div class="grid lg:grid-cols-3 gap-6 items-start">
                 <div class="ensor-services-sidebar rounded-2xl p-4 lg:p-6 xl:p-10 border border-flasWhite dark:border-flasBlack lg:sticky top-36" data-aos="fade-up">
-                    <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-6">
+                    <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-2">
                         Servicios
                     </h5>
+                    <p class="text-sm font-medium text-darkGray dark:text-pastelGrey mb-5 leading-relaxed">
+                        Donde puedo darte una mano — desde tecnología hasta formación.
+                    </p>
                     <p class="text-sm text-darkGray dark:text-pastelGrey opacity-90 mb-5 leading-relaxed">
-                        Puedo acompañarte como <strong class="text-powerBlack dark:text-pastelGrey font-semibold">consultor externo</strong> o como <strong class="text-powerBlack dark:text-pastelGrey font-semibold">refuerzo dentro de tu empresa</strong>: priorizar la hoja de ruta digital, implementar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">web y aplicaciones</strong>, montar o evolucionar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">e-commerce</strong>, integrar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">CRM y automatizaciones</strong>, alinear <strong class="text-powerBlack dark:text-pastelGrey font-semibold">marketing medible</strong> con comercial, construir <strong class="text-powerBlack dark:text-pastelGrey font-semibold">reporting y analítica de datos</strong>, y dar continuidad a <strong class="text-powerBlack dark:text-pastelGrey font-semibold">infraestructura y soporte IT</strong> — con entregables concretos y criterio de negocio. Más trayectoria en <a href="about.html" class="text-powerBlack dark:text-pastelGrey font-semibold underline-offset-2 hover:underline">Sobre mí</a>.
+                        Puedo acompañarte como <strong class="text-powerBlack dark:text-pastelGrey font-semibold">consultor externo</strong> o como <strong class="text-powerBlack dark:text-pastelGrey font-semibold">refuerzo dentro de tu empresa</strong>: priorizar la hoja de ruta digital, implementar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">web y aplicaciones</strong>, montar o evolucionar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">e-commerce</strong>, integrar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">CRM y automatizaciones</strong>, alinear <strong class="text-powerBlack dark:text-pastelGrey font-semibold">marketing medible</strong> con comercial, construir <strong class="text-powerBlack dark:text-pastelGrey font-semibold">reporting y analítica de datos</strong>, dar continuidad a <strong class="text-powerBlack dark:text-pastelGrey font-semibold">infraestructura y soporte IT</strong>, y también <strong class="text-powerBlack dark:text-pastelGrey font-semibold">colaborar en formación</strong> —cursos, talleres y programas para equipos o eventos. Todo con entregables concretos y criterio de negocio. Más trayectoria en <a href="about.html" class="text-powerBlack dark:text-pastelGrey font-semibold underline-offset-2 hover:underline">Sobre mí</a>.
                     </p>
                     <nav class="ensor-service-mindmap" aria-label="Índice de servicios en esta página">
                         <ul class="ensor-service-mindmap__branches">
@@ -231,10 +282,16 @@
                                     <span class="ensor-mindmap-branch__label">Data Analyst</span>
                                 </a>
                             </li>
-                            <li class="ensor-service-mindmap__branch--span">
+                            <li>
                                 <a href="#soporte_it_server" class="ensor-mindmap-branch">
                                     <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-server"></i></span>
                                     <span class="ensor-mindmap-branch__label">Soporte IT / Server</span>
+                                </a>
+                            </li>
+                            <li class="ensor-service-mindmap__branch--span">
+                                <a href="#formacion" class="ensor-mindmap-branch">
+                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-chalkboard-teacher"></i></span>
+                                    <span class="ensor-mindmap-branch__label">Formación / Talleres</span>
                                 </a>
                             </li>
                         </ul>
@@ -341,6 +398,26 @@
                             </a>
                         </p>
                     </div>
+                    <div id="formacion" class="ensor-service-card rounded-2xl p-4 lg:p-6 xl:p-10 border border-flasWhite dark:border-flasBlack">
+                        <h5 class="text-powerBlack dark:text-pastelGrey font-bold text-2xl xl:text-3xl mb-4">
+                            Formación / Talleres
+                        </h5>
+                        <p class="text-darkGray dark:text-pastelGrey leading-relaxed">
+                            ¿Necesitas planificar un <strong class="text-powerBlack dark:text-pastelGrey font-semibold">taller, curso o programa formativo</strong> sobre tecnología? Puedo colaborar como profesor o tallerista. Vengo de la <strong class="text-powerBlack dark:text-pastelGrey font-semibold">docencia universitaria</strong>, fundé <strong class="text-powerBlack dark:text-pastelGrey font-semibold">CCubik</strong> —mi academia de cursos online y presenciales— y he facilitado <strong class="text-powerBlack dark:text-pastelGrey font-semibold">talleres en eventos de software libre en Venezuela</strong>. Diseño contenidos, rúbricas y dinámicas a medida del nivel de tu equipo o de tu evento.
+                        </p>
+                        <ul class="mt-6 grid sm:grid-cols-2 gap-4 *:text-darkGray dark:*:text-pastelGrey *:text-lg *:font-semibold *:flex *:items-center *:gap-2">
+                            <li><i class="fal fa-check-circle"></i> Talleres y cursos a medida</li>
+                            <li><i class="fal fa-check-circle"></i> Docencia universitaria + CCubik</li>
+                            <li><i class="fal fa-check-circle"></i> Software libre y comunidad</li>
+                            <li><i class="fal fa-check-circle"></i> Materiales, rúbricas y mentoría</li>
+                        </ul>
+                        <p class="mt-6">
+                            <a href="contact.html?servicio=formacion" class="ensor-servicio-cta inline-flex items-center gap-2 font-semibold text-powerBlack dark:text-pastelGrey">
+                                Solicitar información
+                                <i class="fal fa-arrow-right text-sm" aria-hidden="true"></i>
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -352,20 +429,45 @@
     Start Footer
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <footer class="mt-24 pb-8" data-aos="fade-up">
-        <div class="container text-center space-y-6">
-            <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-6xl">
-                Contacto
-            </h5>
-            <p>
-                <a href="contact.html" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
-                    hello@ensorlogs.com
-                </a>
-            </p>
-            <p>
-                &copy;2026 <a href="#" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
-            </p>
+        <div class="container text-center">
+            <div class="ensor-footer-cta" data-aos="fade-up">
+                <span class="ensor-footer-cta__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
+                    </svg>
+                </span>
+                <h5 class="ensor-footer-cta__heading">
+                    ¿Interesado en trabajar conmigo? <a href="contact.html" class="ensor-footer-cta__link">Contáctame</a>
+                </h5>
+                <p class="ensor-footer-cta__lead">
+                    Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
+                </p>
+                <p class="ensor-footer-cta__alt">
+                    <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
+                        <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="ensor-footer-cta__copy">
+                    &copy;2026 <a href="#top" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
+                    <span class="ensor-footer-cta__love" aria-label="Hecho con amor y WordPress">
+                        · Hecho con <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span> y <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
+                    </span>
+                </p>
+            </div>
         </div>
-    </footer>
+    <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
+            <a href="legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
+            <a href="legal/privacidad.html" class="hover:underline">Privacidad</a>
+            <a href="legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="legal/accesibilidad.html" class="hover:underline">Accesibilidad</a>
+            <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Preferencias de cookies</button>
+        </nav>
+    </div>
+</footer>
     <!--~~ Footer End ~~-->
 
     </main>
@@ -390,6 +492,9 @@
     <script defer src="assets/js/nav-volver.js"></script>
     <script defer src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
+    <script defer src="assets/js/ensor-a11y.js"></script>
+    <script defer src="assets/js/ensor-cookies.js"></script>
+    <script defer src="assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

@@ -5,13 +5,13 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
-    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
+    <script>(function(){try{if(localStorage.theme==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
     ================================================== -->
     <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
     <meta name="keywords"
         content="contacto Ensorlogs, contratar consultor IT, propuesta proyecto CRM, automatización empresas, consultoría TI Madrid, Ensor Sánchez">
     <meta name="description"
@@ -49,6 +49,10 @@
     <link rel="stylesheet" href="assets/css/style.min.css">
     <link rel="stylesheet" href="assets/css/ensor-brand.css">
 
+    <link rel="stylesheet" href="assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="assets/css/ensor-cookies.css">
+    <meta name="ensor-cookies-url" content="legal/cookies.html">
+    <link rel="stylesheet" href="assets/css/ensor-quiz.css">
 </head>
 
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
@@ -171,7 +175,7 @@
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
                 <p  class="font-medium">
-                    Tienes una propuesta?
+                    ¿Hablamos?
                 </p>
                 <a href="contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
                     Contactar
@@ -229,7 +233,31 @@
                                 <a href="https://www.youtube.com/@ensorlogs" target="_blank" rel="noopener noreferrer" class="w-11 h-11 shrink-0 rounded-full grid place-content-center border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-darkGray dark:text-pastelGrey hover:border-darkGray dark:hover:border-pastelGrey transition-colors" aria-label="YouTube">
                                     <i class="fab fa-youtube text-lg"></i>
                                 </a>
+                                <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-calendly-icon w-11 h-11 shrink-0 rounded-full grid place-content-center border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack hover:border-darkGray dark:hover:border-pastelGrey transition-colors" aria-label="Reserva una llamada en Calendly">
+                                    <i class="far fa-calendar-alt text-lg"></i>
+                                </a>
                             </div>
+                        </div>
+                        <div class="ensor-calendly-card mt-6 pt-6 border-t border-flasWhite dark:border-flasBlack flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div class="flex items-start gap-4">
+                                <div class="ensor-calendly-icon w-12 h-12 lg:w-14 lg:h-14 shrink-0 rounded-full grid place-content-center border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack" aria-hidden="true">
+                                    <i class="far fa-calendar-alt text-xl lg:text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h6 class="font-semibold text-base lg:text-lg text-darkGray dark:text-pastelGrey">
+                                        ¿Prefieres hablar directamente?
+                                    </h6>
+                                    <p class="text-sm leading-relaxed text-darkGray/85 dark:text-pastelGrey/80">
+                                        Reserva una <strong class="font-semibold">discovery call de 30 min</strong> por Google Meet. Sin compromiso — para conocernos y ver si puedo ayudarte.
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="shrink-0">
+                                <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-cta-hablemos inline-flex items-center justify-center gap-2 font-semibold py-2 px-5 md:py-2.5 md:px-6 leading-snug rounded-full">
+                                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                    <span>Agenda 30 min</span>
+                                </a>
+                            </p>
                         </div>
                     </div>
 
@@ -317,20 +345,45 @@
     Start Footer
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <footer class="mt-24 pb-8" data-aos="fade-up">
-        <div class="container text-center space-y-6">
-            <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-6xl">
-                Hablemos
-            </h5>
-            <p>
-                <a href="mailto:hello@ensorlogs.com" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
-                    hello@ensorlogs.com
-                </a>
-            </p>
-            <p>
-                &copy;2026 <a href="#" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
-            </p>
+        <div class="container text-center">
+            <div class="ensor-footer-cta" data-aos="fade-up">
+                <span class="ensor-footer-cta__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
+                    </svg>
+                </span>
+                <h5 class="ensor-footer-cta__heading">
+                    ¿Interesado en trabajar conmigo? <a href="contact.html" class="ensor-footer-cta__link">Contáctame</a>
+                </h5>
+                <p class="ensor-footer-cta__lead">
+                    Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
+                </p>
+                <p class="ensor-footer-cta__alt">
+                    <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
+                        <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="ensor-footer-cta__copy">
+                    &copy;2026 <a href="#top" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
+                    <span class="ensor-footer-cta__love" aria-label="Hecho con amor y WordPress">
+                        · Hecho con <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span> y <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
+                    </span>
+                </p>
+            </div>
         </div>
-    </footer>
+    <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
+            <a href="legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
+            <a href="legal/privacidad.html" class="hover:underline">Privacidad</a>
+            <a href="legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="legal/accesibilidad.html" class="hover:underline">Accesibilidad</a>
+            <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Preferencias de cookies</button>
+        </nav>
+    </div>
+</footer>
     <!--~~ Footer End ~~-->
 
     </main>
@@ -381,6 +434,10 @@
             'soporte-it-server': {
                 subject: 'Consulta: Soporte IT / Server',
                 hint: 'Hola Ensor,\n\nNecesito soporte IT (Windows y Linux), Microsoft 365, Azure o infraestructura. Entorno actual:\n\n'
+            },
+            'formacion': {
+                subject: 'Consulta: Formación / Talleres',
+                hint: 'Hola Ensor,\n\nMe gustaría planificar un taller o curso (universidad, empresa, evento o comunidad). Cuéntame:\n  • Tema y objetivo del taller/curso:\n  • Audiencia (nivel y nº de participantes):\n  • Formato (online, presencial, híbrido) y duración:\n  • Fechas tentativas:\n\n'
             }
         };
         var conf = map[key];
@@ -392,6 +449,9 @@
     })();
     </script>
     <!-- Js Library End -->
+    <script defer src="assets/js/ensor-a11y.js"></script>
+    <script defer src="assets/js/ensor-cookies.js"></script>
+    <script defer src="assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

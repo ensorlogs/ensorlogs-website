@@ -5,13 +5,13 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
-    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
+    <script>(function(){try{if(localStorage.theme==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
     ================================================== -->
     <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
     <meta name="keywords"
         content="Ensor Sánchez biografía, ingeniero sistemas, consultor IT España, experiencia PropTech, formación Coursera Platzi, Ensorlogs">
     <meta name="description"
@@ -49,6 +49,10 @@
     <link rel="stylesheet" href="assets/css/style.min.css">
     <link rel="stylesheet" href="assets/css/ensor-brand.css">
 
+    <link rel="stylesheet" href="assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="assets/css/ensor-cookies.css">
+    <meta name="ensor-cookies-url" content="legal/cookies.html">
+    <link rel="stylesheet" href="assets/css/ensor-quiz.css">
 </head>
 
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
@@ -171,7 +175,7 @@
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
                 <p  class="font-medium">
-                    Tienes una propuesta?
+                    ¿Hablamos?
                 </p>
                 <a href="contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
                     Contactar
@@ -192,36 +196,43 @@
     <div class="main-content mt-28 md:mt-32 lg:mt-36 xl:mt-48">
         <div class="container space-y-6">
             <!-- About Me Introduction Start -->
-            <div class="grid items-center sm:grid-cols-5  gap-8 sm:gap-6 lg:gap-10 rounded-2xl p-4 lg:p-6 xl:p-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-gray-100 dark:border-white/5"  data-aos="fade-up">
+            <div class="grid items-center sm:grid-cols-5  gap-8 sm:gap-6 lg:gap-10 rounded-2xl p-4 lg:p-6 xl:p-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-gray-100 dark:border-white/5 ensor-intro-card"  data-aos="fade-up">
                 
                 <div class="thumbnail sm:order-last sm:col-span-2 text-center sm:text-end">
                     <img 
                         src="assets/img/Ensor CV Test.jpg" 
-                        class="rounded-lg bg-pastelGrey dark:bg-oilBlack" 
+                        class="rounded-lg bg-pastelGrey dark:bg-oilBlack ensor-about-photo" 
                         alt="Ensor Sanchez"
+                        width="800"
+                        height="1067"
+                        decoding="async"
                     >
                 </div>
                 
                 <div class="sm:order-first sm:col-span-3">
                     <h1 class="text-powerBlack dark:text-pastelGrey font-bold text-4xl xl:text-5xl">
-                        Ensor Sanchez
+                        Hola, soy Ensor Sánchez
                     </h1>
                     <h2 class="text-smokeGray dark:text-regentGray font-medium text-lg xl:text-2xl mt-1.5">
-                        Sistemas IT | Operaciones Digitales | Automatizacion
+                        Operaciones digitales · Profesor · Bitácora pública
                     </h2>
-    
+
                     <p class="mt-2 sm:mt-4 lg:mt-6 lg:text-lg max-w-screen-sm">
-                        Ingeniero en Sistemas especializado en operaciones digitales y transformacion tecnologica. Integro <span class="px-2 inline-block text-darkGray dark:text-pastelGrey rounded-md border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">IT, CRM, automatizacion y analitica</span> para optimizar equipos comerciales e inmobiliarios con resultados medibles.
+                        Soy ingeniero en sistemas y profesor universitario; un curioso compulsivo. Trabajo en operaciones digitales — <span class="px-2 inline-block text-darkGray dark:text-pastelGrey rounded-md border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack">IT, CRM, automatización y analítica</span> — y en paralelo publico <strong class="text-powerBlack dark:text-pastelGrey font-semibold">logs</strong> en Ensorlogs: una bitácora pública donde dejo lo que aprendí, lo que aprendo y lo que enseño.
                     </p>
 
-                    <ul class="flex items-center mt-4 lg:mt-6 -mx-3 *:flex *:items-center *:mx-3 *:text-regular lg:*:text-lg">
+                    <p class="mt-3 lg:mt-4 lg:text-lg max-w-screen-sm">
+                        Tres ideas la mueven: <strong class="text-powerBlack dark:text-pastelGrey font-semibold">documentar</strong> lo que vivo, <strong class="text-powerBlack dark:text-pastelGrey font-semibold">conectar</strong> con gente y comunidades que saben más que yo, y <strong class="text-powerBlack dark:text-pastelGrey font-semibold">ayudar</strong> desde la consultoría, la docencia o un taller.
+                    </p>
+
+                    <ul class="flex flex-wrap items-center mt-4 lg:mt-6 -mx-3 *:flex *:items-center *:mx-3 *:my-1 *:text-regular lg:*:text-lg">
                         <li>
                             <i class="mr-2 fal fa-check-double text-darkGray dark:text-pastelGrey"></i>
                             Disponible para proyectos
                         </li>
                         <li>
                             <i class="mr-2 fal fa-check-double text-darkGray dark:text-pastelGrey"></i>
-                            Enfoque IT + PropTech
+                            También para cursos y talleres
                         </li>
                     </ul>
     
@@ -237,6 +248,135 @@
                 
             </div>
             <!-- About Me Introduction End -->
+
+            <div class="foss-events-gallery rounded-2xl p-4 lg:p-6 xl:p-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-gray-100 dark:border-white/5" data-aos="fade-up">
+                <h3 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-4">
+                    Activismo de software libre
+                </h3>
+                <p class="text-smokeGray dark:text-regentGray text-base lg:text-lg max-w-3xl mb-8">
+                    Galería de encuentros en los que participé con comunidades de software libre: <strong class="text-metalBlack dark:text-pastelGrey font-medium">Ubuntu</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Fedora</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Mozilla</strong>, instalaciones, FLISOL y jornadas de difusión en universidades y espacios ciudadanos. Además he sido <strong class="text-metalBlack dark:text-pastelGrey font-medium">profesor</strong> y he <strong class="text-metalBlack dark:text-pastelGrey font-medium">impartido cursos</strong> en aula y en talleres; varias de estas fotos corresponden a esos entornos docentes, no solo a stands o festivales abiertos. Objetivo común: acercar Linux y herramientas abiertas a más personas.
+                </p>
+                <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/10486771255_9849162bb1_b.jpg" alt="Software Freedom Day — mesa LibreOffice y comunidad Ubuntu Venezuela" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Software Freedom Day</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Jornada global de difusión del software libre: mesa de instalación y acompañamiento a nuevos usuarios con Ubuntu Venezuela y LibreOffice durante el encuentro.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/12314133644_361ff7b612_b.jpg" alt="FLISOL Venezuela software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">FLISOL</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Festival Latinoamericano de Instalación de Software Libre: difusión y talleres abiertos al público.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/12314490113_75e76616c0_b.jpg" alt="Comunidad Fedora Venezuela" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Fedora</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Participación junto a la comunidad Linux y cultura de contribución upstream.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm sm:col-span-2 xl:col-span-2">
+                        <div class="aspect-[21/9] sm:aspect-[2/1] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/13963955364_58d0bdd776_o.jpg" alt="Ponencia LibreOffice Comunidad Venezuela Día del Documento Libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">LibreOffice Comunidad Venezuela</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Ponencia en encuentro regional con LibreOffice Comunidad Venezuela: suite ofimática libre, difusión del Día del Documento Libre y voluntariado alrededor del software libre.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/14396831098_05c3f23aaf_b.jpg" alt="Taller Linux Ubuntu" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Taller práctico</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Demostraciones en vivo en cursos y jornadas: escritorio, terminal y primeros pasos con Ubuntu.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/14396839348_bf4cde25e9_b%281%29.jpg" alt="Ponencia Ubuntu Venezuela software libre ante público universitario" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Ponencia Ubuntu Venezuela</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Charla ante estudiantes sobre Ubuntu y software libre, representando a la comunidad Ubuntu-ve: filosofía del proyecto, uso cotidiano de Linux y por qué importa la libertad del software en educación y en el trabajo.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/6164840194_b2ae27693b_b.jpg" alt="Software libre en universidad Venezuela" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Educación y SL</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Docencia y charlas en aula para acercar herramientas libres al ámbito académico y a estudiantes.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/621446090_18418641865188841_7226098398909965257_n.jpg" alt="Stand comunidad software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Stand y voluntariado</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Material divulgativo, conversaciones con visitantes y apoyo entre voluntarios.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/621560350_18431247304115269_3748054521469408443_n.jpg" alt="Ubuntu Loco encuentro local" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Ubuntu Loco</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Encuentro local de usuarios: compartir experiencias y fortalecer la comunidad.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/626872300_18446630206105486_8312217752597808590_n.jpg" alt="Sesión técnica Linux administración" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Sesión técnica</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Temas de administración, terminal y buenas prácticas en entornos Linux.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/641190824_18572355091002990_1142594009819477315_n.jpg" alt="Jornada regional software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Jornada regional</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Charlas y trabajo en red entre asistentes y proyectos de software libre.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/8648410003_595a2a1c48_b.jpg" alt="Networking proyectos software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Entre proyectos</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Intercambio entre comunidades y proyectos abiertos durante el evento.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
+                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
+                            <img src="assets/img/fotoseventos/8648415075_b15e86e65a_b.jpg" alt="Comunidad software libre Venezuela grupo" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
+                        </div>
+                        <figcaption class="p-4">
+                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Comunidad</h4>
+                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Momento grupal: voluntarios y asistentes tras una jornada de trabajo y aprendizaje.</p>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+
 
             <!-- Experience and Education Widget Start -->
             <div class="grid md:grid-cols-2 gap-6 *:rounded-2xl *:p-4 lg:*:p-6 xl:*:p-10 *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack *:border *:border-gray-100 dark:*:border-white/5" data-aos="fade-up">
@@ -266,6 +406,9 @@
                                     <p class="mt-4">
                                         Liderazgo de ecosistema tecnologico: web, CRM, automatizacion, infraestructura y analitica. Mejora operativa documentada de hasta un 70% en procesos internos.
                                     </p>
+                                    <p class="mt-3 text-sm">
+                                        <a href="https://apyca.com/" target="_blank" rel="noopener noreferrer" class="font-medium text-metalBlack dark:text-pastelGrey underline underline-offset-2 decoration-nobelGray/60 hover:decoration-metalBlack dark:hover:decoration-pastelGrey transition-colors">Web — apyca.com</a>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -290,6 +433,9 @@
                                     <p class="mt-4">
                                         Implementacion de sistemas de automatizacion, CRM y gestion digital para campanas y operaciones comerciales. Diseno de flujos de captacion de leads y herramientas digitales que optimizaron procesos internos y aumentaron la eficiencia operativa.
                                     </p>
+                                    <p class="mt-3 text-sm">
+                                        <a href="https://gruposna.com/" target="_blank" rel="noopener noreferrer" class="font-medium text-metalBlack dark:text-pastelGrey underline underline-offset-2 decoration-nobelGray/60 hover:decoration-metalBlack dark:hover:decoration-pastelGrey transition-colors">Web — gruposna.com</a>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -313,6 +459,9 @@
                                     </p>
                                     <p class="mt-4">
                                         Administracion de infraestructura tecnológica, servidores, redes y soporte IT en entorno turístico e inmobiliario. Gestion de plataformas web, soporte tecnico avanzado, administracion de sistemas y optimizacion de operaciones digitales.
+                                    </p>
+                                    <p class="mt-3 text-sm">
+                                        <a href="https://downtownpuntacana.com/" target="_blank" rel="noopener noreferrer" class="font-medium text-metalBlack dark:text-pastelGrey underline underline-offset-2 decoration-nobelGray/60 hover:decoration-metalBlack dark:hover:decoration-pastelGrey transition-colors">Web — downtownpuntacana.com</a>
                                     </p>
                                 </div>
                             </div>
@@ -568,135 +717,6 @@
             </div>
             <!-- Experience and Education Widget End -->
 
-
-            <div class="foss-events-gallery rounded-2xl p-4 lg:p-6 xl:p-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-gray-100 dark:border-white/5" data-aos="fade-up">
-                <h3 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-4">
-                    Activismo de software libre
-                </h3>
-                <p class="text-smokeGray dark:text-regentGray text-base lg:text-lg max-w-3xl mb-8">
-                    Galería de encuentros en los que participé con comunidades de software libre: <strong class="text-metalBlack dark:text-pastelGrey font-medium">Ubuntu</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Fedora</strong>, <strong class="text-metalBlack dark:text-pastelGrey font-medium">Mozilla</strong>, instalaciones, FLISOL y jornadas de difusión en universidades y espacios ciudadanos. Además he sido <strong class="text-metalBlack dark:text-pastelGrey font-medium">profesor</strong> y he <strong class="text-metalBlack dark:text-pastelGrey font-medium">impartido cursos</strong> en aula y en talleres; varias de estas fotos corresponden a esos entornos docentes, no solo a stands o festivales abiertos. Objetivo común: acercar Linux y herramientas abiertas a más personas.
-                </p>
-                <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/10486771255_9849162bb1_b.jpg" alt="Software Freedom Day — mesa LibreOffice y comunidad Ubuntu Venezuela" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Software Freedom Day</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Jornada global de difusión del software libre: mesa de instalación y acompañamiento a nuevos usuarios con Ubuntu Venezuela y LibreOffice durante el encuentro.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/12314133644_361ff7b612_b.jpg" alt="FLISOL Venezuela software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">FLISOL</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Festival Latinoamericano de Instalación de Software Libre: difusión y talleres abiertos al público.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/12314490113_75e76616c0_b.jpg" alt="Comunidad Fedora Venezuela" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Fedora</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Participación junto a la comunidad Linux y cultura de contribución upstream.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm sm:col-span-2 xl:col-span-2">
-                        <div class="aspect-[21/9] sm:aspect-[2/1] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/13963955364_58d0bdd776_o.jpg" alt="Ponencia LibreOffice Comunidad Venezuela Día del Documento Libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">LibreOffice Comunidad Venezuela</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Ponencia en encuentro regional con LibreOffice Comunidad Venezuela: suite ofimática libre, difusión del Día del Documento Libre y voluntariado alrededor del software libre.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/14396831098_05c3f23aaf_b.jpg" alt="Taller Linux Ubuntu" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Taller práctico</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Demostraciones en vivo en cursos y jornadas: escritorio, terminal y primeros pasos con Ubuntu.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/14396839348_bf4cde25e9_b%281%29.jpg" alt="Ponencia Ubuntu Venezuela software libre ante público universitario" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Ponencia Ubuntu Venezuela</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Charla ante estudiantes sobre Ubuntu y software libre, representando a la comunidad Ubuntu-ve: filosofía del proyecto, uso cotidiano de Linux y por qué importa la libertad del software en educación y en el trabajo.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/6164840194_b2ae27693b_b.jpg" alt="Software libre en universidad Venezuela" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Educación y SL</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Docencia y charlas en aula para acercar herramientas libres al ámbito académico y a estudiantes.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/621446090_18418641865188841_7226098398909965257_n.jpg" alt="Stand comunidad software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Stand y voluntariado</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Material divulgativo, conversaciones con visitantes y apoyo entre voluntarios.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/621560350_18431247304115269_3748054521469408443_n.jpg" alt="Ubuntu Loco encuentro local" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Ubuntu Loco</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Encuentro local de usuarios: compartir experiencias y fortalecer la comunidad.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/626872300_18446630206105486_8312217752597808590_n.jpg" alt="Sesión técnica Linux administración" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Sesión técnica</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Temas de administración, terminal y buenas prácticas en entornos Linux.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/641190824_18572355091002990_1142594009819477315_n.jpg" alt="Jornada regional software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Jornada regional</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Charlas y trabajo en red entre asistentes y proyectos de software libre.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/8648410003_595a2a1c48_b.jpg" alt="Networking proyectos software libre" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Entre proyectos</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Intercambio entre comunidades y proyectos abiertos durante el evento.</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="group rounded-xl overflow-hidden border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack shadow-sm">
-                        <div class="aspect-[4/3] overflow-hidden bg-pastelGrey/30 dark:bg-oilBlack/50">
-                            <img src="assets/img/fotoseventos/8648415075_b15e86e65a_b.jpg" alt="Comunidad software libre Venezuela grupo" class="w-full h-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy" decoding="async">
-                        </div>
-                        <figcaption class="p-4">
-                            <h4 class="font-bold text-metalBlack dark:text-pastelGrey">Comunidad</h4>
-                            <p class="mt-2 text-sm text-smokeGray dark:text-regentGray leading-relaxed">Momento grupal: voluntarios y asistentes tras una jornada de trabajo y aprendizaje.</p>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-
             <div class="services overflow-hidden rounded-2xl p-4 lg:p-6 xl:p-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-gray-100  dark:border-white/5" data-aos="fade-up">
                 <h3 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-6">
                     Mis servicios
@@ -806,6 +826,27 @@
                                 Soporte para Windows y Linux; Microsoft 365, Azure, Google Workspace, automatización de workflows, CRM y soporte de infraestructura: endpoints, identidades, copias y documentación técnica para equipos que necesitan estabilidad y continuidad operativa.
                             </p>
                             <a href="contact.html?servicio=soporte-it-server" class="stretched-link ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey" aria-label="Solicitar soporte IT o servidores">
+                                <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="group first:pt-0 last:pb-0">
+                        <div class="name flex items-center gap-5">
+                            <div class="icon">
+                                <i class="fal fa-chalkboard-teacher text-[2rem] leading-none text-smokeGray group-hover:text-darkGray dark:group-hover:text-pastelGrey transition-all" aria-hidden="true"></i>
+                            </div>
+                            <h4 class="text-smokeGray dark:text-regentGray group-hover:text-darkGray dark:group-hover:text-pastelGrey font-bold text-xl transition-all">
+                                Formación / Talleres
+                            </h4>
+                        </div>
+                        <div class="description col-span-2 md:flex items-start">
+                            <p class="flex-[0_0_25rem] lg:flex-[0_0_30rem] xl:flex-[0_0_33rem] group-hover:text-darkGray dark:group-hover:text-pastelGrey transition-all">
+                                Talleres, cursos y programas formativos sobre tecnología, hechos a medida. Docencia universitaria + fundador de CCubik (academia de cursos) + ponente en eventos de software libre en Venezuela. Diseño contenidos, rúbricas y dinámicas según el nivel de tu equipo o evento.
+                            </p>
+                            <a href="contact.html?servicio=formacion" class="stretched-link ml-auto max-md:hidden group-hover:text-darkGray dark:group-hover:text-pastelGrey" aria-label="Solicitar colaboración en formación o talleres">
                                 <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -972,20 +1013,45 @@
     Start Footer
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <footer class="mt-24 pb-8" data-aos="fade-up">
-        <div class="container text-center space-y-6">
-            <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-6xl">
-                Contacto
-            </h5>
-            <p>
-                <a href="#" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
-                    hello@ensorlogs.com
-                </a>
-            </p>
-            <p>
-                &copy;2026 <a href="#" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
-            </p>
+        <div class="container text-center">
+            <div class="ensor-footer-cta" data-aos="fade-up">
+                <span class="ensor-footer-cta__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
+                    </svg>
+                </span>
+                <h5 class="ensor-footer-cta__heading">
+                    ¿Interesado en trabajar conmigo? <a href="contact.html" class="ensor-footer-cta__link">Contáctame</a>
+                </h5>
+                <p class="ensor-footer-cta__lead">
+                    Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
+                </p>
+                <p class="ensor-footer-cta__alt">
+                    <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
+                        <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="ensor-footer-cta__copy">
+                    &copy;2026 <a href="#top" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
+                    <span class="ensor-footer-cta__love" aria-label="Hecho con amor y WordPress">
+                        · Hecho con <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span> y <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
+                    </span>
+                </p>
+            </div>
         </div>
-    </footer>
+    <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
+            <a href="legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
+            <a href="legal/privacidad.html" class="hover:underline">Privacidad</a>
+            <a href="legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="legal/accesibilidad.html" class="hover:underline">Accesibilidad</a>
+            <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Preferencias de cookies</button>
+        </nav>
+    </div>
+</footer>
     <!--~~ Footer End ~~-->
 
     </main>
@@ -1012,6 +1078,9 @@
     <script defer src="assets/js/nav-volver.js"></script>
     <script defer src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
+    <script defer src="assets/js/ensor-a11y.js"></script>
+    <script defer src="assets/js/ensor-cookies.js"></script>
+    <script defer src="assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

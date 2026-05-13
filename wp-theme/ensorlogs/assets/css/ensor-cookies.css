@@ -1,0 +1,283 @@
+/* =========================================================================
+   Ensorlogs · Banner de cookies (RGPD / LOPDGDD compatible)
+   - Mientras no haya consentimiento: el banner aparece y los scripts
+     marcados con type="text/plain" data-ensor-consent="..." no se ejecutan.
+   - El usuario puede aceptar todo, rechazar todo o personalizar.
+   - Preferencias persistentes en localStorage + cookie técnica.
+   ========================================================================= */
+
+.ensor-cookies {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 100;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #ffffff;
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+    padding: 1rem 1.1rem 1.1rem;
+    display: none;
+}
+html.dark .ensor-cookies {
+    background: #1c1d22;
+    color: #f3f4f6;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+.ensor-cookies.is-visible { display: block; }
+
+.ensor-cookies__title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin: 0 0 0.4rem;
+}
+.ensor-cookies__text {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(26, 26, 26, 0.86);
+}
+html.dark .ensor-cookies__text { color: rgba(232, 232, 232, 0.86); }
+
+.ensor-cookies__actions {
+    margin-top: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+.ensor-cookies__btn {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: transparent;
+    color: inherit;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+html.dark .ensor-cookies__btn { border-color: rgba(255, 255, 255, 0.16); }
+.ensor-cookies__btn:hover { border-color: var(--ensor-accent, #d9a300); }
+.ensor-cookies__btn--primary {
+    background: var(--ensor-accent, #d9a300);
+    color: #1a1300;
+    border-color: var(--ensor-accent, #d9a300);
+}
+.ensor-cookies__btn--primary:hover {
+    background: color-mix(in srgb, var(--ensor-accent, #d9a300) 90%, #000);
+}
+.ensor-cookies__link {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--ensor-accent, #d9a300);
+    text-decoration: underline;
+}
+
+/* Modal de personalización */
+.ensor-cookies-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 101;
+    background: rgba(0, 0, 0, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.ensor-cookies-modal.is-open { display: flex; }
+.ensor-cookies-modal__panel {
+    background: #ffffff;
+    color: #1a1a1a;
+    width: min(520px, 100%);
+    max-height: 86vh;
+    overflow-y: auto;
+    border-radius: 16px;
+    padding: 1.3rem 1.4rem;
+}
+html.dark .ensor-cookies-modal__panel { background: #1c1d22; color: #f3f4f6; }
+
+.ensor-cookies-modal__title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin: 0 0 0.6rem;
+}
+.ensor-cookies-modal__intro {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.75);
+}
+html.dark .ensor-cookies-modal__intro { color: rgba(232, 232, 232, 0.7); }
+
+.ensor-cookies-modal__row {
+    margin-top: 0.85rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+}
+html.dark .ensor-cookies-modal__row { border-color: rgba(255, 255, 255, 0.08); }
+.ensor-cookies-modal__row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+.ensor-cookies-modal__row-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+.ensor-cookies-modal__row-text {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.7);
+}
+html.dark .ensor-cookies-modal__row-text { color: rgba(232, 232, 232, 0.7); }
+
+.ensor-cookies-switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 22px;
+    flex: 0 0 38px;
+}
+.ensor-cookies-switch input {
+    opacity: 0;
+    width: 0; height: 0;
+}
+.ensor-cookies-switch__slider {
+    position: absolute; inset: 0;
+    background: #cccccc;
+    border-radius: 999px;
+    transition: background-color .2s ease;
+    cursor: pointer;
+}
+.ensor-cookies-switch__slider::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform .2s ease;
+}
+.ensor-cookies-switch input:checked + .ensor-cookies-switch__slider {
+    background: var(--ensor-accent, #d9a300);
+}
+.ensor-cookies-switch input:checked + .ensor-cookies-switch__slider::before {
+    transform: translateX(16px);
+}
+.ensor-cookies-switch input:disabled + .ensor-cookies-switch__slider {
+    background: #888;
+    cursor: not-allowed;
+}
+
+.ensor-cookies-modal__actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* =========================================================================
+   Footer · Fila de enlaces legales + botón "Preferencias de cookies"
+
+   Importante: `gap-x-5` y `gap-y-2` (Tailwind) no están en algunos builds
+   precompilados, por eso aquí garantizamos el espacio entre items sin
+   depender de utilidades.
+   ========================================================================= */
+#ensor-legal-row {
+    width: 100%;
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
+}
+#ensor-legal-row > nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1.5rem;
+    row-gap: 0.5rem;
+    padding: 1rem 0 0;
+    margin: 0 auto;
+    max-width: 1180px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    font-size: 0.78rem;
+    line-height: 1.2;
+    color: rgba(31, 33, 37, 0.72);
+}
+html.dark #ensor-legal-row > nav {
+    border-top-color: rgba(255, 255, 255, 0.06);
+    color: rgba(232, 232, 232, 0.7);
+}
+#ensor-legal-row > nav > a,
+#ensor-legal-row > nav > button {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 0.25rem 0;
+    border-radius: 4px;
+    transition: color .15s ease, opacity .15s ease;
+}
+#ensor-legal-row > nav > a:hover,
+#ensor-legal-row > nav > a:focus-visible,
+#ensor-legal-row > nav > button:hover,
+#ensor-legal-row > nav > button:focus-visible {
+    color: var(--ensor-accent, #d9a300);
+    text-decoration: underline;
+    outline: none;
+}
+
+/* Separadores sutiles entre items (puntos centrados).
+   Se ocultan en wrap para no quedar al inicio/fin de línea. */
+#ensor-legal-row > nav > a + a::before,
+#ensor-legal-row > nav > a + button::before,
+#ensor-legal-row > nav > button + a::before {
+    content: '·';
+    margin-right: 1.5rem;
+    margin-left: -0.85rem;
+    opacity: 0.45;
+    color: inherit;
+    pointer-events: none;
+}
+
+/* Móvil: layout más compacto, sin separadores y con respiración inferior
+   suficiente para que el botón flotante de accesibilidad no pise el footer. */
+@media (max-width: 640px) {
+    #ensor-legal-row {
+        padding-bottom: 4.5rem;
+    }
+    #ensor-legal-row > nav {
+        column-gap: 1.1rem;
+        row-gap: 0.4rem;
+        font-size: 0.74rem;
+        padding: 0.85rem 0.5rem 0;
+    }
+    #ensor-legal-row > nav > a + a::before,
+    #ensor-legal-row > nav > a + button::before,
+    #ensor-legal-row > nav > button + a::before {
+        content: '';
+        margin: 0;
+    }
+}
+
+/* Botón "Preferencias de cookies" en el footer */
+.ensor-cookies-reopen {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}
+.ensor-cookies-reopen:hover {
+    text-decoration: underline;
+}

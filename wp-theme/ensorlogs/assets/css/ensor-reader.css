@@ -1,0 +1,830 @@
+/* =========================================================================
+   Ensorlogs · Reader UX
+   Estilos exclusivos para single-ensor_article (Logs).
+   Pensado para coexistir con ensor-brand.css y style.min.css.
+   ========================================================================= */
+
+:root {
+    --ensor-reader-progress-h: 3px;
+    --ensor-reader-toc-w: 260px;
+    --ensor-reader-radius: 14px;
+    --ensor-reader-bg-soft: rgba(255, 255, 255, 0.78);
+    --ensor-reader-bg-soft-dark: rgba(20, 21, 23, 0.78);
+    --ensor-reader-edge: rgba(0, 0, 0, 0.08);
+    --ensor-reader-edge-dark: rgba(255, 255, 255, 0.08);
+}
+html.dark {
+    --ensor-reader-bg-soft: rgba(20, 21, 23, 0.78);
+    --ensor-reader-edge: rgba(255, 255, 255, 0.08);
+}
+
+/* -------------------------------------------------------------------------
+   Reading progress bar (fixed top)
+   ------------------------------------------------------------------------- */
+.ensor-reader-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--ensor-reader-progress-h);
+    background: transparent;
+    z-index: 60;
+    pointer-events: none;
+}
+.ensor-reader-progress__fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--ensor-accent, #d9a300) 0%, color-mix(in srgb, var(--ensor-accent, #d9a300) 60%, white) 100%);
+    transition: width 60ms linear;
+    will-change: width;
+}
+
+/* Mini-chip con el topic actual mientras lees */
+.ensor-reader-topic {
+    position: fixed;
+    top: calc(var(--ensor-reader-progress-h) + 6px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-200%);
+    z-index: 60;
+    max-width: min(92vw, 520px);
+    background: var(--ensor-reader-bg-soft);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    backdrop-filter: saturate(140%) blur(10px);
+    border: 1px solid var(--ensor-reader-edge);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: #2a2c30;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 220ms cubic-bezier(.2,.7,.1,1.1), opacity 220ms ease;
+    opacity: 0;
+}
+html.dark .ensor-reader-topic {
+    color: #f3f4f6;
+}
+.ensor-reader-topic.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+.ensor-reader-topic__dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ensor-accent, #d9a300);
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* -------------------------------------------------------------------------
+   Reader header: stack badges + audience chips
+   ------------------------------------------------------------------------- */
+.ensor-reader-headcard {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin: 1rem 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--ensor-reader-radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.4));
+    border: 1px solid var(--ensor-reader-edge);
+}
+html.dark .ensor-reader-headcard {
+    background: linear-gradient(180deg, rgba(28,30,33,0.6), rgba(20,21,23,0.5));
+    border-color: var(--ensor-reader-edge-dark);
+}
+
+.ensor-reader-stacks {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+}
+.ensor-reader-stacks-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.75rem;
+}
+.ensor-reader-stacks-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(31, 33, 37, 0.72);
+}
+html.dark .ensor-reader-stacks-label {
+    color: rgba(232, 232, 232, 0.7);
+}
+
+/* CTAs del footer del lector — refuerza contraste y nitidez sobre el dorado.
+ * Scoped al footer; no afecta a otros CTAs `.ensor-cta-hablemos` del sitio.
+ */
+.ensor-reader-footer a.ensor-cta-hablemos {
+    color: #1a1300 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 0 rgba(255, 246, 210, 0.55);
+    -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
+}
+.ensor-reader-footer a.ensor-cta-hablemos > span {
+    color: inherit !important;
+    background: none !important;
+    text-shadow: inherit;
+}
+.ensor-reader-footer a.ensor-cta-hablemos:hover,
+.ensor-reader-footer a.ensor-cta-hablemos:focus-visible {
+    color: #1a1300 !important;
+    background: linear-gradient(
+        180deg,
+        #fde68a 0%,
+        #f0a812 50%,
+        #c98800 100%
+    ) !important;
+}
+html.dark .ensor-reader-footer a.ensor-cta-hablemos {
+    color: #1a1300 !important;
+    text-shadow: 0 1px 0 rgba(255, 246, 210, 0.5);
+}
+html.dark .ensor-reader-footer a.ensor-cta-hablemos:hover,
+html.dark .ensor-reader-footer a.ensor-cta-hablemos:focus-visible {
+    color: #1a1300 !important;
+    background: linear-gradient(
+        180deg,
+        #ffe89a 0%,
+        #f0a812 50%,
+        #a87700 100%
+    ) !important;
+}
+.ensor-reader-stack {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem 0.35rem 0.35rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #1f2125;
+    background: #fff;
+    border: 1px solid var(--ensor-reader-edge);
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+}
+html.dark .ensor-reader-stack {
+    color: #f3f4f6;
+    background: rgba(255,255,255,0.04);
+    border-color: var(--ensor-reader-edge-dark);
+}
+.ensor-reader-stack:hover {
+    transform: translateY(-1px);
+    border-color: var(--ensor-accent, #d9a300);
+}
+.ensor-reader-stack__icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #f6f3ea;
+    display: inline-grid;
+    place-items: center;
+    color: #1f2125;
+    flex-shrink: 0;
+}
+html.dark .ensor-reader-stack__icon {
+    background: rgba(217, 163, 0, 0.16);
+    color: #f3f4f6;
+}
+.ensor-reader-stack__icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Audience chip filter */
+.ensor-reader-aud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-left: auto;
+}
+.ensor-reader-aud__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    opacity: 0.7;
+    align-self: center;
+    margin-right: 0.25rem;
+}
+.ensor-reader-aud__chip {
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--ensor-reader-edge);
+    color: inherit;
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+html.dark .ensor-reader-aud__chip {
+    border-color: var(--ensor-reader-edge-dark);
+}
+.ensor-reader-aud__chip:hover {
+    border-color: var(--ensor-accent, #d9a300);
+}
+.ensor-reader-aud__chip.is-active {
+    background: var(--ensor-accent, #d9a300);
+    color: #1a1a1a;
+    border-color: var(--ensor-accent, #d9a300);
+}
+
+/* =========================================================================
+   Audience-tagged sections — paneles temáticos por audiencia
+   Cada sección lleva data-aud="context|data|student|teacher|professional".
+   El JS añade `data-aud-label` para que veas el nombre arriba.
+   ========================================================================= */
+.ensor-aud-section[hidden] {
+    display: none !important;
+}
+.ensor-aud-section {
+    position: relative;
+    margin: 1.75rem 0;
+    padding: 1.25rem 1.4rem 1.4rem;
+    border: 1px solid var(--ensor-reader-edge);
+    border-left: 4px solid var(--ensor-aud-color, var(--ensor-accent, #d9a300));
+    border-radius: 14px;
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ensor-aud-color, #d9a300) 6%, transparent) 0%,
+        transparent 60%
+    );
+}
+html.dark .ensor-aud-section {
+    border-color: var(--ensor-reader-edge-dark);
+    border-left-color: var(--ensor-aud-color, var(--ensor-accent-on-dark, #ffd95a));
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ensor-aud-color, #d9a300) 14%, transparent) 0%,
+        transparent 65%
+    );
+}
+
+/* Banda superior: icono + etiqueta visible siempre */
+.ensor-aud-section::before {
+    content: attr(data-aud-label);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    color: var(--ensor-aud-color, var(--ensor-accent, #d9a300));
+    background: color-mix(in srgb, var(--ensor-aud-color, #d9a300) 12%, transparent);
+    padding: 0.3rem 0.7rem 0.3rem 0.55rem;
+    border-radius: 999px;
+    margin-bottom: 0.9rem;
+}
+.ensor-aud-section[data-aud=""]::before,
+.ensor-aud-section:not([data-aud-label])::before {
+    content: '';
+    display: none;
+}
+
+/* Colores e iconos por tipo de sección (data-aud) */
+.ensor-aud-section[data-aud~="context"]      { --ensor-aud-color: #475569; }   /* slate */
+.ensor-aud-section[data-aud~="data"]         { --ensor-aud-color: #0ea5e9; }   /* sky */
+.ensor-aud-section[data-aud~="student"]      { --ensor-aud-color: #16a34a; }   /* green */
+.ensor-aud-section[data-aud~="teacher"]      { --ensor-aud-color: #7c3aed; }   /* violet */
+.ensor-aud-section[data-aud~="professional"] { --ensor-aud-color: #ea580c; }   /* orange */
+.ensor-aud-section[data-aud~="beginner"]     { --ensor-aud-color: #14b8a6; }
+.ensor-aud-section[data-aud~="advanced"]     { --ensor-aud-color: #b91c1c; }
+.ensor-aud-section[data-aud~="client"]       { --ensor-aud-color: #d9a300; }
+
+/* Icono inline antes del label (SVG via mask-image para que tome el color) */
+.ensor-aud-section::after {
+    /* nothing by default; el icono va inyectado en el ::before vía background */
+}
+.ensor-aud-section[data-aud-label]::before {
+    padding-left: 1.85rem;
+    background-repeat: no-repeat;
+    background-position: 0.45rem 50%;
+    background-size: 0.95rem 0.95rem;
+}
+.ensor-aud-section[data-aud~="context"][data-aud-label]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='6' y='3' width='12' height='4' rx='1'/><rect x='6' y='17' width='12' height='4' rx='1'/><path d='M7 7c0 3 4 4 4 5s-4 2-4 5M17 7c0 3-4 4-4 5s4 2 4 5'/></svg>");
+}
+.ensor-aud-section[data-aud~="data"][data-aud-label]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 3v18h18'/><path d='M7 15l4-6 4 3 5-7'/></svg>");
+}
+.ensor-aud-section[data-aud~="student"][data-aud-label]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 8l9-4 9 4-9 4z'/><path d='M5 10v5c0 2 3 4 7 4s7-2 7-4v-5'/><path d='M21 8v6'/></svg>");
+}
+.ensor-aud-section[data-aud~="teacher"][data-aud-label]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M8 20h8M12 16v4'/><path d='M7 8h7M7 11h5'/></svg>");
+}
+.ensor-aud-section[data-aud~="professional"][data-aud-label]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ea580c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='7' width='18' height='13' rx='2'/><path d='M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2'/><path d='M3 13h18'/></svg>");
+}
+
+/* Heading principal dentro de cada sección: ligeramente teñido para coherencia */
+.ensor-aud-section > :where(h2, h3):first-of-type {
+    margin-top: 0.25rem;
+    color: var(--ensor-aud-color, currentColor);
+}
+html.dark .ensor-aud-section > :where(h2, h3):first-of-type {
+    color: color-mix(in srgb, var(--ensor-aud-color, #ffd95a) 80%, white);
+}
+
+/* =========================================================================
+   Bloque "Prompt IA" — callout para insertar dentro de cualquier sección
+   ========================================================================= */
+.ensor-ai-prompt {
+    position: relative;
+    margin: 1.25rem 0;
+    padding: 1.1rem 1.2rem 1.1rem 3rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, #7c3aed 35%, transparent);
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, #7c3aed 8%, white) 0%,
+        color-mix(in srgb, #7c3aed 4%, white) 100%
+    );
+    color: #1a1a1a;
+}
+html.dark .ensor-ai-prompt {
+    color: #f3f4f6;
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, #7c3aed 22%, #1c1d22) 0%,
+        color-mix(in srgb, #7c3aed 10%, #1c1d22) 100%
+    );
+    border-color: color-mix(in srgb, #a78bfa 45%, transparent);
+}
+.ensor-ai-prompt::before {
+    content: '';
+    position: absolute;
+    left: 0.9rem;
+    top: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='6' width='14' height='12' rx='3'/><circle cx='9.5' cy='12' r='1.1' fill='%237c3aed'/><circle cx='14.5' cy='12' r='1.1' fill='%237c3aed'/><path d='M12 3v3M8 21v-3M16 21v-3'/></svg>");
+}
+.ensor-ai-prompt__title {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #7c3aed;
+    margin-bottom: 0.4rem;
+}
+html.dark .ensor-ai-prompt__title {
+    color: #c4b5fd;
+}
+.ensor-ai-prompt__body {
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+.ensor-ai-prompt pre,
+.ensor-ai-prompt__code {
+    display: block;
+    margin: 0.6rem 0 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.06);
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+html.dark .ensor-ai-prompt pre,
+html.dark .ensor-ai-prompt__code {
+    background: rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.ensor-ai-prompt__copy {
+    margin-top: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, #7c3aed 45%, transparent);
+    background: transparent;
+    color: #7c3aed;
+    cursor: pointer;
+    transition: background-color .15s ease, color .15s ease;
+}
+html.dark .ensor-ai-prompt__copy {
+    color: #c4b5fd;
+    border-color: color-mix(in srgb, #a78bfa 55%, transparent);
+}
+.ensor-ai-prompt__copy:hover {
+    background: #7c3aed;
+    color: #fff;
+}
+.ensor-ai-prompt__copy.is-ok {
+    background: #16a34a;
+    color: #fff;
+    border-color: #16a34a;
+}
+
+/* -------------------------------------------------------------------------
+   Hero / imagen destacada del log
+   Alineada al ancho del grid (1180 px máx) y con respiración generosa.
+   ------------------------------------------------------------------------- */
+.ensor-reader-hero {
+    /* Sobrescribe el max-w-screen-lg (1024px) que viene de Tailwind */
+    max-width: 1180px !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    margin-bottom: 2.25rem;
+    padding-left: 0;
+    padding-right: 0;
+}
+.ensor-reader-hero img,
+.ensor-reader-hero .ensor-article-hero {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 12px 32px rgba(0, 0, 0, 0.10);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center;
+}
+html.dark .ensor-reader-hero img,
+html.dark .ensor-reader-hero .ensor-article-hero {
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.35),
+        0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 640px) {
+    .ensor-reader-hero {
+        margin-top: 1.25rem;
+        margin-bottom: 2.75rem;
+    }
+}
+@media (min-width: 768px) {
+    .ensor-reader-hero {
+        margin-bottom: 3.25rem;
+    }
+    .ensor-reader-hero img,
+    .ensor-reader-hero .ensor-article-hero {
+        border-radius: 16px;
+    }
+}
+@media (min-width: 1024px) {
+    .ensor-reader-hero {
+        margin-top: 1.5rem;
+        margin-bottom: 3.5rem;
+    }
+    .ensor-reader-hero img,
+    .ensor-reader-hero .ensor-article-hero {
+        border-radius: 18px;
+    }
+}
+@media (min-width: 1280px) {
+    .ensor-reader-hero {
+        margin-bottom: 4rem;
+    }
+    .ensor-reader-hero img,
+    .ensor-reader-hero .ensor-article-hero {
+        border-radius: 22px;
+    }
+}
+
+/* Reset del primer elemento del cuerpo para que el margen vertical no
+   se "coma" con el espacio del hero. */
+.ensor-reader-body > :first-child {
+    margin-top: 0;
+}
+
+/* -------------------------------------------------------------------------
+   TOC (sticky desktop + sheet mobile)
+
+   Nota: no dependemos de las clases Tailwind `hidden lg:block` para mostrar
+   u ocultar el TOC, porque algunas builds de style.min.css no incluyen
+   `.lg\:block`. Lo controlamos aquí para que la grilla siempre case con
+   la visibilidad real del aside.
+   ------------------------------------------------------------------------- */
+.ensor-reader-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    width: 100%;
+}
+.ensor-reader-layout > * {
+    min-width: 0;
+}
+.ensor-reader-body {
+    min-width: 0;
+    width: 100%;
+}
+.ensor-reader-body > * {
+    max-width: 100%;
+}
+
+/* Mobile-first: el TOC lateral está oculto por defecto.
+   El usuario accede al índice por el botón flotante / sheet. */
+.ensor-reader-toc {
+    display: none;
+    position: relative;
+}
+
+/* Desktop ≥1024px: dos columnas y el TOC sticky se muestra a la izquierda. */
+@media (min-width: 1024px) {
+    .ensor-reader-layout {
+        grid-template-columns: var(--ensor-reader-toc-w) minmax(0, 1fr);
+        gap: 2.5rem;
+    }
+    .ensor-reader-toc {
+        display: block;
+        position: sticky;
+        top: 96px;
+        align-self: start;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        padding-right: 0.5rem;
+    }
+}
+@media (min-width: 1280px) {
+    .ensor-reader-layout {
+        gap: 3rem;
+    }
+}
+.ensor-reader-toc__title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    opacity: 0.75;
+    margin: 0 0 0.5rem;
+}
+.ensor-reader-toc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--ensor-reader-edge);
+}
+html.dark .ensor-reader-toc__list {
+    border-left-color: var(--ensor-reader-edge-dark);
+}
+.ensor-reader-toc__item {
+    margin: 0;
+}
+.ensor-reader-toc__link {
+    display: block;
+    padding: 0.4rem 0.85rem;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.ensor-reader-toc__link:hover {
+    color: var(--ensor-accent, #d9a300);
+}
+.ensor-reader-toc__link.is-current {
+    color: var(--ensor-accent, #d9a300);
+    border-left-color: var(--ensor-accent, #d9a300);
+    font-weight: 600;
+}
+.ensor-reader-toc__item--h3 .ensor-reader-toc__link {
+    padding-left: 1.5rem;
+    font-size: 0.825rem;
+    opacity: 0.85;
+}
+
+/* Mobile TOC trigger (botón flotante) */
+.ensor-reader-toc-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: 84px;
+    z-index: 49;
+    background: var(--ensor-accent, #d9a300);
+    color: #1a1a1a;
+    border: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    transition: transform .2s ease;
+}
+.ensor-reader-toc-toggle:hover {
+    transform: scale(1.05);
+}
+.ensor-reader-toc-toggle svg {
+    width: 22px;
+    height: 22px;
+}
+@media (min-width: 1100px) {
+    .ensor-reader-toc-toggle {
+        display: none;
+    }
+}
+
+.ensor-reader-toc-sheet {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 60;
+    display: none;
+    align-items: flex-end;
+}
+.ensor-reader-toc-sheet.is-open {
+    display: flex;
+}
+.ensor-reader-toc-sheet__panel {
+    width: 100%;
+    max-height: 78vh;
+    overflow: auto;
+    background: #fff;
+    color: #1f2125;
+    border-radius: 18px 18px 0 0;
+    padding: 1rem 1rem 2rem;
+    border: 1px solid var(--ensor-reader-edge);
+}
+html.dark .ensor-reader-toc-sheet__panel {
+    background: #161719;
+    color: #f3f4f6;
+    border-color: var(--ensor-reader-edge-dark);
+}
+.ensor-reader-toc-sheet__panel .ensor-reader-toc__title {
+    font-size: 0.875rem;
+}
+
+/* -------------------------------------------------------------------------
+   Content typography upgrades (titles, highlights, code, links, blockquote)
+   ------------------------------------------------------------------------- */
+.ensor-reader-body :where(h2, h3) {
+    scroll-margin-top: 100px;
+    position: relative;
+    color: var(--ensor-ink, #1a1a1a);
+}
+html.dark .ensor-reader-body :where(h2, h3) {
+    color: #f3f4f6;
+}
+.ensor-reader-body h2 {
+    font-weight: 700;
+    font-size: 1.65rem;
+    line-height: 1.25;
+    margin: 2.5rem 0 1rem;
+}
+.ensor-reader-body h3 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin: 1.75rem 0 0.75rem;
+}
+
+/* Subrayado de acento al estilo "marker" (la palabra clave la marca el editor con <mark>) */
+.ensor-reader-body :where(h1, h2, h3) mark,
+.ensor-reader-body mark,
+.ensor-reader-body .ensor-highlight {
+    background-image: linear-gradient(transparent 60%, color-mix(in srgb, var(--ensor-accent, #d9a300) 55%, transparent) 60%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: inherit;
+    padding: 0 0.18em;
+    border-radius: 0.15em;
+}
+
+/* Si no quieres marcar palabras individuales y prefieres todo el título resaltado, usa h2.is-marker / h3.is-marker */
+.ensor-reader-body :where(h2, h3).is-marker {
+    display: inline-block;
+    background-image: linear-gradient(transparent 62%, color-mix(in srgb, var(--ensor-accent, #d9a300) 50%, transparent) 62%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0 0.2em;
+}
+
+/* Anchor link discreto al hover sobre el título */
+.ensor-reader-body :where(h2, h3) .ensor-anchor {
+    opacity: 0;
+    margin-left: 0.4rem;
+    color: var(--ensor-accent, #d9a300);
+    text-decoration: none;
+    transition: opacity 150ms ease;
+    font-weight: 400;
+}
+.ensor-reader-body :where(h2, h3):hover .ensor-anchor {
+    opacity: 0.75;
+}
+
+/* Code inline */
+.ensor-reader-body code:not(pre code) {
+    background: rgba(217, 163, 0, 0.12);
+    color: #6c4d00;
+    padding: 0.1em 0.4em;
+    border-radius: 0.35em;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.92em;
+    border: 1px solid rgba(217, 163, 0, 0.18);
+}
+html.dark .ensor-reader-body code:not(pre code) {
+    background: rgba(217, 163, 0, 0.16);
+    color: #ffd770;
+    border-color: rgba(217, 163, 0, 0.32);
+}
+
+/* Code blocks (<pre><code>) */
+.ensor-reader-body pre {
+    margin: 1.5rem 0;
+    padding: 1.1rem 1.2rem;
+    border-radius: 14px;
+    background: #14161a;
+    color: #f5f7fa;
+    overflow-x: auto;
+    border: 1px solid #1f2228;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+}
+.ensor-reader-body pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+    border: 0;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Inline links */
+.ensor-reader-body :where(p, li) > a:not(.ensor-cta-hablemos, .button) {
+    color: var(--ensor-ink, #1a1a1a);
+    background-image: linear-gradient(currentColor, currentColor),
+                      linear-gradient(var(--ensor-accent, #d9a300), var(--ensor-accent, #d9a300));
+    background-size: 0% 1px, 100% 1px;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat, no-repeat;
+    text-decoration: none;
+    transition: background-size 220ms ease, color 220ms ease;
+    padding-bottom: 0.05em;
+}
+html.dark .ensor-reader-body :where(p, li) > a:not(.ensor-cta-hablemos, .button) {
+    color: #f3f4f6;
+}
+.ensor-reader-body :where(p, li) > a:not(.ensor-cta-hablemos, .button):hover {
+    background-size: 100% 1px, 100% 1px;
+    color: var(--ensor-accent, #d9a300);
+}
+
+/* Blockquote / pull quote */
+.ensor-reader-body blockquote {
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--ensor-accent, #d9a300);
+    background: color-mix(in srgb, var(--ensor-accent, #d9a300) 10%, transparent);
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-style: italic;
+    color: inherit;
+}
+
+/* Figura: subtítulo más limpio */
+.ensor-reader-body figure {
+    margin: 1.75rem 0;
+}
+.ensor-reader-body figure img {
+    border-radius: 12px;
+}
+.ensor-reader-body figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    opacity: 0.8;
+}
+
+/* "key takeaway" callout (block pattern) */
+.ensor-reader-callout {
+    margin: 1.5rem 0;
+    padding: 1rem 1.1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--ensor-accent, #d9a300) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ensor-accent, #d9a300) 28%, transparent);
+    color: inherit;
+}
+.ensor-reader-callout strong {
+    color: var(--ensor-accent, #d9a300);
+    letter-spacing: 0.02em;
+}

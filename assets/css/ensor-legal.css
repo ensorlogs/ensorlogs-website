@@ -1,0 +1,479 @@
+/* =========================================================================
+   Ensorlogs · Páginas legales (privacidad, cookies, aviso legal, accesibilidad)
+   Branding consistente con el resto del sitio: tipografía cuidada,
+   bloques con jerarquía clara, callouts y CTA final.
+   ========================================================================= */
+
+:root {
+    --legal-radius: 16px;
+    --legal-radius-sm: 10px;
+    --legal-bg-soft: rgba(255, 255, 255, 0.7);
+    --legal-bg-card: #fff;
+    --legal-border: rgba(0, 0, 0, 0.07);
+    --legal-ink: #1f2125;
+    --legal-ink-soft: rgba(31, 33, 37, 0.78);
+    --legal-ink-mute: rgba(31, 33, 37, 0.62);
+    --legal-accent: var(--ensor-accent, #d9a300);
+}
+html.dark {
+    --legal-bg-soft: rgba(28, 30, 33, 0.55);
+    --legal-bg-card: #1a1c1f;
+    --legal-border: rgba(255, 255, 255, 0.08);
+    --legal-ink: #f3f4f6;
+    --legal-ink-soft: rgba(243, 244, 246, 0.82);
+    --legal-ink-mute: rgba(243, 244, 246, 0.6);
+}
+
+/* -------------------------------------------------------------------------
+   Hero del documento
+   ------------------------------------------------------------------------- */
+.ensor-legal-page {
+    color: var(--legal-ink);
+}
+.ensor-legal-hero {
+    position: relative;
+    padding: 2rem 0 1.5rem;
+    background:
+        radial-gradient(900px 320px at 5% 0%, color-mix(in srgb, var(--legal-accent) 8%, transparent), transparent 60%),
+        radial-gradient(700px 260px at 95% 0%, color-mix(in srgb, #7c3aed 6%, transparent), transparent 60%);
+    overflow: hidden;
+}
+html.dark .ensor-legal-hero {
+    background:
+        radial-gradient(900px 320px at 5% 0%, color-mix(in srgb, var(--legal-accent) 18%, transparent), transparent 60%),
+        radial-gradient(700px 260px at 95% 0%, color-mix(in srgb, #a78bfa 10%, transparent), transparent 60%);
+}
+.ensor-legal-hero__inner {
+    position: relative;
+    z-index: 1;
+}
+.ensor-legal-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--legal-accent) 85%, #1a1a1a);
+    margin: 0 0 0.8rem;
+}
+html.dark .ensor-legal-hero__eyebrow {
+    color: color-mix(in srgb, var(--legal-accent) 90%, white);
+}
+.ensor-legal-hero__eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--legal-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--legal-accent) 25%, transparent);
+}
+.ensor-legal-hero__title {
+    font-size: clamp(1.85rem, 1.4rem + 2vw, 2.85rem);
+    line-height: 1.12;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.85rem;
+    color: var(--legal-ink);
+}
+.ensor-legal-hero__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--legal-ink-soft);
+    margin: 0 0 1.25rem;
+    max-width: 64ch;
+}
+.ensor-legal-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.4rem;
+}
+.ensor-legal-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--legal-bg-card);
+    border: 1px solid var(--legal-border);
+    color: var(--legal-ink-soft);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    line-height: 1;
+}
+.ensor-legal-pill__dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--legal-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--legal-accent) 22%, transparent);
+}
+.ensor-legal-pill--accent {
+    background: color-mix(in srgb, var(--legal-accent) 16%, var(--legal-bg-card));
+    border-color: color-mix(in srgb, var(--legal-accent) 32%, transparent);
+    color: var(--legal-ink);
+}
+
+/* -------------------------------------------------------------------------
+   Layout principal (1 columna con max ancho cómodo de lectura)
+   ------------------------------------------------------------------------- */
+.ensor-legal-wrap {
+    margin-top: 1.5rem;
+}
+.ensor-legal-body {
+    background: var(--legal-bg-card);
+    border: 1px solid var(--legal-border);
+    border-radius: var(--legal-radius);
+    padding: 2rem 2rem 1.6rem;
+    max-width: 860px;
+    margin: 0 auto;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.03),
+        0 10px 32px rgba(0, 0, 0, 0.05);
+}
+html.dark .ensor-legal-body {
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.4),
+        0 18px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Numera los <h2> automáticamente con un círculo de acento */
+.ensor-legal-body {
+    counter-reset: legal-h2;
+}
+.ensor-legal-body > h2 {
+    counter-increment: legal-h2;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 2.2rem 0 1rem;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    font-weight: 800;
+    color: var(--legal-ink);
+    letter-spacing: -0.005em;
+}
+.ensor-legal-body > h2:first-child {
+    margin-top: 0;
+}
+.ensor-legal-body > h2::before {
+    content: counter(legal-h2, decimal-leading-zero);
+    flex-shrink: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: color-mix(in srgb, var(--legal-accent) 80%, #1a1a1a);
+    background: color-mix(in srgb, var(--legal-accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--legal-accent) 30%, transparent);
+    padding: 0.35rem 0.55rem;
+    border-radius: 8px;
+    line-height: 1;
+    min-width: 2.2rem;
+    text-align: center;
+}
+html.dark .ensor-legal-body > h2::before {
+    color: color-mix(in srgb, var(--legal-accent) 90%, white);
+    background: color-mix(in srgb, var(--legal-accent) 22%, transparent);
+    border-color: color-mix(in srgb, var(--legal-accent) 40%, transparent);
+}
+
+/* Si el h2 ya empieza con "N. " en el texto original, lo seguimos mostrando;
+   el contador de la izquierda funciona como anclaje visual de número. */
+.ensor-legal-body > h3 {
+    margin: 1.5rem 0 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--legal-ink);
+}
+
+.ensor-legal-body p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--legal-ink-soft);
+    margin: 0 0 0.95rem;
+}
+.ensor-legal-body p strong {
+    color: var(--legal-ink);
+}
+
+.ensor-legal-body ul,
+.ensor-legal-body ol {
+    margin: 0 0 1.1rem;
+    padding-left: 1.4rem;
+    color: var(--legal-ink-soft);
+}
+.ensor-legal-body ul li,
+.ensor-legal-body ol li {
+    margin: 0.3rem 0;
+    line-height: 1.6;
+}
+.ensor-legal-body ul {
+    list-style: none;
+    padding-left: 0;
+}
+.ensor-legal-body ul li {
+    position: relative;
+    padding-left: 1.3rem;
+}
+.ensor-legal-body ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    background: var(--legal-accent);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0.85;
+}
+
+.ensor-legal-body a {
+    color: var(--legal-ink);
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor),
+                      linear-gradient(var(--legal-accent), var(--legal-accent));
+    background-size: 0% 1px, 100% 1px;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat, no-repeat;
+    transition: background-size 220ms ease, color 220ms ease;
+    padding-bottom: 0.05em;
+    font-weight: 600;
+}
+html.dark .ensor-legal-body a { color: #f3f4f6; }
+.ensor-legal-body a:hover {
+    background-size: 100% 1px, 100% 1px;
+    color: var(--legal-accent);
+}
+
+.ensor-legal-body code:not(pre code) {
+    background: color-mix(in srgb, var(--legal-accent) 14%, transparent);
+    color: color-mix(in srgb, var(--legal-accent) 65%, #1a1a1a);
+    padding: 0.1em 0.4em;
+    border-radius: 0.35em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.92em;
+    border: 1px solid color-mix(in srgb, var(--legal-accent) 22%, transparent);
+}
+html.dark .ensor-legal-body code:not(pre code) {
+    color: #ffd770;
+    background: rgba(217, 163, 0, 0.18);
+    border-color: rgba(217, 163, 0, 0.32);
+}
+
+.ensor-legal-body blockquote {
+    margin: 1.3rem 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--legal-accent);
+    background: color-mix(in srgb, var(--legal-accent) 8%, transparent);
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-style: italic;
+    color: var(--legal-ink-soft);
+}
+
+.ensor-legal-body table {
+    width: 100%;
+    margin: 1rem 0 1.4rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--legal-border);
+    border-radius: var(--legal-radius-sm);
+    overflow: hidden;
+    font-size: 0.92rem;
+}
+.ensor-legal-body table thead th {
+    text-align: left;
+    background: color-mix(in srgb, var(--legal-accent) 12%, var(--legal-bg-card));
+    color: var(--legal-ink);
+    font-weight: 800;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--legal-border);
+}
+.ensor-legal-body table tbody td {
+    padding: 0.7rem 0.85rem;
+    color: var(--legal-ink-soft);
+    border-bottom: 1px solid var(--legal-border);
+    vertical-align: top;
+}
+.ensor-legal-body table tbody tr:last-child td {
+    border-bottom: 0;
+}
+.ensor-legal-body table tbody tr:nth-child(even) td {
+    background: color-mix(in srgb, var(--legal-accent) 4%, transparent);
+}
+
+/* Botón "Preferencias de cookies" usado inline en cookies.html */
+.ensor-legal-body .ensor-cookies-reopen {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: color-mix(in srgb, var(--legal-accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--legal-accent) 35%, transparent);
+    color: var(--legal-ink);
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ensor-legal-body .ensor-cookies-reopen:hover {
+    background: color-mix(in srgb, var(--legal-accent) 28%, transparent);
+    text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------
+   Footer del documento: CTA + navegación cruzada
+   ------------------------------------------------------------------------- */
+.ensor-legal-foot {
+    margin: 2rem auto 2.5rem;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+.ensor-legal-cta-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.4rem;
+    border-radius: var(--legal-radius);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--legal-accent) 12%, var(--legal-bg-card)) 0%, var(--legal-bg-card) 100%);
+    border: 1px solid color-mix(in srgb, var(--legal-accent) 28%, var(--legal-border));
+}
+.ensor-legal-cta-card__text {
+    flex: 1 1 220px;
+}
+.ensor-legal-cta-card__title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--legal-ink);
+    margin: 0 0 0.2rem;
+}
+.ensor-legal-cta-card__sub {
+    color: var(--legal-ink-soft);
+    font-size: 0.92rem;
+    margin: 0;
+    line-height: 1.5;
+}
+.ensor-legal-cta-card__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--legal-accent);
+    color: #1a1300;
+    font-weight: 800;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+    border: 0;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--legal-accent) 35%, transparent);
+}
+.ensor-legal-cta-card__action:hover {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--legal-accent) 90%, white);
+}
+html.dark .ensor-legal-cta-card__action {
+    color: #1a1300;
+}
+
+.ensor-legal-cross {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.6rem 0.5rem;
+}
+.ensor-legal-cross__title {
+    width: 100%;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 800;
+    color: var(--legal-ink-mute);
+    margin: 0 0 0.4rem;
+}
+.ensor-legal-cross a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--legal-ink-soft);
+    background: var(--legal-bg-card);
+    border: 1px solid var(--legal-border);
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: border-color .15s ease, color .15s ease, background-color .15s ease;
+}
+.ensor-legal-cross a:hover,
+.ensor-legal-cross a:focus-visible {
+    border-color: var(--legal-accent);
+    color: var(--legal-accent);
+    outline: none;
+}
+.ensor-legal-cross a.is-current {
+    background: color-mix(in srgb, var(--legal-accent) 14%, var(--legal-bg-card));
+    border-color: color-mix(in srgb, var(--legal-accent) 32%, var(--legal-border));
+    color: var(--legal-ink);
+    pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .ensor-legal-hero {
+        padding: 1.5rem 0 1rem;
+    }
+    .ensor-legal-body {
+        padding: 1.5rem 1.25rem 1.2rem;
+        border-radius: 14px;
+    }
+    .ensor-legal-body > h2 {
+        font-size: 1.18rem;
+        margin: 1.8rem 0 0.75rem;
+        gap: 0.65rem;
+    }
+    .ensor-legal-body > h2::before {
+        font-size: 0.72rem;
+        padding: 0.3rem 0.5rem;
+        min-width: 1.95rem;
+    }
+    .ensor-legal-cta-card {
+        padding: 1.1rem 1.15rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ensor-legal-body {
+        padding: 1.25rem 1rem 1.05rem;
+    }
+    .ensor-legal-body table {
+        font-size: 0.82rem;
+    }
+    .ensor-legal-body table thead th,
+    .ensor-legal-body table tbody td {
+        padding: 0.5rem 0.6rem;
+    }
+    .ensor-legal-cta-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+    }
+    .ensor-legal-cta-card__action {
+        justify-content: center;
+        width: 100%;
+    }
+}

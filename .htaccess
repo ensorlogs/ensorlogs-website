@@ -35,7 +35,10 @@ Options -Indexes
     RewriteEngine On
     # Enlaces antiguos en la raíz → carpetas (301 + HTTPS en un solo salto)
     RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
-    RewriteRule ^articulo-(.+\.html)$ https://%{HTTP_HOST}/articulos/articulo-$1 [R=301,L]
+    RewriteRule ^articulo-(.+\.html)$ https://%{HTTP_HOST}/articulos/$1 [R=301,L]
+    # Slugs antiguos con prefix `articulo-` dentro de /articulos/ → sin prefix
+    RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
+    RewriteRule ^articulos/articulo-(.+\.html)$ https://%{HTTP_HOST}/articulos/$1 [R=301,L]
     RewriteCond %{HTTP_HOST} ^(www\.)?ensorlogs\.com$ [NC]
     RewriteRule ^proyecto-(.+\.html)$ https://%{HTTP_HOST}/proyectos/proyecto-$1 [R=301,L]
     # HTTPS solo en dominio de producción (no afecta localhost / preview local)

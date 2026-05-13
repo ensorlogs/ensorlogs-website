@@ -1,0 +1,627 @@
+/* =========================================================================
+   Ensorlogs · Quiz al final de cada log
+   - Panel de preguntas (radio + feedback inmediato).
+   - Badge de estado (pendiente amarillo / completado verde) en la cabecera.
+   - Botón "He leído y comprendido el log" desbloqueable.
+   - Contador "Logs Completados" en el header del sitio.
+   ========================================================================= */
+
+:root {
+    --quiz-bg:        #ecf3e6;  /* fondo del panel de pregunta */
+    --quiz-bg-soft:   #f4f8ee;
+    --quiz-ink:       #1d2818;
+    --quiz-edge:      rgba(0, 0, 0, 0.08);
+    --quiz-pending:   #facc15;  /* amber-400 */
+    --quiz-pending-ink: #1a1a1a;
+    --quiz-done:      #b4cd92;  /* verde "completado" */
+    --quiz-done-edge: #8aa66a;
+    --quiz-done-ink:  #1a1a1a;
+    --quiz-wrong:     #ef4444;
+    --quiz-right:     #16a34a;
+}
+html.dark {
+    --quiz-bg:        rgba(180, 205, 146, 0.08);
+    --quiz-bg-soft:   rgba(180, 205, 146, 0.04);
+    --quiz-ink:       #e7f0db;
+    --quiz-edge:      rgba(255, 255, 255, 0.08);
+    --quiz-pending:   #fbbf24;
+    --quiz-done:      #a3c47c;
+    --quiz-done-ink:  #1a2410;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Badge de estado del log (en la cabecera, junto al meta)                 */
+/* ----------------------------------------------------------------------- */
+.ensor-log-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.32rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--quiz-pending) 70%, transparent);
+    color: var(--quiz-pending-ink);
+    line-height: 1;
+    transition: background-color .25s ease, color .25s ease;
+}
+.ensor-log-status__dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--quiz-pending-ink);
+    flex-shrink: 0;
+}
+.ensor-log-status.is-done {
+    background: var(--quiz-done);
+    color: var(--quiz-done-ink);
+}
+.ensor-log-status.is-done .ensor-log-status__dot {
+    background: var(--quiz-done-ink);
+    border-radius: 0;
+    width: 12px; height: 12px;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a2410' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Cabecera de la sección quiz                                              */
+/* ----------------------------------------------------------------------- */
+.ensor-quiz {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+.ensor-quiz__intro {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+.ensor-quiz__eyebrow {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--quiz-done-edge) 80%, transparent);
+}
+html.dark .ensor-quiz__eyebrow { color: var(--quiz-done); }
+.ensor-quiz__title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--quiz-ink);
+    margin: 0;
+}
+html.dark .ensor-quiz__title { color: #f3f5ef; }
+.ensor-quiz__desc {
+    margin: 0.4rem 0 1.2rem;
+    font-size: 0.95rem;
+    color: rgba(29, 40, 24, 0.78);
+    max-width: 60ch;
+}
+html.dark .ensor-quiz__desc { color: rgba(231, 240, 219, 0.8); }
+
+/* ----------------------------------------------------------------------- */
+/* Cada pregunta                                                            */
+/* ----------------------------------------------------------------------- */
+.ensor-quiz__question {
+    background: var(--quiz-bg);
+    border: 1px solid var(--quiz-edge);
+    border-radius: 14px;
+    padding: 1.2rem 1.3rem 1.3rem;
+    margin-bottom: 1rem;
+    transition: border-color .2s ease;
+}
+.ensor-quiz__question[data-state="right"] {
+    border-color: color-mix(in srgb, var(--quiz-right) 45%, transparent);
+}
+.ensor-quiz__question[data-state="wrong"] {
+    border-color: color-mix(in srgb, var(--quiz-wrong) 45%, transparent);
+}
+
+.ensor-quiz__q {
+    font-weight: 700;
+    color: var(--quiz-ink);
+    margin: 0 0 0.9rem;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+html.dark .ensor-quiz__q { color: #eef4e6; }
+
+.ensor-quiz__options {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+.ensor-quiz__options > li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.ensor-quiz__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .15s ease;
+    color: var(--quiz-ink);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    width: 100%;
+}
+.ensor-quiz__option > span {
+    flex: 1 1 auto;
+    min-width: 0;
+    word-break: break-word;
+}
+html.dark .ensor-quiz__option { color: #e7f0db; }
+.ensor-quiz__option:hover {
+    background: var(--quiz-bg-soft);
+}
+
+/* IMPORTANTE: style.min.css (Tailwind base) aplica
+   `input:not([type='checkbox']) { width: 100%; padding: 1.125rem; ... }`
+   con una coma que también afecta al radio. Reseteamos aquí. */
+.ensor-quiz__option input[type="radio"],
+.ensor-quiz input[type="radio"] {
+    appearance: auto;
+    -webkit-appearance: radio;
+    width: 1.05rem !important;
+    height: 1.05rem !important;
+    min-width: 1.05rem;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    margin: 0.25rem 0 0 0 !important;
+    accent-color: var(--quiz-done-edge);
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.ensor-quiz__option input[type="radio"]:focus-visible {
+    outline: 2px solid var(--quiz-done-edge);
+    outline-offset: 2px;
+    border-radius: 50%;
+}
+.ensor-quiz__question[data-state="right"] .ensor-quiz__option,
+.ensor-quiz__question[data-state="wrong"] .ensor-quiz__option {
+    cursor: not-allowed;
+}
+.ensor-quiz__option.is-correct {
+    background: color-mix(in srgb, var(--quiz-right) 18%, transparent);
+    font-weight: 600;
+}
+.ensor-quiz__option.is-wrong {
+    background: color-mix(in srgb, var(--quiz-wrong) 16%, transparent);
+}
+
+/* Área de botones (verificar + reintentar) */
+.ensor-quiz__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+/* Botón verificar (estados) */
+.ensor-quiz__verify {
+    background: #1a1a1a;
+    color: #fff;
+    border: 0;
+    padding: 0.6rem 1.15rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background-color .15s ease, transform .1s ease;
+}
+.ensor-quiz__verify:hover { transform: translateY(-1px); }
+.ensor-quiz__verify:disabled {
+    background: rgba(0, 0, 0, 0.25);
+    cursor: not-allowed;
+    transform: none;
+}
+html.dark .ensor-quiz__verify { background: #f3f5ef; color: #1a1a1a; }
+html.dark .ensor-quiz__verify:disabled { background: rgba(255, 255, 255, 0.18); color: rgba(255,255,255,0.4); }
+
+.ensor-quiz__question[data-state="right"] .ensor-quiz__verify {
+    background: var(--quiz-right);
+    cursor: default;
+    pointer-events: none;
+}
+.ensor-quiz__question[data-state="wrong"] .ensor-quiz__verify {
+    background: var(--quiz-wrong);
+}
+
+.ensor-quiz__retry {
+    background: transparent;
+    border: 1px solid var(--quiz-edge);
+    color: inherit;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.ensor-quiz__retry:hover {
+    border-color: var(--quiz-done-edge);
+}
+
+.ensor-quiz__feedback {
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--quiz-ink);
+    display: none;
+}
+html.dark .ensor-quiz__feedback { color: rgba(231, 240, 219, 0.92); }
+.ensor-quiz__question[data-state="right"] .ensor-quiz__feedback,
+.ensor-quiz__question[data-state="wrong"] .ensor-quiz__feedback {
+    display: block;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Resumen del quiz (progreso + CTA "He leído y comprendido el log")        */
+/* ----------------------------------------------------------------------- */
+.ensor-quiz__summary {
+    margin-top: 1.4rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: 14px;
+    background: var(--quiz-bg-soft);
+    border: 1px solid var(--quiz-edge);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+.ensor-quiz__progress {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--quiz-ink);
+}
+html.dark .ensor-quiz__progress { color: #eaf2e0; }
+.ensor-quiz__progress-bar {
+    margin-top: 0.4rem;
+    width: 16rem;
+    max-width: 100%;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+html.dark .ensor-quiz__progress-bar { background: rgba(255, 255, 255, 0.1); }
+.ensor-quiz__progress-fill {
+    height: 100%;
+    background: var(--quiz-done-edge);
+    width: 0;
+    transition: width .25s ease;
+}
+
+.ensor-quiz__complete {
+    background: rgba(0, 0, 0, 0.12);
+    color: rgba(0, 0, 0, 0.45);
+    border: 0;
+    padding: 0.7rem 1.3rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.86rem;
+    letter-spacing: 0.04em;
+    cursor: not-allowed;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+html.dark .ensor-quiz__complete {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.35);
+}
+.ensor-quiz__complete-icon { font-size: 0.85rem; }
+.ensor-quiz__complete::before {
+    content: '';
+    width: 14px; height: 14px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.ensor-quiz__complete.is-unlocked {
+    background: #1a1a1a;
+    color: #fff;
+    cursor: pointer;
+}
+html.dark .ensor-quiz__complete.is-unlocked { background: #f3f5ef; color: #1a1a1a; }
+.ensor-quiz__complete.is-unlocked:hover { transform: translateY(-1px); }
+.ensor-quiz__complete.is-unlocked::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0'/></svg>");
+}
+html.dark .ensor-quiz__complete.is-unlocked::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0'/></svg>");
+}
+
+.ensor-quiz__complete.is-done {
+    background: var(--quiz-done);
+    color: var(--quiz-done-ink);
+    cursor: default;
+    pointer-events: none;
+}
+.ensor-quiz__complete.is-done::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a2410' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+}
+
+/* ----------------------------------------------------------------------- */
+/* Contador "Logs Completados" en el header                                 */
+/* ----------------------------------------------------------------------- */
+.ensor-completed-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.3rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--quiz-ink);
+    text-decoration: none;
+    line-height: 1;
+    width: max-content;
+    max-width: 100%;
+    white-space: nowrap;
+    opacity: 0.92;
+}
+html.dark .ensor-completed-counter { color: #d9e5cb; }
+.ensor-completed-counter::before {
+    content: '›';
+    font-size: 0.95rem;
+    color: rgba(0, 0, 0, 0.32);
+    font-weight: 400;
+    line-height: 1;
+}
+html.dark .ensor-completed-counter::before { color: rgba(255, 255, 255, 0.35); }
+
+.ensor-completed-counter__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: var(--quiz-done);
+    color: var(--quiz-done-ink);
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1;
+}
+.ensor-completed-counter.is-empty .ensor-completed-counter__num {
+    background: rgba(0, 0, 0, 0.07);
+    color: rgba(0, 0, 0, 0.45);
+}
+html.dark .ensor-completed-counter.is-empty .ensor-completed-counter__num {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.ensor-completed-counter:hover { text-decoration: underline; }
+
+/* En pantallas estrechas o headers compactos: oculta del header desktop.
+   Sigue visible en el menú móvil (que tiene su propio brand area). */
+@media (max-width: 1023.98px) {
+    header .ensor-completed-counter {
+        display: none;
+    }
+}
+
+/* En el menú móvil/lateral, deja el contador con margen reducido. */
+.mobile_menu .ensor-completed-counter {
+    margin-top: 0.25rem;
+    font-size: 0.65rem;
+}
+.mobile_menu .ensor-completed-counter__num {
+    min-width: 1.1rem;
+    height: 1.1rem;
+    font-size: 0.66rem;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Responsive: tablet                                                       */
+/* ----------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .ensor-quiz__question {
+        padding: 1.05rem 1rem 1.15rem;
+    }
+    .ensor-quiz__summary {
+        padding: 1rem 1.05rem;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+/* Responsive: pantallas pequeñas                                            */
+/* ----------------------------------------------------------------------- */
+@media (max-width: 640px) {
+    .ensor-quiz { margin-top: 2rem; }
+    .ensor-quiz__title { font-size: 1.18rem; line-height: 1.25; }
+    .ensor-quiz__desc  { font-size: 0.9rem; }
+    .ensor-quiz__question {
+        padding: 1rem 0.85rem 1.1rem;
+        border-radius: 12px;
+    }
+    .ensor-quiz__q { font-size: 0.94rem; line-height: 1.4; }
+    .ensor-quiz__option {
+        font-size: 0.92rem;
+        padding: 0.55rem 0.6rem;
+        gap: 0.55rem;
+    }
+    .ensor-quiz__option input[type="radio"],
+    .ensor-quiz input[type="radio"] {
+        width: 1rem !important;
+        height: 1rem !important;
+        min-width: 1rem;
+        margin-top: 0.2rem !important;
+    }
+    .ensor-quiz__verify,
+    .ensor-quiz__retry {
+        width: 100%;
+        text-align: center;
+    }
+    .ensor-quiz__summary {
+        padding: 1rem;
+        gap: 0.9rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .ensor-quiz__progress-bar { width: 100%; }
+    .ensor-quiz__complete {
+        width: 100%;
+        justify-content: center;
+        padding: 0.85rem 1rem;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+/* Responsive: pantallas muy estrechas                                       */
+/* ----------------------------------------------------------------------- */
+@media (max-width: 380px) {
+    .ensor-quiz__question {
+        padding: 0.9rem 0.75rem 1rem;
+    }
+    .ensor-quiz__option {
+        padding: 0.5rem 0.55rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Status badge en la línea de meta del log: que no rompa columnas */
+.ensor-log-status {
+    max-width: 100%;
+}
+@media (max-width: 480px) {
+    .ensor-log-status {
+        font-size: 0.68rem;
+        padding: 0.28rem 0.65rem;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+/* Cards del listado de logs (blog.html, blog-2.html, WP archive)          */
+/* Banda superior con color de estado + badge "Pendiente" / "Completado"   */
+/* ----------------------------------------------------------------------- */
+.blog-item,
+.ensor-log-card,
+[data-log-card] {
+    position: relative;
+}
+
+/* Banda superior fina con color de estado (sticker bar). */
+.blog-item.is-log-done .thumbnail,
+.blog-item.is-log-pending .thumbnail,
+.ensor-log-card.is-log-done .thumbnail,
+.ensor-log-card.is-log-pending .thumbnail {
+    position: relative;
+    isolation: isolate;
+}
+.blog-item.is-log-done .thumbnail::before,
+.blog-item.is-log-pending .thumbnail::before,
+.ensor-log-card.is-log-done .thumbnail::before,
+.ensor-log-card.is-log-pending .thumbnail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    z-index: 3;
+    background: var(--quiz-pending);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+    pointer-events: none;
+}
+.blog-item.is-log-done .thumbnail::before,
+.ensor-log-card.is-log-done .thumbnail::before,
+[data-log-card].is-log-done .thumbnail::before {
+    background: var(--quiz-done);
+}
+html.dark .blog-item.is-log-done .thumbnail::before,
+html.dark .ensor-log-card.is-log-done .thumbnail::before {
+    background: color-mix(in srgb, var(--quiz-done) 90%, white);
+}
+
+/* Badge flotante (esquina superior izquierda del thumbnail). */
+.ensor-log-card-status {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.72rem 0.32rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    background: var(--quiz-pending);
+    color: var(--quiz-pending-ink);
+    border: 1px solid color-mix(in srgb, var(--quiz-pending-ink) 12%, var(--quiz-pending));
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+    backdrop-filter: saturate(140%);
+}
+.ensor-log-card-status.is-done {
+    background: var(--quiz-done);
+    color: var(--quiz-done-ink);
+    border-color: color-mix(in srgb, var(--quiz-done-ink) 14%, var(--quiz-done));
+}
+
+/* Icono (dot pulsante para pending, check fijo para done). */
+.ensor-log-card-status__icon {
+    display: inline-flex;
+    width: 12px;
+    height: 12px;
+    align-items: center;
+    justify-content: center;
+}
+.ensor-log-card-status.is-pending .ensor-log-card-status__icon::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.85;
+    animation: ensor-card-pulse 1.8s ease-in-out infinite;
+}
+.ensor-log-card-status.is-done .ensor-log-card-status__icon {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a2410' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+@keyframes ensor-card-pulse {
+    0%, 100% { transform: scale(1);   opacity: 0.85; }
+    50%      { transform: scale(1.25); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-log-card-status.is-pending .ensor-log-card-status__icon::before {
+        animation: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .ensor-log-card-status {
+        top: 0.55rem;
+        left: 0.55rem;
+        font-size: 0.66rem;
+        padding: 0.28rem 0.6rem 0.28rem 0.48rem;
+    }
+}

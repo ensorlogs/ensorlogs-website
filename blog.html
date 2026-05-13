@@ -5,18 +5,18 @@
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
-    <script>(function(){try{if(localStorage.theme!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}})();</script>
+    <script>(function(){try{if(localStorage.theme==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Specific Meta
     ================================================== -->
     <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
     <meta name="keywords"
-        content="blog IT, bitácora tecnología, PropTech, automatización, Ensorlogs, Ensor Sánchez, operaciones digitales">
+        content="blog IT, bitácora tecnología, PropTech, automatización, Ensorlogs, EnsorLogs, operaciones digitales">
     <meta name="description"
         content="Blog Ensorlogs: bitácora sobre IT, PropTech, automatización y operaciones digitales. Artículos prácticos para equipos y proyectos.">
-    <meta name="author" content="Ensor Sánchez · Ensorlogs">
+    <meta name="author" content="EnsorLogs">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://ensorlogs.com/blog.html">
     <meta property="og:type" content="website">
@@ -48,6 +48,10 @@
     <link rel="stylesheet" href="assets/css/style.min.css">
     <link rel="stylesheet" href="assets/css/ensor-brand.css">
 
+    <link rel="stylesheet" href="assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="assets/css/ensor-cookies.css">
+    <meta name="ensor-cookies-url" content="legal/cookies.html">
+    <link rel="stylesheet" href="assets/css/ensor-quiz.css">
 </head>
 
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
@@ -170,7 +174,7 @@
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
                 <p  class="font-medium">
-                    Tienes una propuesta?
+                    ¿Hablamos?
                 </p>
                 <a href="contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
                     Contactar
@@ -195,6 +199,9 @@
                         Hablemos de…
                     </h1>
                     <span class="ensor-tagline-rule mt-4 h-0.5 max-w-[14rem] rounded-full block" aria-hidden="true"></span>
+                    <p class="mt-4 text-sm md:text-base text-darkGray dark:text-pastelGrey max-w-3xl leading-relaxed">
+                        Aquí dejo escritos los <strong class="text-powerBlack dark:text-pastelGrey font-semibold">logs</strong> de lo que aprendo, pruebo y enseño. Elige un stack y entra al detalle — o ve todos abajo.
+                    </p>
                     <nav class="ensor-blog-temas mt-6 md:mt-8" aria-label="Temas del blog">
                         <div class="ensor-home-temas-grid ensor-home-temas-grid--12 gap-2 md:gap-3">
                             <a href="blog.html?tema=linux" class="ensor-home-tema-pill space-y-2 text-center min-w-0 p-2.5 md:p-3 border border-transparent hover:border-flasWhite dark:hover:border-flasBlack" aria-label="Linux"><div class="icon h-12 grid place-content-center"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/linux.svg" alt="" width="40" height="40" decoding="async" class="w-10 h-10 ensor-simple-icon"></div><p class="text-xs md:text-sm font-medium text-darkGray dark:text-pastelGrey leading-tight">Linux</p></a>
@@ -220,157 +227,111 @@
                 </div>
             </section>
 
-            <div class="blog-wrapper grid sm:grid-cols-2 lg:grid-cols-3 gap-6 *:p-2 *:rounded-xl xl:*:rounded-2xl *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack *:border *:border-flasWhite dark:*:border-flasBlack" data-aos="fade-up">
-                <div class="blog-item group" data-temas="linux ia it servidores">
-                    <div class="thumbnail relative overflow-hidden rounded-xl">
-                        <a href="articulos/articulo-linux-terminal-ia-caracas-2026.html">
-                            <img src="https://images.unsplash.com/photo-1629654298833-01dc4cda8337?auto=format&fit=crop&w=900&q=82" alt="Linux y terminal para estudiar IT en Caracas" width="900" height="506" decoding="async" class="w-full h-52 object-cover transition-all duration-300 group-hover:scale-110">
+            <div class="blog-wrapper grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7 *:p-2 *:rounded-xl xl:*:rounded-2xl *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack *:border *:border-flasWhite dark:*:border-flasBlack" data-aos="fade-up">
+                <div class="blog-item group flex flex-col h-full min-w-0" data-temas="wordpress marketing google ia it">
+                    <div class="thumbnail relative h-44 sm:h-48 overflow-hidden rounded-xl shrink-0">
+                        <a href="articulos/wordpress-vale-pena-aprender-2026.html" class="block h-full">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=82" alt="WordPress en 2026 — experiencia real" width="900" height="506" decoding="async" class="h-full w-full object-cover transition-all duration-300 group-hover:scale-105">
                         </a>
-                        <div class="tags absolute right-4 top-4">
-                            <a href="blog.html?tema=linux" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">Linux</a>
-                        </div>
-                    </div>
-                    <div class="description py-6 px-4 pb-4">
-                        <h2 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
-                            <a href="articulos/articulo-linux-terminal-ia-caracas-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">Estudiar Linux en Caracas en 2026: terminal, WSL y el nuevo compañero llamado IA</a>
-                        </h2>
-                        <div class="meta my-5">
-                            <span class="text-regular inline-flex items-center gap-2">
-                                <img class="w-9 h-9 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="Ensor Sánchez">
-                                <span class="author-name"><span>Por</span> Ensor Sánchez</span>
-                            </span>
-                            <time class="text-regular block mt-2" datetime="2026-01-12">12 ene 2026</time>
-                        </div>
-                        <p class="line-clamp-3 !leading-normal">Guía larga: WSL, práctica de terminal, IA como copiloto sin sustituir fundamentos y SEO local para quien estudia o busca trabajo remoto desde Venezuela.</p>
-                        <p class="mt-4 xl:mt-8"><a href="articulos/articulo-linux-terminal-ia-caracas-2026.html" class="font-semibold text-base leading-none text-darkGray dark:text-pastelGrey flex items-center justify-between" aria-label="Leer más">Leer más<svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                    </div>
-                </div>
-                <div class="blog-item group" data-temas="wordpress marketing google it">
-                    <div class="thumbnail relative overflow-hidden rounded-xl">
-                        <a href="articulos/articulo-wordpress-bloques-seguridad-caracas-2026.html">
-                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=82" alt="WordPress y negocios digitales en Caracas" width="900" height="506" decoding="async" class="w-full h-52 object-cover transition-all duration-300 group-hover:scale-110">
-                        </a>
-                        <div class="tags absolute right-4 top-4">
+                        <div class="tags absolute right-3 top-3">
                             <a href="blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
                         </div>
                     </div>
-                    <div class="description py-6 px-4 pb-4">
-                        <h2 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
-                            <a href="articulos/articulo-wordpress-bloques-seguridad-caracas-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">WordPress en 2026: bloques, seguridad y cómo enseño el stack sin marear al estudiante</a>
+                    <div class="description flex flex-col flex-1 px-3 pt-4 pb-4 min-h-0">
+                        <h2 class="text-lg font-bold text-darkGray dark:text-pastelGrey leading-snug line-clamp-3">
+                            <a href="articulos/wordpress-vale-pena-aprender-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">WordPress en 2026: ¿todavía vale la pena aprenderlo o ya “murió”?</a>
                         </h2>
-                        <div class="meta my-5">
+                        <div class="meta my-3 text-sm text-darkGray dark:text-pastelGrey">
                             <span class="text-regular inline-flex items-center gap-2">
-                                <img class="w-9 h-9 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="Ensor Sánchez">
-                                <span class="author-name"><span>Por</span> Ensor Sánchez</span>
+                                <img class="w-8 h-8 shrink-0 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="EnsorLogs">
+                                <span class="author-name"><span>Por</span> EnsorLogs</span>
                             </span>
-                            <time class="text-regular block mt-2" datetime="2026-01-18">18 ene 2026</time>
+                            <time class="text-regular block mt-1.5 opacity-90" datetime="2026-05-12">may 2026</time>
                         </div>
-                        <p class="line-clamp-3 !leading-normal">Gutenberg, seguridad mínima viable, rendimiento y uso honesto de IA en contenidos — con ojo en clientes y estudiantes en Venezuela.</p>
-                        <p class="mt-4 xl:mt-8"><a href="articulos/articulo-wordpress-bloques-seguridad-caracas-2026.html" class="font-semibold text-base leading-none text-darkGray dark:text-pastelGrey flex items-center justify-between" aria-label="Leer más">Leer más<svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+                        <p class="text-sm leading-snug text-darkGray dark:text-pastelGrey line-clamp-3 flex-1">Mi experiencia real como estudiante, freelancer y alguien que todavía lo usa en proyectos reales: Venezuela, WordCamp Madrid, IA y por qué el contenido humano sigue importando.</p>
+                        <p class="mt-4 pt-1">
+                            <a href="articulos/wordpress-vale-pena-aprender-2026.html" class="ensor-cta-hablemos inline-flex w-full items-center justify-center shrink-0 font-semibold py-2 px-4 text-sm leading-snug rounded-full no-underline" aria-label="Leer log completo"><span>Leer log</span></a>
+                        </p>
                     </div>
                 </div>
-                <div class="blog-item group" data-temas="python ia it database">
-                    <div class="thumbnail relative overflow-hidden rounded-xl">
-                        <a href="articulos/articulo-python-ia-estudio-trabajo-2026-venezuela.html">
-                            <img src="https://images.unsplash.com/photo-1526379095098-d400fd11bf52?auto=format&fit=crop&w=900&q=82" alt="Python y aprendizaje con IA en Venezuela" width="900" height="506" decoding="async" class="w-full h-52 object-cover transition-all duration-300 group-hover:scale-110">
+                <div class="blog-item group flex flex-col h-full min-w-0" data-temas="wordpress ia it servidores">
+                    <div class="thumbnail relative h-44 sm:h-48 overflow-hidden rounded-xl shrink-0">
+                        <a href="articulos/wordpress-instalacion-ia-2026.html" class="block h-full">
+                            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=82" alt="Instalar WordPress — servidor y entorno" width="900" height="506" decoding="async" class="h-full w-full object-cover transition-all duration-300 group-hover:scale-105">
                         </a>
-                        <div class="tags absolute right-4 top-4">
-                            <a href="blog.html?tema=python" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">Python</a>
-                        </div>
-                    </div>
-                    <div class="description py-6 px-4 pb-4">
-                        <h2 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
-                            <a href="articulos/articulo-python-ia-estudio-trabajo-2026-venezuela.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">Python + IA en 2026: qué estudiar de verdad si vives entre la U, el apagón y las ganas de trabajar remoto</a>
-                        </h2>
-                        <div class="meta my-5">
-                            <span class="text-regular inline-flex items-center gap-2">
-                                <img class="w-9 h-9 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="Ensor Sánchez">
-                                <span class="author-name"><span>Por</span> Ensor Sánchez</span>
-                            </span>
-                            <time class="text-regular block mt-2" datetime="2026-02-03">3 feb 2026</time>
-                        </div>
-                        <p class="line-clamp-3 !leading-normal">Fundamentos que no negocio con el copiloto, proyectos con historia para portfolio y lectura de tickets como entrenamiento laboral.</p>
-                        <p class="mt-4 xl:mt-8"><a href="articulos/articulo-python-ia-estudio-trabajo-2026-venezuela.html" class="font-semibold text-base leading-none text-darkGray dark:text-pastelGrey flex items-center justify-between" aria-label="Leer más">Leer más<svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                    </div>
-                </div>
-                <div class="blog-item group" data-temas="crm marketing it google">
-                    <div class="thumbnail relative overflow-hidden rounded-xl">
-                        <a href="articulos/articulo-crm-trabajo-remoto-caracas-2026.html">
-                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=82" alt="CRM y trabajo en equipo remoto" width="900" height="506" decoding="async" class="w-full h-52 object-cover transition-all duration-300 group-hover:scale-110">
-                        </a>
-                        <div class="tags absolute right-4 top-4">
-                            <a href="blog.html?tema=crm" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">CRM</a>
-                        </div>
-                    </div>
-                    <div class="description py-6 px-4 pb-4">
-                        <h2 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
-                            <a href="articulos/articulo-crm-trabajo-remoto-caracas-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">CRM y trabajo remoto desde Caracas: lo que la carrera no te contó sobre pipelines, pruebas y confianza</a>
-                        </h2>
-                        <div class="meta my-5">
-                            <span class="text-regular inline-flex items-center gap-2">
-                                <img class="w-9 h-9 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="Ensor Sánchez">
-                                <span class="author-name"><span>Por</span> Ensor Sánchez</span>
-                            </span>
-                            <time class="text-regular block mt-2" datetime="2026-02-10">10 feb 2026</time>
-                        </div>
-                        <p class="line-clamp-3 !leading-normal">Tu búsqueda de empleo como pipeline, seguimiento sin quemar puentes y CRM aplicado a servicios y reputación — pensando en clientes fuera de Venezuela.</p>
-                        <p class="mt-4 xl:mt-8"><a href="articulos/articulo-crm-trabajo-remoto-caracas-2026.html" class="font-semibold text-base leading-none text-darkGray dark:text-pastelGrey flex items-center justify-between" aria-label="Leer más">Leer más<svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                    </div>
-                </div>
-                <div class="blog-item group" data-temas="database servidores linux it">
-                    <div class="thumbnail relative overflow-hidden rounded-xl">
-                        <a href="articulos/articulo-sql-bases-datos-estudiante-trabajo-2026.html">
-                            <img src="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=900&q=82" alt="SQL y datos para desarrolladores" width="900" height="506" decoding="async" class="w-full h-52 object-cover transition-all duration-300 group-hover:scale-110">
-                        </a>
-                        <div class="tags absolute right-4 top-4">
-                            <a href="blog.html?tema=database" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">Database</a>
-                        </div>
-                    </div>
-                    <div class="description py-6 px-4 pb-4">
-                        <h2 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
-                            <a href="articulos/articulo-sql-bases-datos-estudiante-trabajo-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">SQL y bases de datos en 2026: de la normalización en clase a la consulta lenta a medianoche en producción</a>
-                        </h2>
-                        <div class="meta my-5">
-                            <span class="text-regular inline-flex items-center gap-2">
-                                <img class="w-9 h-9 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="Ensor Sánchez">
-                                <span class="author-name"><span>Por</span> Ensor Sánchez</span>
-                            </span>
-                            <time class="text-regular block mt-2" datetime="2026-03-01">1 mar 2026</time>
-                        </div>
-                        <p class="line-clamp-3 !leading-normal">Teoría vs producción, Postgres/MySQL/SQLite con criterio, validar SQL generado por IA y conexión con Linux y servidores remotos.</p>
-                        <p class="mt-4 xl:mt-8"><a href="articulos/articulo-sql-bases-datos-estudiante-trabajo-2026.html" class="font-semibold text-base leading-none text-darkGray dark:text-pastelGrey flex items-center justify-between" aria-label="Leer más">Leer más<svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
-                    </div>
-                </div>
-                <div class="blog-item group" data-temas="wordpress marketing google servidores">
-                    <div class="thumbnail relative overflow-hidden rounded-xl">
-                        <a href="articulos/articulo-wordpress-optimizacion-cache-caracas-2026.html">
-                            <img src="https://images.unsplash.com/photo-1504639725590-cec6a9de3e12?auto=format&fit=crop&w=900&q=82" alt="Optimización WordPress y productividad" width="900" height="506" decoding="async" class="w-full h-52 object-cover transition-all duration-300 group-hover:scale-110">
-                        </a>
-                        <div class="tags absolute right-4 top-4">
+                        <div class="tags absolute right-3 top-3">
                             <a href="blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
                         </div>
                     </div>
-                    <div class="description py-6 px-4 pb-4">
-                        <h2 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
-                            <a href="articulos/articulo-wordpress-optimizacion-cache-caracas-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">WordPress rápido en Caracas: caching, plugins y decisiones de adulto para no convertir el sitio en Frankenstein</a>
+                    <div class="description flex flex-col flex-1 px-3 pt-4 pb-4 min-h-0">
+                        <h2 class="text-lg font-bold text-darkGray dark:text-pastelGrey leading-snug line-clamp-3">
+                            <a href="articulos/wordpress-instalacion-ia-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">Instalar WordPress en 2026: lo esencial y cómo uso la IA</a>
                         </h2>
-                        <div class="meta my-5">
+                        <div class="meta my-3 text-sm text-darkGray dark:text-pastelGrey">
                             <span class="text-regular inline-flex items-center gap-2">
-                                <img class="w-9 h-9 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="Ensor Sánchez">
-                                <span class="author-name"><span>Por</span> Ensor Sánchez</span>
+                                <img class="w-8 h-8 shrink-0 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="EnsorLogs">
+                                <span class="author-name"><span>Por</span> EnsorLogs</span>
                             </span>
-                            <time class="text-regular block mt-2" datetime="2026-03-08">8 mar 2026</time>
+                            <time class="text-regular block mt-1.5 opacity-90" datetime="2026-05-12">may 2026</time>
                         </div>
-                        <p class="line-clamp-3 !leading-normal">Caché de página/objeto/CDN, menos plugins tontos, hosting y SEO técnico mínimo con foco en usuarios móviles en Venezuela.</p>
-                        <p class="mt-4 xl:mt-8"><a href="articulos/articulo-wordpress-optimizacion-cache-caracas-2026.html" class="font-semibold text-base leading-none text-darkGray dark:text-pastelGrey flex items-center justify-between" aria-label="Leer más">Leer más<svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+                        <p class="text-sm leading-snug text-darkGray dark:text-pastelGrey line-clamp-3 flex-1">Hosting, DNS, SSL, PHP y base de datos — más cómo usar IA como copiloto sin filtrar credenciales ni sustituir el criterio.</p>
+                        <p class="mt-4 pt-1">
+                            <a href="articulos/wordpress-instalacion-ia-2026.html" class="ensor-cta-hablemos inline-flex w-full items-center justify-center shrink-0 font-semibold py-2 px-4 text-sm leading-snug rounded-full no-underline" aria-label="Leer log sobre instalación WordPress"><span>Leer log</span></a>
+                        </p>
                     </div>
                 </div>
-            </div>
-
-            <div class="text-center pt-12 pb-4">
-                <p class="text-sm text-darkGray dark:text-pastelGrey max-w-xl mx-auto">
-                    Próximos artículos seguirán enlazando Linux, bases de datos, WordPress, Python y operaciones reales desde Caracas. Si quieres un tema prioritario, <a href="contact.html" class="font-semibold underline underline-offset-2">escríbeme</a>.
-                </p>
+                <div class="blog-item group flex flex-col h-full min-w-0" data-temas="wordpress ia it">
+                    <div class="thumbnail relative h-44 sm:h-48 overflow-hidden rounded-xl shrink-0">
+                        <a href="articulos/wordpress-seguridad-estudiantes-2026.html" class="block h-full">
+                            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=82" alt="Seguridad WordPress — buenas prácticas" width="900" height="506" decoding="async" class="h-full w-full object-cover transition-all duration-300 group-hover:scale-105">
+                        </a>
+                        <div class="tags absolute right-3 top-3">
+                            <a href="blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
+                        </div>
+                    </div>
+                    <div class="description flex flex-col flex-1 px-3 pt-4 pb-4 min-h-0">
+                        <h2 class="text-lg font-bold text-darkGray dark:text-pastelGrey leading-snug line-clamp-3">
+                            <a href="articulos/wordpress-seguridad-estudiantes-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">WordPress seguro + IA: disciplina sin sustitutos</a>
+                        </h2>
+                        <div class="meta my-3 text-sm text-darkGray dark:text-pastelGrey">
+                            <span class="text-regular inline-flex items-center gap-2">
+                                <img class="w-8 h-8 shrink-0 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="EnsorLogs">
+                                <span class="author-name"><span>Por</span> EnsorLogs</span>
+                            </span>
+                            <time class="text-regular block mt-1.5 opacity-90" datetime="2026-05-12">may 2026</time>
+                        </div>
+                        <p class="text-sm leading-snug text-darkGray dark:text-pastelGrey line-clamp-3 flex-1">Backups, plugins legítimos y hosting con cabeza; IA para checklists y logs siempre anonimizados — nunca pegues contraseñas al chat.</p>
+                        <p class="mt-4 pt-1">
+                            <a href="articulos/wordpress-seguridad-estudiantes-2026.html" class="ensor-cta-hablemos inline-flex w-full items-center justify-center shrink-0 font-semibold py-2 px-4 text-sm leading-snug rounded-full no-underline" aria-label="Leer log sobre seguridad WordPress"><span>Leer log</span></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="blog-item group flex flex-col h-full min-w-0" data-temas="wordpress ia google marketing">
+                    <div class="thumbnail relative h-44 sm:h-48 overflow-hidden rounded-xl shrink-0">
+                        <a href="articulos/wordpress-rendimiento-estudiantes-2026.html" class="block h-full">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=82" alt="Rendimiento WordPress — métricas y velocidad" width="900" height="506" decoding="async" class="h-full w-full object-cover transition-all duration-300 group-hover:scale-105">
+                        </a>
+                        <div class="tags absolute right-3 top-3">
+                            <a href="blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
+                        </div>
+                    </div>
+                    <div class="description flex flex-col flex-1 px-3 pt-4 pb-4 min-h-0">
+                        <h2 class="text-lg font-bold text-darkGray dark:text-pastelGrey leading-snug line-clamp-3">
+                            <a href="articulos/wordpress-rendimiento-estudiantes-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">Rendimiento WordPress + IA: velocidad con cabeza</a>
+                        </h2>
+                        <div class="meta my-3 text-sm text-darkGray dark:text-pastelGrey">
+                            <span class="text-regular inline-flex items-center gap-2">
+                                <img class="w-8 h-8 shrink-0 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="assets/img/Logos/ensorlogs2.png" alt="EnsorLogs">
+                                <span class="author-name"><span>Por</span> EnsorLogs</span>
+                            </span>
+                            <time class="text-regular block mt-1.5 opacity-90" datetime="2026-05-12">may 2026</time>
+                        </div>
+                        <p class="text-sm leading-snug text-darkGray dark:text-pastelGrey line-clamp-3 flex-1">Imágenes, caché y métricas sin marearte: uso la IA para ordenar informes, pero mido y priorizo según el proyecto real.</p>
+                        <p class="mt-4 pt-1">
+                            <a href="articulos/wordpress-rendimiento-estudiantes-2026.html" class="ensor-cta-hablemos inline-flex w-full items-center justify-center shrink-0 font-semibold py-2 px-4 text-sm leading-snug rounded-full no-underline" aria-label="Leer log sobre rendimiento WordPress"><span>Leer log</span></a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -382,20 +343,45 @@
     Start Footer
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <footer class="mt-24 pb-8" data-aos="fade-up">
-        <div class="container text-center space-y-6">
-            <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-4xl xl:text-6xl">
-                Contacto
-            </h5>
-            <p>
-                <a href="#" class="text-powerBlack dark:text-pastelGrey py-4 px-12 rounded-4xl bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack text-regular xl:text-lg inline-flex items-center border border-gray-100  dark:border-white/5">
-                    hello@ensorlogs.com
-                </a>
-            </p>
-            <p>
-                &copy;2026 <a href="#" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
-            </p>
+        <div class="container text-center">
+            <div class="ensor-footer-cta" data-aos="fade-up">
+                <span class="ensor-footer-cta__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
+                    </svg>
+                </span>
+                <h5 class="ensor-footer-cta__heading">
+                    ¿Interesado en trabajar conmigo? <a href="contact.html" class="ensor-footer-cta__link">Contáctame</a>
+                </h5>
+                <p class="ensor-footer-cta__lead">
+                    Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
+                </p>
+                <p class="ensor-footer-cta__alt">
+                    <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
+                        <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="ensor-footer-cta__copy">
+                    &copy;2026 <a href="#top" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. Todos los derechos reservados
+                    <span class="ensor-footer-cta__love" aria-label="Hecho con amor y WordPress">
+                        · Hecho con <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span> y <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
+                    </span>
+                </p>
+            </div>
         </div>
-    </footer>
+    <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
+            <a href="legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
+            <a href="legal/privacidad.html" class="hover:underline">Privacidad</a>
+            <a href="legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="legal/accesibilidad.html" class="hover:underline">Accesibilidad</a>
+            <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Preferencias de cookies</button>
+        </nav>
+    </div>
+</footer>
     <!--~~ Footer End ~~-->
 
     </main>
@@ -423,6 +409,9 @@
     <script defer src="assets/js/nav-volver.js"></script>
     <script defer src="assets/js/theme-mode.js"></script>
     <!-- Js Library End -->
+    <script defer src="assets/js/ensor-a11y.js"></script>
+    <script defer src="assets/js/ensor-cookies.js"></script>
+    <script defer src="assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

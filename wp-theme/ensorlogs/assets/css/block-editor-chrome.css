@@ -1,0 +1,12 @@
+/**
+ * Ajustes ligeros del marco del editor (fuera del iframe) para artículos y proyectos Ensorlogs.
+ */
+.interface-interface-skeleton__body {
+    --wp-admin-border-width-focus: 1px;
+}
+
+/* Un poco más de aire bajo la barra superior al editar CPT largos. */
+body.post-type-ensor_article .interface-interface-skeleton__content,
+body.post-type-ensor_project .interface-interface-skeleton__content {
+    background-color: #f6f7f7;
+}

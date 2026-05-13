@@ -1,0 +1,182 @@
+/* =========================================================================
+   Ensorlogs · Accesibilidad
+   - Skip link al contenido principal.
+   - Toolbar flotante (tamaño texto, alto contraste, espaciado).
+   - Foco visible reforzado.
+   - Modo de "lectura tranquila" (texto base mayor).
+   ========================================================================= */
+
+/* Skip link visible solo al recibir foco con Tab */
+.ensor-skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 9999;
+    padding: 0.6rem 1rem;
+    background: #1a1a1a;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 0 0 8px 8px;
+}
+.ensor-skip-link:focus {
+    left: 1rem;
+    top: 0.5rem;
+    outline: 3px solid var(--ensor-accent, #d9a300);
+    outline-offset: 2px;
+}
+
+/* Foco visible más claro en todo el sitio */
+:focus-visible {
+    outline: 2px solid var(--ensor-accent, #d9a300);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Toolbar de accesibilidad                                              */
+/* -------------------------------------------------------------------- */
+.ensor-a11y-fab {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 90;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    color: #1a1a1a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    transition: transform .15s ease;
+}
+html.dark .ensor-a11y-fab {
+    background: #1c1d22;
+    color: #f3f4f6;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+.ensor-a11y-fab:hover { transform: translateY(-1px) scale(1.04); }
+.ensor-a11y-fab svg { width: 22px; height: 22px; fill: currentColor; }
+
+.ensor-a11y-panel {
+    position: fixed;
+    left: 1rem;
+    bottom: 4.5rem;
+    z-index: 91;
+    width: min(20rem, calc(100vw - 2rem));
+    background: #ffffff;
+    color: #1a1a1a;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.18);
+    padding: 1rem 1rem 0.6rem;
+    display: none;
+}
+html.dark .ensor-a11y-panel {
+    background: #1c1d22;
+    color: #f3f4f6;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+.ensor-a11y-panel.is-open { display: block; }
+.ensor-a11y-panel h2 {
+    margin: 0 0 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+.ensor-a11y-panel__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.45rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+html.dark .ensor-a11y-panel__row { border-top-color: rgba(255, 255, 255, 0.08); }
+.ensor-a11y-panel__row:first-of-type { border-top: 0; }
+.ensor-a11y-panel__label {
+    font-size: 0.85rem;
+    line-height: 1.3;
+}
+.ensor-a11y-panel__hint {
+    display: block;
+    font-size: 0.72rem;
+    color: rgba(0, 0, 0, 0.55);
+}
+html.dark .ensor-a11y-panel__hint { color: rgba(232, 232, 232, 0.6); }
+
+.ensor-a11y-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    color: inherit;
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+html.dark .ensor-a11y-btn { border-color: rgba(255, 255, 255, 0.16); }
+.ensor-a11y-btn:hover { border-color: var(--ensor-accent, #d9a300); }
+.ensor-a11y-btn.is-active {
+    background: var(--ensor-accent, #d9a300);
+    color: #1a1300;
+    border-color: var(--ensor-accent, #d9a300);
+}
+
+.ensor-a11y-group {
+    display: inline-flex;
+    gap: 0.3rem;
+}
+
+/* -------------------------------------------------------------------- */
+/* Estados aplicados al <html>                                            */
+/* -------------------------------------------------------------------- */
+html.ensor-a11y-text-lg { font-size: 17.6px; }      /* +10% */
+html.ensor-a11y-text-xl { font-size: 19.2px; }      /* +20% */
+
+html.ensor-a11y-spacing :where(p, li, blockquote) {
+    line-height: 1.85 !important;
+    letter-spacing: 0.02em !important;
+}
+html.ensor-a11y-spacing :where(h2, h3) {
+    line-height: 1.35 !important;
+}
+
+/* Modo alto contraste — colores forzados, sin gradientes, sin sombras */
+html.ensor-a11y-contrast {
+    --ensor-accent: #ffcc00;
+}
+html.ensor-a11y-contrast,
+html.ensor-a11y-contrast body {
+    background: #000 !important;
+    color: #fff !important;
+}
+html.ensor-a11y-contrast :where(a, .ensor-cta-hablemos, .ensor-reader-stack__label) {
+    color: #ffcc00 !important;
+    background-image: none !important;
+}
+html.ensor-a11y-contrast :where(.ensor-reader-stack, .ensor-reader-aud__chip, .ensor-reader-toc, .ensor-reader-toc-sheet__panel, .ensor-podcast-card, .ensor-podcast-mini, .ensor-aud-section, .ensor-ai-prompt) {
+    background: #111 !important;
+    color: #fff !important;
+    border-color: #ffcc00 !important;
+    box-shadow: none !important;
+}
+html.ensor-a11y-contrast :where(h1, h2, h3, h4, h5, h6, p, li, span, strong, em, mark, code, time) {
+    color: inherit !important;
+}
+html.ensor-a11y-contrast mark {
+    background: #ffcc00 !important;
+    color: #000 !important;
+}
+html.ensor-a11y-contrast img,
+html.ensor-a11y-contrast video {
+    filter: grayscale(15%) contrast(115%);
+}
+
+/* Reducir movimiento — respetar preferencia del usuario */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}
