@@ -106,8 +106,79 @@ function ensorlogs_inject_heading_ids_regex(string $html): string
 }
 
 /**
- * Solo aplica al contenido principal de Logs (artículos) en singular.
+ * Inyecta al final del contenido del log las secciones pedagógicas guardadas
+ * desde las cajas meta del backend (Contexto, Datos, Como estudiante, …).
+ * No duplica una sección si el editor de bloques ya emite una con el mismo
+ * `data-aud`. Se ejecuta ANTES de la inyección automática de ids en H2/H3
+ * para que las secciones nuevas también reciban anchors.
+ *
+ * @return string contenido con secciones inyectadas.
  */
+function ensorlogs_append_section_metas_to_content(string $content): string
+{
+    if (!function_exists('ensorlogs_article_sections')) {
+        return $content;
+    }
+    $post_id = (int) get_the_ID();
+    if ($post_id <= 0) {
+        return $content;
+    }
+    $sections = ensorlogs_article_sections();
+    if (!$sections) {
+        return $content;
+    }
+    $appended = '';
+    foreach ($sections as $sec_key => $sec_def) {
+        $value = (string) get_post_meta($post_id, '_ensor_section_' . $sec_key, true);
+        if (trim(wp_strip_all_tags($value)) === '') {
+            continue;
+        }
+        // Si el contenido ya trae una sección con esa audiencia, respetamos
+        // lo que el editor de bloques generó (no duplicamos).
+        $aud_re = preg_quote($sec_def['aud'], '/');
+        if (preg_match('/data-aud=["\']\\s*[^"\']*\\b' . $aud_re . '\\b/i', $content)) {
+            continue;
+        }
+        $label  = $sec_def['label'];
+        $aud    = $sec_def['aud'];
+        $body   = trim($value);
+        // Aseguramos que la primera línea sin tags arranque con un <h2>.
+        if (stripos($body, '<h2') === false) {
+            $heading_id = sanitize_title('como-' . $aud);
+            // Encabezados especiales: context/data conservan su nombre canónico.
+            if ($sec_key === 'context') {
+                $heading_id = 'contexto';
+            } elseif ($sec_key === 'data') {
+                $heading_id = 'datos';
+            }
+            $body = '<h2 id="' . esc_attr($heading_id) . '">' . esc_html($label) . '</h2>' . $body;
+        }
+        $appended .= "\n<section class=\"ensor-aud-section\" data-aud=\"" . esc_attr($aud) . "\">\n"
+                  . $body
+                  . "\n</section>\n";
+    }
+    return $appended === '' ? $content : ($content . $appended);
+}
+
+/**
+ * Solo aplica al contenido principal de Logs (artículos) en singular.
+ * Orden:
+ *   - prioridad 22 → inyectar secciones desde meta
+ *   - prioridad 25 → inyectar ids automáticos en H2/H3
+ */
+add_filter(
+    'the_content',
+    static function (string $content): string {
+        if (!is_singular('ensor_article')) {
+            return $content;
+        }
+        if (is_feed() || is_admin()) {
+            return $content;
+        }
+        return ensorlogs_append_section_metas_to_content($content);
+    },
+    22
+);
 add_filter(
     'the_content',
     static function (string $content): string {
@@ -148,6 +219,29 @@ function ensorlogs_detect_audiences(string $html): array
         }
     }
     return array_keys($set);
+}
+
+/**
+ * Devuelve las audiencias de un log que vienen *de las cajas meta del backend*
+ * (no del contenido del editor de bloques). Si la caja meta tiene texto
+ * útil (no solo HTML vacío), su audiencia entra en el filtro de navegación.
+ *
+ * @param int $post_id ID del log.
+ * @return array<int, string>
+ */
+function ensorlogs_article_section_audiences_with_value(int $post_id): array
+{
+    if ($post_id <= 0 || !function_exists('ensorlogs_article_sections')) {
+        return array();
+    }
+    $auds = array();
+    foreach (ensorlogs_article_sections() as $sec_key => $sec_def) {
+        $v = (string) get_post_meta($post_id, '_ensor_section_' . $sec_key, true);
+        if (trim(wp_strip_all_tags($v)) !== '') {
+            $auds[] = $sec_def['aud'];
+        }
+    }
+    return $auds;
 }
 
 /**

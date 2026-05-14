@@ -1,95 +1,37 @@
-# Guía de lectura del repo
+# Recorrido por el repo
 
-Orden sugerido para entender cómo está montado el sitio (HTML, CSS, JS, PHP y el script de artículos). Cada sección apunta a archivos concretos.
+Orden que a mí me sirvió para no perderme cuando volví a tocar el proyecto después de un tiempo.
 
----
+## 1. Una página tipo `index.html`
 
-## 1. Empezar por el “esqueleto” de una página
+- `<head>`: meta, OG, JSON-LD si aplica, orden de CSS.
+- El script corto al inicio que lee `localStorage.theme` y pone `dark` en `<html>` antes de pintar (evita flash).
+- Estructura: preloader opcional, `header`, `main`, `footer`, scripts al final con `defer`.
 
-**Archivo:** `index.html` (sirve de referencia para casi todas las páginas).
+El interruptor de tema vive también en `theme-mode.js`.
 
-**Qué mirar:**
+## 2. CSS
 
-1. `<head>`: metaetiquetas SEO, Open Graph, JSON-LD (`application/ld+json`), fuentes, CSS en orden.
-2. Un `<script>` muy pequeño **inline** al inicio: lee `localStorage.theme` y pone la clase `dark` en `<html>` **antes** de pintar mucho contenido (evita un “flash” de modo claro).
-3. `<body>`: preloader, `<header>`, `<main>`, `<footer>`.
-4. Al final del `<body>`, scripts con **`defer`**: se descargan en paralelo al HTML y se ejecutan **en orden** cuando el documento está parseado.
+Orden habitual: Font Awesome → `style.min.css` (plantilla compilada; no lo edito a mano) → `ensor-brand.css` (variables `--ensor-*`, botones, lector, filtros del blog, etc.).
 
-El tema claro/oscuro aparece en dos sitios: un script mínimo en `<head>` (evita flash) y `theme-mode.js` para el interruptor y el resto.
+## 3. JavaScript
 
----
+La plantilla arrastra jQuery en `script.js`. Lo más acotado está en archivos sueltos: `nav-volver.js`, `theme-mode.js`, filtros de blog/proyectos, `ensor-reader.js` en los logs. Vale la pena leerlos en ese orden si quieres entender el patrón sin tragarte todo jQuery de golpe.
 
-## 2. CSS: tres capas encima de otra
+## 4. `contact-form.php`
 
-| Archivo | Rol |
-|---------|-----|
-| `assets/css/fontAwesome5Pro.css` | Iconos (Font Awesome). |
-| `assets/css/style.min.css` | Plantilla + Tailwind **compilado** (no edites a mano; el fuente Tailwind está en `src/tailwind.css` si lo usas en tu flujo). |
-| `assets/css/ensor-brand.css` | **Marca Ensorlogs**: variables `--ensor-*`, botones, preloader, filtros del blog, etc. |
+POST, honeypot, validación de campos, cabeceras de correo sin basura inyectable, respuesta HTML. Cualquier cosa que salga del usuario conviene escaparla al imprimir.
 
-En `ensor-brand.css`, `:root` define variables como `--ensor-accent`; buena referencia para ver qué toca la marca.
+## 5. `render_blog_articles.py`
 
----
+Lee plantilla + YAML + Markdown y escupe HTML. Útil si quieres ver cómo se mezclan f-strings y trocear HTML grande por marcadores.
 
-## 3. JavaScript sin framework (pero con jQuery legacy)
+## 6. `.htaccess`
 
-La plantilla original usa **jQuery** (`assets/js/script.js`). Es código imperativo: “cuando pasa X, haz Y”.
+Directivas de Apache: caché, cabeceras, redirects. En tu máquina con servidor estático de Python no aplica. En producción, léelo antes de tocar reglas de dominio.
 
-**Orden sugerido de lectura:**
+## 7. Qué haría después (lista corta)
 
-1. `assets/js/nav-volver.js` — IIFE corta, `querySelectorAll`, lógica de URL.
-2. `assets/js/theme-mode.js` — `localStorage`, clases en `<html>`, parámetros `?version=` en la URL.
-3. `assets/js/blog-tema-filter.js` — `URLSearchParams`, `history.replaceState`, clases para ocultar nodos.
-4. `assets/js/projects-tema-filter.js` — mismo patrón que el blog, otro contenedor y otra página base.
-5. `assets/js/script.js` — preloader, menú móvil, AOS, Swiper, scroll.
+Tests mínimos (por ejemplo que cada HTML generado tenga un `h1`). CSP estricta si algún día centralizamos scripts inline. Nada de esto es obligatorio para mover contenidos hoy.
 
-**Idea clave:** `blog-tema-filter.js` y `projects-tema-filter.js` **no** comparten archivo a propósito: así puedes comparar “mismo patrón, distinto contexto” (principio DRY a nivel de aprendizaje vs. a nivel de librería).
-
----
-
-## 4. PHP: un solo endpoint de formulario
-
-**Archivos:** `contact.html` (vista) y `contact-form.php` (procesamiento).
-
-**Flujo:**
-
-1. El usuario envía `POST` a `contact-form.php`.
-2. PHP valida honeypot, captcha simple, email, longitudes y patrones sospechosos.
-3. Construye cabeceras de correo **sin saltos de línea** en campos que van a cabeceras (evita inyección de cabeceras).
-4. Responde con **una página HTML** (mismo estilo visual) según éxito o error.
-
-En la salida HTML del PHP conviene escapar textos que vienen del usuario (`htmlspecialchars`).
-
----
-
-## 5. Python: plantilla + datos → HTML
-
-**Archivos:** `content/articulos/*.md`, `scripts/render_blog_articles.py`, plantilla `blogs-details.html`.
-
-**Ideas de programación que aparecen:**
-
-- Leer un archivo grande como **texto** y cortar por “marcadores” (`index`, slicing).
-- **f-strings** con HTML embebido (rápido de leer; en proyectos grandes a veces se prefiere un motor de plantillas).
-- **YAML** en cabecera de cada `.md` y cuerpo en **Markdown** (el script usa la librería `markdown`).
-
-Tras ejecutar el script, abre un `articulos/*.html` generado y compáralo con `blogs-details.html`.
-
----
-
-## 6. Seguridad y rendimiento en producción
-
-Lee **`.htaccess`** con calma: son directivas de **Apache** (típico en SiteGround). Comenta en el propio archivo qué hace cada bloque.
-
-En local, si usas `python3 -m http.server`, **`.htaccess` no se aplica** (no es Apache). Eso es normal.
-
----
-
-## 7. Siguiente nivel (cuando domines lo anterior)
-
-- Añadir **tests** (p. ej. validar que cada `articulos/*.html` tiene un `<h1>`).
-- Mover contenidos del blog a **Markdown** + un generador (menos HTML repetido en Python).
-- **CSP** (Content-Security-Policy) con nonces para scripts inline (requiere build o servidor que inyecte nonces).
-
----
-
-¡Buen estudio! Si documentas tu propio fork, mantén el mismo espíritu: **qué hace el archivo**, **por qué existe**, **qué romperías si lo tocas**.
+Si haces un fork, documenta sobre todo **qué archivo tocarías para cambiar X** y qué romperías si lo borras.

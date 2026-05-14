@@ -4,3 +4,6 @@
 __pycache__/
 *.py[cod]
 .python-version
+# Originales de cámara (pesados); en web usamos jpg/webp exportados
+*.HEIC
+*.heic

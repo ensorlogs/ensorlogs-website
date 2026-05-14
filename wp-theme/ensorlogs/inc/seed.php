@@ -17,8 +17,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-const ENSORLOGS_SEED_VERSION = 8;
+const ENSORLOGS_SEED_VERSION = 9;
 const ENSORLOGS_SEED_META_KEY = '_ensor_seeded_at';
+const ENSORLOGS_PAGE_CONTENT_SEED_META = '_ensor_page_content_seeded';
 
 /**
  * Crea las páginas estructurales del sitio si no existen. Si existen
@@ -120,7 +121,10 @@ function ensorlogs_seed_insert_article(array $row, int $menu_order): void
         return;
     }
     $raw   = (string) file_get_contents($path);
-    $body  = ensorlogs_relink_migrated_body(ensorlogs_extract_main_content_html($raw));
+    $body  = ensorlogs_blockify_html_for_editor(
+        ensorlogs_relink_migrated_body(ensorlogs_extract_main_content_html($raw)),
+        'article'
+    );
     $title = ensorlogs_parse_title_from_static_html($raw);
     if ($title === '') {
         $title = (string) $row['post_name'];
@@ -159,7 +163,10 @@ function ensorlogs_seed_insert_project(array $row, int $menu_order): void
         return;
     }
     $raw   = (string) file_get_contents($path);
-    $body  = ensorlogs_relink_migrated_body(ensorlogs_extract_main_content_html($raw));
+    $body  = ensorlogs_blockify_html_for_editor(
+        ensorlogs_relink_migrated_body(ensorlogs_extract_main_content_html($raw)),
+        'project'
+    );
     $title = ensorlogs_parse_title_from_static_html($raw);
     if ($title === '') {
         $title = (string) $row['title'];
@@ -261,12 +268,66 @@ function ensorlogs_seed_ensure_legal_pages(): void
 }
 
 /**
+ * Pre-rellena el `post_content` de las páginas estructurales (inicio, about,
+ * services, projects, blog, contact) con el HTML que vive dentro de
+ * `<!-- ensor:editable -->` del fragment correspondiente, **solo si**:
+ *   1. La página existe.
+ *   2. Su `post_content` está vacío.
+ *   3. Aún no fue pre-rellenada (meta `_ensor_page_content_seeded` ausente).
+ *
+ * Esto le da al usuario un punto de partida editable cuando abre la página
+ * en WordPress; si decide vaciar el editor y guardar, la web vuelve al
+ * default del fragment (no se rompe nada).
+ */
+function ensorlogs_seed_prefill_page_contents(): void
+{
+    if (!function_exists('ensorlogs_page_fragments_map')
+        || !function_exists('ensorlogs_extract_fragment_editable_default')) {
+        return;
+    }
+    foreach (ensorlogs_page_fragments_map() as $slug => $fragment) {
+        $found = get_posts(array(
+            'post_type'      => 'page',
+            'name'           => $slug,
+            'post_status'    => 'any',
+            'posts_per_page' => 1,
+        ));
+        if (empty($found) || !$found[0] instanceof WP_Post) {
+            continue;
+        }
+        $page = $found[0];
+        $pid  = (int) $page->ID;
+        // Política idempotente: si ya fue pre-rellenada o si el editor ya
+        // tiene contenido, NO tocamos nada.
+        if (get_post_meta($pid, ENSORLOGS_PAGE_CONTENT_SEED_META, true)) {
+            continue;
+        }
+        if (trim((string) $page->post_content) !== '') {
+            // El usuario ya escribió algo: respetamos pero marcamos como seeded
+            // para no volver a evaluarlo en futuras versiones.
+            update_post_meta($pid, ENSORLOGS_PAGE_CONTENT_SEED_META, ENSORLOGS_SEED_VERSION);
+            continue;
+        }
+        $default_html = ensorlogs_extract_fragment_editable_default($fragment);
+        if ($default_html === '') {
+            continue;
+        }
+        wp_update_post(array(
+            'ID'           => $pid,
+            'post_content' => wp_slash($default_html),
+        ));
+        update_post_meta($pid, ENSORLOGS_PAGE_CONTENT_SEED_META, ENSORLOGS_SEED_VERSION);
+    }
+}
+
+/**
  * Recorre el manifest y crea (nunca sobrescribe) los posts que falten.
  */
 function ensorlogs_run_theme_seed(): void
 {
     require_once get_template_directory() . '/inc/seed-manifest.php';
     ensorlogs_seed_ensure_pages();
+    ensorlogs_seed_prefill_page_contents();
     ensorlogs_seed_ensure_legal_pages();
     $i = 0;
     foreach (ensorlogs_seed_article_manifest() as $row) {

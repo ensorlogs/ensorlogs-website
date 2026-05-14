@@ -1,21 +1,21 @@
-# Ensorlogs — sitio web
+# Ensorlogs — repo del sitio
 
-Código del sitio [ensorlogs.com](https://ensorlogs.com): páginas en HTML, estilos en `assets/css/` (Tailwind ya compilado en `style.min.css` + `ensor-brand.css`), JS sin framework, formulario con `contact-form.php`. Los posts largos se escriben en Markdown bajo `content/articulos/` y el script `scripts/render_blog_articles.py` genera `articulos/*.html`. Las fichas de proyectos siguen en `proyectos/`.
+Aquí está el HTML estático, los CSS (`style.min.css` compilado + `ensor-brand.css`), JS sueltos y el formulario PHP. Los posts largos viven en Markdown en `content/articulos/`; el script `scripts/render_blog_articles.py` vuelca a `articulos/*.html` usando la plantilla de `blogs-details.html`. Los proyectos siguen en `proyectos/`.
 
-Más detalle de estructura y flujos: [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md). Si quieres un recorrido tipo tutorial: [`docs/GUIA-ESTUDIANTES.md`](docs/GUIA-ESTUDIANTES.md).
+Si quieres ver cómo encaja todo: [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md). Si prefieres un recorrido por archivos: [`docs/GUIA-ESTUDIANTES.md`](docs/GUIA-ESTUDIANTES.md).
 
-## Ver en local
+## Verlo en local
 
 ```bash
-cd ruta/del/repo
+cd /ruta/al/repo
 python3 -m http.server 8080
 ```
 
-Abre `http://127.0.0.1:8080/`. (Con `file://` algunas cosas se comportan raro; mejor servidor.)
+Abre `http://localhost:8080/` en el navegador. Con `file://` suelen fallar rutas y fetch; mejor un servidor mínimo.
 
-## Regenerar artículos del blog
+## Regenerar los logs del blog
 
-Necesitas `PyYAML` y `markdown` (ver `requirements.txt`). Ejemplo con venv:
+Necesitas lo de `requirements.txt` (PyYAML, markdown, etc.):
 
 ```bash
 python3 -m venv .venv
@@ -23,4 +23,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_blog_articles.py
 ```
 
-Edita los `.md` en `content/articulos/` (no los HTML generados). Detalle de campos: `content/articulos/README.md`.
+Toca los `.md` de `content/articulos/`, no los HTML generados (se pisan al correr el script). Los campos del YAML están resumidos en `content/articulos/README.md`.

@@ -2,7 +2,11 @@
 /**
  * Listado de proyectos (tarjetas desde CPT ensor_project).
  *
- * Mismo patrón de caché que el blog (6 horas, invalidación en `save_post`).
+ * Imagen de la tarjeta: imagen destacada del proyecto si existe; si no,
+ * meta `_ensor_img_rel` (assets del tema); por último, logo del tema.
+ *
+ * Mismo patrón de caché que el blog (6 horas, invalidación en `save_post`
+ * y al cambiar `_thumbnail_id`).
  *
  * @package Ensorlogs
  */
@@ -11,8 +15,21 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Si la página WP de slug "projects" tiene contenido en su editor, lo usamos
+// para sustituir la zona <!-- ensor:editable --> del fragment.
+$ensor_proj_editable = '';
+$ensor_proj_q = get_posts(array(
+    'post_type'      => 'page',
+    'name'           => 'projects',
+    'posts_per_page' => 1,
+    'post_status'    => 'publish',
+));
+if (!empty($ensor_proj_q) && $ensor_proj_q[0] instanceof WP_Post) {
+    $ensor_proj_editable = apply_filters('the_content', $ensor_proj_q[0]->post_content);
+}
+
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-echo ensorlogs_render_fragment('projects-list-top.fragment.html');
+echo ensorlogs_render_fragment_editable('projects-list-top.fragment.html', $ensor_proj_editable);
 
 $ensor_cache_key = 'ensorlogs_projects_list_v1';
 $ensor_cached    = (defined('WP_DEBUG') && WP_DEBUG) ? false : get_transient($ensor_cache_key);
@@ -67,10 +84,14 @@ while ($proj_q->have_posts()) {
     if ($list_t === '') {
         $list_t = get_the_title();
     }
-    $img_src = ensorlogs_resolve_public_asset_url($img_rel);
-    if ($img_src === '' && has_post_thumbnail($pid)) {
+    // Imagen destacada del CPT primero (editor WP); `_ensor_img_rel` solo si no hay thumbnail.
+    $img_src = '';
+    if (has_post_thumbnail($pid)) {
         $thumb = get_the_post_thumbnail_url($pid, 'large');
         $img_src = is_string($thumb) && $thumb !== '' ? esc_url($thumb) : '';
+    }
+    if ($img_src === '') {
+        $img_src = ensorlogs_resolve_public_asset_url($img_rel);
     }
     if ($img_src === '') {
         $img_src = esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');

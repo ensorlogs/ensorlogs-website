@@ -439,7 +439,7 @@ def page(article):
                                 {stack_badge_html(primary) if primary else ""}
                                 {other_badges}
                     </div>
-                    {('<nav class="ensor-reader-aud" aria-label="Filtrar por audiencia"></nav>') if audiences_present else ''}
+                    {('<nav class="ensor-reader-aud" aria-label="Saltar a sección del log"></nav>') if audiences_present else ''}
                 </div>
                 {podcast_html}
             </header>

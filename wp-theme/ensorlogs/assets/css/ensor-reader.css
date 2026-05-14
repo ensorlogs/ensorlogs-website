@@ -5,6 +5,8 @@
    ========================================================================= */
 
 :root {
+    /* Borde inferior del header fijo del sitio (px); lo rellena ensor-reader.js al cargar y al redimensionar. */
+    --ensor-site-header-offset: 6.5rem;
     --ensor-reader-progress-h: 3px;
     --ensor-reader-toc-w: 260px;
     --ensor-reader-radius: 14px;
@@ -19,16 +21,16 @@ html.dark {
 }
 
 /* -------------------------------------------------------------------------
-   Reading progress bar (fixed top)
+   Reading progress bar (fixed, justo debajo del header del sitio)
    ------------------------------------------------------------------------- */
 .ensor-reader-progress {
     position: fixed;
-    top: 0;
+    top: var(--ensor-site-header-offset);
     left: 0;
     right: 0;
     height: var(--ensor-reader-progress-h);
     background: transparent;
-    z-index: 60;
+    z-index: 55;
     pointer-events: none;
 }
 .ensor-reader-progress__fill {
@@ -42,10 +44,10 @@ html.dark {
 /* Mini-chip con el topic actual mientras lees */
 .ensor-reader-topic {
     position: fixed;
-    top: calc(var(--ensor-reader-progress-h) + 6px);
+    top: calc(var(--ensor-site-header-offset) + var(--ensor-reader-progress-h) + 6px);
     left: 50%;
     transform: translateX(-50%) translateY(-200%);
-    z-index: 60;
+    z-index: 55;
     max-width: min(92vw, 520px);
     background: var(--ensor-reader-bg-soft);
     -webkit-backdrop-filter: saturate(140%) blur(10px);
@@ -222,22 +224,61 @@ html.dark .ensor-reader-stack__icon {
     background: transparent;
     border: 1px solid var(--ensor-reader-edge);
     color: inherit;
+    text-decoration: none;
     border-radius: 999px;
     padding: 0.3rem 0.75rem;
     font-size: 0.8125rem;
     font-weight: 600;
-    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+    line-height: 1.2;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .15s ease, box-shadow .2s ease;
+}
+.ensor-reader-aud__chip:focus-visible {
+    outline: 2px solid var(--ensor-accent, #d9a300);
+    outline-offset: 2px;
 }
 html.dark .ensor-reader-aud__chip {
     border-color: var(--ensor-reader-edge-dark);
 }
 .ensor-reader-aud__chip:hover {
     border-color: var(--ensor-accent, #d9a300);
+    color: inherit;
+    transform: translateY(-1px);
 }
 .ensor-reader-aud__chip.is-active {
     background: var(--ensor-accent, #d9a300);
     color: #1a1a1a;
     border-color: var(--ensor-accent, #d9a300);
+    box-shadow: 0 4px 14px -6px rgba(var(--ensor-accent-rgb, 217 163 0), 0.45);
+}
+html.dark .ensor-reader-aud__chip.is-active {
+    color: #1a1a1a;
+}
+/* En modo navegación, el chip tiene icono sutil de "salto" al hover */
+.ensor-reader-aud[data-mode="jump"] .ensor-reader-aud__chip::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 0.35em;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity .2s ease, transform .2s ease;
+    font-weight: 700;
+}
+.ensor-reader-aud[data-mode="jump"] .ensor-reader-aud__chip:hover::after,
+.ensor-reader-aud[data-mode="jump"] .ensor-reader-aud__chip:focus-visible::after {
+    opacity: 0.7;
+    transform: translateY(0);
+}
+.ensor-reader-aud[data-mode="jump"] .ensor-reader-aud__chip.is-active::after {
+    opacity: 0.85;
+    transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+    .ensor-reader-aud__chip {
+        transition: none;
+    }
+    .ensor-reader-aud__chip:hover {
+        transform: none;
+    }
 }
 
 /* =========================================================================
@@ -247,6 +288,23 @@ html.dark .ensor-reader-aud__chip {
    ========================================================================= */
 .ensor-aud-section[hidden] {
     display: none !important;
+}
+/* Cuando el usuario navega con los chips, parpadeo suave para marcar
+   la sección que acaba de alcanzar. */
+.ensor-aud-section.is-jump-target {
+    animation: ensorAudJump 2.1s cubic-bezier(0.4, 0, 0.2, 1) 1;
+}
+@keyframes ensorAudJump {
+    0%   { box-shadow: 0 0 0 0 rgba(var(--ensor-accent-rgb, 217 163 0), 0); }
+    18%  { box-shadow: 0 0 0 6px rgba(var(--ensor-accent-rgb, 217 163 0), 0.32); }
+    100% { box-shadow: 0 0 0 0 rgba(var(--ensor-accent-rgb, 217 163 0), 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ensor-aud-section.is-jump-target {
+        animation: none;
+        outline: 2px solid var(--ensor-accent, #d9a300);
+        outline-offset: 4px;
+    }
 }
 .ensor-aud-section {
     position: relative;
@@ -545,20 +603,30 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     position: relative;
 }
 
-/* Desktop ≥1024px: dos columnas y el TOC sticky se muestra a la izquierda. */
+/* Desktop ≥1024px: dos columnas y el TOC sticky a la izquierda.
+   La columna debe estirarse a la altura del artículo (no align-self:start),
+   si no el bloque sticky es demasiado bajo y el índice “se pierde” al bajar.
+   El título queda fijo arriba; la lista hace scroll si hay muchos ítems. */
 @media (min-width: 1024px) {
     .ensor-reader-layout {
         grid-template-columns: var(--ensor-reader-toc-w) minmax(0, 1fr);
         gap: 2.5rem;
+        align-items: stretch;
     }
     .ensor-reader-toc {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-self: stretch;
         position: sticky;
-        top: 96px;
-        align-self: start;
-        max-height: calc(100vh - 120px);
-        overflow-y: auto;
+        top: calc(var(--ensor-site-header-offset, 6.5rem) + 12px);
+        max-height: calc(100vh - var(--ensor-site-header-offset, 6.5rem) - 2rem);
         padding-right: 0.5rem;
+    }
+    .ensor-reader-toc__list {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 @media (min-width: 1280px) {
@@ -573,6 +641,7 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     font-weight: 700;
     opacity: 0.75;
     margin: 0 0 0.5rem;
+    flex-shrink: 0;
 }
 .ensor-reader-toc__list {
     list-style: none;

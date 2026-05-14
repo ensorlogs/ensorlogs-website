@@ -10,8 +10,7 @@ meta_title: 'WordPress seguridad 2026 + IA como copiloto | Ensorlogs'
 meta_desc: >-
   Backups, plugins, hosting y buenas prácticas con mirada de freelancer y estudiante.
   Cómo usar IA para revisar logs y checklists sin filtrar credenciales ni confiar ciegamente.
-meta_keywords: WordPress seguridad 2026, IA WordPress, backups WordPress, plugins nulled,
-  WordPress Venezuela, freelance WordPress
+meta_keywords: WordPress, seguridad, backups, plugins, hosting, IA
 canonical_path: articulos/wordpress-seguridad-estudiantes-2026.html
 hero_src: >-
   https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1600&q=82

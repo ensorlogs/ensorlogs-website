@@ -1,91 +1,47 @@
-# Arquitectura
+# Arquitectura (notas rápidas)
 
-Carpetas, flujos (blog, contacto, generador de artículos) y qué depende de qué.
+Cómo está repartido el repo y qué toca qué.
 
----
+## Flujo general
 
-## Diagrama textual
+1. Visitante entra a páginas HTML + assets en `assets/`.
+2. El formulario de contacto hace `POST` a `contact-form.php` (validación básica y correo vía lo que tenga el hosting).
+3. Cuando toco un log en Markdown, paso el script `scripts/render_blog_articles.py` y se regeneran los `articulos/*.html`.
 
-```
-[Visitante]
-     │
-     ▼
-┌─────────────────────────────────────────────────────────┐
-│  HTML estático (index, blog, projects, articulos/, proyectos/) │
-│  + CSS (style.min + ensor-brand + fonts)               │
-│  + JS (jQuery + AOS + script.js + filtros + tema)     │
-└─────────────────────────────────────────────────────────┘
-     │ POST contacto
-     ▼
-┌──────────────────┐     ┌─────────────────────────────┐
-│ contact-form.php │────▶│ mail() / SMTP del hosting   │
-└──────────────────┘     └─────────────────────────────┘
+## Carpetas
 
-[Desarrollador] ──▶ python3 scripts/render_blog_articles.py ──▶ articulos/*.html
-                      (lee blogs-details.html + content/articulos/*.md)
-```
+| Ruta | Qué hay |
+|------|---------|
+| Raíz | `index.html`, `blog.html`, `services.html`, etc., más `.htaccess` si despliegas en Apache. |
+| `content/articulos/` | Markdown fuente de cada log. |
+| `articulos/` | HTML generado (salida del script). |
+| `proyectos/` | Fichas de proyecto. |
+| `assets/css/` | `style.min.css` (plantilla + utilidades compiladas), `ensor-brand.css` (marca y piezas Ensor). |
+| `assets/js/` | JS del front (tema, filtros, lector, etc.). |
+| `assets/img/` | Imágenes. |
+| `scripts/` | Generador de artículos. |
+| `src/tailwind.css` | Solo si en algún momento regeneras `style.min.css` desde Tailwind. |
 
----
+## Filtro `?tema=` en blog y proyectos
 
-## Carpetas principales
+`blog-tema-filter.js` y `projects-tema-filter.js` leen el querystring, aplican clases para ocultar tarjetas y actualizan la URL con `history.replaceState` sin recargar. El estilo de ocultar está en `ensor-brand.css`.
 
-| Ruta | Contenido |
-|------|-----------|
-| `/` | Páginas `.html` de sección (index, blog, projects…), `.htaccess`, `README.md`. |
-| `content/articulos/` | Fuente Markdown (`.md`) de cada artículo. |
-| `articulos/` | HTML generado (`articulo-*.html`) a partir de los `.md`. |
-| `proyectos/` | Fichas de detalle de cada caso (`proyecto-*.html`). |
-| `assets/css/` | Hojas de estilo; `ensor-brand.css` es la capa de marca. |
-| `assets/js/` | Scripts del front; filtros y utilidades Ensor. |
-| `assets/img/` | Imágenes y logos. |
-| `scripts/` | Herramientas de build (`render_blog_articles.py`). |
-| `docs/` | Documentación para humanos (esta carpeta). |
-| `src/tailwind.css` | Fuente Tailwind si regeneras `style.min.css` en tu flujo. |
+## Contacto
 
----
+`contact.html` manda a `contact-form.php`. Campos típicos: nombre, email, asunto, mensaje, captcha simple y honeypot. La respuesta es una página HTML, no JSON.
 
-## Flujo: filtro del blog (`?tema=`)
+## Cosas que cargan desde fuera
 
-1. `blog.html` carga `blog-tema-filter.js` (al final, con `defer`).
-2. Al cargar, el script lee `window.location.search` con `URLSearchParams`.
-3. Para cada `.blog-item[data-temas]`, divide el atributo en slugs y decide si mostrar u ocultar (clase `ensor-blog-item--hidden`, definida en `ensor-brand.css`).
-4. Al hacer clic en una pastilla del `<nav class="ensor-blog-temas">`, se hace `preventDefault`, se actualiza la URL con `history.replaceState` y se vuelve a aplicar el filtro **sin recargar** la página.
+Google Fonts (Bricolage Grotesque), a veces iconos de marcas por CDN, AOS/Swiper locales en `assets/`.
 
-El listado de **proyectos** repite el patrón con `projects-tema-filter.js` y `projects.html`.
+## `.htaccess`
 
----
+Solo cuenta en **Apache** con `AllowOverride` permitido. Ahí suelen ir cabeceras de seguridad básicas, compresión/caché de estáticos y reglas de redirección si cambias rutas o dominio. En local con `python3 -m http.server` ese archivo no hace nada: es normal.
 
-## Flujo: formulario de contacto
+Si cambias de dominio, revisa condiciones de host en las reglas de rewrite.
 
-1. `contact.html` envía `POST` multipart/urlencoded a `contact-form.php`.
-2. Campos esperados: `clientName`, `clientEmail`, `contactSubject`, `contact__message`, `contact_captcha`, honeypot `website`.
-3. PHP responde con **HTML completo** (página de resultado), no JSON — diseño simple para hosting compartido.
+## Añadir cosas sin romper lo demás
 
----
-
-## Dependencias externas (runtime)
-
-- **Google Fonts** (Bricolage Grotesque).
-- **simple-icons** vía `cdn.jsdelivr.net` en algunas páginas (iconos de marcas).
-- **AOS**: JS local + CSS copiado a `assets/css/aos-2.3.1.min.css` (antes unpkg).
-
----
-
-## Apache (`.htaccess`)
-
-Solo aplica en servidores **Apache** con `AllowOverride` adecuado (típico en SiteGround). Incluye:
-
-- Cabeceras de seguridad (`X-Frame-Options`, `Referrer-Policy`, etc.).
-- Compresión y caché de estáticos.
-- Redirección HTTP→HTTPS condicionada al host `ensorlogs.com`.
-- **301** de URLs antiguas en la raíz (`/articulo-….html`, `/proyecto-….html`) hacia `articulos/` y `proyectos/` (enlaces externos y buscadores conservan autoridad).
-
-Si cambias de dominio, revisa las reglas `RewriteCond` del host.
-
----
-
-## Extensiones futuras sin romper lo existente
-
-- Nuevas páginas: copia el `<head>` de `index.html`, ajusta `<title>` y canonical, enlaza CSS/JS en el mismo orden.
-- Nuevo filtro: copia `blog-tema-filter.js`, cambia selectores y nombre del parámetro URL, añade CSS de ocultación si usas otra clase.
-- Nuevo artículo: copia un `.md` en `content/articulos/`, ajusta front matter y `order`, ejecuta el script.
+- Página nueva: copia cabecera/canonical de una existente y ajusta título y rutas de CSS/JS.
+- Log nuevo: duplica un `.md` en `content/articulos/`, ajusta YAML, corre el script.
+- Filtro nuevo: copia el JS del blog, cambia selectores y nombre del parámetro en la URL.

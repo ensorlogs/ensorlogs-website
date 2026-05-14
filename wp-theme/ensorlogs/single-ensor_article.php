@@ -3,7 +3,7 @@
  * Log individual (CPT ensor_article).
  *
  * Renderiza:
- *  - Barra de progreso (fija arriba).
+ *  - Barra de progreso (fija, debajo del header del sitio).
  *  - Chip flotante con el tema de la sección actual.
  *  - Header con título, meta y badges de Stacks (taxonomía).
  *  - Filtro por audiencia (estudiante/profesional/profesor/datos…) si el
@@ -82,6 +82,15 @@ while (have_posts()) {
     if (function_exists('ensorlogs_detect_audiences')) {
         $audiences = ensorlogs_detect_audiences($content);
     }
+    // También consideramos audiencias que vengan de las cajas meta (Contexto,
+    // Datos, Como estudiante, …); estas se inyectan en `the_content` con un
+    // filter a prioridad 22, así que en este momento aún no están en `$content`.
+    if (function_exists('ensorlogs_article_section_audiences_with_value')) {
+        $meta_auds = ensorlogs_article_section_audiences_with_value($pid);
+        if (!empty($meta_auds)) {
+            $audiences = array_values(array_unique(array_merge($audiences, $meta_auds)));
+        }
+    }
     $audience_labels = function_exists('ensorlogs_audience_labels') ? ensorlogs_audience_labels() : array();
 
     $time_attr = get_the_date('c');
@@ -158,7 +167,7 @@ while (have_posts()) {
                             </div>
                         <?php endif; ?>
                         <?php if (!empty($audiences)) : ?>
-                            <nav class="ensor-reader-aud" aria-label="<?php esc_attr_e('Filtrar por audiencia', 'ensorlogs'); ?>">
+                            <nav class="ensor-reader-aud" aria-label="<?php esc_attr_e('Saltar a sección del log', 'ensorlogs'); ?>">
                                 <!-- chips inyectadas por JS -->
                             </nav>
                         <?php endif; ?>

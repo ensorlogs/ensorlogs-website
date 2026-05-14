@@ -1,7 +1,84 @@
 Instalación del tema Ensorlogs (WordPress)
 ==========================================
 
-Versión: 1.7.8
+Versión: 1.9.2
+
+Novedades 1.9.2
+---------------
+   - Sobre mí (fragmento): galería «Activismo…» con separación real entre
+     tarjetas (`.ensor-about-activism-grid`); textos de tarjetas (cursos
+     Linux/WordPress, docencia BD, WordCamp Madrid 2026) e imagen JPEG
+     derivada del HEIC en `fotoseventos/`.
+   - Servicios: hero con foto más baja/recortada (franja banner) hasta
+     sustituir la imagen.
+   - Logs (lector): el chip de sección actual no se muestra hasta pasar
+     la cabecera del artículo, para no tapar el título al cargar.
+
+Novedades 1.9.1
+---------------
+   - Portada: marquesina de la terminal con enlaces a los últimos logs
+     publicados (marcador `%%HOME_LOG_TICKER_SEGMENTS%%`).
+   - Logs: panel «Audio del log» con Mediateca, ID de adjunto, vista previa,
+     quitar audio y meta de narrador; URLs de audio resueltas con prioridad
+     al archivo subido.
+   - Proyectos: migración en pantalla del CTA antiguo (href #) a dos botones
+     (contacto + servicios) y relinks del HTML exportado en `the_content`.
+   - Ajustes de estilo (ticker, admin audio) y dependencias del script de
+     meta en el escritorio (`media-editor`).
+
+Novedades 1.9.0
+---------------
+   - Permalinks canónicos de logs y proyectos (`/articulos/slug/` y
+     `/proyectos/slug/`); las URLs antiguas con `.html` redirigen 301.
+   - Editor en bloques: el seed guarda el cuerpo como bloques HTML por
+     sección; plantilla por defecto al crear logs/proyectos nuevos.
+   - Listado de proyectos: prioriza la imagen destacada del CPT sobre la
+     ruta estática en meta, con invalidación de caché al cambiar thumbnail.
+
+Novedades 1.8.0
+---------------
+   - Las páginas estructurales del sitio (Inicio, Sobre mí, Servicios,
+     Proyectos, Hablemos de…, Contacto) ahora SE PUEDEN EDITAR DESDE EL
+     EDITOR DE WORDPRESS. Cada una tiene una "zona editable" definida en
+     su fragmento del tema (el intro / lead del hero), marcada con
+     `<!-- ensor:editable --> ... <!-- /ensor:editable -->`. Lo que
+     escribas en el editor de la página sustituye ese bloque.
+   - Si vacías el editor y guardas, la web vuelve al texto por defecto
+     del tema — no hay forma de romper la página por accidente.
+   - Aviso visible en el editor (clásico y Gutenberg) explicando qué
+     zona se está editando.
+   - Seed v9: al activar/actualizar el tema, las páginas que aún tengan
+     `post_content == ''` se pre-rellenan con el HTML por defecto del
+     fragment (para que abras el editor y veas el texto actual listo
+     para tocar). Si la página ya tenía contenido, se respeta.
+   - Helper nuevo `ensorlogs_render_fragment_editable($file, $html)`
+     que cualquier template puede usar para inyectar contenido del editor.
+   - `front-page.php`, `page-about.php`, `page-services.php`,
+     `page-contact.php`, `template-parts/blog-listing.php` y
+     `template-parts/projects-listing.php` reescritos para usar el helper.
+
+Versión anterior: 1.7.9
+
+Novedades 1.7.9
+---------------
+   - Navegación por secciones (antes "filtro"): los chips de arriba del log
+     (Contexto, Datos, Como estudiante, Como profesor, Como profesional)
+     ahora actúan como atajos de navegación: hacen scroll suave a la
+     sección correspondiente y resaltan brevemente al llegar. Mientras
+     scrolleas, el chip de la sección visible se marca activo
+     automáticamente (IntersectionObserver). Ya NO se oculta contenido.
+   - Editor del log: 5 cajas meta WYSIWYG independientes para las secciones
+     pedagógicas (Contexto, Datos, Como estudiante, Como profesor, Como
+     profesional). Cada caja tiene TinyMCE completo con "Añadir medios",
+     ayuda contextual y un prompt sugerido de IA para producir contenido.
+     Si dejas la caja vacía no se añade nada; si tiene texto, se inyecta
+     al final del log con el data-aud correcto para que aparezca el chip
+     de navegación. Si ya tienes una sección con ese data-aud en el
+     editor de bloques, se respeta lo que pongas allí (no se duplica).
+   - aria-label del nav cambiado de "Filtrar por audiencia" a "Saltar a
+     sección del log" — refleja el comportamiento real.
+
+Versión anterior: 1.7.8
 
 Novedades 1.7.8
 ---------------
@@ -18,9 +95,9 @@ Versión anterior: 1.7.7
 Novedades 1.7.7
 ---------------
    - Página "Sobre mí" reordenada: ahora muestra **primero** el bloque
-     "Activismo de software libre" (Ubuntu, Fedora, Mozilla, FLISOL,
-     LibreOffice Comunidad Venezuela, aula docente) y luego la
-     Experiencia Profesional + Formación. La intención es contar primero
+     "Activismo, comunidades y eventos" (WordPress en aula, Ubuntu,
+     Fedora, Mozilla, FLISOL, LibreOffice Comunidad Venezuela, aula
+     docente) y luego la Experiencia Profesional + Formación. La intención es contar primero
      la historia humana antes de los años/empresas/títulos.
    - Footer global: micro-firma final "Hecho con ❤️ y WordPress"
      (latido sutil, WordPress enlaza a wordpress.org, dark-mode listo).
@@ -82,7 +159,8 @@ C) Actualizaciones automáticas desde GitHub
        · La portada estática se fija a la página «Inicio» solo si no se
          había definido otra.
    - Ajustes → Enlaces permanentes → «Nombre de la entrada» → Guardar.
-     Refresca las reglas de las URLs `.html` y `/tema/...`.
+     Refresca las reglas de reescritura (logs y proyectos en /articulos/slug/
+     y /proyectos/slug/, más compatibilidad con URLs antiguas *.html).
 
 3) Personalización (Customizer)
 -------------------------------

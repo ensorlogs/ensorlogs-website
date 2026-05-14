@@ -10,8 +10,7 @@ meta_title: 'WordPress en 2026: ¿murió o sigue valiendo la pena? Experiencia r
 meta_desc: >-
   Más de 10 años en tecnología: por qué WordPress sigue resolviendo problemas reales,
   qué aprendí como estudiante y freelancer, Venezuela, WordCamp Madrid e IA en 2026.
-meta_keywords: WordPress 2026, aprender WordPress Venezuela, freelance WordPress,
-  SEO WordPress, WooCommerce Latinoamérica, IA WordPress, estudiantes IT
+meta_keywords: WordPress, formación, freelance, SEO, WooCommerce, IA
 canonical_path: articulos/wordpress-vale-pena-aprender-2026.html
 hero_src: >-
   https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=82
@@ -38,7 +37,7 @@ quiz:
       - "Que la cuota de mercado real ya es inferior al 20%"
       - "Que ya no se puede instalar en hostings compartidos"
     correct: 1
-    explanation: "Exacto. WordPress.org (el CMS open source) sigue moviendo gran parte de la web; el ruido suele venir de mezclarlo con WordPress.com o con Gutenberg como producto de bloques."
+    explanation: "WordPress.org es el CMS abierto; WordPress.com es otro producto. Mezclarlos explica buena parte del ruido en redes."
 
   - q: "¿Cuál es la ventaja que más se subestima de saber WordPress en 2026?"
     options:
@@ -47,7 +46,7 @@ quiz:
       - "Te garantiza un sueldo mínimo en Europa"
       - "Permite ignorar SEO porque viene resuelto de fábrica"
     correct: 1
-    explanation: "Eso. La barrera de entrada baja y la cantidad de proyectos vivos lo convierten en una de las formas más prácticas de salir de los tutoriales y trabajar con clientes reales."
+    explanation: "Barra de entrada baja y muchísimos proyectos vivos: te saca del tutorial y te mete en presupuesto, plazos y cliente de verdad."
 
   - q: "Como profesor, ¿qué evaluación tiene más sentido al enseñar WordPress?"
     options:
@@ -56,7 +55,7 @@ quiz:
       - "Memorizar la documentación oficial"
       - "Examen oral sobre la historia del CMS"
     correct: 1
-    explanation: "Sí. El aprendizaje útil se demuestra entregando un proyecto vivo: instalación, configuración, contenidos, SEO básico y handover al cliente."
+    explanation: "Instalación, tema, contenidos publicados y SEO mínimo en algo que se pueda enseñar: eso sí se puede evaluar."
 tags:
   - slug: wordpress
     label: WordPress
@@ -199,13 +198,14 @@ A finales de 2025 y entrando en 2026, varias voces de Twitter/X repiten que Word
 <section class="ensor-aud-section" data-aud="data" markdown="1">
 ## Datos
 
-- **~43,3 %** de todos los sitios públicos siguen corriendo en WordPress (W3Techs, abr-2026).
-- **~62 %** de cuota entre los CMS conocidos, **+1.2 pp** respecto al mismo mes de 2025.
-- En Latinoamérica hispana, **WooCommerce** mantiene la primera posición de carritos open-source para tiendas <500 productos.
-- Las búsquedas mensuales de «aprender WordPress 2026» en Google Trends crecieron **+18 %** YoY.
-- WordCamp Madrid 2026: récord de asistencia, con 4 charlas dedicadas a flujos con IA.
+No pego porcentajes con decimales: en la red cambian cada mes y este texto
+quedaría mentiroso enseguida. Si te interesa el dato de hoy, abre W3Techs,
+BuiltWith o HTTP Archive y lee cómo miden (no es lo mismo uno que otro).
 
-> Las cifras varían entre fuentes (W3Techs, BuiltWith, HTTP Archive); úsalas como orden de magnitud, no como verdad absoluta.
+Sin números mágicos: sigue habiendo muchísimos sitios en WordPress, la
+comunidad sigue llenando eventos tipo WordCamp, y en trabajo real sigue
+apareciendo en pymes que solo quieren publicar sin montar un equipo de
+plataforma.
 </section>
 
 <section class="ensor-aud-section" data-aud="student" markdown="1">
@@ -220,11 +220,10 @@ Si estás aprendiendo, WordPress es un **patio de juegos honesto**: te obliga a 
 <div class="ensor-ai-prompt" markdown="1">
 **Prompt IA — plan de estudio 4 semanas**
 
-<pre>Eres un mentor técnico. Diseña un plan de 4 semanas (1 h/día) para
-un estudiante de IT que quiere ofrecer landings y blogs en WordPress
-a pymes locales. Incluye: temas a cubrir cada semana, 1 mini-proyecto
-entregable por semana y 3 errores comunes a evitar. Idioma: español
-neutro. Formato: tabla por semana.</pre>
+<pre>Plan de 4 semanas (1 h/día) para un estudiante de IT que quiere ofrecer
+landings y blogs en WordPress a pymes locales. Incluye: temas por semana,
+un mini-proyecto entregable por semana y 3 errores típicos a evitar.
+Español neutro. Formato: tabla por semana.</pre>
 </div>
 </section>
 
@@ -241,12 +240,10 @@ WordPress es **excusa perfecta** para enseñar competencias transversales: hosti
 <div class="ensor-ai-prompt" markdown="1">
 **Prompt IA — rúbrica + feedback automatizado**
 
-<pre>Actúa como profesor de tecnologías web. Dado este enlace de proyecto
-WordPress de un estudiante, genera: 1) una rúbrica de evaluación con
-5 criterios y peso porcentual, 2) feedback redactado en tono cálido
-y constructivo dirigido al alumno, 3) tres preguntas para la defensa
-oral. Si detectas problemas de rendimiento o accesibilidad, indícalos
-con prioridad alta/media/baja.</pre>
+<pre>Con este enlace de proyecto WordPress de un estudiante, devuelve:
+1) rúbrica de 5 criterios con pesos, 2) feedback en tono directo pero
+respetuoso, 3) tres preguntas para defensa oral. Si ves rendimiento o
+accesibilidad flojos, márcalos prioridad alta/media/baja.</pre>
 </div>
 </section>
 
@@ -263,11 +260,9 @@ En mi trabajo del día a día, WordPress sigue apareciendo en proyectos donde el
 <div class="ensor-ai-prompt" markdown="1">
 **Prompt IA — auditoría rápida pre-propuesta**
 
-<pre>Eres un consultor senior en operaciones digitales. Dado este sitio
-WordPress, analiza en 5 puntos: (1) estado de núcleo + plugins,
-(2) rendimiento aproximado (Core Web Vitals), (3) riesgos de seguridad
-visibles, (4) accesibilidad básica, (5) oportunidades SEO obvias.
-Devuelve el resultado como propuesta de mejora con tres tramos:
-quick wins (1-2 semanas), medio plazo (1-3 meses) y estructural.</pre>
+<pre>Auditoría rápida de este sitio WordPress en 5 puntos: (1) núcleo y
+plugins, (2) rendimiento aproximado / Core Web Vitals, (3) riesgos de
+seguridad visibles, (4) accesibilidad básica, (5) SEO obvio. Salida:
+quick wins (1–2 semanas), medio plazo (1–3 meses) y cambios estructurales.</pre>
 </div>
 </section>

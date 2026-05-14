@@ -13,8 +13,21 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Si la página WP de slug "blog" tiene contenido en su editor, lo usamos
+// para sustituir la zona <!-- ensor:editable --> del fragment.
+$ensor_blog_editable = '';
+$ensor_blog_q = get_posts(array(
+    'post_type'      => 'page',
+    'name'           => 'blog',
+    'posts_per_page' => 1,
+    'post_status'    => 'publish',
+));
+if (!empty($ensor_blog_q) && $ensor_blog_q[0] instanceof WP_Post) {
+    $ensor_blog_editable = apply_filters('the_content', $ensor_blog_q[0]->post_content);
+}
+
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-echo ensorlogs_render_fragment('blog-list-top.fragment.html');
+echo ensorlogs_render_fragment_editable('blog-list-top.fragment.html', $ensor_blog_editable);
 
 $ensor_cache_key = 'ensorlogs_blog_list_v1';
 $ensor_cached    = (defined('WP_DEBUG') && WP_DEBUG) ? false : get_transient($ensor_cache_key);

@@ -10,8 +10,7 @@ meta_title: 'Rendimiento WordPress 2026 e IA para medir y priorizar | Ensorlogs'
 meta_desc: >-
   Imágenes, caché, hosting y Core Web Vitals con mirada práctica. Cómo usar IA para interpretar
   métricas y armar planes de acción sin creer ciegamente en un número de Lighthouse.
-meta_keywords: WordPress rendimiento 2026, IA WordPress, Core Web Vitals, velocidad WordPress,
-  PageSpeed, estudiantes freelance
+meta_keywords: WordPress, rendimiento, Core Web Vitals, caché, IA
 canonical_path: articulos/wordpress-rendimiento-estudiantes-2026.html
 hero_src: >-
   https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=82

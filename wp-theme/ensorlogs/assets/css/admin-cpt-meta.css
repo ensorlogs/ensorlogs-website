@@ -84,3 +84,14 @@
     height: auto;
     vertical-align: top;
 }
+
+.ensor-cpt-meta__preview--audio {
+    margin-top: 12px;
+    max-width: min(100%, 480px);
+}
+
+.ensor-cpt-meta__preview--audio audio {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+}

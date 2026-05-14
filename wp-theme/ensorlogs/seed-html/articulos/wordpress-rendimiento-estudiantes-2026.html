@@ -13,7 +13,7 @@
     <meta name="viewport" 
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
         <meta name="keywords"
-        content="WordPress rendimiento 2026, IA WordPress, Core Web Vitals, velocidad WordPress, PageSpeed, estudiantes freelance">
+        content="WordPress, rendimiento, Core Web Vitals, caché, IA">
     <meta name="description"
         content="Imágenes, caché, hosting y Core Web Vitals con mirada práctica. Cómo usar IA para interpretar métricas y armar planes de acción sin creer ciegamente en un número de Lighthouse.">
     <meta name="author" content="EnsorLogs">
@@ -49,6 +49,11 @@
     <link rel="stylesheet" href="../assets/css/ensor-brand.css">
     <link rel="stylesheet" href="../assets/css/ensor-reader.css">
 
+    <link rel="stylesheet" href="../assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="../assets/css/ensor-cookies.css">
+    <link rel="stylesheet" href="../assets/css/ensor-podcast.css">
+    <meta name="ensor-cookies-url" content="../legal/cookies.html">
+    <link rel="stylesheet" href="../assets/css/ensor-quiz.css">
 </head>
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,7 +91,7 @@
                             ENSOR.<span class="ensor-logo-accent">LOGS</span>
                         </span>
                         <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
-                            Bitácora de un geek <img src="../../../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                            Bitácora de un geek <img src="../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                         </span>
                         <span class="ensor-tagline-rule mt-1.5 h-0.5 max-w-[12rem] rounded-full" aria-hidden="true"></span>
                     </span>
@@ -110,7 +115,7 @@
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
-                    <button class="btn_theme_switch w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <button class="btn_theme_switch max-lg:hidden w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
                         <svg  class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -141,7 +146,7 @@
                         ENSOR.<span class="ensor-logo-accent">LOGS</span>
                     </span>
                     <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
-                        Bitácora de un geek <img src="../../../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                        Bitácora de un geek <img src="../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                     </span>
                     <span class="ensor-tagline-rule mt-1 h-0.5 max-w-[10rem] rounded-full" aria-hidden="true"></span>
                 </span>
@@ -166,6 +171,19 @@
             <a href="../services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
                 ¿Cómo puedo ayudarte?
             </a>
+        
+            <div class="ensor-mobile-theme-toggle flex items-center justify-between gap-3 py-2.5 px-4 rounded-md bg-slate-50 dark:bg-metalBlack text-powerBlack dark:text-white">
+                <span class="font-medium">Claro / oscuro</span>
+                <button type="button" class="btn_theme_switch w-13 h-13 relative rounded-full group border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack *:w-5 *:h-5 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <svg class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <svg class="moon opacity-0 group-[&.btn-light]:opacity-100" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
@@ -223,6 +241,7 @@
                         <i class="fal fa-book-open" aria-hidden="true"></i>
                         3 min de lectura
                     </li>
+                    
                 </ul>
 
                 <div class="ensor-reader-headcard">
@@ -233,6 +252,7 @@
                     </div>
                     
                 </div>
+                
             </header>
 
             <div class="ensor-reader-hero max-w-screen-lg mx-auto mt-2 mb-8 md:mb-10">
@@ -296,6 +316,8 @@ Velocidad no es vanity metric: es si la persona espera, compra o se va. Aquí me
 <p>Rendimiento es hábito: cada tema, cada plugin nuevo, cada imagen nueva puede volver lenta la web si no prestas atención. La IA acelera lectura y priorización; <strong>tú</strong> cierras el ciclo midiendo de nuevo después del cambio.</p>
 <p>Igual que en clase: constancia le gana al sprint del último día —y el cliente nota la diferencia en la primera visita.</p>
                     </div>
+
+                    
 
                     <footer class="ensor-reader-footer mt-10 grid md:grid-cols-2 gap-4 md:gap-6 items-center">
                         <div class="ensor-reader-stacks-block flex flex-wrap items-center gap-3" aria-label="Stacks del log">
@@ -455,6 +477,10 @@ Velocidad no es vanity metric: es si la persona espera, compra o se va. Aquí me
     <script defer src="../assets/js/theme-mode.js"></script>
     <script defer src="../assets/js/ensor-reader.js"></script>
     <!-- Js Library End -->
+    <script defer src="../assets/js/ensor-a11y.js"></script>
+    <script defer src="../assets/js/ensor-cookies.js"></script>
+    <script defer src="../assets/js/ensor-podcast.js"></script>
+    <script defer src="../assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

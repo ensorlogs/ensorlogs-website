@@ -10,8 +10,7 @@ meta_title: 'Instalar WordPress 2026 con criterio + IA como copiloto | Ensorlogs
 meta_desc: >-
   Hosting, dominio, SSL, PHP, base de datos y buenas prácticas desde la primera instalación.
   Experiencia personal y cómo usar IA sin filtrar contraseñas ni sustituir el pensamiento.
-meta_keywords: WordPress instalación 2026, hosting WordPress, IA WordPress, estudiantes,
-  freelance WordPress, SSL HTTPS WordPress
+meta_keywords: WordPress, instalación, hosting, SSL, IA, seguridad
 canonical_path: articulos/wordpress-instalacion-ia-2026.html
 hero_src: >-
   https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=82

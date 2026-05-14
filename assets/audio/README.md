@@ -1,11 +1,9 @@
-# Audios de los logs ("Comentarios del autor")
+# MP3 de los logs
 
-Sube aquí los MP3 que acompañan cada log. Convenciones:
+Convención simple: el archivo se llama como el slug del log, ej. `wordpress-vale-pena-aprender-2026.mp3`.
 
-- Nombre del archivo igual al slug del log: `wordpress-vale-pena-aprender-2026.mp3`.
-- Formato recomendado: **MP3 mono 96–128 kbps** (voz). Si grabas con invitado,
-  usa estéreo y 128–192 kbps.
-- Apunta al archivo desde el front matter del Markdown:
+- Mono 96–128 kbps suele bastar para voz. Si hay más de una voz o música, sube un poco el bitrate.
+- En el front matter del `.md` va algo así:
 
 ```yaml
 podcast:
@@ -16,8 +14,7 @@ podcast:
     - { time: "0:00", title: "Intro" }
     - { time: "1:20", title: "Contexto" }
   guests:
-    - { name: "Nombre invitado", role: "Rol" }
+    - { name: "Nombre", role: "Rol" }
 ```
 
-- En WordPress, el campo `Audio del comentario del autor` del log acepta una
-  URL pública (puedes subir el MP3 a la Mediateca y pegar su URL).
+En WordPress: sube el MP3 a la Mediateca y pega la URL en el campo de audio del log (no hace falta que coincida la ruta local).

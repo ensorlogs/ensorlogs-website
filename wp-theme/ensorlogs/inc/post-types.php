@@ -1,6 +1,10 @@
 <?php
 /**
- * Tipos de contenido migrados: artículos y proyectos (URLs con .html como el sitio estático).
+ * Tipos de contenido migrados: artículos y proyectos.
+ *
+ * Permalinks canónicos: /articulos/{slug}/ y /proyectos/{slug}/ (WordPress).
+ * Se mantienen reglas de reescritura para /articulos/{slug}.html por compatibilidad;
+ * esas URLs redirigen 301 a la forma canónica.
  *
  * @package Ensorlogs
  */
@@ -47,6 +51,10 @@ add_action('init', static function (): void {
             'menu_icon'           => 'dashicons-media-document',
             'capability_type'     => 'post',
             'map_meta_cap'        => true,
+            'template'            => function_exists('ensorlogs_cpt_default_block_template')
+                ? ensorlogs_cpt_default_block_template('ensor_article')
+                : array(),
+            'template_lock'       => false,
         )
     );
 
@@ -75,6 +83,10 @@ add_action('init', static function (): void {
             'menu_icon'           => 'dashicons-portfolio',
             'capability_type'     => 'post',
             'map_meta_cap'        => true,
+            'template'            => function_exists('ensorlogs_cpt_default_block_template')
+                ? ensorlogs_cpt_default_block_template('ensor_project')
+                : array(),
+            'template_lock'       => false,
         )
     );
 
@@ -264,16 +276,30 @@ add_action(
     30
 );
 
-add_filter('post_type_link', static function (string $permalink, \WP_Post $post): string {
-    if (!in_array($post->post_type, array('ensor_article', 'ensor_project'), true)) {
-        return $permalink;
-    }
-    if (in_array($post->post_status, array('draft', 'pending', 'auto-draft', 'future'), true)) {
-        return $permalink;
-    }
-    $slug = $post->post_name;
-    if ($post->post_type === 'ensor_article') {
-        return home_url('articulos/' . $slug . '.html');
-    }
-    return home_url('proyectos/' . $slug . '.html');
-}, 10, 2);
+/**
+ * Redirige URLs legacy con .html a los permalinks canónicos del CPT.
+ */
+add_action(
+    'template_redirect',
+    static function (): void {
+        if (!is_singular(array('ensor_article', 'ensor_project'))) {
+            return;
+        }
+        $req = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';
+        $path = (string) wp_parse_url($req, PHP_URL_PATH);
+        if ($path === '' || stripos($path, '.html') === false) {
+            return;
+        }
+        $id = (int) get_queried_object_id();
+        if ($id <= 0) {
+            return;
+        }
+        $url = get_permalink($id);
+        if (!is_string($url) || $url === '') {
+            return;
+        }
+        wp_safe_redirect($url, 301);
+        exit;
+    },
+    0
+);

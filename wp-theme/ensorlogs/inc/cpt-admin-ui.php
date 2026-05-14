@@ -163,11 +163,65 @@ add_filter(
 );
 
 /**
+ * Catálogo canónico de las secciones pedagógicas que un log puede tener.
+ * Cada entrada define la audiencia (`aud`, mismo valor que `data-aud` del front),
+ * el slug del heading que se generará (`id`), la etiqueta visible y un texto
+ * de ayuda con sugerencias didácticas (incluida recomendación de prompts de IA).
+ *
+ * Modifica este array si quieres añadir o cambiar secciones; las metaboxes,
+ * el registro de metas, el sanitizer y el renderer en `the_content` se
+ * regeneran automáticamente a partir de aquí.
+ *
+ * @return array<string, array{aud:string,label:string,help:string,prompt:string}>
+ */
+function ensorlogs_article_sections(): array
+{
+    return array(
+        'context' => array(
+            'aud'    => 'context',
+            'label'  => __('Contexto', 'ensorlogs'),
+            'help'   => __('Explica la situación y el contexto actual del tema. ¿Qué pasa ahora? ¿Por qué este log existe? Ubica al lector antes de entrar en el detalle.', 'ensorlogs'),
+            'prompt' => __('Prompt sugerido para IA: «Dame un resumen objetivo del estado actual de [TEMA] en 2026, citando 3 fuentes recientes con enlaces, en máximo 180 palabras y tono periodístico.»', 'ensorlogs'),
+        ),
+        'data' => array(
+            'aud'    => 'data',
+            'label'  => __('Datos', 'ensorlogs'),
+            'help'   => __('Estadísticas, gráficos, cifras, capturas o referencias que respalden lo que dices en Contexto. Si tienes imágenes, súbelas con el botón «Añadir medios».', 'ensorlogs'),
+            'prompt' => __('Prompt sugerido para IA: «Dame 5 cifras verificables sobre [TEMA] en 2025-2026 con fuente original (W3Techs, StatCounter, GitHub, Stack Overflow Survey, etc.) en formato lista.»', 'ensorlogs'),
+        ),
+        'student' => array(
+            'aud'    => 'student',
+            'label'  => __('Como estudiante', 'ensorlogs'),
+            'help'   => __('Qué puede aprovechar alguien que recién empieza para aprender el tema. Recursos, atajos, errores comunes, dónde practicar. Recomienda IA y prompts útiles para estudiar.', 'ensorlogs'),
+            'prompt' => __('Prompt sugerido para IA: «Soy estudiante de [CARRERA] y quiero practicar [TEMA] desde cero en 2 semanas. Dame un plan diario con recursos gratuitos y ejercicios autoevaluables.»', 'ensorlogs'),
+        ),
+        'teacher' => array(
+            'aud'    => 'teacher',
+            'label'  => __('Como profesor', 'ensorlogs'),
+            'help'   => __('Tips para enseñarlo: dinámicas, evaluaciones, anécdotas de clase, recursos que recomiendas o evitas. Pensado para profesores y formadores que adapten este material.', 'ensorlogs'),
+            'prompt' => __('Prompt sugerido para IA: «Diseña una actividad evaluable de 45 min para enseñar [TEMA] a estudiantes universitarios de primer año, con rúbrica y criterios claros.»', 'ensorlogs'),
+        ),
+        'professional' => array(
+            'aud'    => 'professional',
+            'label'  => __('Como profesional', 'ensorlogs'),
+            'help'   => __('Cómo lo usas tú en proyectos reales: ventajas, desventajas, decisiones de stack, casos donde sí encaja y casos donde no. Aquí compartes tu experiencia profesional.', 'ensorlogs'),
+            'prompt' => __('Prompt sugerido para IA: «Actúa como senior con 8 años en [TEMA]. Lista los 5 errores más comunes en producción y qué patrón aplicar en cada caso.»', 'ensorlogs'),
+        ),
+    );
+}
+
+/**
  * Devuelve un callback de saneamiento por cada meta_key, para que el valor
  * sea seguro tanto si llega desde el panel clásico como desde la REST API.
  */
 function ensorlogs_meta_sanitizer(string $meta_key): callable
 {
+    // Secciones pedagógicas con WYSIWYG: aceptan HTML básico (wp_kses_post).
+    if (strpos($meta_key, '_ensor_section_') === 0) {
+        return static function ($value): string {
+            return wp_kses_post(is_string($value) ? $value : '');
+        };
+    }
     switch ($meta_key) {
         case '_ensor_card_image':
         case '_ensor_img_rel':
@@ -191,6 +245,32 @@ function ensorlogs_meta_sanitizer(string $meta_key): callable
         case '_ensor_item_class':
             return static function ($value): string {
                 return ensorlogs_sanitize_project_item_class(is_string($value) ? $value : '');
+            };
+        case '_ensor_podcast_attachment_id':
+            return static function ($value): int {
+                return absint($value);
+            };
+        case '_ensor_podcast_src':
+            return static function ($value): string {
+                $v = trim(is_string($value) ? $value : '');
+                return $v === '' ? '' : esc_url_raw($v);
+            };
+        case '_ensor_podcast_chapters':
+            return static function ($value): string {
+                return ensorlogs_sanitize_podcast_chapters(is_string($value) ? $value : '');
+            };
+        case '_ensor_podcast_guests':
+            return static function ($value): string {
+                $g = wp_strip_all_tags(is_string($value) ? $value : '');
+                $lines = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $g) ?: array()));
+                return implode("\n", $lines);
+            };
+        case '_ensor_podcast_title':
+        case '_ensor_podcast_eyebrow':
+        case '_ensor_podcast_duration':
+        case '_ensor_podcast_narrator':
+            return static function ($value): string {
+                return sanitize_text_field(is_string($value) ? $value : '');
             };
         case '_ensor_tag_slugs':
             return static function ($value): string {
@@ -234,23 +314,38 @@ add_action(
         };
 
         $article_meta = array(
-            '_ensor_card_image'   => 'string',
-            '_ensor_card_excerpt' => 'string',
-            '_ensor_temas'        => 'string',
-            '_ensor_primary_tema' => 'string',
+            '_ensor_card_image'              => 'string',
+            '_ensor_card_excerpt'            => 'string',
+            '_ensor_temas'                   => 'string',
+            '_ensor_primary_tema'            => 'string',
+            '_ensor_podcast_attachment_id'   => 'integer',
+            '_ensor_podcast_src'             => 'string',
+            '_ensor_podcast_title'           => 'string',
+            '_ensor_podcast_eyebrow'         => 'string',
+            '_ensor_podcast_duration'        => 'string',
+            '_ensor_podcast_chapters'        => 'string',
+            '_ensor_podcast_guests'          => 'string',
+            '_ensor_podcast_narrator'        => 'string',
         );
+        // Secciones pedagógicas (Contexto, Datos, Como estudiante, …) editables
+        // como cajas meta WYSIWYG independientes — se inyectan al final del log.
+        foreach (array_keys(ensorlogs_article_sections()) as $sec_key) {
+            $article_meta['_ensor_section_' . $sec_key] = 'string';
+        }
         foreach ($article_meta as $key => $type) {
-            register_post_meta(
-                'ensor_article',
-                $key,
-                array(
-                    'type'              => $type,
-                    'single'            => true,
-                    'show_in_rest'      => true,
-                    'auth_callback'     => $auth,
-                    'sanitize_callback' => ensorlogs_meta_sanitizer($key),
-                )
+            $args = array(
+                'single'            => true,
+                'show_in_rest'      => true,
+                'auth_callback'     => $auth,
+                'sanitize_callback' => ensorlogs_meta_sanitizer($key),
             );
+            if ($type === 'integer') {
+                $args['type']    = 'integer';
+                $args['default'] = 0;
+            } else {
+                $args['type'] = 'string';
+            }
+            register_post_meta('ensor_article', $key, $args);
         }
         $project_meta = array(
             '_ensor_subtitle'   => 'string',
@@ -290,11 +385,11 @@ add_action(
         );
         add_meta_box(
             'ensor_article_podcast',
-            __('Comentario del autor (audio)', 'ensorlogs'),
+            __('Audio del log (reproductor)', 'ensorlogs'),
             'ensorlogs_render_article_podcast_metabox',
             'ensor_article',
             'normal',
-            'default'
+            'high'
         );
         add_meta_box(
             'ensor_article_quiz',
@@ -304,6 +399,23 @@ add_action(
             'normal',
             'default'
         );
+        // Una caja meta WYSIWYG por sección pedagógica.
+        // Aparecen plegadas por defecto; se inyectan en el contenido del log
+        // si contienen texto. El editor TinyMCE incluye «Añadir medios»
+        // para subir fotos / videos, igual que el editor principal.
+        foreach (ensorlogs_article_sections() as $sec_key => $sec_def) {
+            add_meta_box(
+                'ensor_article_section_' . $sec_key,
+                /* translators: %s: nombre legible de la sección (Contexto, Datos, …). */
+                sprintf(__('Sección · %s', 'ensorlogs'), $sec_def['label']),
+                static function ($post) use ($sec_key): void {
+                    ensorlogs_render_article_section_metabox($post, $sec_key);
+                },
+                'ensor_article',
+                'normal',
+                'low'
+            );
+        }
         add_meta_box(
             'ensor_project_listing',
             __('Tarjeta del proyecto', 'ensorlogs'),
@@ -406,6 +518,40 @@ function ensorlogs_sanitize_podcast_chapters(string $raw): string
 }
 
 /**
+ * Comprueba si el ID es un adjunto de WordPress con MIME audio/*.
+ */
+function ensorlogs_is_audio_attachment_id(int $attachment_id): bool
+{
+    if ($attachment_id <= 0) {
+        return false;
+    }
+    $p = get_post($attachment_id);
+    if (!$p instanceof WP_Post || $p->post_type !== 'attachment') {
+        return false;
+    }
+    $mime = get_post_mime_type($attachment_id);
+    return is_string($mime) && str_starts_with($mime, 'audio/');
+}
+
+/**
+ * URL del audio del log: adjunto de Mediateca si existe; si no, meta `_ensor_podcast_src`.
+ *
+ * @return string URL escapada con esc_url_raw o cadena vacía.
+ */
+function ensorlogs_get_podcast_audio_url(int $post_id): string
+{
+    $aid = absint(get_post_meta($post_id, '_ensor_podcast_attachment_id', true));
+    if ($aid > 0 && ensorlogs_is_audio_attachment_id($aid)) {
+        $u = wp_get_attachment_url($aid);
+        if (is_string($u) && $u !== '') {
+            return esc_url_raw($u);
+        }
+    }
+    $src = trim((string) get_post_meta($post_id, '_ensor_podcast_src', true));
+    return $src === '' ? '' : esc_url_raw($src);
+}
+
+/**
  * Convierte un string "1:23" o "1:02:30" a segundos.
  */
 function ensorlogs_podcast_time_to_seconds(string $value): int
@@ -458,7 +604,7 @@ function ensorlogs_podcast_chapters_array(int $post_id): array
  */
 function ensorlogs_render_podcast_card(int $post_id): string
 {
-    $src = (string) get_post_meta($post_id, '_ensor_podcast_src', true);
+    $src = ensorlogs_get_podcast_audio_url($post_id);
     $src = trim($src);
     if ($src === '') {
         return '';
@@ -470,6 +616,7 @@ function ensorlogs_render_podcast_card(int $post_id): string
     $eyebrow  = (string) get_post_meta($post_id, '_ensor_podcast_eyebrow', true);
     $duration = (string) get_post_meta($post_id, '_ensor_podcast_duration', true);
     $guests   = (string) get_post_meta($post_id, '_ensor_podcast_guests', true);
+    $narrator = trim((string) get_post_meta($post_id, '_ensor_podcast_narrator', true));
     $chapters = ensorlogs_podcast_chapters_array($post_id);
     $has_guests = ($guests !== '');
 
@@ -486,7 +633,15 @@ function ensorlogs_render_podcast_card(int $post_id): string
     if (!empty($chapters)) {
         $sub_parts[] = sprintf(_n('%d capítulo', '%d capítulos', count($chapters), 'ensorlogs'), count($chapters));
     }
-    $sub_parts[] = __('narrado por Ensor', 'ensorlogs');
+    if ($narrator !== '') {
+        $sub_parts[] = sprintf(
+            /* translators: %s: nombre del narrador (p. ej. Ensor). */
+            __('narrado por %s', 'ensorlogs'),
+            $narrator
+        );
+    } else {
+        $sub_parts[] = __('narrado por Ensor', 'ensorlogs');
+    }
     $sub_text   = implode(' · ', $sub_parts);
 
     $guests_html = '';
@@ -528,25 +683,41 @@ function ensorlogs_render_article_podcast_metabox($post): void
         return;
     }
     wp_nonce_field('ensor_cpt_meta_save', 'ensor_cpt_meta_nonce');
-    $src      = (string) get_post_meta($post->ID, '_ensor_podcast_src', true);
-    $title    = (string) get_post_meta($post->ID, '_ensor_podcast_title', true);
-    $eyebrow  = (string) get_post_meta($post->ID, '_ensor_podcast_eyebrow', true);
-    $duration = (string) get_post_meta($post->ID, '_ensor_podcast_duration', true);
-    $chapters = (string) get_post_meta($post->ID, '_ensor_podcast_chapters', true);
-    $guests   = (string) get_post_meta($post->ID, '_ensor_podcast_guests', true);
+    $attach_id = absint(get_post_meta($post->ID, '_ensor_podcast_attachment_id', true));
+    $src       = (string) get_post_meta($post->ID, '_ensor_podcast_src', true);
+    $title     = (string) get_post_meta($post->ID, '_ensor_podcast_title', true);
+    $eyebrow   = (string) get_post_meta($post->ID, '_ensor_podcast_eyebrow', true);
+    $duration  = (string) get_post_meta($post->ID, '_ensor_podcast_duration', true);
+    $chapters  = (string) get_post_meta($post->ID, '_ensor_podcast_chapters', true);
+    $guests    = (string) get_post_meta($post->ID, '_ensor_podcast_guests', true);
+    $narrator  = (string) get_post_meta($post->ID, '_ensor_podcast_narrator', true);
     ?>
-    <div class="ensor-cpt-meta">
+    <div class="ensor-cpt-meta ensor-cpt-meta--podcast">
         <p class="ensor-cpt-meta__help">
-            <?php esc_html_e('Sube el audio a la Mediateca (o usa una URL externa) y rellena los datos. Si dejas el campo URL vacío, no se mostrará nada en el log.', 'ensorlogs'); ?>
+            <?php esc_html_e('Cada log puede tener su propio archivo de audio. Súbelo desde la Mediateca (pestaña «Subir archivos») o pega la URL pública del .mp3 / .m4a. La tarjeta con play aparece en la cabecera del log cuando hay audio.', 'ensorlogs'); ?>
         </p>
         <div class="ensor-cpt-meta__section">
-            <h4 class="ensor-cpt-meta__title"><?php esc_html_e('Audio (URL al .mp3)', 'ensorlogs'); ?></h4>
+            <h4 class="ensor-cpt-meta__title"><?php esc_html_e('Archivo de audio', 'ensorlogs'); ?></h4>
+            <input type="hidden" id="ensor_podcast_attachment_id" name="_ensor_podcast_attachment_id" value="<?php echo esc_attr((string) $attach_id); ?>">
             <div class="ensor-cpt-meta__row">
-                <input type="url" class="large-text" id="ensor_podcast_src" name="_ensor_podcast_src" value="<?php echo esc_attr($src); ?>" placeholder="https://...mp3">
+                <label for="ensor_podcast_src"><?php esc_html_e('URL del audio', 'ensorlogs'); ?></label>
+                <input type="url" class="large-text" id="ensor_podcast_src" name="_ensor_podcast_src" value="<?php echo esc_attr($src); ?>" placeholder="https://…/tu-log.mp3" autocomplete="off">
                 <div class="ensor-cpt-meta__actions">
-                    <button type="button" class="button ensor-cpt-pick-media" data-target="ensor_podcast_src" data-mime="audio" data-title="<?php esc_attr_e('Audio del comentario', 'ensorlogs'); ?>" data-button="<?php esc_attr_e('Usar este audio', 'ensorlogs'); ?>">
-                        <?php esc_html_e('Elegir de la Mediateca', 'ensorlogs'); ?>
+                    <button type="button" class="button button-primary ensor-cpt-pick-media" data-target="ensor_podcast_src" data-attach-target="ensor_podcast_attachment_id" data-mime="audio" data-title="<?php esc_attr_e('Subir o elegir audio del log', 'ensorlogs'); ?>" data-button="<?php esc_attr_e('Usar este archivo', 'ensorlogs'); ?>">
+                        <?php esc_html_e('Subir o elegir desde la Mediateca', 'ensorlogs'); ?>
                     </button>
+                    <button type="button" class="button ensor-cpt-clear-podcast-audio">
+                        <?php esc_html_e('Quitar audio', 'ensorlogs'); ?>
+                    </button>
+                </div>
+                <p class="description"><?php esc_html_e('Al elegir un archivo en la Mediateca se guarda el enlace y el ID del adjunto. Si editas la URL a mano, se desvincula el adjunto.', 'ensorlogs'); ?></p>
+                <div class="ensor-cpt-meta__preview ensor-cpt-meta__preview--audio" aria-hidden="true">
+                    <?php
+                    $pv = trim($src);
+                    if ($pv !== '') {
+                        echo '<audio controls preload="none" src="' . esc_url($pv) . '"></audio>';
+                    }
+                    ?>
                 </div>
             </div>
             <div class="ensor-cpt-meta__row">
@@ -562,6 +733,11 @@ function ensorlogs_render_article_podcast_metabox($post): void
             <div class="ensor-cpt-meta__row">
                 <label for="ensor_podcast_duration"><?php esc_html_e('Duración (mm:ss)', 'ensorlogs'); ?></label>
                 <input type="text" class="regular-text" id="ensor_podcast_duration" name="_ensor_podcast_duration" value="<?php echo esc_attr($duration); ?>" placeholder="12:34">
+            </div>
+            <div class="ensor-cpt-meta__row">
+                <label for="ensor_podcast_narrator"><?php esc_html_e('Narrador (línea inferior)', 'ensorlogs'); ?></label>
+                <input type="text" class="regular-text" id="ensor_podcast_narrator" name="_ensor_podcast_narrator" value="<?php echo esc_attr($narrator); ?>" placeholder="<?php esc_attr_e('Ensor', 'ensorlogs'); ?>">
+                <p class="description"><?php esc_html_e('Vacío = se muestra «narrado por Ensor».', 'ensorlogs'); ?></p>
             </div>
         </div>
         <div class="ensor-cpt-meta__section">
@@ -735,6 +911,79 @@ function ensorlogs_render_article_quiz_metabox($post): void
 }
 
 /**
+ * Renderiza un metabox WYSIWYG para una sección pedagógica del log.
+ * Cada sección (Contexto, Datos, Como estudiante, …) tiene su propio editor
+ * TinyMCE con «Añadir medios», ayuda contextual y un prompt sugerido de IA.
+ *
+ * @param mixed  $post     WP_Post o null.
+ * @param string $sec_key  Clave de la sección (context, data, student, …).
+ */
+function ensorlogs_render_article_section_metabox($post, string $sec_key): void
+{
+    if (!$post instanceof WP_Post) {
+        return;
+    }
+    $sections = ensorlogs_article_sections();
+    if (!isset($sections[$sec_key])) {
+        return;
+    }
+    $sec       = $sections[$sec_key];
+    $meta_key  = '_ensor_section_' . $sec_key;
+    $value     = (string) get_post_meta($post->ID, $meta_key, true);
+    $editor_id = 'ensor_section_' . $sec_key;
+    // Solo emitimos el nonce una vez por pantalla; el resto de metaboxes ya lo
+    // declararon, así que comprobamos primero si ya existe en la página.
+    static $nonce_done = false;
+    if (!$nonce_done) {
+        wp_nonce_field('ensor_cpt_meta_save', 'ensor_cpt_meta_nonce');
+        $nonce_done = true;
+    }
+    ?>
+    <div class="ensor-cpt-meta ensor-cpt-section">
+        <p class="ensor-cpt-meta__help">
+            <strong><?php echo esc_html($sec['label']); ?></strong> ·
+            <?php echo esc_html($sec['help']); ?>
+        </p>
+        <p class="ensor-cpt-meta__help" style="background:#fffaf0;border-left:3px solid #d9a300;padding:0.6rem 0.8rem;border-radius:4px;">
+            <span style="font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.04em;color:#7a5b00;display:block;margin-bottom:0.25rem;">
+                <?php esc_html_e('Idea de prompt para IA', 'ensorlogs'); ?>
+            </span>
+            <code style="background:transparent;padding:0;font-size:12px;"><?php echo esc_html($sec['prompt']); ?></code>
+        </p>
+        <?php
+        wp_editor(
+            $value,
+            $editor_id,
+            array(
+                'textarea_name' => $meta_key,
+                'textarea_rows' => 10,
+                'media_buttons' => true,
+                'teeny'         => false,
+                'tinymce'       => array(
+                    'wpautop'           => true,
+                    'block_formats'     => 'Párrafo=p;Cita=blockquote;Encabezado 3=h3;Encabezado 4=h4;Código=pre',
+                    'toolbar1'          => 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,link,unlink,wp_more,spellchecker,wp_add_media,fullscreen,wp_adv',
+                    'toolbar2'          => 'underline,strikethrough,hr,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help',
+                ),
+                'quicktags'     => array('buttons' => 'strong,em,link,block,del,ins,ul,ol,li,code,more,close'),
+                'editor_class'  => 'ensor-section-editor ensor-section-editor--' . esc_attr($sec_key),
+            )
+        );
+        ?>
+        <p class="description" style="margin-top:0.6rem;">
+            <?php
+            printf(
+                /* translators: %s: data-aud value, e.g. "context" */
+                esc_html__('Si dejas este campo vacío, no se añade nada al log. Si tienes texto, se inyecta automáticamente al final del contenido con la marca data-aud="%s" para que aparezca el filtro de navegación de arriba.', 'ensorlogs'),
+                esc_html($sec['aud'])
+            );
+            ?>
+        </p>
+    </div>
+    <?php
+}
+
+/**
  * @param mixed $post WP_Post o null
  */
 function ensorlogs_render_project_listing_metabox($post): void
@@ -794,7 +1043,7 @@ function ensorlogs_render_project_listing_metabox($post): void
                     }
                     ?>
                 </div>
-                <p class="description"><?php esc_html_e('Si subes una imagen desde la biblioteca, se guardará como URL. También puedes usar rutas del tema como assets/img/projects/img1.png.', 'ensorlogs'); ?></p>
+                <p class="description"><?php esc_html_e('Si el proyecto tiene imagen destacada (panel lateral), esa es la que verás en «Proyectos». Este campo solo se usa cuando no hay destacada: URL de la biblioteca o ruta del tema como assets/img/projects/img1.png.', 'ensorlogs'); ?></p>
             </div>
         </div>
         <div class="ensor-cpt-meta__section">
@@ -857,7 +1106,22 @@ add_action(
                     update_post_meta($post_id, '_ensor_primary_tema', $p);
                 }
             }
-            if (isset($_POST['_ensor_podcast_src'])) {
+            $attach_in = isset($_POST['_ensor_podcast_attachment_id']) ? absint(wp_unslash($_POST['_ensor_podcast_attachment_id'])) : null;
+            if ($attach_in !== null) {
+                if ($attach_in > 0 && ensorlogs_is_audio_attachment_id($attach_in) && current_user_can('edit_post', $attach_in)) {
+                    update_post_meta($post_id, '_ensor_podcast_attachment_id', $attach_in);
+                    $file_url = wp_get_attachment_url($attach_in);
+                    if (is_string($file_url) && $file_url !== '') {
+                        update_post_meta($post_id, '_ensor_podcast_src', esc_url_raw($file_url));
+                    }
+                } else {
+                    delete_post_meta($post_id, '_ensor_podcast_attachment_id');
+                    if (isset($_POST['_ensor_podcast_src'])) {
+                        $src = trim((string) wp_unslash($_POST['_ensor_podcast_src']));
+                        update_post_meta($post_id, '_ensor_podcast_src', $src === '' ? '' : esc_url_raw($src));
+                    }
+                }
+            } elseif (isset($_POST['_ensor_podcast_src'])) {
                 $src = trim((string) wp_unslash($_POST['_ensor_podcast_src']));
                 update_post_meta($post_id, '_ensor_podcast_src', $src === '' ? '' : esc_url_raw($src));
             }
@@ -871,6 +1135,9 @@ add_action(
                 $dur = trim((string) wp_unslash($_POST['_ensor_podcast_duration']));
                 $dur = preg_replace('/[^0-9:]/', '', $dur) ?? '';
                 update_post_meta($post_id, '_ensor_podcast_duration', $dur);
+            }
+            if (isset($_POST['_ensor_podcast_narrator'])) {
+                update_post_meta($post_id, '_ensor_podcast_narrator', sanitize_text_field((string) wp_unslash($_POST['_ensor_podcast_narrator'])));
             }
             if (isset($_POST['_ensor_podcast_chapters'])) {
                 update_post_meta(
@@ -890,6 +1157,17 @@ add_action(
                     '_ensor_quiz',
                     wp_strip_all_tags((string) wp_unslash($_POST['_ensor_quiz']))
                 );
+            }
+            // Secciones pedagógicas WYSIWYG: aceptan HTML básico via wp_kses_post.
+            foreach (array_keys(ensorlogs_article_sections()) as $sec_key) {
+                $meta_key = '_ensor_section_' . $sec_key;
+                if (isset($_POST[$meta_key])) {
+                    update_post_meta(
+                        $post_id,
+                        $meta_key,
+                        wp_kses_post((string) wp_unslash($_POST[$meta_key]))
+                    );
+                }
             }
             return;
         }
@@ -920,6 +1198,71 @@ add_action(
     2
 );
 
+/**
+ * Aviso amigable en el editor de las páginas estructurales (inicio, about,
+ * services, projects, blog, contact) explicando que el contenido del editor
+ * SUSTITUYE la zona <!-- ensor:editable --> del fragment del tema.
+ *
+ * Se imprime tanto en el editor clásico (`edit_form_after_title`) como
+ * en Gutenberg (vía `admin_notices`, que el bloque "notice" recoge).
+ */
+function ensorlogs_render_structural_page_notice(WP_Post $post): void
+{
+    if ($post->post_type !== 'page' || !function_exists('ensorlogs_page_fragments_map')) {
+        return;
+    }
+    $map = ensorlogs_page_fragments_map();
+    if (!isset($map[$post->post_name])) {
+        return;
+    }
+    $labels = array(
+        'inicio'   => __('la portada (Inicio)', 'ensorlogs'),
+        'about'    => __('la página «Sobre mí»', 'ensorlogs'),
+        'services' => __('la página «Servicios»', 'ensorlogs'),
+        'projects' => __('la cabecera de «Proyectos»', 'ensorlogs'),
+        'blog'     => __('la cabecera de «Hablemos de…» (blog)', 'ensorlogs'),
+        'contact'  => __('la cabecera del formulario de «Contacto»', 'ensorlogs'),
+    );
+    $label = $labels[$post->post_name] ?? $post->post_name;
+    ?>
+    <div class="notice notice-info" style="border-left-color:#d9a300;">
+        <p style="margin: .5em 0 0; font-weight: 600;">
+            <?php
+            printf(
+                /* translators: %s: nombre legible de la zona, ej. "la portada (Inicio)". */
+                esc_html__('Estás editando %s.', 'ensorlogs'),
+                esc_html($label)
+            );
+            ?>
+        </p>
+        <p style="margin: .25em 0 .5em; font-size: 13px; line-height: 1.5;">
+            <?php esc_html_e('El contenido que escribas aquí sustituye el bloque intro/lead del diseño actual. Si vacías el editor y guardas, la web vuelve al texto por defecto del tema (no se rompe nada).', 'ensorlogs'); ?>
+        </p>
+    </div>
+    <?php
+}
+
+// Editor clásico (TinyMCE):
+add_action(
+    'edit_form_after_title',
+    'ensorlogs_render_structural_page_notice'
+);
+
+// Gutenberg muestra los admin_notices con su componente "Notices".
+add_action(
+    'admin_notices',
+    static function (): void {
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        if (!$screen || $screen->base !== 'post' || $screen->post_type !== 'page') {
+            return;
+        }
+        $post = get_post();
+        if ($post instanceof WP_Post) {
+            ensorlogs_render_structural_page_notice($post);
+        }
+    }
+);
+
 add_action(
     'admin_enqueue_scripts',
     static function (string $hook_suffix): void {
@@ -940,7 +1283,7 @@ add_action(
         wp_enqueue_script(
             'ensor-admin-cpt-meta',
             get_template_directory_uri() . '/js/admin-cpt-meta.js',
-            array('jquery'),
+            array('jquery', 'media-editor'),
             ENSORLOGS_THEME_VERSION,
             true
         );

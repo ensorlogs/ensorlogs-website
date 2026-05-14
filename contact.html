@@ -115,7 +115,7 @@
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
-                    <button class="btn_theme_switch w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <button class="btn_theme_switch max-lg:hidden w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
                         <svg  class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -171,6 +171,19 @@
             <a href="services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
                 ¿Cómo puedo ayudarte?
             </a>
+        
+            <div class="ensor-mobile-theme-toggle flex items-center justify-between gap-3 py-2.5 px-4 rounded-md bg-slate-50 dark:bg-metalBlack text-powerBlack dark:text-white">
+                <span class="font-medium">Claro / oscuro</span>
+                <button type="button" class="btn_theme_switch w-13 h-13 relative rounded-full group border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack *:w-5 *:h-5 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <svg class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <svg class="moon opacity-0 group-[&.btn-light]:opacity-100" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">

@@ -9,9 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.7.8');
+define('ENSORLOGS_THEME_VERSION', '1.9.2');
 
 require_once get_template_directory() . '/inc/helpers.php';
+require_once get_template_directory() . '/inc/block-content.php';
 require_once get_template_directory() . '/inc/stacks.php';
 require_once get_template_directory() . '/inc/post-types.php';
 require_once get_template_directory() . '/inc/cpt-admin-ui.php';

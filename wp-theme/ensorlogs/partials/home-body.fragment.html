@@ -32,9 +32,11 @@
                         <div class="name text-powerBlack dark:text-pastelGrey font-bold text-4xl leading-tight">
                             Ensor Logs
                         </div>
+                        <!-- ensor:editable -->
                         <p class="my-3">
                             Esta es mi bitácora pública. Aquí dejo escrito lo que aprendí, lo que aprendo y lo que enseño — datos, automatización, infra, web, PropTech y el buen caos cuando toca resolverlo. La idea es sencilla: <strong class="text-powerBlack dark:text-pastelGrey font-semibold">documentar</strong>, <strong class="text-powerBlack dark:text-pastelGrey font-semibold">conectar</strong> con gente y comunidades que saben, y <strong class="text-powerBlack dark:text-pastelGrey font-semibold">mostrar</strong> en qué puedo ayudar.
                         </p>
+                        <!-- /ensor:editable -->
                         <h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group mt-5">
                             <a href="%%HOME%%about/" class="flex items-center justify-between">
                                 ¿A que me dedico? 
@@ -139,18 +141,9 @@
                                 <p class="ensor-terminal-prompt" aria-hidden="true">
                                     <span class="ensor-terminal-prompt__user">ensor@logs</span><span class="ensor-terminal-prompt__sep">:</span><span class="ensor-terminal-prompt__path">~</span><span class="ensor-terminal-prompt__sig">$</span><span class="ensor-terminal-prompt__cursor">▋</span>
                                 </p>
-                                <div class="ensor-marquee ensor-marquee--matrix ensor-marquee--terminal py-2 md:py-2.5" role="region" aria-label="Mensajes destacados ENSOR.LOGS">
+                                <div class="ensor-marquee ensor-marquee--matrix ensor-marquee--terminal py-2 md:py-2.5" role="region" aria-label="Últimos logs ENSOR.LOGS">
                                     <div class="ensor-marquee__track">
-                                        <div class="ensor-marquee__segment ensor-marquee__segment--matrix text-xs md:text-sm whitespace-nowrap">
-                                            <span class="inline-flex items-center gap-x-3">
-                                                <span>tail -f bitácora.log — automatización · PropTech · CRM · analítica · infraestructura · aprendizaje continuo</span>
-                                            </span>
-                                        </div>
-                                        <div class="ensor-marquee__segment ensor-marquee__segment--matrix text-xs md:text-sm whitespace-nowrap" aria-hidden="true">
-                                            <span class="inline-flex items-center gap-x-3">
-                                                <span>tail -f bitácora.log — automatización · PropTech · CRM · analítica · infraestructura · aprendizaje continuo</span>
-                                            </span>
-                                        </div>
+                                        %%HOME_LOG_TICKER_SEGMENTS%%
                                     </div>
                                 </div>
                             </div>
@@ -292,10 +285,10 @@
                 <div class="ensor-widgets-row space-y-6 lg:max-xl:space-y-0 md:max-xl:col-span-2 lg:max-xl:grid lg:max-xl:grid-cols-2 lg:max-xl:gap-6 *:rounded-2xl max-md:*:p-4 *:p-6 xl:*:px-10 *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack *:border *:border-flasWhite dark:*:border-flasBlack">
                     <!-- Widget Item Start -->
                     <div class="widget overflow-hidden ensor-widget-media-card" data-aos="fade-up" data-aos-delay="150">
-                        <a href="%%HOME%%blog/" class="relative block ensor-widget-cover-16-10 w-full overflow-hidden">
+                        <a href="%%LATEST_LOG_URL%%" class="relative block ensor-widget-cover-16-10 w-full overflow-hidden" aria-label="Abrir el último log publicado">
                             <img 
-                                src="%%THEME_URI%%/assets/img/Ensorlogs%20Blog.png" 
-                                alt="Bitácora ENSOR.LOGS — workspace y documentación técnica"
+                                src="%%LATEST_LOG_IMG%%" 
+                                alt="%%LATEST_LOG_TITLE_ATTR%%"
                                 class="absolute inset-0 h-full w-full object-cover object-center"
                                 width="800"
                                 height="500"
@@ -305,17 +298,26 @@
                         </a>
                         <div class="mt-10 px-4 md:px-6 xl:px-10">
                             <p class="text-sm opacity-70">
-                                BITACORA / LOGS
+                                BITÁCORA / LOGS
                             </p>
-                            <h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group">
-                                <a href="%%HOME%%blog/" class="flex items-center justify-between">
-                                    Ver articulos y aprendizajes
-                                    <svg class="w-11 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <p class="mt-1 text-[11px] font-bold uppercase tracking-wider text-powerBlack dark:text-pastelGrey">
+                                Último log
+                            </p>
+                            <h6 class="mt-2 font-semibold text-lg text-darkGray dark:text-pastelGrey group">
+                                <a href="%%LATEST_LOG_URL%%" class="flex items-start justify-between gap-3">
+                                    <span class="min-w-0 flex-1 leading-snug line-clamp-3">%%LATEST_LOG_TITLE%%</span>
+                                    <svg class="w-11 shrink-0 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300 mt-0.5" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                         <path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                         <path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </a>
                             </h6>
+                            <p class="mt-4 pt-4 border-t border-flasWhite dark:border-flasBlack">
+                                <a href="%%HOME%%blog/" class="inline-flex items-center gap-2 text-sm font-semibold text-powerBlack dark:text-pastelGrey underline-offset-2 hover:underline">
+                                    <i class="fal fa-th-large text-xs opacity-80" aria-hidden="true"></i>
+                                    Ver todos los logs
+                                </a>
+                            </p>
                         </div>
                     </div>
                     <!-- Widget Item End -->

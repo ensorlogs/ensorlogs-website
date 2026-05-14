@@ -13,7 +13,7 @@
     <meta name="viewport" 
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
         <meta name="keywords"
-        content="WordPress 2026, aprender WordPress Venezuela, freelance WordPress, SEO WordPress, WooCommerce Latinoamérica, IA WordPress, estudiantes IT">
+        content="WordPress, formación, freelance, SEO, WooCommerce, IA">
     <meta name="description"
         content="Más de 10 años en tecnología: por qué WordPress sigue resolviendo problemas reales, qué aprendí como estudiante y freelancer, Venezuela, WordCamp Madrid e IA en 2026.">
     <meta name="author" content="EnsorLogs">
@@ -49,6 +49,11 @@
     <link rel="stylesheet" href="../assets/css/ensor-brand.css">
     <link rel="stylesheet" href="../assets/css/ensor-reader.css">
 
+    <link rel="stylesheet" href="../assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="../assets/css/ensor-cookies.css">
+    <link rel="stylesheet" href="../assets/css/ensor-podcast.css">
+    <meta name="ensor-cookies-url" content="../legal/cookies.html">
+    <link rel="stylesheet" href="../assets/css/ensor-quiz.css">
 </head>
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,7 +91,7 @@
                             ENSOR.<span class="ensor-logo-accent">LOGS</span>
                         </span>
                         <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
-                            Bitácora de un geek <img src="../../../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                            Bitácora de un geek <img src="../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                         </span>
                         <span class="ensor-tagline-rule mt-1.5 h-0.5 max-w-[12rem] rounded-full" aria-hidden="true"></span>
                     </span>
@@ -110,7 +115,7 @@
                     </a>
                 </div>
                 <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
-                    <button class="btn_theme_switch w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <button class="btn_theme_switch max-lg:hidden w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
                         <svg  class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -141,7 +146,7 @@
                         ENSOR.<span class="ensor-logo-accent">LOGS</span>
                     </span>
                     <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
-                        Bitácora de un geek <img src="../../../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                        Bitácora de un geek <img src="../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                     </span>
                     <span class="ensor-tagline-rule mt-1 h-0.5 max-w-[10rem] rounded-full" aria-hidden="true"></span>
                 </span>
@@ -166,6 +171,19 @@
             <a href="../services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
                 ¿Cómo puedo ayudarte?
             </a>
+        
+            <div class="ensor-mobile-theme-toggle flex items-center justify-between gap-3 py-2.5 px-4 rounded-md bg-slate-50 dark:bg-metalBlack text-powerBlack dark:text-white">
+                <span class="font-medium">Claro / oscuro</span>
+                <button type="button" class="btn_theme_switch w-13 h-13 relative rounded-full group border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack *:w-5 *:h-5 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <svg class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <svg class="moon opacity-0 group-[&.btn-light]:opacity-100" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="mt-auto">
             <div class="cta_button text-center space-y-1">
@@ -223,6 +241,7 @@
                         <i class="fal fa-book-open" aria-hidden="true"></i>
                         10 min de lectura
                     </li>
+                    <li><span class="ensor-log-status" data-slug="wordpress-vale-pena-aprender-2026" aria-live="polite"><span class="ensor-log-status__dot" aria-hidden="true"></span><span class="ensor-log-status__label">Pendiente · quiz al final</span></span></li>
                 </ul>
 
                 <div class="ensor-reader-headcard">
@@ -231,8 +250,9 @@
                                 <a href="../blog.html?tema=ia" class="ensor-reader-stack" style="--ensor-stack-color:#7c3aed" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="6" width="14" height="12" rx="3"/><circle cx="9.5" cy="12" r="1.1" fill="currentColor"/><circle cx="14.5" cy="12" r="1.1" fill="currentColor"/><path d="M12 3v3M8 21v-3M16 21v-3"/></svg></span><span class="ensor-reader-stack__label">IA</span></a>
                                 <a href="../blog.html?tema=marketing" class="ensor-reader-stack" style="--ensor-stack-color:#f97316" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l14-5v12L3 13zM3 11v2M7 12.4v4.6c0 1 .8 2 2 2h.5c1 0 1.5-1 1.5-2v-4"/></svg></span><span class="ensor-reader-stack__label">Marketing</span></a>
                     </div>
-                    <nav class="ensor-reader-aud" aria-label="Filtrar por audiencia"></nav>
+                    <nav class="ensor-reader-aud" aria-label="Saltar a sección del log"></nav>
                 </div>
+                <div class="ensor-podcast-card" data-audio="../assets/audio/wordpress-vale-pena-aprender-2026.mp3" data-duration="12:30" data-title="Escúchame contarte este log" data-chapters='[{"time": 0, "title": "Intro: por qué hablo de esto"}, {"time": 80, "title": "Contexto: lo que el ruido dice"}, {"time": 220, "title": "Datos: cuota real de WordPress"}, {"time": 350, "title": "Como estudiante"}, {"time": 480, "title": "Como profesor: cómo lo enseño"}, {"time": 610, "title": "Como profesional: pros y contras"}]'><button type="button" class="ensor-podcast-card__play" aria-label="Reproducir comentario del autor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button><div class="ensor-podcast-card__meta"><span class="ensor-podcast-card__eyebrow">LOG.MP3 · DIRECTOR'S CUT</span><strong class="ensor-podcast-card__title">Escúchame contarte este log</strong><span class="ensor-podcast-card__sub">12:30 · 6 capítulos · narrado por Ensor</span></div></div>
             </header>
 
             <div class="ensor-reader-hero max-w-screen-lg mx-auto mt-2 mb-8 md:mb-10">
@@ -359,16 +379,13 @@ No es un tutorial ni una lista de “mejores prácticas” genérica: es lo que 
 </section>
 <section class="ensor-aud-section" data-aud="data">
 <h2 id="datos">Datos</h2>
-<ul>
-<li><strong>~43,3 %</strong> de todos los sitios públicos siguen corriendo en WordPress (W3Techs, abr-2026).</li>
-<li><strong>~62 %</strong> de cuota entre los CMS conocidos, <strong>+1.2 pp</strong> respecto al mismo mes de 2025.</li>
-<li>En Latinoamérica hispana, <strong>WooCommerce</strong> mantiene la primera posición de carritos open-source para tiendas &lt;500 productos.</li>
-<li>Las búsquedas mensuales de «aprender WordPress 2026» en Google Trends crecieron <strong>+18 %</strong> YoY.</li>
-<li>WordCamp Madrid 2026: récord de asistencia, con 4 charlas dedicadas a flujos con IA.</li>
-</ul>
-<blockquote>
-<p>Las cifras varían entre fuentes (W3Techs, BuiltWith, HTTP Archive); úsalas como orden de magnitud, no como verdad absoluta.</p>
-</blockquote>
+<p>No pego porcentajes con decimales: en la red cambian cada mes y este texto
+quedaría mentiroso enseguida. Si te interesa el dato de hoy, abre W3Techs,
+BuiltWith o HTTP Archive y lee cómo miden (no es lo mismo uno que otro).</p>
+<p>Sin números mágicos: sigue habiendo muchísimos sitios en WordPress, la
+comunidad sigue llenando eventos tipo WordCamp, y en trabajo real sigue
+apareciendo en pymes que solo quieren publicar sin montar un equipo de
+plataforma.</p>
 </section>
 <section class="ensor-aud-section" data-aud="student">
 <h2 id="como-estudiante">Como estudiante</h2>
@@ -380,11 +397,10 @@ No es un tutorial ni una lista de “mejores prácticas” genérica: es lo que 
 </ol>
 <div class="ensor-ai-prompt">
 <p><strong>Prompt IA — plan de estudio 4 semanas</strong></p>
-<pre>Eres un mentor técnico. Diseña un plan de 4 semanas (1 h/día) para
-un estudiante de IT que quiere ofrecer landings y blogs en WordPress
-a pymes locales. Incluye: temas a cubrir cada semana, 1 mini-proyecto
-entregable por semana y 3 errores comunes a evitar. Idioma: español
-neutro. Formato: tabla por semana.</pre>
+<pre>Plan de 4 semanas (1 h/día) para un estudiante de IT que quiere ofrecer
+landings y blogs en WordPress a pymes locales. Incluye: temas por semana,
+un mini-proyecto entregable por semana y 3 errores típicos a evitar.
+Español neutro. Formato: tabla por semana.</pre>
 </div>
 </section>
 <section class="ensor-aud-section" data-aud="teacher">
@@ -398,12 +414,10 @@ neutro. Formato: tabla por semana.</pre>
 </ul>
 <div class="ensor-ai-prompt">
 <p><strong>Prompt IA — rúbrica + feedback automatizado</strong></p>
-<pre>Actúa como profesor de tecnologías web. Dado este enlace de proyecto
-WordPress de un estudiante, genera: 1) una rúbrica de evaluación con
-5 criterios y peso porcentual, 2) feedback redactado en tono cálido
-y constructivo dirigido al alumno, 3) tres preguntas para la defensa
-oral. Si detectas problemas de rendimiento o accesibilidad, indícalos
-con prioridad alta/media/baja.</pre>
+<pre>Con este enlace de proyecto WordPress de un estudiante, devuelve:
+1) rúbrica de 5 criterios con pesos, 2) feedback en tono directo pero
+respetuoso, 3) tres preguntas para defensa oral. Si ves rendimiento o
+accesibilidad flojos, márcalos prioridad alta/media/baja.</pre>
 </div>
 </section>
 <section class="ensor-aud-section" data-aud="professional">
@@ -417,15 +431,15 @@ con prioridad alta/media/baja.</pre>
 </ul>
 <div class="ensor-ai-prompt">
 <p><strong>Prompt IA — auditoría rápida pre-propuesta</strong></p>
-<pre>Eres un consultor senior en operaciones digitales. Dado este sitio
-WordPress, analiza en 5 puntos: (1) estado de núcleo + plugins,
-(2) rendimiento aproximado (Core Web Vitals), (3) riesgos de seguridad
-visibles, (4) accesibilidad básica, (5) oportunidades SEO obvias.
-Devuelve el resultado como propuesta de mejora con tres tramos:
-quick wins (1-2 semanas), medio plazo (1-3 meses) y estructural.</pre>
+<pre>Auditoría rápida de este sitio WordPress en 5 puntos: (1) núcleo y
+plugins, (2) rendimiento aproximado / Core Web Vitals, (3) riesgos de
+seguridad visibles, (4) accesibilidad básica, (5) SEO obvio. Salida:
+quick wins (1–2 semanas), medio plazo (1–3 meses) y cambios estructurales.</pre>
 </div>
 </section>
                     </div>
+
+                    <section class="ensor-quiz" data-slug="wordpress-vale-pena-aprender-2026" data-quiz="{&quot;questions&quot;: [{&quot;q&quot;: &quot;Cuando hablamos de &#x27;WordPress murió&#x27;, ¿qué confunde la mayoría de quienes lo afirman?&quot;, &quot;options&quot;: [&quot;Que WordPress y Wix usan el mismo motor de bloques&quot;, &quot;Que hablar del CMS y hablar del producto comercial WordPress.com es lo mismo&quot;, &quot;Que la cuota de mercado real ya es inferior al 20%&quot;, &quot;Que ya no se puede instalar en hostings compartidos&quot;], &quot;correct&quot;: 1, &quot;explanation&quot;: &quot;WordPress.org es el CMS abierto; WordPress.com es otro producto. Mezclarlos explica buena parte del ruido en redes.&quot;}, {&quot;q&quot;: &quot;¿Cuál es la ventaja que más se subestima de saber WordPress en 2026?&quot;, &quot;options&quot;: [&quot;Es la única forma de hacer e-commerce en LATAM&quot;, &quot;Sigue siendo una puerta de entrada barata a proyectos reales con clientes&quot;, &quot;Te garantiza un sueldo mínimo en Europa&quot;, &quot;Permite ignorar SEO porque viene resuelto de fábrica&quot;], &quot;correct&quot;: 1, &quot;explanation&quot;: &quot;Barra de entrada baja y muchísimos proyectos vivos: te saca del tutorial y te mete en presupuesto, plazos y cliente de verdad.&quot;}, {&quot;q&quot;: &quot;Como profesor, ¿qué evaluación tiene más sentido al enseñar WordPress?&quot;, &quot;options&quot;: [&quot;Examen tipo test sobre la administración del panel&quot;, &quot;Un proyecto entregable: levantar un sitio, configurar un tema y publicar contenido real&quot;, &quot;Memorizar la documentación oficial&quot;, &quot;Examen oral sobre la historia del CMS&quot;], &quot;correct&quot;: 1, &quot;explanation&quot;: &quot;Instalación, tema, contenidos publicados y SEO mínimo en algo que se pueda enseñar: eso sí se puede evaluar.&quot;}]}" aria-labelledby="ensor-quiz-title-wordpress-vale-pena-aprender-2026"></section>
 
                     <footer class="ensor-reader-footer mt-10 grid md:grid-cols-2 gap-4 md:gap-6 items-center">
                         <div class="ensor-reader-stacks-block flex flex-wrap items-center gap-3" aria-label="Stacks del log">
@@ -597,6 +611,10 @@ quick wins (1-2 semanas), medio plazo (1-3 meses) y estructural.</pre>
     <script defer src="../assets/js/theme-mode.js"></script>
     <script defer src="../assets/js/ensor-reader.js"></script>
     <!-- Js Library End -->
+    <script defer src="../assets/js/ensor-a11y.js"></script>
+    <script defer src="../assets/js/ensor-cookies.js"></script>
+    <script defer src="../assets/js/ensor-podcast.js"></script>
+    <script defer src="../assets/js/ensor-quiz.js"></script>
 </body>
 
 </html>

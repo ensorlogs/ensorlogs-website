@@ -1,60 +1,57 @@
-# Logs (fuente Markdown)
+# Fuente Markdown de los logs
 
-Cada `.md` tiene **YAML al inicio** (entre `---`) y debajo el **cuerpo**. Puedes mezclar Markdown (`## Título`, listas, `**negrita**`) y HTML con las mismas clases Tailwind que ya usabas en el sitio.
+Cada archivo lleva **YAML entre `---`** y debajo el **cuerpo**. Puedes mezclar Markdown normal y HTML con las mismas clases que ya usas en el sitio.
 
-Campos del front matter:
+### Front matter (lo que uso casi siempre)
 
-| Campo | Uso |
-|-------|-----|
-| `order` | Orden en el generador (menor = antes). Con **menos de 3** logs en la carpeta, el bloque “Otros logs” no se muestra. |
-| `filename` | Nombre del HTML de salida (ej. `mi-slug.html`). Sin prefix `articulo-`. |
-| `primary_tema` | Slug del stack principal (mismo que usa `blog.html?tema=…`). |
-| `pill` | (Opcional) Texto de la pastilla; si se omite, se usa la etiqueta del stack. |
-| `stacks` | Lista de slugs de **stacks** que aparecerán como badges con logo. Ej. `[wordpress, ia, servidores]`. |
-| `h1` | Título principal del log. |
-| `date` | Texto libre (ej. “Mayo 2026”). |
-| `meta_title`, `meta_desc`, `meta_keywords` | SEO (`<title>` y meta). |
-| `canonical_path` | Ruta en el sitio (ej. `articulos/wordpress-….html`). |
-| `hero_src`, `hero_alt` | Imagen hero. |
-| `tags` | (Compatibilidad) Lista de `{ slug, label }`; si no hay `stacks`, se derivan de aquí. |
+| Campo | Para qué |
+|-------|----------|
+| `order` | Orden al generar (número bajo = antes). Si hay menos de 3 logs, el bloque “Otros logs” no sale. |
+| `filename` | Nombre del HTML de salida, ej. `mi-slug.html` (sin prefijo `articulo-`). |
+| `primary_tema` | Slug del stack principal (el de `blog.html?tema=…`). |
+| `pill` | (Opcional) Texto de la pastilla; si no va, sale la etiqueta del stack. |
+| `stacks` | Lista de slugs de stacks con badge, ej. `[wordpress, ia, servidores]`. |
+| `h1` | Título del log. |
+| `date` | Texto libre (“Mayo 2026”, etc.). |
+| `meta_title`, `meta_desc`, `meta_keywords` | SEO. |
+| `canonical_path` | Ruta publicada, ej. `articulos/….html`. |
+| `hero_src`, `hero_alt` | Imagen del hero. |
+| `tags` | Compatibilidad: `{ slug, label }`; si no hay `stacks`, se puede derivar de aquí. |
 
-Chrome del lector (auto):
+### Cosas que mete solo el lector (no hace falta tocarlas en el `.md` salvo que quieras)
 
-- Barra de progreso de lectura arriba.
-- Chip flotante con la sección actual.
-- TOC sticky en desktop, sheet en mobile (botón inferior).
-- Badges de stacks con logo en cabecera y pie del log.
-- Filtro por audiencia y secciones tematizadas (panel con icono + color) si añades:
+- Barra de progreso arriba.
+- Chip con el encabezado en el que vas.
+- TOC en escritorio y hoja en móvil (se arma con los `h2`/`h3` del cuerpo).
+- Bloques por audiencia si usas secciones así:
 
 ```html
 <section class="ensor-aud-section" data-aud="context" markdown="1">
 ## Contexto
-Texto markdown normal va aquí.
+Texto…
 </section>
 ```
 
-Valores de `data-aud` (orden recomendado): `context`, `data`, `student`, `teacher`, `professional`. Opcionales: `beginner`, `advanced`, `client`.
+Valores habituales de `data-aud`: `context`, `data`, `student`, `teacher`, `professional`; a veces `beginner`, `advanced`, `client`.
 
-- Bloque «Prompt IA» dentro de cualquier sección (incluye botón copiar automático):
+### Bloque copiable tipo “prompt” (opcional)
 
 ```html
 <div class="ensor-ai-prompt" markdown="1">
-**Prompt IA — describe qué hace**
+**Prompt — qué hace**
 
-<pre>Eres [rol].
-Tu tarea es [objetivo].
-Devuelve: [formato esperado].</pre>
+<pre>Tu instrucción aquí, sin contraseñas ni URLs privadas.</pre>
 </div>
 ```
 
-- Resaltado: usa `<mark>palabra clave</mark>` para el subrayado amarillo.
+Para el subrayado amarillo: `<mark>texto</mark>`.
 
-Regenerar HTML:
+### Generar de nuevo
 
 ```bash
-python3 -m venv .venv          # solo la primera vez
+python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python scripts/render_blog_articles.py
 ```
 
-No edites a mano los `articulos/*.html` generados: se sobrescriben al correr el script.
+No edites a mano `articulos/*.html`: el script los machaca.

@@ -2,8 +2,10 @@
  * Ensorlogs · Reader UX
  *
  * Activa, en cada Log individual:
- *  - Barra de progreso de lectura (fixed top).
- *  - Chip flotante con el topic / sección actual.
+ *  - Barra de progreso de lectura (fixed, debajo del header del sitio).
+ *  - Chip flotante con el topic / sección actual (debajo de la barra);
+ *    permanece oculto hasta que la cabecera del log (título y meta) queda
+ *    por encima del chip, para no tapar el h1 al cargar.
  *  - TOC sticky (desktop) o sheet flotante (mobile) generado a partir de los h2/h3.
  *  - Filtro por audiencia (estudiante, profesional, profesor, datos, etc.)
  *    cuando hay secciones marcadas con `.ensor-aud-section[data-aud="..."]`.
@@ -24,11 +26,95 @@
     if (!contentEl) return;
 
     /* ------------------------------------------------------------------
+     * Altura bajo el header del sitio: alinea barra + chip con el nav fijo
+     * (incluye estado .is-sticky del theme).
+     * ------------------------------------------------------------------ */
+    var offsetRafQueued = false;
+
+    function findSiteHeader() {
+        var main = d.querySelector('main#main-content') || d.querySelector('main.app');
+        if (!main) return null;
+        var ch = main.children;
+        for (var i = 0; i < ch.length; i++) {
+            if (ch[i].tagName === 'HEADER') {
+                return ch[i];
+            }
+        }
+        return null;
+    }
+
+    function syncSiteHeaderOffset() {
+        var siteHeader = findSiteHeader();
+        if (!siteHeader) {
+            d.documentElement.style.removeProperty('--ensor-site-header-offset');
+            return;
+        }
+        var y = Math.ceil(siteHeader.getBoundingClientRect().bottom);
+        if (y < 0) y = 0;
+        d.documentElement.style.setProperty('--ensor-site-header-offset', y + 'px');
+    }
+
+    function scheduleSyncSiteHeaderOffset() {
+        if (offsetRafQueued) return;
+        offsetRafQueued = true;
+        requestAnimationFrame(function () {
+            offsetRafQueued = false;
+            syncSiteHeaderOffset();
+        });
+    }
+
+    /* ------------------------------------------------------------------
      * Progress bar
      * ------------------------------------------------------------------ */
     var progressFill = d.querySelector('.ensor-reader-progress__fill');
     var topicChip = d.querySelector('.ensor-reader-topic');
     var topicChipText = topicChip ? topicChip.querySelector('.ensor-reader-topic__text') : null;
+
+    /** Borde superior del chip fijo (px en viewport), alineado con ensor-reader.css */
+    function getReaderChipTopPx() {
+        var siteHeader = findSiteHeader();
+        var headerBottom = 0;
+        if (siteHeader) {
+            headerBottom = Math.ceil(siteHeader.getBoundingClientRect().bottom);
+            if (headerBottom < 0) {
+                headerBottom = 0;
+            }
+        } else {
+            var st = getComputedStyle(d.documentElement);
+            var raw = st.getPropertyValue('--ensor-site-header-offset').trim();
+            headerBottom = parseFloat(raw);
+            if (!headerBottom || isNaN(headerBottom)) {
+                headerBottom = 104;
+            }
+        }
+        var st2 = getComputedStyle(d.documentElement);
+        var ph = parseFloat(st2.getPropertyValue('--ensor-reader-progress-h').trim());
+        if (!ph || isNaN(ph)) {
+            ph = 3;
+        }
+        return headerBottom + ph + 6;
+    }
+
+    /** Evita solapar título/meta: el chip solo se muestra cuando la cabecera ya subió por encima de la zona fija. */
+    function isReaderIntroPastTopicChip() {
+        var head = root.querySelector('.ensor-reader-head');
+        if (!head) {
+            var y = window.pageYOffset || d.documentElement.scrollTop || 0;
+            return y > 160;
+        }
+        var chipTop = getReaderChipTopPx();
+        return head.getBoundingClientRect().bottom < chipTop + 4;
+    }
+
+    function applyTopicChipVisibility() {
+        if (!topicChip || !topicChipText) return;
+        var label = (topicChipText.textContent || '').trim();
+        if (!label) {
+            topicChip.classList.remove('is-visible');
+            return;
+        }
+        topicChip.classList.toggle('is-visible', isReaderIntroPastTopicChip());
+    }
 
     function clamp(n, min, max) {
         return Math.max(min, Math.min(max, n));
@@ -134,7 +220,7 @@
             var match = contentEl.querySelector('#' + window.CSS.escape(id));
             var label = match ? match.textContent.replace(/#$/, '').trim() : '';
             topicChipText.textContent = label;
-            topicChip.classList.toggle('is-visible', !!label);
+            applyTopicChipVisibility();
         }
     }
 
@@ -191,14 +277,21 @@
         // Set data-aud-label para cada sección (visible en CSS)
         var labelsMap = audienceLabels();
         var present = {};
+        // Mapa audiencia -> primer DOM node con esa audiencia (para hacer scroll)
+        var firstSectionFor = {};
         sections.forEach(function (sec) {
             var audAttr = (sec.getAttribute('data-aud') || '').trim().toLowerCase();
             if (!audAttr) return;
+            // Asegurar que ninguna sección esté oculta por configuración previa
+            sec.hidden = false;
             // Permitir múltiples audiencias por sección, separadas por espacio o coma
             var auds = audAttr.split(/[\s,]+/).filter(Boolean);
             sec.setAttribute('data-aud', auds.join(' '));
             sec.setAttribute('data-aud-label', auds.map(function (a) { return labelsMap[a] || titleCase(a); }).join(' · '));
-            auds.forEach(function (a) { present[a] = true; });
+            auds.forEach(function (a) {
+                present[a] = true;
+                if (!firstSectionFor[a]) firstSectionFor[a] = sec;
+            });
         });
 
         var keys = Object.keys(present).sort(function (a, b) {
@@ -214,28 +307,89 @@
             return;
         }
 
-        bar.innerHTML = '<span class="ensor-reader-aud__label">Filtrar</span>' +
-            '<button type="button" class="ensor-reader-aud__chip is-active" data-aud="*">Todo</button>' +
+        // Ahora es navegación, no filtro: cambiamos rol y label.
+        bar.setAttribute('role', 'navigation');
+        bar.setAttribute('aria-label', 'Saltar a sección del log');
+        bar.dataset.mode = 'jump';
+
+        bar.innerHTML = '<span class="ensor-reader-aud__label">Ir a</span>' +
             keys.map(function (a) {
-                return '<button type="button" class="ensor-reader-aud__chip" data-aud="' + escapeHtml(a) + '">' + escapeHtml(labelsMap[a] || titleCase(a)) + '</button>';
+                var sec = firstSectionFor[a];
+                var href = sec && sec.id ? '#' + sec.id :
+                           (sec && sec.querySelector('[id]') ? '#' + sec.querySelector('[id]').id : '');
+                return '<a class="ensor-reader-aud__chip" data-aud="' + escapeHtml(a) + '"' +
+                       (href ? ' href="' + escapeHtml(href) + '"' : '') +
+                       '>' + escapeHtml(labelsMap[a] || titleCase(a)) + '</a>';
             }).join('');
+
+        // Offset vertical del scroll: borde inferior de la barra de progreso (debajo del header)
+        function getScrollOffset() {
+            var pb = d.querySelector('.ensor-reader-progress');
+            if (pb) {
+                return Math.round(pb.getBoundingClientRect().bottom) + 10;
+            }
+            var st = getComputedStyle(d.documentElement);
+            var raw = st.getPropertyValue('--ensor-site-header-offset').trim();
+            var topPx = parseFloat(raw);
+            if (!topPx || isNaN(topPx)) {
+                topPx = 104;
+            }
+            var ph = parseFloat(st.getPropertyValue('--ensor-reader-progress-h'));
+            if (!ph || isNaN(ph)) ph = 3;
+            return Math.round(topPx + ph) + 10;
+        }
+
+        function flashSection(sec) {
+            if (!sec) return;
+            sec.classList.remove('is-jump-target');
+            // forzar reflow para reiniciar la animación
+            void sec.offsetWidth;
+            sec.classList.add('is-jump-target');
+            setTimeout(function () { sec.classList.remove('is-jump-target'); }, 2200);
+        }
+
+        function jumpTo(aud) {
+            var sec = firstSectionFor[aud];
+            if (!sec) return;
+            var rect = sec.getBoundingClientRect();
+            var y = window.scrollY + rect.top - getScrollOffset();
+            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+            flashSection(sec);
+        }
 
         bar.addEventListener('click', function (e) {
             var btn = e.target.closest('.ensor-reader-aud__chip');
             if (!btn) return;
-            var target = btn.dataset.aud;
+            e.preventDefault();
+            var aud = btn.dataset.aud;
             var chips = bar.querySelectorAll('.ensor-reader-aud__chip');
             chips.forEach(function (c) { c.classList.toggle('is-active', c === btn); });
-            sections.forEach(function (sec) {
-                if (target === '*') {
-                    sec.hidden = false;
-                    return;
-                }
-                var auds = (sec.getAttribute('data-aud') || '').split(' ');
-                sec.hidden = auds.indexOf(target) === -1;
-            });
-            updateProgress();
+            jumpTo(aud);
         });
+
+        // Mientras el usuario scrollea, marcamos como activo el chip de la sección visible
+        if ('IntersectionObserver' in window) {
+            var ioMap = {};
+            sections.forEach(function (sec) {
+                var firstAud = (sec.getAttribute('data-aud') || '').split(/\s+/)[0];
+                if (firstAud) ioMap[firstAud] = sec;
+            });
+            var visibleAud = null;
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var aud = (entry.target.getAttribute('data-aud') || '').split(/\s+/)[0];
+                        if (!aud || aud === visibleAud) return;
+                        visibleAud = aud;
+                        var chips = bar.querySelectorAll('.ensor-reader-aud__chip');
+                        chips.forEach(function (c) {
+                            c.classList.toggle('is-active', c.dataset.aud === aud);
+                        });
+                    }
+                });
+            }, { rootMargin: '-30% 0px -55% 0px', threshold: 0.01 });
+            sections.forEach(function (sec) { io.observe(sec); });
+        }
     }
 
     function titleCase(s) {
@@ -339,6 +493,7 @@
     }
 
     ready(function () {
+        syncSiteHeaderOffset();
         var headings = ensureHeadingIds();
         buildTOC(headings);
         watchHeadings(headings);
@@ -346,7 +501,22 @@
         initMobileSheet();
         initAiPrompts();
         updateProgress();
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        window.addEventListener('resize', updateProgress, { passive: true });
+        function onScrollResize() {
+            scheduleSyncSiteHeaderOffset();
+            updateProgress();
+            applyTopicChipVisibility();
+        }
+        window.addEventListener('scroll', onScrollResize, { passive: true });
+        window.addEventListener('resize', onScrollResize, { passive: true });
+        window.addEventListener('load', function () {
+            scheduleSyncSiteHeaderOffset();
+            updateProgress();
+            applyTopicChipVisibility();
+        });
+        requestAnimationFrame(function () {
+            scheduleSyncSiteHeaderOffset();
+            updateProgress();
+            applyTopicChipVisibility();
+        });
     });
 })();

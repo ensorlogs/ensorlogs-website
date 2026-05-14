@@ -1,55 +1,35 @@
-# Datos para completar Ensorlogs CV
+# Plantilla — datos para el CV (Ensorlogs)
 
-Rellena esta guia y te dejo toda la plantilla finalizada con tu informacion real.
+Rellena y luego se puede volcar a la web o al PDF sin inventar nada en caliente.
 
-## 1) Perfil principal
+## 1) Perfil
 - Nombre completo:
-- Titular profesional (ej: Desarrollador Full Stack):
-- Ubicacion:
-- Estado laboral (Disponible / No disponible):
-- Resumen profesional (4-6 lineas):
+- Titular / rol (una línea):
+- Ubicación:
+- Disponibilidad (sí / no / parcial):
+- Resumen (4–6 líneas, tono tú):
 
 ## 2) Contacto
 - Email:
-- Telefono (opcional):
-- LinkedIn URL:
-- GitHub URL:
-- Web personal u otra red:
+- Teléfono (opcional):
+- LinkedIn:
+- GitHub u otro código:
+- Web o red adicional:
 
-## 3) Experiencia laboral
-Incluye 3-6 experiencias en este formato:
-- Empresa:
-- Rol:
-- Periodo:
-- Logros (2-4 bullets):
-- Tecnologias usadas:
+## 3) Experiencia (3–6 bloques)
+Por cada una: empresa, rol, fechas, 2–4 logros concretos, stack que usaste.
 
-## 4) Formacion
-- Institucion:
-- Titulo:
-- Periodo:
-- Detalles relevantes:
+## 4) Formación
+Institución, título, fechas, detalle si aporta.
 
-## 5) Skills y stack
-- Lenguajes:
-- Frameworks:
-- Herramientas:
-- Plataformas:
+## 5) Stack
+Lenguajes, frameworks, herramientas, cloud/hosting que domines de verdad.
 
-## 6) Proyectos destacados
-Incluye 3-8 proyectos:
-- Nombre:
-- Descripcion corta:
-- Stack:
-- URL del proyecto:
-- URL del repositorio:
+## 6) Proyectos (3–8)
+Nombre, una frase de qué era, stack, URL pública, repo si es abierto.
 
-## 7) Estadisticas (opcionales)
-- Anos de experiencia:
-- Proyectos finalizados:
-- Clientes o equipos:
-- Certificaciones:
+## 7) Opcional
+Años aproximados, nº proyectos, certificaciones (solo si las puedes demostrar).
 
-## 8) CV descargable
-- Ruta del PDF (si ya existe):
-- Nombre del archivo final (ej: ensor-logs-cv.pdf):
+## 8) PDF
+Ruta o nombre del archivo si ya está subido al repo (`assets/pdf/…`).
