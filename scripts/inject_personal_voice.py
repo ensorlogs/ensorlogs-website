@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Aplica la voz "Ensorlogs" (documentar · conectar · ayudar) en las zonas
-estratégicas del sitio: mobile menu CTA, terminal CTA del home, intros de
-Servicios y Proyectos. Idempotente: si encuentra el texto ya nuevo, no toca.
+estratégicas del sitio: mobile menu CTA, intros de Servicios,
+Proyectos y Blog. Idempotente: si encuentra el texto ya nuevo, no toca.
 """
 from __future__ import annotations
 
@@ -54,22 +54,12 @@ REPLACEMENTS: list[tuple[str, str]] = [
         "esc_html_e('Tienes una propuesta', 'ensorlogs')",
         "esc_html_e('¿Hablamos', 'ensorlogs')",
     ),
-    # 2) Terminal CTA del home  (label superior)
-    (
-        '<p class="text-sm opacity-70">\n                                TIENES UNA PROPUESTA?\n                            </p>',
-        '<p class="text-sm opacity-70">\n                                ¿TIENES UNA IDEA EN MENTE?\n                            </p>',
-    ),
-    # 3) Servicios — intro personal (insertar bajada después del párrafo largo)
+    # 2) Servicios — intro personal (insertar bajada después del párrafo largo)
     (
         '<h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-6">\n                        Servicios\n                    </h5>',
         '<h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-2">\n                        Servicios\n                    </h5>\n                    <p class="text-sm font-medium text-darkGray dark:text-pastelGrey mb-5 leading-relaxed">\n                        Donde puedo darte una mano — desde tecnología hasta formación.\n                    </p>',
     ),
-    # 4) Proyectos — añadir sub-texto bajo el H1 (antes de la línea decorativa)
-    (
-        '<h1 id="proyectos-temas-heading" class="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold text-powerBlack dark:text-pastelGrey tracking-tight text-balance max-w-4xl leading-tight">\n                        Cómo he aplicado los stacks en la vida real\n                    </h1>\n                    <span class="ensor-tagline-rule mt-4 h-0.5 max-w-[14rem] rounded-full block" aria-hidden="true"></span>\n                    <p class="mt-4 text-sm md:text-base text-darkGray dark:text-pastelGrey max-w-3xl leading-relaxed">\n                        Aquí encontrarás implementaciones con Linux, WordPress, CRM, bases de datos, Google Workspace, automatización y otras herramientas que forman parte de mi día a día.\n                    </p>',
-        '<h1 id="proyectos-temas-heading" class="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold text-powerBlack dark:text-pastelGrey tracking-tight text-balance max-w-4xl leading-tight">\n                        Cómo he aplicado los stacks en la vida real\n                    </h1>\n                    <span class="ensor-tagline-rule mt-4 h-0.5 max-w-[14rem] rounded-full block" aria-hidden="true"></span>\n                    <p class="mt-4 text-sm md:text-base text-darkGray dark:text-pastelGrey max-w-3xl leading-relaxed">\n                        Cada proyecto es también un log: implementaciones reales con Linux, WordPress, CRM, bases de datos, Google Workspace y automatización. Lo que aprendí trabajando con clientes y equipos, escrito sin maquillaje para que puedas ver cómo lo resolvería en el tuyo.\n                    </p>',
-    ),
-    # 5) Blog — añadir bajada bajo "Hablemos de…"
+    # 3) Blog — añadir bajada bajo "Hablemos de…"
     (
         '<h1 id="blog-temas-heading" class="text-2xl md:text-3xl xl:text-4xl font-bold text-powerBlack dark:text-pastelGrey tracking-tight">\n                        Hablemos de…\n                    </h1>\n                    <span class="ensor-tagline-rule mt-4 h-0.5 max-w-[14rem] rounded-full block" aria-hidden="true"></span>',
         '<h1 id="blog-temas-heading" class="text-2xl md:text-3xl xl:text-4xl font-bold text-powerBlack dark:text-pastelGrey tracking-tight">\n                        Hablemos de…\n                    </h1>\n                    <span class="ensor-tagline-rule mt-4 h-0.5 max-w-[14rem] rounded-full block" aria-hidden="true"></span>\n                    <p class="mt-4 text-sm md:text-base text-darkGray dark:text-pastelGrey max-w-3xl leading-relaxed">\n                        Aquí dejo escritos los <strong class="text-powerBlack dark:text-pastelGrey font-semibold">logs</strong> de lo que aprendo, pruebo y enseño. Elige un stack y entra al detalle — o ve todos abajo.\n                    </p>',

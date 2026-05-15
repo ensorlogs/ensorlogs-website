@@ -679,6 +679,18 @@ html.dark .ensor-reader-toc__list {
     font-size: 0.825rem;
     opacity: 0.85;
 }
+.ensor-reader-toc__item--quiz .ensor-reader-toc__link {
+    margin-top: 0.35rem;
+    padding-top: 0.55rem;
+    border-top: 1px dashed var(--ensor-reader-edge);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+}
+html.dark .ensor-reader-toc__item--quiz .ensor-reader-toc__link {
+    border-top-color: var(--ensor-reader-edge-dark);
+}
 
 /* Mobile TOC trigger (botón flotante) */
 .ensor-reader-toc-toggle {

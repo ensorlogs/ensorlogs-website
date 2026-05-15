@@ -21,21 +21,7 @@
  * declarar variables globales.
  */
 (function () {
-    function normalizePath(p) {
-        p = (p || '').replace(/\\/g, '/');
-        if (!p || p === '/') {
-            return '/';
-        }
-        return p.replace(/\/+$/, '') || '/';
-    }
-
     function isHomePage() {
-        var g = typeof window !== 'undefined' ? window.ENSORLOGS : null;
-        if (g && typeof g.homePath === 'string' && g.homePath.length) {
-            var path = normalizePath(window.location.pathname || '');
-            var home = normalizePath(g.homePath);
-            return path === home;
-        }
         var href = window.location.href || '';
         var path = (window.location.pathname || '').replace(/\\/g, '/');
         var tail = (path.split('/').pop() || '').split('?')[0].split('#')[0];

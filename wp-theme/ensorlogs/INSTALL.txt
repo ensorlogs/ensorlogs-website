@@ -1,7 +1,42 @@
 Instalación del tema Ensorlogs (WordPress)
 ==========================================
 
-Versión: 1.9.2
+Versión: 1.9.5
+
+Novedades 1.9.5
+---------------
+   - Proyectos: se quita la cuadrícula de filtros por stack; nuevo título e
+     intro que invitan a explorar los casos reales (el listado CPT no cambia).
+   - Portada: terminal «Ultimos Logs», sin CTA bajo la consola; puntito verde
+     «Disponible» con parpadeo suave.
+   - CV en `PDF/CV Ensor Sanchez - IT.pdf` (Sobre y Credenciales).
+   - Lector: TOC con «Quiz» cuando el artículo incluye cuestionario.
+   - Actualizador GitHub apunta a `ensorlogs/ensorlogs-website`.
+
+   Actualización segura en un hosting con contenido ya editado
+   ------------------------------------------------------------
+   Al subir esta versión (zip o «Actualizar» desde GitHub) solo se sustituyen
+   archivos del tema (PHP, CSS, JS, fragmentos). El seed NO sobrescribe logs ni
+   proyectos que ya existan en la base de datos (mismo slug = se omite). No se
+   ha subido la versión interna del seed: no se reimporta el manifest al
+   actualizar. Si la página «Proyectos» tiene texto propio en el editor de
+   bloques, ese bloque prevalece sobre el fragmento del tema.
+
+Novedades 1.9.4
+---------------
+   - Paridad de `assets/css` y `assets/js` con el sitio estático del repo
+     al empaquetar el tema (misma base de marca y lector).
+   - CV descargable en `PDF/CV Ensor Sanchez - IT.pdf` (enlace en Sobre y
+     Credenciales); carpeta `assets/pdf` del tema queda vacía si no la usas.
+   - Ajustes de portada y marca ya integrados en esta build (barra de la
+     terminal, pill «Disponible», etc.).
+
+Novedades 1.9.3
+---------------
+   - Captura del tema (`screenshot.png`) renovada: estilo ilustración
+     acorde a la marca, con la web Ensorlogs en la pantalla del portátil.
+   - Descripción del tema en `style.css` alineada con la bitácora pública
+     (texto propio, menos genérico).
 
 Novedades 1.9.2
 ---------------
@@ -136,7 +171,7 @@ B) Por FTP/SFTP
 C) Actualizaciones automáticas desde GitHub
    - El tema consulta `https://api.github.com/repos/<repo>/releases/latest`
      cada 6 horas.
-   - El repo por defecto es `heyensor/bentoman-html`. Para cambiarlo, define
+   - El repo por defecto es `ensorlogs/ensorlogs-website`. Para cambiarlo, define
      en `wp-config.php`:
          define('ENSORLOGS_GITHUB_REPO', 'tu-usuario/tu-repo');
    - Para repos privados añade un token con scope `repo`:
@@ -335,7 +370,7 @@ director", para acompañar la lectura.
 13) Resumen de constantes opcionales (wp-config.php)
 ----------------------------------------------------
 
-   define('ENSORLOGS_GITHUB_REPO',   'usuario/repo');   // por defecto: heyensor/bentoman-html
+   define('ENSORLOGS_GITHUB_REPO',   'usuario/repo');   // por defecto: ensorlogs/ensorlogs-website
    define('ENSORLOGS_GITHUB_ASSET',  'ensorlogs.zip');  // nombre del zip en el release
    define('ENSORLOGS_GITHUB_TOKEN',  'ghp_xxxxxxxxx');  // sólo si tu repo es privado
    define('ENSORLOGS_ALLOW_XMLRPC',  true);             // re-habilita XML-RPC

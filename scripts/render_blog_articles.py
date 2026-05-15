@@ -137,8 +137,10 @@ def _quiz_block_html(slug: str, quiz_in) -> str:
         return ""
 
     payload = _html.escape(_json.dumps({"questions": questions}, ensure_ascii=False), quote=True)
+    quiz_id = "ensor-quiz-" + _slug_from_filename(slug)
     return (
-        f'<section class="ensor-quiz" data-slug="{_html.escape(slug, quote=True)}" '
+        f'<section class="ensor-quiz" id="{_html.escape(quiz_id, quote=True)}" '
+        f'data-slug="{_html.escape(slug, quote=True)}" '
         f'data-quiz="{payload}" aria-labelledby="ensor-quiz-title-{_html.escape(slug, quote=True)}"></section>'
     )
 

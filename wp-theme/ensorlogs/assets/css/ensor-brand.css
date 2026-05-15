@@ -2189,11 +2189,25 @@ html.dark .ensor-calendly-icon {
     );
 }
 
+@keyframes ensor-cta-dot-blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+
 /* Pill "Disponible · agenda 30 min" — interactivo */
 .ensor-pulse-dot.ensor-pulse-dot--cta {
     text-decoration: none !important;
     cursor: pointer;
     transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.ensor-pulse-dot.ensor-pulse-dot--cta::before {
+    animation: ensor-cta-dot-blink 1.5s ease-in-out infinite;
 }
 
 .ensor-pulse-dot.ensor-pulse-dot--cta:hover,
@@ -2210,6 +2224,10 @@ html.dark .ensor-calendly-icon {
     a:hover > .ensor-calendly-icon {
         transition: none;
         transform: none !important;
+    }
+
+    .ensor-pulse-dot.ensor-pulse-dot--cta::before {
+        animation: none;
     }
 }
 

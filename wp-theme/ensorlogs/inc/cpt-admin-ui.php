@@ -856,7 +856,8 @@ function ensorlogs_render_quiz_section(int $post_id): string
     }
     $slug    = (string) get_post_field('post_name', $post_id);
     $payload = wp_json_encode(array('questions' => $questions));
-    return '<section class="ensor-quiz" data-slug="' . esc_attr($slug) . '" '
+    $quiz_id = 'ensor-quiz-' . sanitize_title($slug);
+    return '<section class="ensor-quiz" id="' . esc_attr($quiz_id) . '" data-slug="' . esc_attr($slug) . '" '
         . 'data-quiz="' . esc_attr($payload) . '"></section>';
 }
 

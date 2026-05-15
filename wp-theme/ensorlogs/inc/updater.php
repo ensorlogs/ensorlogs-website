@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('ENSORLOGS_GITHUB_REPO')) {
-    define('ENSORLOGS_GITHUB_REPO', 'heyensor/bentoman-html');
+    define('ENSORLOGS_GITHUB_REPO', 'ensorlogs/ensorlogs-website');
 }
 if (!defined('ENSORLOGS_GITHUB_ASSET')) {
     define('ENSORLOGS_GITHUB_ASSET', 'ensorlogs.zip');
