@@ -1,0 +1,16 @@
+# Ensorlogs theme: no servir archivos internos del tema por HTTP.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(inc|partials|seed-html|template-parts)(/|$) - [F,L,NC]
+</IfModule>
+
+<FilesMatch "(^\.|.*\.(php|md|markdown|txt|json|lock|bak|backup|old|orig|swp|sql|sqlite|sqlite3|env|ini|log|sh|py|map)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>

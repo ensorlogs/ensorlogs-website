@@ -7,3 +7,26 @@ __pycache__/
 # Originales de cámara (pesados); en web usamos jpg/webp exportados
 *.HEIC
 *.heic
+
+# No publicar fuentes ni notas internas en el repo público.
+docs/
+content/
+scripts/
+src/
+CV-CONTENIDO.md
+assets/audio/README.md
+wp-theme/ensorlogs/INSTALL.txt
+wp-theme/ensorlogs/seed-html/
+
+# Archivos sensibles o de trabajo local.
+.env
+.env.*
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+*.old
+*.orig
+*.swp
