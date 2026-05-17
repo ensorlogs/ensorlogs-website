@@ -1,7 +1,7 @@
-# Ensorlogs Website
+# Ensorlogs
 
-Repositorio público del sitio Ensorlogs.
+Este es el repo público de mi web: ensorlogs.com.
 
-La rama pública contiene únicamente los archivos necesarios para publicar la web y el tema WordPress. Las notas internas, fuentes Markdown, scripts de generación y documentación operativa se mantienen fuera del repositorio público.
+Aquí dejo solo lo necesario para publicar el sitio y el theme de WordPress. Las notas internas, borradores, scripts de trabajo y documentación operativa se quedan fuera del repo público.
 
 Sitio: https://ensorlogs.com

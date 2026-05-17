@@ -104,7 +104,10 @@
                     <!-- /ensor:editable -->
 
                     <!-- Main Contact Form Starts -->
-                    <form action="contact-form.php" method="post" class="relative mt-8 grid sm:grid-cols-2 gap-6" autocomplete="on">
+                    %%CONTACT_STATUS%%
+                    <form id="contact-form" action="%%CONTACT_FORM_ACTION%%" method="post" class="relative mt-8 grid sm:grid-cols-2 gap-6" autocomplete="on">
+                        <input type="hidden" name="action" value="ensorlogs_contact">
+                        %%CONTACT_FORM_NONCE%%
                         <!-- Anti-spam: no rellenar (honeypot) -->
                         <div class="absolute -left-[9999px] top-auto h-0 overflow-hidden" aria-hidden="true">
                             <label for="website">Sitio web</label>

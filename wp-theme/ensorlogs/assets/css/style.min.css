@@ -17,7 +17,7 @@ Support	      :	    Themearray@gmail.com
 4.  Tailwind Base Layer
     4.1    Global Typography 
 5. Custom Utilities Layer
-6. Custom Cursor Style
+6. Custom Pointer Style
 7. Custom Styles
 ------------------------------------------------------------------*/
 
@@ -2435,7 +2435,7 @@ html.dark input:-webkit-autofill,
 ------------------------------------------------------------------*/
 
 /*------------------------------------------------------------------
-[6. Custom Cursor Style]
+[6. Custom Pointer Style]
 ------------------------------------------------------------------*/
 
 .custom_cursor_one {

@@ -17,6 +17,8 @@ CV-CONTENIDO.md
 assets/audio/README.md
 wp-theme/ensorlogs/INSTALL.txt
 wp-theme/ensorlogs/seed-html/
+wp-theme/*.zip
+.cursor/
 
 # Archivos sensibles o de trabajo local.
 .env

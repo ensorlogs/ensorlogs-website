@@ -161,6 +161,10 @@ function ensorlogs_render_fragment(string $filename): string
     if (strpos($html, '%%HOME_LOG_TICKER_SEGMENTS%%') !== false) {
         $html = str_replace('%%HOME_LOG_TICKER_SEGMENTS%%', ensorlogs_home_log_ticker_segments_html(), $html);
     }
+    if (strpos($html, '%%CONTACT_') !== false && function_exists('ensorlogs_contact_fragment_tokens')) {
+        $contact = ensorlogs_contact_fragment_tokens();
+        $html    = str_replace(array_keys($contact), array_values($contact), $html);
+    }
     return $html;
 }
 
