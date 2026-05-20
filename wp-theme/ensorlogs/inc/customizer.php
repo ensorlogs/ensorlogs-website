@@ -76,6 +76,11 @@ function ensorlogs_sanitize_theme_default_mode($value): string
     return in_array($value, array('light', 'dark', 'system'), true) ? $value : 'system';
 }
 
+function ensorlogs_sanitize_checkbox($value): bool
+{
+    return (bool) $value;
+}
+
 /**
  * Helpers para leer los valores con default razonable.
  */
@@ -273,6 +278,70 @@ add_action(
                     'section'   => 'ensor_section_seo',
                     'mime_type' => 'image',
                 )
+            )
+        );
+
+        /* ---------- Newsletter ---------- */
+        $wp_customize->add_section(
+            'ensor_section_newsletter',
+            array(
+                'title' => __('Newsletter (Notifícame)', 'ensorlogs'),
+                'panel' => 'ensorlogs',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'ensor_newsletter_enabled',
+            array(
+                'default'           => true,
+                'transport'         => 'refresh',
+                'sanitize_callback' => 'ensorlogs_sanitize_checkbox',
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_newsletter_enabled',
+            array(
+                'label'   => __('Mostrar botones «Notifícame» y el modal', 'ensorlogs'),
+                'section' => 'ensor_section_newsletter',
+                'type'    => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'ensor_newsletter_title',
+            array(
+                'default'           => __('Entérate de los nuevos logs', 'ensorlogs'),
+                'transport'         => 'refresh',
+                'sanitize_callback' => 'sanitize_text_field',
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_newsletter_title',
+            array(
+                'label'       => __('Título del modal', 'ensorlogs'),
+                'description' => __('Deja el encabezado del plugin Mailchimp en blanco o corto para no duplicar este texto.', 'ensorlogs'),
+                'section'     => 'ensor_section_newsletter',
+                'type'        => 'text',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'ensor_newsletter_description',
+            array(
+                'default'           => __(
+                    'Suscríbete gratis a la lista y te aviso cuando publique un log nuevo: WordPress, datos, automatización y lo que vaya aprendiendo en la bitácora.',
+                    'ensorlogs'
+                ),
+                'transport'         => 'refresh',
+                'sanitize_callback' => 'sanitize_textarea_field',
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_newsletter_description',
+            array(
+                'label'   => __('Descripción del modal', 'ensorlogs'),
+                'section' => 'ensor_section_newsletter',
+                'type'    => 'textarea',
             )
         );
 

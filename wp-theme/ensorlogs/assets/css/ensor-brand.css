@@ -524,6 +524,7 @@ html.dark .ensor-tagline-rule {
 /* Titulares principales de páginas internas: negrita + subrayado amarillo de marca. */
 .main-content .container > section:first-child h1,
 .ensor-intro-card h1,
+.ensor-section-hero-title,
 .ensor-services-hero__title,
 .ensor-legal-hero__title,
 .blog-details-wrapper .blog-details-content > h1:first-child,
@@ -544,6 +545,7 @@ html.dark .ensor-tagline-rule {
 
 html.dark .main-content .container > section:first-child h1,
 html.dark .ensor-intro-card h1,
+html.dark .ensor-section-hero-title,
 html.dark .ensor-services-hero__title,
 html.dark .ensor-legal-hero__title,
 html.dark .blog-details-wrapper .blog-details-content > h1:first-child,
@@ -1080,6 +1082,25 @@ img.ensor-article-hero {
     display: none !important;
 }
 
+/* Títulos de intro blog / proyectos: mismo tamaño que servicios */
+.ensor-section-hero-title {
+    font-size: clamp(1.75rem, 4.2vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.055em;
+    color: var(--ensor-ink);
+    margin: 0;
+    text-wrap: balance;
+}
+
+html.dark .ensor-section-hero-title {
+    color: var(--ensor-paper);
+}
+
+#proyectos-intro-heading.ensor-section-hero-title {
+    max-width: 56rem;
+}
+
 /* Accesos del home “Hablemos de…” → categorías del blog */
 a.ensor-home-tema-pill {
     text-decoration: none;
@@ -1148,17 +1169,59 @@ html.dark a.ensor-blog-tema--todos.ensor-blog-tema--active {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* Enlaces “Solicitar información” en services.html (hover con tokens de marca) */
-a.ensor-servicio-cta {
-    transition: color 0.2s ease;
+/* CTA “Solicitar información” en fichas de servicios */
+.ensor-services-stack a.ensor-servicio-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.15rem;
+    padding: 0.7rem 1.35rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-decoration: none;
+    color: #1a1300 !important;
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ensor-accent, #d9a300) 92%, #fff) 0%,
+        var(--ensor-accent, #d9a300) 100%
+    );
+    border: 1px solid rgba(120, 82, 0, 0.28);
+    box-shadow:
+        0 2px 0 rgba(120, 82, 0, 0.12),
+        0 6px 18px rgba(var(--ensor-accent-rgb), 0.38);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
 }
 
-a.ensor-servicio-cta:hover {
-    color: var(--ensor-accent);
+.ensor-services-stack a.ensor-servicio-cta:hover {
+    color: #1a1300 !important;
+    filter: brightness(1.03);
+    transform: translateY(-2px);
+    box-shadow:
+        0 3px 0 rgba(120, 82, 0, 0.14),
+        0 10px 24px rgba(var(--ensor-accent-rgb), 0.45);
 }
 
-html.dark a.ensor-servicio-cta:hover {
-    color: var(--ensor-accent-on-dark);
+.ensor-services-stack a.ensor-servicio-cta:focus-visible {
+    outline: 2px solid var(--ensor-accent);
+    outline-offset: 3px;
+}
+
+html.dark .ensor-services-stack a.ensor-servicio-cta {
+    color: #1a1300 !important;
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.35);
+    box-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.2),
+        0 8px 22px rgba(var(--ensor-accent-rgb), 0.32);
+}
+
+html.dark .ensor-services-stack a.ensor-servicio-cta:hover {
+    color: #1a1300 !important;
+    filter: brightness(1.06);
 }
 
 /* ---------- Servicios: columna lateral + índice (services.html) ---------- */
@@ -1311,13 +1374,35 @@ html.dark .ensor-mindmap-branch:focus-visible {
     }
 }
 
+/* Servicios: sin columna lateral (sidebar retirada del fragmento) */
+.page-services .ensor-services-sidebar {
+    display: none !important;
+}
+
+.page-services .grid.lg\:grid-cols-3 {
+    grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.page-services .ensor-services-stack.lg\:col-span-2 {
+    grid-column: 1 / -1 !important;
+    width: 100%;
+    max-width: none;
+}
+
 /* ---------- Servicios: tarjetas apiladas (mazo / escalera) + acento oro ---------- */
 .ensor-services-stack {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    gap: 1.75rem;
     padding-top: 0.35rem;
     padding-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+    .ensor-services-stack {
+        gap: 2.25rem;
+    }
 }
 
 .ensor-services-stack .ensor-service-card {
@@ -1363,75 +1448,19 @@ html.dark .ensor-services-stack .ensor-service-card {
         0 18px 44px rgba(var(--ensor-accent-rgb), 0.08);
 }
 
-/* Más solapamiento = lectura más clara del “mazo” */
 .ensor-services-stack .ensor-service-card + .ensor-service-card {
-    margin-top: -2.15rem;
+    margin-top: 0;
 }
 
-@media (min-width: 640px) {
-    .ensor-services-stack .ensor-service-card + .ensor-service-card {
-        margin-top: -2.85rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .ensor-services-stack .ensor-service-card + .ensor-service-card {
-        margin-top: -3.6rem;
-    }
-}
-
-/* Escalera: cada tarjeta inferior luce un poco más “lejos” hasta interactuar */
-.ensor-services-stack .ensor-service-card:nth-child(1) {
-    z-index: 1;
-    transform: translateY(0) scale(1);
-    filter: saturate(1.02);
-}
-
-.ensor-services-stack .ensor-service-card:nth-child(2) {
-    z-index: 2;
-    transform: translateY(0) scale(0.988);
-    filter: saturate(1) brightness(0.995);
-}
-
-.ensor-services-stack .ensor-service-card:nth-child(3) {
-    z-index: 3;
-    transform: translateY(0) scale(0.976);
-    filter: brightness(0.99);
-}
-
-.ensor-services-stack .ensor-service-card:nth-child(4) {
-    z-index: 4;
-    transform: translateY(0) scale(0.964);
-    filter: brightness(0.985);
-}
-
-.ensor-services-stack .ensor-service-card:nth-child(5) {
-    z-index: 5;
-    transform: translateY(0) scale(0.952);
-    filter: brightness(0.98);
-}
-
-@media (max-width: 639px) {
-    .ensor-services-stack .ensor-service-card:nth-child(2) {
-        transform: translateY(0) scale(0.993);
-    }
-
-    .ensor-services-stack .ensor-service-card:nth-child(3) {
-        transform: translateY(0) scale(0.986);
-    }
-
-    .ensor-services-stack .ensor-service-card:nth-child(4) {
-        transform: translateY(0) scale(0.979);
-    }
-
-    .ensor-services-stack .ensor-service-card:nth-child(5) {
-        transform: translateY(0) scale(0.972);
-    }
+.ensor-services-stack .ensor-service-card:nth-child(n) {
+    z-index: auto;
+    transform: none;
+    filter: none;
 }
 
 .ensor-services-stack .ensor-service-card:hover {
-    transform: translateY(-16px) scale(1) !important;
-    z-index: 40 !important;
+    transform: translateY(-4px) !important;
+    z-index: 2 !important;
     filter: saturate(1.05) brightness(1) !important;
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.85),
@@ -2397,9 +2426,8 @@ html.dark .ensor-services-hero {
     position: relative;
     margin: 0;
     width: 100%;
-    /* Menos alto que 16:9 a ancho completo: franja tipo “banner” hasta sustituir la foto. */
-    height: clamp(10.25rem, 24vw, 17rem);
-    max-height: min(34vh, 19rem);
+    height: clamp(11.5rem, 28vw, 18.5rem);
+    max-height: min(38vh, 21rem);
     overflow: hidden;
     background: linear-gradient(
         135deg,
@@ -2415,6 +2443,10 @@ html.dark .ensor-services-hero {
     object-position: center 42%;
     display: block;
     transition: transform 0.6s ease;
+}
+
+.ensor-services-hero__media--workspace img {
+    object-position: center 42%;
 }
 
 .ensor-services-hero:hover .ensor-services-hero__media img {
@@ -2500,6 +2532,7 @@ html.dark .ensor-services-hero__dot {
     font-size: clamp(1.75rem, 4.2vw, 3.2rem);
     font-weight: 700;
     line-height: 1.15;
+    letter-spacing: -0.055em;
     color: var(--ensor-ink);
     margin: 0;
     text-wrap: balance;

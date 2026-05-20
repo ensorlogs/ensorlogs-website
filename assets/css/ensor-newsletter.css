@@ -1,0 +1,184 @@
+/* Ensorlogs · Modal newsletter (Mailchimp) */
+
+body.ensor-newsletter-open {
+    overflow: hidden;
+}
+
+.ensor-newsletter-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.ensor-newsletter-modal.is-open {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+}
+
+.ensor-newsletter-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 12, 0.62);
+    backdrop-filter: blur(4px);
+}
+
+.ensor-newsletter-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 28rem);
+    max-height: min(92vh, 40rem);
+    overflow: auto;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: linear-gradient(180deg, #fffdf8 0%, #f7f3ea 100%);
+    color: var(--ensor-ink, #1a1300);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+html.dark .ensor-newsletter-modal__panel {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, #23242b 0%, #17181d 100%);
+    color: #f3f4f6;
+}
+
+.ensor-newsletter-modal__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+    opacity: 0.75;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.ensor-newsletter-modal__close:hover,
+.ensor-newsletter-modal__close:focus-visible {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
+html.dark .ensor-newsletter-modal__close:hover,
+html.dark .ensor-newsletter-modal__close:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.ensor-newsletter-modal__title {
+    margin: 0 2rem 0.5rem 0;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.ensor-newsletter-modal__lead {
+    margin: 0 0 1.25rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: rgba(26, 19, 0, 0.82);
+}
+
+html.dark .ensor-newsletter-modal__lead {
+    color: rgba(243, 244, 246, 0.82);
+}
+
+.ensor-newsletter-modal__legal {
+    margin: 1rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: rgba(26, 19, 0, 0.7);
+}
+
+html.dark .ensor-newsletter-modal__legal {
+    color: rgba(243, 244, 246, 0.68);
+}
+
+.ensor-newsletter-modal__legal a {
+    color: var(--ensor-accent, #d9a300);
+    text-decoration: underline;
+}
+
+.ensor-newsletter-form__fallback {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.ensor-newsletter-form :where(h1, h2, h3, h4, .mc_header, #mc_subheader) {
+    display: none;
+}
+
+.ensor-newsletter-form :where(label, .mc_var_label) {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.ensor-newsletter-form :where(input[type="email"], input[type="text"], .mc_input) {
+    width: 100%;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #fff;
+    color: inherit;
+    padding: 0.7rem 1rem;
+    font-size: 0.92rem;
+    margin-bottom: 0.75rem;
+}
+
+html.dark .ensor-newsletter-form :where(input[type="email"], input[type="text"], .mc_input) {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.ensor-newsletter-form :where(input[type="submit"], button[type="submit"], #mc_signup_submit, .button, .mc_signup_submit) {
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.72rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--ensor-accent, #d9a300);
+    color: #1a1300;
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.ensor-newsletter-form :where(input[type="submit"], button[type="submit"], #mc_signup_submit, .button, .mc_signup_submit):hover {
+    filter: brightness(0.95);
+}
+
+.ensor-footer-cta__newsletter {
+    margin-top: 1.25rem;
+}
+
+.ensor-contact-newsletter {
+    margin-top: 0.75rem;
+}
+
+.ensor-reader-footer .ensor-newsletter-open {
+    border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-newsletter-modal {
+        transition: none;
+    }
+}

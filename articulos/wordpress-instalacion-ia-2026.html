@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="../assets/css/aos-2.3.1.min.css">
     <link rel="stylesheet" href="../assets/css/style.min.css">
     <link rel="stylesheet" href="../assets/css/ensor-brand.css">
+    <link rel="stylesheet" href="../assets/css/ensor-newsletter.css">
     <link rel="stylesheet" href="../assets/css/ensor-reader.css">
 
     <link rel="stylesheet" href="../assets/css/ensor-a11y.css">
@@ -127,6 +128,7 @@
                     <a href="../contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
                         <span>Hablemos</span>
                     </a>
+                            <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-outline rounded-full text-regular py-2 px-5 md:py-2.5 md:px-7 leading-snug">Notifícame</button>
                     <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
                         <i class="fal fa-bars"></i>
                     </button>
@@ -440,7 +442,10 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
                 <p class="ensor-footer-cta__lead">
                     Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
                 </p>
-                <p class="ensor-footer-cta__alt">
+                                <p class="ensor-footer-cta__newsletter">
+                    <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-outline rounded-full text-regular py-2 lg:py-3 px-7 lg:px-10">Notifícame</button>
+                </p>
+<p class="ensor-footer-cta__alt">
                     <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>
                         <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
@@ -493,8 +498,43 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
     <!-- Js Library End -->
     <script defer src="../assets/js/ensor-a11y.js"></script>
     <script defer src="../assets/js/ensor-cookies.js"></script>
+    <script defer src="../assets/js/ensor-newsletter.js"></script>
     <script defer src="../assets/js/ensor-podcast.js"></script>
     <script defer src="../assets/js/ensor-quiz.js"></script>
+
+<div
+    id="ensor-newsletter-modal"
+    class="ensor-newsletter-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ensor-newsletter-title"
+    aria-describedby="ensor-newsletter-desc"
+    aria-hidden="true"
+    hidden
+>
+    <div class="ensor-newsletter-modal__overlay" data-ensor-newsletter-close tabindex="-1"></div>
+    <div class="ensor-newsletter-modal__panel">
+        <button type="button" class="ensor-newsletter-modal__close" data-ensor-newsletter-close aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 id="ensor-newsletter-title" class="ensor-newsletter-modal__title">Entérate de los nuevos logs</h2>
+        <p id="ensor-newsletter-desc" class="ensor-newsletter-modal__lead">
+            Suscríbete gratis a la lista y te aviso cuando publique un log nuevo: WordPress, datos, automatización y lo que vaya aprendiendo en la bitácora.
+        </p>
+        <div class="ensor-newsletter-modal__form ensor-newsletter-form">
+            <form action="../contact.html" method="get">
+                <label for="ensor-newsletter-email-static">Tu correo electrónico</label>
+                <input type="email" id="ensor-newsletter-email-static" name="clientEmail" placeholder="Tu correo electrónico" required autocomplete="email">
+                <input type="hidden" name="contactSubject" value="Suscripción newsletter Ensorlogs">
+                <button type="submit">Suscribirme</button>
+            </form>        </div>
+        <p class="ensor-newsletter-modal__legal">
+            Al suscribirte aceptas recibir correos de la lista Ensorlogs.
+            Consulta la <a href="../legal/privacidad.html">política de privacidad</a>.
+        </p>
+    </div>
+</div>
+
 </body>
 
 </html>

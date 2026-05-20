@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="assets/css/aos-2.3.1.min.css">
     <link rel="stylesheet" href="assets/css/style.min.css">
     <link rel="stylesheet" href="assets/css/ensor-brand.css">
+    <link rel="stylesheet" href="assets/css/ensor-newsletter.css">
 
     <link rel="stylesheet" href="assets/css/ensor-a11y.css">
     <link rel="stylesheet" href="assets/css/ensor-cookies.css">
@@ -54,7 +55,7 @@
     <link rel="stylesheet" href="assets/css/ensor-quiz.css">
 </head>
 
-<body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
+<body class="page-services relative bg-[#F5F7F9] dark:bg-powerBlack">
     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Preloader
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -208,19 +209,17 @@
     <div class="main-content mt-28 md:mt-32 lg:mt-36 xl:mt-48">
         <div class="container">
             <section class="ensor-services-hero rounded-2xl overflow-hidden border border-flasWhite dark:border-flasBlack mb-6 lg:mb-8" data-aos="fade-up" aria-labelledby="services-hero-title">
-                <figure class="ensor-services-hero__media">
+                <figure class="ensor-services-hero__media ensor-services-hero__media--workspace">
                     <img
-                        src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=82"
-                        srcset="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80 800w, https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=82 1200w, https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=82 1600w"
-                        sizes="(max-width: 1024px) 100vw, 1180px"
-                        alt="Sesión de trabajo colaborativa con notas, planos y café — clima de taller técnico"
+                        src="assets/img/ensor-services-hero.jpg"
+                        alt="Ensor Sánchez trabajando en consultoría IT: código en pantallas y portátil en el escritorio"
                         width="1600"
                         height="900"
                         loading="eager"
                         fetchpriority="high"
                         decoding="async"
                     >
-                    <figcaption class="sr-only">Sesión de trabajo colaborativa — Ensorlogs servicios y formación</figcaption>
+                    <figcaption class="sr-only">Ensor Sánchez en el escritorio, desarrollo y consultoría — Ensorlogs servicios</figcaption>
                 </figure>
                 <div class="ensor-services-hero__content">
                     <p class="ensor-services-hero__eyebrow">
@@ -251,66 +250,8 @@
                     </div>
                 </div>
             </section>
-            <div class="grid lg:grid-cols-3 gap-6 items-start">
-                <div class="ensor-services-sidebar rounded-2xl p-4 lg:p-6 xl:p-10 border border-flasWhite dark:border-flasBlack lg:sticky top-36" data-aos="fade-up">
-                    <h5 class="text-powerBlack dark:text-pastelGrey font-semibold text-2xl xl:text-3xl mb-2">
-                        Servicios
-                    </h5>
-                    <p class="text-sm font-medium text-darkGray dark:text-pastelGrey mb-5 leading-relaxed">
-                        Donde puedo darte una mano — desde tecnología hasta formación.
-                    </p>
-                    <p class="text-sm text-darkGray dark:text-pastelGrey opacity-90 mb-5 leading-relaxed">
-                        Puedo acompañarte como <strong class="text-powerBlack dark:text-pastelGrey font-semibold">consultor externo</strong> o como <strong class="text-powerBlack dark:text-pastelGrey font-semibold">refuerzo dentro de tu empresa</strong>: priorizar la hoja de ruta digital, implementar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">web y aplicaciones</strong>, montar o evolucionar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">e-commerce</strong>, integrar <strong class="text-powerBlack dark:text-pastelGrey font-semibold">CRM y automatizaciones</strong>, alinear <strong class="text-powerBlack dark:text-pastelGrey font-semibold">marketing medible</strong> con comercial, construir <strong class="text-powerBlack dark:text-pastelGrey font-semibold">reporting y analítica de datos</strong>, dar continuidad a <strong class="text-powerBlack dark:text-pastelGrey font-semibold">infraestructura y soporte IT</strong>, y también <strong class="text-powerBlack dark:text-pastelGrey font-semibold">colaborar en formación</strong> —cursos, talleres y programas para equipos o eventos. Todo con entregables concretos y criterio de negocio. Más trayectoria en <a href="about.html" class="text-powerBlack dark:text-pastelGrey font-semibold underline-offset-2 hover:underline">Sobre mí</a>.
-                    </p>
-                    <nav class="ensor-service-mindmap" aria-label="Índice de servicios en esta página">
-                        <ul class="ensor-service-mindmap__branches">
-                            <li>
-                                <a href="#desarrollo_web_app" class="ensor-mindmap-branch">
-                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true">
-                                        <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10.6667 19.6665C10.4134 19.6665 10.1601 19.5732 9.96008 19.3732L7.29342 16.7065C6.90675 16.3198 6.90675 15.6798 7.29342 15.2931L9.96008 12.6264C10.3468 12.2398 10.9867 12.2398 11.3734 12.6264C11.7601 13.0131 11.7601 13.6532 11.3734 14.0398L9.41341 15.9998L11.3734 17.9598C11.7601 18.3464 11.7601 18.9865 11.3734 19.3732C11.1734 19.5732 10.9201 19.6665 10.6667 19.6665Z" fill="currentcolor"></path>
-                                            <path d="M21.3331 19.6665C21.0798 19.6665 20.8264 19.5732 20.6264 19.3732C20.2398 18.9865 20.2398 18.3464 20.6264 17.9598L22.5864 15.9998L20.6264 14.0398C20.2398 13.6532 20.2398 13.0131 20.6264 12.6264C21.0131 12.2398 21.6531 12.2398 22.0398 12.6264L24.7064 15.2931C25.0931 15.6798 25.0931 16.3198 24.7064 16.7065L22.0398 19.3732C21.8398 19.5732 21.5864 19.6665 21.3331 19.6665Z" fill="currentcolor"></path>
-                                            <path d="M15.9998 30.3332C8.09317 30.3332 1.6665 23.9065 1.6665 15.9998C1.6665 8.09317 8.09317 1.6665 15.9998 1.6665C23.9065 1.6665 30.3332 8.09317 30.3332 15.9998C30.3332 23.9065 23.9065 30.3332 15.9998 30.3332ZM15.9998 3.6665C9.19984 3.6665 3.6665 9.19984 3.6665 15.9998C3.6665 22.7998 9.19984 28.3332 15.9998 28.3332C22.7998 28.3332 28.3332 22.7998 28.3332 15.9998C28.3332 9.19984 22.7998 3.6665 15.9998 3.6665Z" fill="currentcolor"></path>
-                                            <path d="M14.6667 20.1069C14.5333 20.1069 14.4 20.0803 14.28 20.0269C13.7733 19.8136 13.5333 19.2269 13.76 18.7069L16.4267 12.4802C16.64 11.9735 17.2267 11.7335 17.7333 11.9602C18.24 12.1735 18.48 12.7603 18.2533 13.2803L15.5867 19.5069C15.4267 19.8802 15.0533 20.1069 14.6667 20.1069Z" fill="currentcolor"></path>
-                                        </svg>
-                                    </span>
-                                    <span class="ensor-mindmap-branch__label">Desarrollo Web / APP</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#ecommerce" class="ensor-mindmap-branch">
-                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-shopping-cart"></i></span>
-                                    <span class="ensor-mindmap-branch__label">E-commerce</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#marketing_digital" class="ensor-mindmap-branch">
-                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-bullhorn"></i></span>
-                                    <span class="ensor-mindmap-branch__label">Marketing digital</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#data_analyst" class="ensor-mindmap-branch">
-                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-chart-line"></i></span>
-                                    <span class="ensor-mindmap-branch__label">Data Analyst</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#soporte_it_server" class="ensor-mindmap-branch">
-                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-server"></i></span>
-                                    <span class="ensor-mindmap-branch__label">Soporte IT / Server</span>
-                                </a>
-                            </li>
-                            <li class="ensor-service-mindmap__branch--span">
-                                <a href="#formacion" class="ensor-mindmap-branch">
-                                    <span class="ensor-mindmap-branch__icon" aria-hidden="true"><i class="fal fa-chalkboard-teacher"></i></span>
-                                    <span class="ensor-mindmap-branch__label">Formación / Talleres</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="lg:col-span-2 ensor-services-stack" data-aos="fade-up">
+            <div class="ensor-services-stack" data-aos="fade-up">
+
                     <div id="desarrollo_web_app" class="ensor-service-card rounded-2xl p-4 lg:p-6 xl:p-10 border border-flasWhite dark:border-flasBlack">
                         <h5 class="text-powerBlack dark:text-pastelGrey font-bold text-2xl xl:text-3xl mb-4">
                             Desarrollo Web / APP
@@ -431,7 +372,6 @@
                             </a>
                         </p>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -456,7 +396,10 @@
                 <p class="ensor-footer-cta__lead">
                     Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.
                 </p>
-                <p class="ensor-footer-cta__alt">
+                                <p class="ensor-footer-cta__newsletter">
+                    <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-outline rounded-full text-regular py-2 lg:py-3 px-7 lg:px-10">Notifícame</button>
+                </p>
+<p class="ensor-footer-cta__alt">
                     <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>
                         <span>¿Prefieres una llamada? Reserva 30 min en Calendly</span>
@@ -507,7 +450,42 @@
     <!-- Js Library End -->
     <script defer src="assets/js/ensor-a11y.js"></script>
     <script defer src="assets/js/ensor-cookies.js"></script>
+    <script defer src="assets/js/ensor-newsletter.js"></script>
     <script defer src="assets/js/ensor-quiz.js"></script>
+
+<div
+    id="ensor-newsletter-modal"
+    class="ensor-newsletter-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ensor-newsletter-title"
+    aria-describedby="ensor-newsletter-desc"
+    aria-hidden="true"
+    hidden
+>
+    <div class="ensor-newsletter-modal__overlay" data-ensor-newsletter-close tabindex="-1"></div>
+    <div class="ensor-newsletter-modal__panel">
+        <button type="button" class="ensor-newsletter-modal__close" data-ensor-newsletter-close aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 id="ensor-newsletter-title" class="ensor-newsletter-modal__title">Entérate de los nuevos logs</h2>
+        <p id="ensor-newsletter-desc" class="ensor-newsletter-modal__lead">
+            Suscríbete gratis a la lista y te aviso cuando publique un log nuevo: WordPress, datos, automatización y lo que vaya aprendiendo en la bitácora.
+        </p>
+        <div class="ensor-newsletter-modal__form ensor-newsletter-form">
+            <form action="contact.html" method="get">
+                <label for="ensor-newsletter-email-static">Tu correo electrónico</label>
+                <input type="email" id="ensor-newsletter-email-static" name="clientEmail" placeholder="Tu correo electrónico" required autocomplete="email">
+                <input type="hidden" name="contactSubject" value="Suscripción newsletter Ensorlogs">
+                <button type="submit">Suscribirme</button>
+            </form>        </div>
+        <p class="ensor-newsletter-modal__legal">
+            Al suscribirte aceptas recibir correos de la lista Ensorlogs.
+            Consulta la <a href="legal/privacidad.html">política de privacidad</a>.
+        </p>
+    </div>
+</div>
+
 </body>
 
 </html>

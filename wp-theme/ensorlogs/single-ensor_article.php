@@ -242,6 +242,12 @@ while (have_posts()) {
                             <a href="<?php echo esc_url(home_url('/contact/')); ?>" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full no-underline">
                                 <span><?php esc_html_e('Hablemos', 'ensorlogs'); ?></span>
                             </a>
+                            <?php
+                            if (function_exists('ensorlogs_render_newsletter_button')) {
+                                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                echo ensorlogs_render_newsletter_button();
+                            }
+                            ?>
                         </div>
                     </footer>
                 </div>

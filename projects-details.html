@@ -16,6 +16,7 @@
     <p>Este detalle se movió a su propia página. <a href="proyectos/proyecto-villa-martina-residences.html">Ir a Villa Martina Residences</a>.</p>
     <script defer src="assets/js/ensor-a11y.js"></script>
     <script defer src="assets/js/ensor-cookies.js"></script>
+    <script defer src="assets/js/ensor-newsletter.js"></script>
     <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
         <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
             <a href="legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
@@ -26,5 +27,39 @@
         </nav>
     </div>
     <script defer src="assets/js/ensor-quiz.js"></script>
+
+<div
+    id="ensor-newsletter-modal"
+    class="ensor-newsletter-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ensor-newsletter-title"
+    aria-describedby="ensor-newsletter-desc"
+    aria-hidden="true"
+    hidden
+>
+    <div class="ensor-newsletter-modal__overlay" data-ensor-newsletter-close tabindex="-1"></div>
+    <div class="ensor-newsletter-modal__panel">
+        <button type="button" class="ensor-newsletter-modal__close" data-ensor-newsletter-close aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 id="ensor-newsletter-title" class="ensor-newsletter-modal__title">Entérate de los nuevos logs</h2>
+        <p id="ensor-newsletter-desc" class="ensor-newsletter-modal__lead">
+            Suscríbete gratis a la lista y te aviso cuando publique un log nuevo: WordPress, datos, automatización y lo que vaya aprendiendo en la bitácora.
+        </p>
+        <div class="ensor-newsletter-modal__form ensor-newsletter-form">
+            <form action="contact.html" method="get">
+                <label for="ensor-newsletter-email-static">Tu correo electrónico</label>
+                <input type="email" id="ensor-newsletter-email-static" name="clientEmail" placeholder="Tu correo electrónico" required autocomplete="email">
+                <input type="hidden" name="contactSubject" value="Suscripción newsletter Ensorlogs">
+                <button type="submit">Suscribirme</button>
+            </form>        </div>
+        <p class="ensor-newsletter-modal__legal">
+            Al suscribirte aceptas recibir correos de la lista Ensorlogs.
+            Consulta la <a href="legal/privacidad.html">política de privacidad</a>.
+        </p>
+    </div>
+</div>
+
 </body>
 </html>

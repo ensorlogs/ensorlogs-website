@@ -370,6 +370,7 @@ add_filter(
             'ensorlogs-blog-filter',
             'ensorlogs-projects-filter',
             'ensorlogs-reader',
+            'ensorlogs-newsletter',
         );
         if (!in_array($handle, $defer, true)) {
             return $tag;

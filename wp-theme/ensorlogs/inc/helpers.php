@@ -165,6 +165,10 @@ function ensorlogs_render_fragment(string $filename): string
         $contact = ensorlogs_contact_fragment_tokens();
         $html    = str_replace(array_keys($contact), array_values($contact), $html);
     }
+    if (strpos($html, '%%NEWSLETTER_') !== false && function_exists('ensorlogs_newsletter_fragment_tokens')) {
+        $newsletter = ensorlogs_newsletter_fragment_tokens();
+        $html       = str_replace(array_keys($newsletter), array_values($newsletter), $html);
+    }
     return $html;
 }
 

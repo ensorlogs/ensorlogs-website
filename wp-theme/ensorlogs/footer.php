@@ -35,6 +35,14 @@ if (!defined('ABSPATH')) {
                 <p class="ensor-footer-cta__lead">
                     <?php echo esc_html($ensor_footer_lead); ?>
                 </p>
+                <?php if (function_exists('ensorlogs_render_newsletter_button')) : ?>
+                    <p class="ensor-footer-cta__newsletter">
+                        <?php
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo ensorlogs_render_newsletter_button('ensor-footer-newsletter-btn');
+                        ?>
+                    </p>
+                <?php endif; ?>
                 <p class="ensor-footer-cta__alt">
                     <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>
@@ -81,6 +89,12 @@ if (!defined('ABSPATH')) {
 <a href="#top" title="<?php esc_attr_e('Scroll Top', 'ensorlogs'); ?>" id="scroll-top" class="topbutton fixed right-4 xl:right-7 2xl:right-8 bottom-6 xl:bottom-7.5 w-13 h-13 text-lg rounded-full bg-white dark:bg-powerBlack shadow-sm shadow-slate-400 grid place-content-center text-black dark:text-white opacity-0 invisible transition duration-200 [&.btn-show]:opacity-100 [&.btn-show]:visible z-[9999]">
     <i class="far fa-level-up-alt"></i>
 </a>
+
+<?php
+if (function_exists('ensorlogs_render_newsletter_modal')) {
+    ensorlogs_render_newsletter_modal();
+}
+?>
 
 <?php wp_footer(); ?>
 </body>
