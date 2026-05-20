@@ -481,7 +481,7 @@ function ensorlogs_render_seed_admin_page(): void
                         <p class="description">
                             <?php
                             esc_html_e(
-                                'El release en GitHub solo muestra la versión (sin zip público). La descarga la hace WordPress con tu token.',
+                                'Cada tag publica ensorlogs.zip en el release. WordPress lo instala desde Actualizaciones.',
                                 'ensorlogs'
                             );
                             ?>
@@ -493,11 +493,11 @@ function ensorlogs_render_seed_admin_page(): void
                     <td>
                         <?php if ($has_token) : ?>
                             <span style="color:#1a7f37;font-weight:600;">
-                                <?php esc_html_e('Configurado', 'ensorlogs'); ?>
+                                <?php esc_html_e('Configurado (repo privado)', 'ensorlogs'); ?>
                             </span>
                         <?php else : ?>
-                            <span style="color:#d63638;font-weight:600;">
-                                <?php esc_html_e('Falta `ENSORLOGS_GITHUB_TOKEN` — no podrás instalar actualizaciones.', 'ensorlogs'); ?>
+                            <span style="color:#1a7f37;font-weight:600;">
+                                <?php esc_html_e('No necesario si el repo es público y el release trae ensorlogs.zip', 'ensorlogs'); ?>
                             </span>
                         <?php endif; ?>
                     </td>
@@ -509,7 +509,7 @@ function ensorlogs_render_seed_admin_page(): void
             <?php wp_nonce_field('ensorlogs_check_update'); ?>
             <?php submit_button(__('Buscar actualizaciones ahora', 'ensorlogs'), 'secondary', 'submit', false); ?>
         </form>
-        <?php if ($has_new && $has_token) : ?>
+        <?php if ($has_new) : ?>
             <p style="margin-top:1em;">
                 <?php
                 printf(
@@ -518,10 +518,6 @@ function ensorlogs_render_seed_admin_page(): void
                     '<a href="' . esc_url(admin_url('update-core.php')) . '">' . esc_html__('Escritorio → Actualizaciones', 'ensorlogs') . '</a>'
                 );
                 ?>
-            </p>
-        <?php elseif ($has_new && !$has_token) : ?>
-            <p class="description" style="margin-top:1em;">
-                <?php esc_html_e('Hay una versión nueva en GitHub, pero necesitas el token en wp-config.php para instalarla.', 'ensorlogs'); ?>
             </p>
         <?php endif; ?>
     </div>
