@@ -2,14 +2,11 @@
 /**
  * Auto-actualización del tema desde GitHub Releases.
  *
- * Cuando publicas un nuevo release en GitHub con un asset llamado
- * `ensorlogs.zip`, WordPress detecta la nueva versión y propone la
- * actualización igual que con cualquier tema del directorio oficial.
+ * Publica un release en GitHub con el asset `ensorlogs.zip` (tag vX.Y.Z).
+ * El workflow `.github/workflows/release-theme.yml` lo genera al pushear el tag.
  *
- * Configuración: ajusta la constante `ENSORLOGS_GITHUB_REPO`
- * (`owner/repo`) en wp-config.php si tu repo no es el por defecto.
- * Para repos privados define `ENSORLOGS_GITHUB_TOKEN` con un PAT
- * de GitHub con scope `repo`.
+ * Configuración: `ENSORLOGS_GITHUB_REPO` (`owner/repo`) en wp-config.php.
+ * Repos privados: `ENSORLOGS_GITHUB_TOKEN` (PAT con scope `repo` o `public_repo`).
  *
  * @package Ensorlogs
  */
@@ -25,16 +22,18 @@ if (!defined('ENSORLOGS_GITHUB_ASSET')) {
     define('ENSORLOGS_GITHUB_ASSET', 'ensorlogs.zip');
 }
 
+/** @var string|null Último error de la API de GitHub (para el panel de mantenimiento). */
+$GLOBALS['ensorlogs_github_last_error'] = null;
+
 /**
- * Construye los headers para hablar con la API de GitHub.
- *
  * @return array<string, string>
  */
 function ensorlogs_github_headers(): array
 {
     $headers = array(
-        'Accept'     => 'application/vnd.github+json',
-        'User-Agent' => 'Ensorlogs-Theme-Updater',
+        'Accept'               => 'application/vnd.github+json',
+        'X-GitHub-Api-Version' => '2022-11-28',
+        'User-Agent'           => 'Ensorlogs-Theme-Updater',
     );
     if (defined('ENSORLOGS_GITHUB_TOKEN') && ENSORLOGS_GITHUB_TOKEN !== '') {
         $headers['Authorization'] = 'Bearer ' . ENSORLOGS_GITHUB_TOKEN;
@@ -43,7 +42,137 @@ function ensorlogs_github_headers(): array
 }
 
 /**
- * Devuelve el release "latest" de GitHub. Cacheado 6 horas en transient.
+ * Mensaje legible del último fallo al consultar GitHub.
+ */
+function ensorlogs_github_get_last_error(): string
+{
+    global $ensorlogs_github_last_error;
+    return is_string($ensorlogs_github_last_error) ? $ensorlogs_github_last_error : '';
+}
+
+/**
+ * @param array<string, mixed> $args
+ * @return array{code: int, body: mixed, error: string}
+ */
+function ensorlogs_github_api_get(string $path, array $args = array()): array
+{
+    global $ensorlogs_github_last_error;
+
+    $repo = (string) apply_filters('ensorlogs_github_repo', ENSORLOGS_GITHUB_REPO);
+    if ($repo === '') {
+        $ensorlogs_github_last_error = __('Repositorio GitHub vacío (`ENSORLOGS_GITHUB_REPO`).', 'ensorlogs');
+        return array('code' => 0, 'body' => null, 'error' => $ensorlogs_github_last_error);
+    }
+
+    $query = !empty($args) ? '?' . http_build_query($args) : '';
+    $url   = sprintf(
+        'https://api.github.com/repos/%s%s',
+        ensorlogs_rawurlencode_path($repo),
+        $path . $query
+    );
+
+    $response = wp_remote_get(
+        $url,
+        array(
+            'timeout' => 20,
+            'headers' => ensorlogs_github_headers(),
+        )
+    );
+
+    if (is_wp_error($response)) {
+        $ensorlogs_github_last_error = $response->get_error_message();
+        return array('code' => 0, 'body' => null, 'error' => $ensorlogs_github_last_error);
+    }
+
+    $code = (int) wp_remote_retrieve_response_code($response);
+    $raw  = (string) wp_remote_retrieve_body($response);
+    $body = json_decode($raw, true);
+
+    if ($code === 403) {
+        $ensorlogs_github_last_error = __(
+            'GitHub devolvió 403 (límite de API o repo privado). Define `ENSORLOGS_GITHUB_TOKEN` en wp-config.php.',
+            'ensorlogs'
+        );
+        return array('code' => $code, 'body' => $body, 'error' => $ensorlogs_github_last_error);
+    }
+
+    if ($code === 404) {
+        $ensorlogs_github_last_error = __(
+            'No hay releases publicados en el repo. Publica un tag `vX.Y.Z` con el workflow de release (asset ensorlogs.zip).',
+            'ensorlogs'
+        );
+        return array('code' => $code, 'body' => $body, 'error' => $ensorlogs_github_last_error);
+    }
+
+    if ($code < 200 || $code >= 300) {
+        $msg = is_array($body) && isset($body['message']) ? (string) $body['message'] : '';
+        $ensorlogs_github_last_error = sprintf(
+            /* translators: 1: HTTP code, 2: API message */
+            __('GitHub respondió %1$d%2$s', 'ensorlogs'),
+            $code,
+            $msg !== '' ? ': ' . $msg : ''
+        );
+        return array('code' => $code, 'body' => $body, 'error' => $ensorlogs_github_last_error);
+    }
+
+    $ensorlogs_github_last_error = null;
+    return array('code' => $code, 'body' => $body, 'error' => '');
+}
+
+/**
+ * Elige el release más reciente que tenga el zip del tema.
+ *
+ * @param array<int, array<string, mixed>> $releases
+ * @return array<string, mixed>|null
+ */
+function ensorlogs_github_pick_best_release(array $releases): ?array
+{
+    $asset_name = (string) apply_filters('ensorlogs_github_asset_name', ENSORLOGS_GITHUB_ASSET);
+    $best       = null;
+    $best_ver   = '0';
+
+    foreach ($releases as $release) {
+        if (!is_array($release)) {
+            continue;
+        }
+        if (!empty($release['draft']) || !empty($release['prerelease'])) {
+            continue;
+        }
+        $tag = isset($release['tag_name']) ? (string) $release['tag_name'] : '';
+        if ($tag === '') {
+            continue;
+        }
+        $has_zip = false;
+        if (!empty($release['assets']) && is_array($release['assets'])) {
+            foreach ($release['assets'] as $asset) {
+                if (!is_array($asset)) {
+                    continue;
+                }
+                if (
+                    isset($asset['name'], $asset['browser_download_url'])
+                    && (string) $asset['name'] === $asset_name
+                    && (string) $asset['browser_download_url'] !== ''
+                ) {
+                    $has_zip = true;
+                    break;
+                }
+            }
+        }
+        if (!$has_zip) {
+            continue;
+        }
+        $ver = ensorlogs_normalize_version($tag);
+        if ($best === null || version_compare($ver, $best_ver, '>')) {
+            $best     = $release;
+            $best_ver = $ver;
+        }
+    }
+
+    return $best;
+}
+
+/**
+ * Devuelve el release publicado más reciente con ensorlogs.zip. Cacheado 6 horas.
  *
  * @return array<string, mixed>|null
  */
@@ -56,32 +185,39 @@ function ensorlogs_github_get_latest_release(bool $force = false): ?array
             return $cached;
         }
     }
-    $repo = (string) apply_filters('ensorlogs_github_repo', ENSORLOGS_GITHUB_REPO);
-    if ($repo === '') {
+
+    $result = ensorlogs_github_api_get('/releases/latest');
+    $release = null;
+
+    if ($result['code'] === 200 && is_array($result['body'])) {
+        $candidate = $result['body'];
+        if (ensorlogs_github_package_url($candidate) !== '') {
+            $release = $candidate;
+        }
+    }
+
+    if ($release === null) {
+        $list = ensorlogs_github_api_get('/releases', array('per_page' => 30));
+        if ($list['code'] === 200 && is_array($list['body'])) {
+            $release = ensorlogs_github_pick_best_release($list['body']);
+            if ($release === null && ensorlogs_github_get_last_error() === '') {
+                global $ensorlogs_github_last_error;
+                $ensorlogs_github_last_error = sprintf(
+                    /* translators: %s: nombre del asset zip */
+                    __('Hay releases pero ninguno incluye el asset `%s`. Sube el zip en el release de GitHub.', 'ensorlogs'),
+                    (string) apply_filters('ensorlogs_github_asset_name', ENSORLOGS_GITHUB_ASSET)
+                );
+            }
+        }
+    }
+
+    if ($release === null) {
+        delete_transient($key);
         return null;
     }
-    $url = sprintf('https://api.github.com/repos/%s/releases/latest', ensorlogs_rawurlencode_path($repo));
-    $response = wp_remote_get(
-        $url,
-        array(
-            'timeout'    => 15,
-            'headers'    => ensorlogs_github_headers(),
-            'user-agent' => 'Ensorlogs-Theme-Updater',
-        )
-    );
-    if (is_wp_error($response)) {
-        return null;
-    }
-    $code = (int) wp_remote_retrieve_response_code($response);
-    if ($code !== 200) {
-        return null;
-    }
-    $body = json_decode((string) wp_remote_retrieve_body($response), true);
-    if (!is_array($body)) {
-        return null;
-    }
-    set_transient($key, $body, 6 * HOUR_IN_SECONDS);
-    return $body;
+
+    set_transient($key, $release, 6 * HOUR_IN_SECONDS);
+    return $release;
 }
 
 /**
@@ -106,9 +242,7 @@ function ensorlogs_normalize_version(string $tag): string
 }
 
 /**
- * Devuelve la URL del asset `ensorlogs.zip` del release. Si el release no
- * tiene assets, usa `zipball_url` (que descarga el árbol completo en una
- * carpeta sin el slug del tema, así que sólo se usa como último recurso).
+ * URL de descarga del asset ensorlogs.zip (requerido para actualizar en WordPress).
  */
 function ensorlogs_github_package_url(array $release): string
 {
@@ -123,9 +257,6 @@ function ensorlogs_github_package_url(array $release): string
                 return (string) $asset['browser_download_url'];
             }
         }
-    }
-    if (!empty($release['zipball_url'])) {
-        return (string) $release['zipball_url'];
     }
     return '';
 }
@@ -171,9 +302,7 @@ add_filter(
 );
 
 /**
- * Si el package descargado es el `zipball_url` de GitHub, viene con una
- * carpeta tipo `owner-repo-abc1234/`. WordPress espera que el tema esté en
- * `ensorlogs/`. Renombramos la carpeta antes de la instalación.
+ * Renombra la carpeta del zipball si algún release antiguo no traía ensorlogs/ en la raíz.
  */
 add_filter(
     'upgrader_source_selection',
@@ -202,10 +331,6 @@ add_filter(
     4
 );
 
-/**
- * Botón en Apariencia → Temas → detalle del tema → "Buscar actualizaciones".
- * También expone un enlace en la página del seed.
- */
 add_action(
     'admin_post_ensorlogs_check_update',
     static function (): void {

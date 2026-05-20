@@ -407,12 +407,17 @@ function ensorlogs_render_seed_admin_page(): void
     $done    = isset($_GET['seed']) && $_GET['seed'] === 'done';
     $checked = isset($_GET['checked']) && $_GET['checked'] === '1';
     $release = function_exists('ensorlogs_github_get_latest_release')
-        ? ensorlogs_github_get_latest_release()
+        ? ensorlogs_github_get_latest_release(isset($_GET['checked']))
         : null;
+    $gh_error = function_exists('ensorlogs_github_get_last_error')
+        ? ensorlogs_github_get_last_error()
+        : '';
     $tag      = is_array($release) && isset($release['tag_name']) ? (string) $release['tag_name'] : '';
     $latest   = function_exists('ensorlogs_normalize_version') ? ensorlogs_normalize_version($tag) : $tag;
     $current  = defined('ENSORLOGS_THEME_VERSION') ? ENSORLOGS_THEME_VERSION : '0';
     $has_new  = $latest !== '' && version_compare($latest, $current, '>');
+    $has_zip  = is_array($release) && function_exists('ensorlogs_github_package_url')
+        && ensorlogs_github_package_url($release) !== '';
     ?>
     <div class="wrap">
         <h1><?php esc_html_e('Ensorlogs · Mantenimiento', 'ensorlogs'); ?></h1>
@@ -461,14 +466,39 @@ function ensorlogs_render_seed_admin_page(): void
                                 </span>
                             <?php endif; ?>
                         <?php else : ?>
-                            <em><?php esc_html_e('No se pudo consultar GitHub (revisa la conexión o el repo en `ENSORLOGS_GITHUB_REPO`).', 'ensorlogs'); ?></em>
+                            <em><?php esc_html_e('No se pudo consultar GitHub.', 'ensorlogs'); ?></em>
+                            <?php if ($gh_error !== '') : ?>
+                                <p class="description" style="margin-top:0.5em;">
+                                    <?php echo esc_html($gh_error); ?>
+                                </p>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row"><?php esc_html_e('Repositorio configurado', 'ensorlogs'); ?></th>
-                    <td><code><?php echo esc_html((string) (defined('ENSORLOGS_GITHUB_REPO') ? ENSORLOGS_GITHUB_REPO : '')); ?></code></td>
+                    <td>
+                        <code><?php echo esc_html((string) (defined('ENSORLOGS_GITHUB_REPO') ? ENSORLOGS_GITHUB_REPO : '')); ?></code>
+                        <p class="description">
+                            <?php
+                            esc_html_e(
+                                'Cada versión se publica con un tag vX.Y.Z y el workflow sube ensorlogs.zip al release.',
+                                'ensorlogs'
+                            );
+                            ?>
+                        </p>
+                    </td>
                 </tr>
+                <?php if ($latest !== '' && !$has_zip) : ?>
+                <tr>
+                    <th scope="row"><?php esc_html_e('Paquete de actualización', 'ensorlogs'); ?></th>
+                    <td>
+                        <span style="color:#d63638;">
+                            <?php esc_html_e('El release no incluye ensorlogs.zip; WordPress no podrá instalar la actualización.', 'ensorlogs'); ?>
+                        </span>
+                    </td>
+                </tr>
+                <?php endif; ?>
             </tbody>
         </table>
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">

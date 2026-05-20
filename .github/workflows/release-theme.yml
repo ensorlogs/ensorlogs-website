@@ -1,0 +1,38 @@
+# Publica un GitHub Release con ensorlogs.zip al pushear un tag v* (ej. v1.10.0).
+# WordPress consulta releases/latest y descarga el asset para actualizar el tema.
+
+name: Release Theme
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Empaquetar tema y publicar release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Crear ensorlogs.zip (sin seed-html ni INSTALL.txt)
+        run: |
+          cd wp-theme
+          rm -f ensorlogs.zip
+          zip -r ensorlogs.zip ensorlogs \
+            -x "ensorlogs/seed-html/*" \
+            -x "ensorlogs/seed-html/**" \
+            -x "ensorlogs/INSTALL.txt" \
+            -x "*.DS_Store" \
+            -x "*/.DS_Store"
+          unzip -l ensorlogs.zip | head -5
+          test -f ensorlogs.zip
+
+      - name: Publicar release en GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: wp-theme/ensorlogs.zip
+          generate_release_notes: true
