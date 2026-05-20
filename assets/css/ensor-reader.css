@@ -596,6 +596,26 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     max-width: 100%;
 }
 
+/* Párrafos y listas: compensa Tailwind preflight (p { margin: 0 }) */
+.ensor-reader-body :where(p, ul, ol) {
+    margin-bottom: 1.25em;
+}
+.ensor-reader-body :where(ul, ol) {
+    padding-left: 1.35em;
+}
+.ensor-reader-body :where(li) {
+    margin-bottom: 0.35em;
+}
+.ensor-reader-body :where(strong, b) {
+    font-weight: 700;
+}
+html:not(.dark) .ensor-reader-body :where(strong, b) {
+    color: #1a1a1a;
+}
+html.dark .ensor-reader-body :where(strong, b) {
+    color: #f3f4f6;
+}
+
 /* Mobile-first: el TOC lateral está oculto por defecto.
    El usuario accede al índice por el botón flotante / sheet. */
 .ensor-reader-toc {
@@ -757,13 +777,20 @@ html.dark .ensor-reader-toc-sheet__panel {
 /* -------------------------------------------------------------------------
    Content typography upgrades (titles, highlights, code, links, blockquote)
    ------------------------------------------------------------------------- */
-.ensor-reader-body :where(h2, h3) {
+.ensor-reader-body :where(h1, h2, h3) {
     scroll-margin-top: 100px;
     position: relative;
     color: var(--ensor-ink, #1a1a1a);
 }
-html.dark .ensor-reader-body :where(h2, h3) {
+html.dark .ensor-reader-body :where(h1, h2, h3) {
     color: #f3f4f6;
+}
+/* H1 en el cuerpo = sección del índice (el H1 del header está fuera de .ensor-reader-body) */
+.ensor-reader-body h1 {
+    font-weight: 700;
+    font-size: 1.65rem;
+    line-height: 1.25;
+    margin: 2.5rem 0 1rem;
 }
 .ensor-reader-body h2 {
     font-weight: 700;
@@ -790,8 +817,8 @@ html.dark .ensor-reader-body :where(h2, h3) {
     border-radius: 0.15em;
 }
 
-/* Si no quieres marcar palabras individuales y prefieres todo el título resaltado, usa h2.is-marker / h3.is-marker */
-.ensor-reader-body :where(h2, h3).is-marker {
+/* Si no quieres marcar palabras individuales y prefieres todo el título resaltado, usa .is-marker en el encabezado */
+.ensor-reader-body :where(h1, h2, h3).is-marker {
     display: inline-block;
     background-image: linear-gradient(transparent 62%, color-mix(in srgb, var(--ensor-accent, #d9a300) 50%, transparent) 62%);
     background-repeat: no-repeat;
@@ -800,7 +827,7 @@ html.dark .ensor-reader-body :where(h2, h3) {
 }
 
 /* Anchor link discreto al hover sobre el título */
-.ensor-reader-body :where(h2, h3) .ensor-anchor {
+.ensor-reader-body :where(h1, h2, h3) .ensor-anchor {
     opacity: 0;
     margin-left: 0.4rem;
     color: var(--ensor-accent, #d9a300);
@@ -808,7 +835,7 @@ html.dark .ensor-reader-body :where(h2, h3) {
     transition: opacity 150ms ease;
     font-weight: 400;
 }
-.ensor-reader-body :where(h2, h3):hover .ensor-anchor {
+.ensor-reader-body :where(h1, h2, h3):hover .ensor-anchor {
     opacity: 0.75;
 }
 

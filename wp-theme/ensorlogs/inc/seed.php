@@ -415,9 +415,8 @@ function ensorlogs_render_seed_admin_page(): void
     $tag      = is_array($release) && isset($release['tag_name']) ? (string) $release['tag_name'] : '';
     $latest   = function_exists('ensorlogs_normalize_version') ? ensorlogs_normalize_version($tag) : $tag;
     $current  = defined('ENSORLOGS_THEME_VERSION') ? ENSORLOGS_THEME_VERSION : '0';
-    $has_new  = $latest !== '' && version_compare($latest, $current, '>');
-    $has_zip  = is_array($release) && function_exists('ensorlogs_github_package_url')
-        && ensorlogs_github_package_url($release) !== '';
+    $has_new   = $latest !== '' && version_compare($latest, $current, '>');
+    $has_token = function_exists('ensorlogs_github_token_configured') && ensorlogs_github_token_configured();
     ?>
     <div class="wrap">
         <h1><?php esc_html_e('Ensorlogs · Mantenimiento', 'ensorlogs'); ?></h1>
@@ -482,23 +481,27 @@ function ensorlogs_render_seed_admin_page(): void
                         <p class="description">
                             <?php
                             esc_html_e(
-                                'Cada versión se publica con un tag vX.Y.Z y el workflow sube ensorlogs.zip al release.',
+                                'El release en GitHub solo muestra la versión (sin zip público). La descarga la hace WordPress con tu token.',
                                 'ensorlogs'
                             );
                             ?>
                         </p>
                     </td>
                 </tr>
-                <?php if ($latest !== '' && !$has_zip) : ?>
                 <tr>
-                    <th scope="row"><?php esc_html_e('Paquete de actualización', 'ensorlogs'); ?></th>
+                    <th scope="row"><?php esc_html_e('Token GitHub (wp-config)', 'ensorlogs'); ?></th>
                     <td>
-                        <span style="color:#d63638;">
-                            <?php esc_html_e('El release no incluye ensorlogs.zip; WordPress no podrá instalar la actualización.', 'ensorlogs'); ?>
-                        </span>
+                        <?php if ($has_token) : ?>
+                            <span style="color:#1a7f37;font-weight:600;">
+                                <?php esc_html_e('Configurado', 'ensorlogs'); ?>
+                            </span>
+                        <?php else : ?>
+                            <span style="color:#d63638;font-weight:600;">
+                                <?php esc_html_e('Falta `ENSORLOGS_GITHUB_TOKEN` — no podrás instalar actualizaciones.', 'ensorlogs'); ?>
+                            </span>
+                        <?php endif; ?>
                     </td>
                 </tr>
-                <?php endif; ?>
             </tbody>
         </table>
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -506,15 +509,19 @@ function ensorlogs_render_seed_admin_page(): void
             <?php wp_nonce_field('ensorlogs_check_update'); ?>
             <?php submit_button(__('Buscar actualizaciones ahora', 'ensorlogs'), 'secondary', 'submit', false); ?>
         </form>
-        <?php if ($has_new) : ?>
+        <?php if ($has_new && $has_token) : ?>
             <p style="margin-top:1em;">
                 <?php
                 printf(
                     /* translators: %s: enlace al panel de actualizaciones */
-                    esc_html__('Ve a %s para instalar la nueva versión con el flujo nativo de WordPress.', 'ensorlogs'),
+                    esc_html__('Ve a %s para instalar la nueva versión (solo desde tu WordPress, no hay descarga pública del zip).', 'ensorlogs'),
                     '<a href="' . esc_url(admin_url('update-core.php')) . '">' . esc_html__('Escritorio → Actualizaciones', 'ensorlogs') . '</a>'
                 );
                 ?>
+            </p>
+        <?php elseif ($has_new && !$has_token) : ?>
+            <p class="description" style="margin-top:1em;">
+                <?php esc_html_e('Hay una versión nueva en GitHub, pero necesitas el token en wp-config.php para instalarla.', 'ensorlogs'); ?>
             </p>
         <?php endif; ?>
     </div>

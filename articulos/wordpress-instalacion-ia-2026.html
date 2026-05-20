@@ -290,9 +290,9 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
 </p>
 
 <p>Instalar WordPress en 2026 sigue siendo “subir un ZIP y darle al instalador” solo en los tutoriales más cortos. En la vida real hay dominio, DNS, correo, SSL, versión de PHP, límites del hosting, usuarios con permisos razonables y la primera decisión que define el resto: <strong>¿vas a aprender el stack o solo a clicar hasta que funcione?</strong> Yo prefiero la primera; la segunda te cobra factura más adelante.</p>
-<h2 id="antes-del-clic-wordpress-org-vs-el-resto">Antes del clic: WordPress.org vs el resto</h2>
+<h1 id="antes-del-clic-wordpress-org-vs-el-resto">Antes del clic: WordPress.org vs el resto</h1>
 <p>Si tu objetivo es entender la web de verdad y poder escalar, normalmente querrás <strong>WordPress.org</strong> (software libre) sobre tu hosting. Los builders todo-en-uno tienen su lugar cuando el tiempo manda y no quieres tocar servidor; aquí el foco es <strong>instalación clásica</strong> porque es la que te enseña qué hay detrás del panel.</p>
-<h2 id="hosting-el-terreno-donde-crece-todo">Hosting: el terreno donde crece todo</h2>
+<h1 id="hosting-el-terreno-donde-crece-todo">Hosting: el terreno donde crece todo</h1>
 <p>No todos los planes aguantan el mismo tráfico ni la misma versión de PHP. En 2026 reviso siempre: PHP compatible con la última WordPress estable (y margen para subir), extensiones comunes (mysqli, curl, imagick si toca imágenes pesadas), límites de memoria y tiempo de ejecución razonables para actualizaciones y backups.</p>
 <p>Si el panel parece de 2009 y te obliga a PHP viejo “por compartido”, estás comprando problemas.</p>
 <figure class="my-10 overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
@@ -300,16 +300,16 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
 <figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">Instalar bien es leer el panel del hosting sin hacerse el sorprendido cuando algo falla.</figcaption>
 </figure>
 
-<h2 id="dominio-dns-y-correo-el-triangulo-aburrido">Dominio, DNS y correo (el triángulo aburrido)</h2>
+<h1 id="dominio-dns-y-correo-el-triangulo-aburrido">Dominio, DNS y correo (el triángulo aburrido)</h1>
 <p>El dominio apunta al hosting con registros <strong>A</strong> o <strong>CNAME</strong>; si algo “no resuelve”, la culpa suele estar antes del WordPress. El correo del dominio (Google Workspace, Microsoft 365, Zoho…) puede pelear con el DNS si copias plantillas sin mirar: revisa MX, SPF y DKIM cuando cambias proveedor.</p>
 <p>Traducción práctica: cuando instalo para un cliente, dejo <strong>documentado</strong> qué DNS toqué y por qué. El yo del futuro —o el cliente nuevo que llegó tres años después— te lo agradece.</p>
-<h2 id="https-desde-el-dia-uno">HTTPS desde el día uno</h2>
+<h1 id="https-desde-el-dia-uno">HTTPS desde el día uno</h1>
 <p>Sin certificado válido ni redirección sensata, navegadores y buscadores te tratan como segunda opción. La mayoría de hostings facilitan Let’s Encrypt o equivalente; activa <strong>forzar HTTPS</strong> en WordPress cuando el sitio ya responde bien por TLS.</p>
-<h2 id="base-de-datos-y-prefijo-de-tablas">Base de datos y prefijo de tablas</h2>
+<h1 id="base-de-datos-y-prefijo-de-tablas">Base de datos y prefijo de tablas</h1>
 <p>El instalador crea tablas con prefijo <code>wp_</code>. En entornos compartidos o cuando llevo años viendo ataques automatizados, cambiar el prefijo es una capa más —no magia, pero reduce ruido en logs de bots que buscan lo obvio. Lo importante es <strong>usuario de MySQL con permisos mínimos</strong> para esa base, no root del servidor.</p>
-<h2 id="entorno-local-vs-hosting-directo">Entorno local vs hosting directo</h2>
+<h1 id="entorno-local-vs-hosting-directo">Entorno local vs hosting directo</h1>
 <p>Para romper cosas sin culpa uso entorno local (Docker, Local WP, lo que prefieras) y subo cuando el flujo está claro. Instalar directo en producción está bien si sabes que vas a meter backups desde el minuto cero; si no, estás jugando a ruleta con el index del cliente.</p>
-<h2 id="donde-entra-la-ia-y-donde-no">Dónde entra la IA (y dónde no)</h2>
+<h1 id="donde-entra-la-ia-y-donde-no">Dónde entra la IA (y dónde no)</h1>
 <p>La IA en 2026 es brutal para <strong>organizar</strong>: checklist previa a instalación, recordarte extensiones PHP típicas, resumir documentación del hosting en español claro o ayudarte a redactar un correo técnico al soporte con datos ordenados.</p>
 <p>Lo que <strong>no</strong> hago: pegar en el chat público contraseñas de FTP, claves de base de datos, URLs del wp-admin con usuarios reales o capturas con tokens. La IA no es tu cofre fuerte; es tu ayudante de estudio. Anonymiza antes de pedir ayuda.</p>
 <figure class="my-10 overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
@@ -318,13 +318,13 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
 </figure>
 
 <p>Prompt útiles (sin datos sensibles): “Lista verificación post-instalación WordPress en hosting compartido”, “Explica en tres frases qué valida el archivo wp-config.php”, “Propón mensaje corto al soporte si el instalador falla con error de permisos en wp-content”.</p>
-<h2 id="usuario-administrador-y-primer-login">Usuario administrador y primer login</h2>
+<h1 id="usuario-administrador-y-primer-login">Usuario administrador y primer login</h1>
 <p>Evita <code>admin</code> como nombre de usuario. Activa <strong>autenticación fuerte</strong> donde puedas. Si el hosting ofrece 2FA a nivel cuenta, úsalo: muchos ataques son por credenciales robadas, no por “magia hacker”.</p>
-<h2 id="actualizaciones-y-backups-antes-del-cafe">Actualizaciones y backups antes del café</h2>
+<h1 id="actualizaciones-y-backups-antes-del-cafe">Actualizaciones y backups antes del café</h1>
 <p>Primera regla después de que el sitio arranque: plugin de backup <strong>probado</strong> o backup del panel + prueba de restauración en staging. Segunda: plan de actualizar núcleo, temas y plugins desde fuentes legítimas. La IA puede ayudarte a montar una <strong>política de mantenimiento</strong> en texto claro para tu cliente universitario o tu propio negocio —lo firmas tú.</p>
-<h2 id="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">El error típico que seguí viendo en Venezuela y fuera</h2>
+<h1 id="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">El error típico que seguí viendo en Venezuela y fuera</h1>
 <p>Instalar demasiados plugins “por si acaso” antes de tener contenido real. Cada plugin es superficie de ataque y de conflicto. Mejor una web simple que cargue y se pueda mantener que un festival de extensiones que nadie actualiza.</p>
-<h2 id="cierre-honesto">Cierre honesto</h2>
+<h1 id="cierre-honesto">Cierre honesto</h1>
 <p>Instalar WordPress bien es demostrar que entiendes <strong>hosting + DNS + seguridad mínima + disciplina</strong>. La IA acelera lectura y redacción; no absuelve de leer el error real en pantalla cuando algo truena.</p>
 <p>Si empiezas con ese marco, lo que viene después —temas, SEO, WooCommerce— se apoya en cimientos que no tiemblan cada martes.</p>
                     </div>

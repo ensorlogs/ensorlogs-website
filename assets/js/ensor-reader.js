@@ -6,7 +6,7 @@
  *  - Chip flotante con el topic / sección actual (debajo de la barra);
  *    permanece oculto hasta que la cabecera del log (título y meta) queda
  *    por encima del chip, para no tapar el h1 al cargar.
- *  - TOC sticky (desktop) o sheet flotante (mobile) generado a partir de los h2/h3.
+ *  - TOC sticky (desktop) o sheet flotante (mobile) generado solo desde h1 del cuerpo.
  *  - Filtro por audiencia (estudiante, profesional, profesor, datos, etc.)
  *    cuando hay secciones marcadas con `.ensor-aud-section[data-aud="..."]`.
  *
@@ -137,7 +137,7 @@
 
     /* ------------------------------------------------------------------
      * TOC build: si el HTML no trae <nav.ensor-reader-toc>, se genera.
-     * Se cogen h2 y h3 dentro del cuerpo.
+     * Solo h1 dentro de .ensor-reader-body (el título del log está fuera).
      * ------------------------------------------------------------------ */
     function slugify(text) {
         return String(text || '')
@@ -151,7 +151,7 @@
 
     function ensureHeadingIds() {
         var seen = {};
-        var headings = contentEl.querySelectorAll('h2, h3');
+        var headings = contentEl.querySelectorAll('h1');
         for (var i = 0; i < headings.length; i++) {
             var h = headings[i];
             if (!h.id) {
@@ -200,9 +200,7 @@
         var html = '';
         for (var i = 0; i < headings.length; i++) {
             var h = headings[i];
-            var tag = h.tagName.toLowerCase();
-            var cls = tag === 'h3' ? 'ensor-reader-toc__item ensor-reader-toc__item--h3' : 'ensor-reader-toc__item';
-            html += '<li class="' + cls + '">' +
+            html += '<li class="ensor-reader-toc__item">' +
                 '<a href="#' + h.id + '" class="ensor-reader-toc__link" data-target="' + h.id + '">' +
                 escapeHtml(h.textContent.replace(/#$/, '').trim()) +
                 '</a></li>';

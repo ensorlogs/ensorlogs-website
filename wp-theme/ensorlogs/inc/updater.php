@@ -1,12 +1,14 @@
 <?php
 /**
- * Auto-actualización del tema desde GitHub Releases.
+ * Auto-actualización del tema desde GitHub Releases (solo versión visible al público).
  *
- * Publica un release en GitHub con el asset `ensorlogs.zip` (tag vX.Y.Z).
- * El workflow `.github/workflows/release-theme.yml` lo genera al pushear el tag.
+ * Los releases muestran el tag vX.Y.Z y las notas, sin adjuntar ensorlogs.zip.
+ * La actualización en WordPress usa la API de GitHub con token (wp-config.php).
  *
- * Configuración: `ENSORLOGS_GITHUB_REPO` (`owner/repo`) en wp-config.php.
- * Repos privados: `ENSORLOGS_GITHUB_TOKEN` (PAT con scope `repo` o `public_repo`).
+ * define('ENSORLOGS_GITHUB_TOKEN', 'ghp_...'); // obligatorio para actualizar
+ * define('ENSORLOGS_GITHUB_REPO', 'ensorlogs/ensorlogs-website'); // opcional
+ *
+ * Repo privado recomendado: el código del tema no se descarga sin el token.
  *
  * @package Ensorlogs
  */
@@ -22,7 +24,10 @@ if (!defined('ENSORLOGS_GITHUB_ASSET')) {
     define('ENSORLOGS_GITHUB_ASSET', 'ensorlogs.zip');
 }
 
-/** @var string|null Último error de la API de GitHub (para el panel de mantenimiento). */
+/** Esquema interno para que WordPress no use URLs públicas de assets. */
+define('ENSORLOGS_GH_PACKAGE_SCHEME', 'ensorlogs-gh-tag://');
+
+/** @var string|null Último error de la API de GitHub (panel de mantenimiento). */
 $GLOBALS['ensorlogs_github_last_error'] = null;
 
 /**
@@ -35,10 +40,15 @@ function ensorlogs_github_headers(): array
         'X-GitHub-Api-Version' => '2022-11-28',
         'User-Agent'           => 'Ensorlogs-Theme-Updater',
     );
-    if (defined('ENSORLOGS_GITHUB_TOKEN') && ENSORLOGS_GITHUB_TOKEN !== '') {
+    if (ensorlogs_github_token_configured()) {
         $headers['Authorization'] = 'Bearer ' . ENSORLOGS_GITHUB_TOKEN;
     }
     return $headers;
+}
+
+function ensorlogs_github_token_configured(): bool
+{
+    return defined('ENSORLOGS_GITHUB_TOKEN') && ENSORLOGS_GITHUB_TOKEN !== '';
 }
 
 /**
@@ -90,7 +100,7 @@ function ensorlogs_github_api_get(string $path, array $args = array()): array
 
     if ($code === 403) {
         $ensorlogs_github_last_error = __(
-            'GitHub devolvió 403 (límite de API o repo privado). Define `ENSORLOGS_GITHUB_TOKEN` en wp-config.php.',
+            'GitHub devolvió 403. Añade `ENSORLOGS_GITHUB_TOKEN` en wp-config.php (PAT con scope repo).',
             'ensorlogs'
         );
         return array('code' => $code, 'body' => $body, 'error' => $ensorlogs_github_last_error);
@@ -98,7 +108,7 @@ function ensorlogs_github_api_get(string $path, array $args = array()): array
 
     if ($code === 404) {
         $ensorlogs_github_last_error = __(
-            'No hay releases publicados en el repo. Publica un tag `vX.Y.Z` con el workflow de release (asset ensorlogs.zip).',
+            'No hay releases publicados. Publica un tag `vX.Y.Z` (workflow Release Theme).',
             'ensorlogs'
         );
         return array('code' => $code, 'body' => $body, 'error' => $ensorlogs_github_last_error);
@@ -120,16 +130,13 @@ function ensorlogs_github_api_get(string $path, array $args = array()): array
 }
 
 /**
- * Elige el release más reciente que tenga el zip del tema.
- *
  * @param array<int, array<string, mixed>> $releases
  * @return array<string, mixed>|null
  */
 function ensorlogs_github_pick_best_release(array $releases): ?array
 {
-    $asset_name = (string) apply_filters('ensorlogs_github_asset_name', ENSORLOGS_GITHUB_ASSET);
-    $best       = null;
-    $best_ver   = '0';
+    $best     = null;
+    $best_ver = '0';
 
     foreach ($releases as $release) {
         if (!is_array($release)) {
@@ -140,25 +147,6 @@ function ensorlogs_github_pick_best_release(array $releases): ?array
         }
         $tag = isset($release['tag_name']) ? (string) $release['tag_name'] : '';
         if ($tag === '') {
-            continue;
-        }
-        $has_zip = false;
-        if (!empty($release['assets']) && is_array($release['assets'])) {
-            foreach ($release['assets'] as $asset) {
-                if (!is_array($asset)) {
-                    continue;
-                }
-                if (
-                    isset($asset['name'], $asset['browser_download_url'])
-                    && (string) $asset['name'] === $asset_name
-                    && (string) $asset['browser_download_url'] !== ''
-                ) {
-                    $has_zip = true;
-                    break;
-                }
-            }
-        }
-        if (!$has_zip) {
             continue;
         }
         $ver = ensorlogs_normalize_version($tag);
@@ -172,8 +160,6 @@ function ensorlogs_github_pick_best_release(array $releases): ?array
 }
 
 /**
- * Devuelve el release publicado más reciente con ensorlogs.zip. Cacheado 6 horas.
- *
  * @return array<string, mixed>|null
  */
 function ensorlogs_github_get_latest_release(bool $force = false): ?array
@@ -186,28 +172,17 @@ function ensorlogs_github_get_latest_release(bool $force = false): ?array
         }
     }
 
-    $result = ensorlogs_github_api_get('/releases/latest');
     $release = null;
+    $result  = ensorlogs_github_api_get('/releases/latest');
 
-    if ($result['code'] === 200 && is_array($result['body'])) {
-        $candidate = $result['body'];
-        if (ensorlogs_github_package_url($candidate) !== '') {
-            $release = $candidate;
-        }
+    if ($result['code'] === 200 && is_array($result['body']) && !empty($result['body']['tag_name'])) {
+        $release = $result['body'];
     }
 
     if ($release === null) {
         $list = ensorlogs_github_api_get('/releases', array('per_page' => 30));
         if ($list['code'] === 200 && is_array($list['body'])) {
             $release = ensorlogs_github_pick_best_release($list['body']);
-            if ($release === null && ensorlogs_github_get_last_error() === '') {
-                global $ensorlogs_github_last_error;
-                $ensorlogs_github_last_error = sprintf(
-                    /* translators: %s: nombre del asset zip */
-                    __('Hay releases pero ninguno incluye el asset `%s`. Sube el zip en el release de GitHub.', 'ensorlogs'),
-                    (string) apply_filters('ensorlogs_github_asset_name', ENSORLOGS_GITHUB_ASSET)
-                );
-            }
         }
     }
 
@@ -220,18 +195,12 @@ function ensorlogs_github_get_latest_release(bool $force = false): ?array
     return $release;
 }
 
-/**
- * Codifica cada segmento por separado y conserva las barras (`owner/repo`).
- */
 function ensorlogs_rawurlencode_path(string $path): string
 {
     $parts = explode('/', $path);
     return implode('/', array_map('rawurlencode', $parts));
 }
 
-/**
- * Limpia un tag de GitHub (`v1.2.3` → `1.2.3`).
- */
 function ensorlogs_normalize_version(string $tag): string
 {
     $tag = trim($tag);
@@ -242,32 +211,194 @@ function ensorlogs_normalize_version(string $tag): string
 }
 
 /**
- * URL de descarga del asset ensorlogs.zip (requerido para actualizar en WordPress).
+ * Identificador interno para el upgrader (no expone browser_download_url).
  */
-function ensorlogs_github_package_url(array $release): string
+function ensorlogs_github_package_descriptor(array $release): string
 {
-    $asset_name = (string) apply_filters('ensorlogs_github_asset_name', ENSORLOGS_GITHUB_ASSET);
-    if (!empty($release['assets']) && is_array($release['assets'])) {
-        foreach ($release['assets'] as $asset) {
-            if (!is_array($asset)) {
-                continue;
-            }
-            $name = isset($asset['name']) ? (string) $asset['name'] : '';
-            if ($name === $asset_name && !empty($asset['browser_download_url'])) {
-                return (string) $asset['browser_download_url'];
-            }
-        }
+    $tag = isset($release['tag_name']) ? (string) $release['tag_name'] : '';
+    if ($tag === '') {
+        return '';
     }
-    return '';
+    return ENSORLOGS_GH_PACKAGE_SCHEME . $tag;
 }
 
 /**
- * Inyecta la actualización en el sondeo de WordPress.
+ * @deprecated Solo compatibilidad; no devuelve URLs públicas de assets.
  */
+function ensorlogs_github_package_url(array $release): string
+{
+    return ensorlogs_github_package_descriptor($release);
+}
+
+/**
+ * Localiza wp-theme/ensorlogs dentro del zipball de GitHub.
+ */
+function ensorlogs_locate_theme_dir_in_tree(string $root): ?string
+{
+    $root = trailingslashit($root);
+    $direct = array(
+        $root . 'wp-theme/ensorlogs',
+        $root . 'ensorlogs',
+    );
+    foreach ($direct as $path) {
+        if (is_dir($path) && is_readable($path . '/style.css')) {
+            return $path;
+        }
+    }
+
+    $entries = @scandir($root);
+    if (!is_array($entries)) {
+        return null;
+    }
+    foreach ($entries as $entry) {
+        if ($entry === '.' || $entry === '..') {
+            continue;
+        }
+        $nested = $root . $entry;
+        if (!is_dir($nested)) {
+            continue;
+        }
+        $theme = $nested . '/wp-theme/ensorlogs';
+        if (is_dir($theme) && is_readable($theme . '/style.css')) {
+            return $theme;
+        }
+        if (is_dir($nested . '/ensorlogs') && is_readable($nested . '/ensorlogs/style.css')) {
+            return $nested . '/ensorlogs';
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Empaqueta el directorio del tema como ensorlogs.zip listo para Theme_Upgrader.
+ *
+ * @return string|WP_Error Ruta al zip temporal.
+ */
+function ensorlogs_github_build_package_zip_from_tag(string $tag)
+{
+    if (!ensorlogs_github_token_configured()) {
+        return new WP_Error(
+            'ensorlogs_no_github_token',
+            __(
+                'Define `ENSORLOGS_GITHUB_TOKEN` en wp-config.php para actualizar el tema desde GitHub.',
+                'ensorlogs'
+            )
+        );
+    }
+
+    $repo = (string) apply_filters('ensorlogs_github_repo', ENSORLOGS_GITHUB_REPO);
+    $url  = sprintf(
+        'https://api.github.com/repos/%s/zipball/%s',
+        ensorlogs_rawurlencode_path($repo),
+        rawurlencode($tag)
+    );
+
+    $response = wp_remote_get(
+        $url,
+        array(
+            'timeout'  => 300,
+            'headers'  => array_merge(
+                ensorlogs_github_headers(),
+                array('Accept' => 'application/vnd.github+json')
+            ),
+            'stream'   => true,
+            'filename' => wp_tempnam('ensorlogs-src'),
+        )
+    );
+
+    if (is_wp_error($response)) {
+        return $response;
+    }
+
+    $code = (int) wp_remote_retrieve_response_code($response);
+    if ($code < 200 || $code >= 300) {
+        return new WP_Error(
+            'ensorlogs_github_download',
+            sprintf(
+                /* translators: %d: HTTP status */
+                __('No se pudo descargar el código del tag (%d).', 'ensorlogs'),
+                $code
+            )
+        );
+    }
+
+    $src_zip = $response['filename'] ?? '';
+    if ($src_zip === '' || !is_readable($src_zip)) {
+        return new WP_Error('ensorlogs_github_download', __('Descarga vacía desde GitHub.', 'ensorlogs'));
+    }
+
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+
+    $unpacked = wp_tempnam('ensorlogs-unpack');
+    if (!$unpacked) {
+        return new WP_Error('ensorlogs_temp', __('No se pudo crear carpeta temporal.', 'ensorlogs'));
+    }
+    @unlink($unpacked);
+
+    $dest_dir = $unpacked . '-dir';
+    wp_mkdir_p($dest_dir);
+
+    $unzip = unzip_file($src_zip, $dest_dir);
+    @unlink($src_zip);
+
+    if (is_wp_error($unzip)) {
+        return $unzip;
+    }
+
+    $theme_dir = ensorlogs_locate_theme_dir_in_tree($dest_dir);
+    if ($theme_dir === null) {
+        return new WP_Error(
+            'ensorlogs_theme_path',
+            __('El zip de GitHub no contiene wp-theme/ensorlogs.', 'ensorlogs')
+        );
+    }
+
+    if (!class_exists('ZipArchive')) {
+        return new WP_Error('ensorlogs_zip', __('PHP ZipArchive no está disponible en el servidor.', 'ensorlogs'));
+    }
+
+    $out_zip = wp_tempnam('ensorlogs-package');
+    if ($out_zip === false) {
+        return new WP_Error('ensorlogs_temp', __('No se pudo crear el zip del tema.', 'ensorlogs'));
+    }
+    @unlink($out_zip);
+
+    $zip = new ZipArchive();
+    if ($zip->open($out_zip, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+        return new WP_Error('ensorlogs_zip', __('No se pudo abrir el zip de salida.', 'ensorlogs'));
+    }
+
+    $slug   = get_template();
+    $parent = $slug . '/';
+    $zip->addEmptyDir($slug);
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($theme_dir, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::SELF_FIRST
+    );
+
+    foreach ($iterator as $file) {
+        if (!$file->isFile()) {
+            continue;
+        }
+        $full = $file->getPathname();
+        $rel  = $parent . substr($full, strlen(trailingslashit($theme_dir)));
+        $zip->addFile($full, str_replace('\\', '/', $rel));
+    }
+
+    $zip->close();
+
+    return $out_zip;
+}
+
 add_filter(
     'pre_set_site_transient_update_themes',
     static function ($transient) {
         if (!is_object($transient)) {
+            return $transient;
+        }
+        if (!ensorlogs_github_token_configured()) {
             return $transient;
         }
         $release = ensorlogs_github_get_latest_release();
@@ -283,7 +414,7 @@ add_filter(
         if (version_compare($new_version, $current, '<=')) {
             return $transient;
         }
-        $package = ensorlogs_github_package_url($release);
+        $package = ensorlogs_github_package_descriptor($release);
         if ($package === '') {
             return $transient;
         }
@@ -301,9 +432,27 @@ add_filter(
     }
 );
 
-/**
- * Renombra la carpeta del zipball si algún release antiguo no traía ensorlogs/ en la raíz.
- */
+add_filter(
+    'upgrader_pre_download',
+    static function ($reply, $package, $upgrader, $hook_extra) {
+        if (!is_string($package) || strpos($package, ENSORLOGS_GH_PACKAGE_SCHEME) !== 0) {
+            return $reply;
+        }
+        if (!isset($hook_extra['theme']) || $hook_extra['theme'] !== get_template()) {
+            return $reply;
+        }
+
+        $tag = substr($package, strlen(ENSORLOGS_GH_PACKAGE_SCHEME));
+        if ($tag === '') {
+            return new WP_Error('ensorlogs_package', __('Tag de release inválido.', 'ensorlogs'));
+        }
+
+        return ensorlogs_github_build_package_zip_from_tag($tag);
+    },
+    10,
+    4
+);
+
 add_filter(
     'upgrader_source_selection',
     static function ($source, $remote_source, $upgrader, $hook_extra) {

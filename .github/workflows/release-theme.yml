@@ -1,5 +1,5 @@
-# Publica un GitHub Release con ensorlogs.zip al pushear un tag v* (ej. v1.10.0).
-# WordPress consulta releases/latest y descarga el asset para actualizar el tema.
+# Publica un tag/release visible (vX.Y.Z) sin adjuntar ensorlogs.zip al release público.
+# El zip se guarda como artifact de Actions; WordPress descarga vía API con ENSORLOGS_GITHUB_TOKEN.
 
 name: Release Theme
 
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   release:
-    name: Empaquetar tema y publicar release
+    name: Tag, notas y paquete privado (artifact)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,11 +28,17 @@ jobs:
             -x "ensorlogs/INSTALL.txt" \
             -x "*.DS_Store" \
             -x "*/.DS_Store"
-          unzip -l ensorlogs.zip | head -5
           test -f ensorlogs.zip
 
-      - name: Publicar release en GitHub
+      - name: Publicar release en GitHub (solo tag y notas, sin descarga pública)
         uses: softprops/action-gh-release@v2
         with:
-          files: wp-theme/ensorlogs.zip
           generate_release_notes: true
+          make_latest: true
+
+      - name: Guardar zip como artifact (solo tú / Actions; no aparece en Assets del release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ensorlogs-${{ github.ref_name }}
+          path: wp-theme/ensorlogs.zip
+          retention-days: 90

@@ -962,7 +962,7 @@ function ensorlogs_render_article_section_metabox($post, string $sec_key): void
                 'teeny'         => false,
                 'tinymce'       => array(
                     'wpautop'           => true,
-                    'block_formats'     => 'Párrafo=p;Cita=blockquote;Encabezado 3=h3;Encabezado 4=h4;Código=pre',
+                    'block_formats'     => 'Párrafo=p;Cita=blockquote;Encabezado 1=h1;Encabezado 3=h3;Encabezado 4=h4;Código=pre',
                     'toolbar1'          => 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,link,unlink,wp_more,spellchecker,wp_add_media,fullscreen,wp_adv',
                     'toolbar2'          => 'underline,strikethrough,hr,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help',
                 ),

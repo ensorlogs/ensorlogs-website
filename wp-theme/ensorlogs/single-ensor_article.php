@@ -32,13 +32,8 @@ while (have_posts()) {
     $has_shell = (bool) preg_match('/<div[^>]*class=["\'][^"\']*main-content\s+mt-28/m', $content);
 
     if ($has_shell) {
-        if (function_exists('has_blocks') && has_blocks($content)) {
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo apply_filters('the_content', $content);
-        } else {
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo $content;
-        }
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo apply_filters('the_content', $content);
         continue;
     }
 
