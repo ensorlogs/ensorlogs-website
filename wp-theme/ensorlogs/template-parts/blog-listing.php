@@ -24,6 +24,7 @@ $ensor_blog_q = get_posts(array(
 ));
 if (!empty($ensor_blog_q) && $ensor_blog_q[0] instanceof WP_Post) {
     $ensor_blog_editable = apply_filters('the_content', $ensor_blog_q[0]->post_content);
+    $ensor_blog_editable = ensorlogs_normalize_intro_heading($ensor_blog_editable, 'blog-temas-heading');
 }
 
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

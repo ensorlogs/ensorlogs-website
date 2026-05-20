@@ -26,6 +26,7 @@ $ensor_proj_q = get_posts(array(
 ));
 if (!empty($ensor_proj_q) && $ensor_proj_q[0] instanceof WP_Post) {
     $ensor_proj_editable = apply_filters('the_content', $ensor_proj_q[0]->post_content);
+    $ensor_proj_editable = ensorlogs_normalize_intro_heading($ensor_proj_editable, 'proyectos-intro-heading');
 }
 
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

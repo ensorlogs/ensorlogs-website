@@ -199,6 +199,64 @@ function ensorlogs_render_fragment_editable(string $filename, string $editable_h
 }
 
 /**
+ * Fuerza id y clase de titular en el primer h1/h2 del intro editable (blog/proyectos).
+ *
+ * @param string $html       HTML del editor de la página.
+ * @param string $heading_id id canónico (p. ej. proyectos-intro-heading).
+ */
+function ensorlogs_normalize_intro_heading(string $html, string $heading_id): string
+{
+    if (trim(wp_strip_all_tags($html)) === '' || !preg_match('/<(h[12])\b/i', $html)) {
+        return $html;
+    }
+
+    $done = false;
+
+    return (string) preg_replace_callback(
+        '/<(h[12])\b([^>]*)>/i',
+        static function (array $m) use ($heading_id, &$done): string {
+            if ($done) {
+                return $m[0];
+            }
+            $done = true;
+
+            $tag   = strtolower($m[1]);
+            $attrs = $m[2];
+
+            if (preg_match('/\bid\s*=/i', $attrs)) {
+                $attrs = (string) preg_replace(
+                    '/\bid\s*=\s*["\'][^"\']*["\']/i',
+                    ' id="' . esc_attr($heading_id) . '"',
+                    $attrs,
+                    1
+                );
+            } else {
+                $attrs .= ' id="' . esc_attr($heading_id) . '"';
+            }
+
+            if (preg_match('/\bclass\s*=\s*["\']([^"\']*)["\']/i', $attrs, $cm)) {
+                $classes = trim($cm[1]);
+                if (strpos($classes, 'ensor-section-hero-title') === false) {
+                    $classes .= ' ensor-section-hero-title';
+                }
+                $attrs = (string) preg_replace(
+                    '/\bclass\s*=\s*["\'][^"\']*["\']/i',
+                    ' class="' . esc_attr(trim($classes)) . '"',
+                    $attrs,
+                    1
+                );
+            } else {
+                $attrs .= ' class="ensor-section-hero-title"';
+            }
+
+            return '<' . $tag . $attrs . '>';
+        },
+        $html,
+        1
+    );
+}
+
+/**
  * Devuelve el HTML por defecto que vive dentro de la zona editable de
  * un fragmento (entre los marcadores `<!-- ensor:editable -->`).
  * Útil para pre-rellenar el editor del post al hacer seed.

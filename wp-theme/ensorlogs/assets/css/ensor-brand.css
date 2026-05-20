@@ -1101,6 +1101,28 @@ html.dark .ensor-section-hero-title {
     max-width: 56rem;
 }
 
+/* Editor WP en página projects/blog: el h1 suele perder ensor-section-hero-title */
+section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
+section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type,
+section[aria-labelledby="blog-temas-heading"] h1:first-of-type,
+section[aria-labelledby="blog-temas-heading"] h2:first-of-type {
+    font-size: clamp(1.75rem, 4.2vw, 3.2rem) !important;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.055em;
+    color: var(--ensor-ink);
+    margin: 0;
+    text-wrap: balance;
+    max-width: 56rem;
+}
+
+html.dark section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
+html.dark section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type,
+html.dark section[aria-labelledby="blog-temas-heading"] h1:first-of-type,
+html.dark section[aria-labelledby="blog-temas-heading"] h2:first-of-type {
+    color: var(--ensor-paper);
+}
+
 /* Accesos del home “Hablemos de…” → categorías del blog */
 a.ensor-home-tema-pill {
     text-decoration: none;
