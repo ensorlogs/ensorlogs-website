@@ -1,11 +1,9 @@
-"""Comprobaciones estáticas de seguridad en repo y tema WordPress."""
+"""Comprobaciones estáticas de seguridad (mínimas)."""
 
 from __future__ import annotations
 
 import re
 from pathlib import Path
-
-import pytest
 
 from conftest import REPO_ROOT, THEME_ROOT
 
@@ -52,44 +50,38 @@ def iter_scannable_files() -> list[Path]:
     return files
 
 
-def test_htaccess_security_headers() -> None:
+def test_htaccess_hardening() -> None:
     htaccess = REPO_ROOT / ".htaccess"
     assert htaccess.is_file(), "Falta .htaccess en la raíz"
     content = htaccess.read_text(encoding="utf-8", errors="replace")
     for needle in HTACCESS_REQUIRED:
-        assert needle in content, f".htaccess: falta directiva o cabecera «{needle}»"
+        assert needle in content, f".htaccess: falta «{needle}»"
     for folder in HTACCESS_BLOCKED_DIRS:
-        assert folder in content, f".htaccess: no bloquea acceso a «{folder}/»"
-
-
-def test_htaccess_denies_sensitive_extensions() -> None:
-    content = (REPO_ROOT / ".htaccess").read_text(encoding="utf-8", errors="replace")
+        assert folder in content, f".htaccess: no bloquea «{folder}/»"
     blocks_env = ".env" in content or "|env|" in content or r"\.env" in content
-    assert blocks_env, ".htaccess: no bloquea archivos .env"
+    assert blocks_env, ".htaccess: no bloquea .env"
     assert "Require all denied" in content or "Deny from all" in content
 
 
-@pytest.mark.parametrize("php_path", sorted(THEME_ROOT.rglob("*.php")), ids=lambda p: p.relative_to(REPO_ROOT).as_posix())
-def test_theme_php_abspath_guard(php_path: Path) -> None:
-    text = php_path.read_text(encoding="utf-8", errors="replace")
-    assert "ABSPATH" in text, f"{php_path}: sin protección ABSPATH"
+def test_theme_php_hardening() -> None:
+    missing_abspath: list[str] = []
+    dangerous: list[str] = []
+    for path in THEME_ROOT.rglob("*.php"):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if "ABSPATH" not in text:
+            missing_abspath.append(path.relative_to(REPO_ROOT).as_posix())
+        for pattern, label in DANGEROUS_PHP:
+            if pattern.search(text):
+                dangerous.append(f"{path.name}: {label}")
+    assert not missing_abspath, "PHP sin ABSPATH:\n" + "\n".join(missing_abspath[:8])
+    assert not dangerous, "Patrones PHP de riesgo:\n" + "\n".join(dangerous)
 
 
-def test_no_hardcoded_secrets_in_scannable_files() -> None:
+def test_no_hardcoded_secrets() -> None:
     hits: list[str] = []
     for path in iter_scannable_files():
         text = path.read_text(encoding="utf-8", errors="replace")
         for pattern, label in SECRET_PATTERNS:
             if pattern.search(text):
                 hits.append(f"{path.relative_to(REPO_ROOT)} ({label})")
-    assert not hits, "Posibles secretos en el repositorio:\n" + "\n".join(hits)
-
-
-def test_no_dangerous_php_patterns_in_theme() -> None:
-    hits: list[str] = []
-    for path in THEME_ROOT.rglob("*.php"):
-        text = path.read_text(encoding="utf-8", errors="replace")
-        for pattern, label in DANGEROUS_PHP:
-            if pattern.search(text):
-                hits.append(f"{path.relative_to(REPO_ROOT)}: {label}")
-    assert not hits, "Patrones PHP de alto riesgo:\n" + "\n".join(hits)
+    assert not hits, "Posibles secretos:\n" + "\n".join(hits[:8])

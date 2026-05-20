@@ -21,6 +21,8 @@ wp-theme/ensorlogs/seed-html/
 wp-theme/*.zip
 .cursor/
 tests/lighthouse-reports/
+.lighthouseci/
+.lighthouseci/
 
 # Archivos sensibles o de trabajo local.
 .env

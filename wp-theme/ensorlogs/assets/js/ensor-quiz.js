@@ -52,14 +52,21 @@
     /* ------------------------------------------------------ contador header */
     function findBrandHosts() {
         // Cada nodo `.ensor-wordmark` está dentro de un contenedor de marca;
-        // pegamos el contador justo después del rule del tagline.
-        var nodes = Array.prototype.slice.call(d.querySelectorAll('.ensor-wordmark'));
-        return nodes.map(function (n) {
-            return n.parentNode || null;
-        }).filter(Boolean);
+        // Anclas del logo en header (no dentro del <a> para evitar enlaces anidados).
+        return Array.prototype.slice.call(
+            d.querySelectorAll('header .nav > a.inline-flex, .mobile_menu > a.inline-flex')
+        ).filter(function (logoLink) {
+            return logoLink.querySelector('.ensor-wordmark');
+        });
     }
-    function ensureCounter(host) {
-        var existing = host.querySelector('.ensor-completed-counter');
+    function ensureCounter(logoLink) {
+        var host = logoLink.parentNode;
+        if (!host) return null;
+        var existing = logoLink.nextElementSibling;
+        if (existing && existing.classList && existing.classList.contains('ensor-completed-counter')) {
+            return existing;
+        }
+        existing = host.querySelector(':scope > .ensor-completed-counter');
         if (existing) return existing;
         var blogHref = (function () {
             // Si estamos en /articulos/ vamos a ../blog.html, si no, blog.html
@@ -75,15 +82,11 @@
         var a = d.createElement('a');
         a.className = 'ensor-completed-counter';
         a.href = blogHref;
-        a.setAttribute('aria-label', 'Logs completados');
+        a.setAttribute('aria-label', 'Logs completados: 0');
         a.innerHTML =
             '<span class="ensor-completed-counter__text">Logs Completados</span>' +
-            '<span class="ensor-completed-counter__num">0</span>';
-        // Inserta justo después de la regla del tagline (si existe).
-        var anchor = host.querySelector('.ensor-tagline-rule')
-                  || host.querySelector('.ensor-wordmark');
-        if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(a, anchor.nextSibling);
-        else host.appendChild(a);
+            '<span class="ensor-completed-counter__num" aria-hidden="true">0</span>';
+        host.insertBefore(a, logoLink.nextSibling);
         return a;
     }
     function refreshCounters() {
@@ -92,6 +95,7 @@
         counters.forEach(function (c) {
             var num = c.querySelector('.ensor-completed-counter__num');
             if (num) num.textContent = String(n);
+            c.setAttribute('aria-label', 'Logs completados: ' + String(n));
             c.classList.toggle('is-empty', n === 0);
         });
         // Cuando cambian los completados, también refrescamos las cards del listado.

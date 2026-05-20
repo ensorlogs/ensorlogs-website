@@ -368,6 +368,9 @@ html.dark .ensor-quiz__complete.is-unlocked::before {
     align-items: center;
     gap: 0.35rem;
     margin-top: 0.3rem;
+    padding: 0.2rem 0.1rem;
+    min-height: 24px;
+    min-width: 24px;
     font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: 0.02em;

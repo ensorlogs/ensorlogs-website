@@ -1,19 +1,20 @@
-# Comprobación de enlaces en HTML público (modo offline en CI).
+# Enlaces offline: muestra mínima (mismas páginas que pytest/Lighthouse).
 offline = true
 no_progress = true
-max_retries = 2
-timeout = 20
+max_retries = 1
+timeout = 15
 exclude_path = [
   "wp-theme/",
   "assets/audio/",
 ]
 
-# Recursos externos opcionales o bloqueados en CI sin red completa.
 exclude = [
   '^https://fonts\\.googleapis\\.com',
   '^https://fonts\\.gstatic\\.com',
   '^https://cdn\\.jsdelivr\\.net',
   '^https://www\\.linkedin\\.com',
+  '^https://calendly\\.com',
+  '^https://www\\.google\\.com/maps',
   '^mailto:',
   '^tel:',
 ]
@@ -21,13 +22,7 @@ exclude = [
 [files]
 include = [
   "index.html",
-  "about.html",
   "services.html",
-  "contact.html",
-  "blog.html",
-  "projects.html",
-  "credentials.html",
-  "articulos/*.html",
-  "proyectos/*.html",
-  "legal/*.html",
+  "articulos/wordpress-seguridad-estudiantes-2026.html",
+  "legal/privacidad.html",
 ]

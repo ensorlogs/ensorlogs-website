@@ -154,7 +154,8 @@ a.ensor-nav-volver.hidden {
 
 /* Logo wordmark */
 .ensor-logo-accent {
-    color: var(--ensor-accent);
+    /* Contraste AA sobre fondo claro del header */
+    color: var(--ensor-accent-hover, #9a7200);
 }
 
 html.dark .ensor-logo-accent {
