@@ -1,6 +1,8 @@
 # Calidad Ensorlogs (mínima)
 
-Suite reducida para CI rápido. Cubre **seguridad**, **SEO/enlaces** en una muestra y **Lighthouse** en 3 URLs.
+Suite reducida para CI rápido. Cubre **seguridad**, **SEO y enlaces internos** (pytest en 4 páginas) y **Lighthouse** en 3 URLs.
+
+`lychee.toml` queda para comprobación manual opcional (`lychee --config tests/lychee.toml index.html …`).
 
 ## Muestra HTML
 

@@ -47,18 +47,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Enlaces internos (Lychee, 4 páginas)
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >
-            --config tests/lychee.toml
-            index.html
-            services.html
-            articulos/wordpress-seguridad-estudiantes-2026.html
-            legal/privacidad.html
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Lighthouse CI (3 URLs)
         run: |
           npm install -g @lhci/cli@0.14.0
