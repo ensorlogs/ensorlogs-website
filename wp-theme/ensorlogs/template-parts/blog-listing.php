@@ -30,7 +30,8 @@ if (!empty($ensor_blog_q) && $ensor_blog_q[0] instanceof WP_Post) {
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 echo ensorlogs_render_fragment_editable('blog-list-top.fragment.html', $ensor_blog_editable);
 
-$ensor_cache_key = 'ensorlogs_blog_list_v1';
+$ensor_ui_lang   = function_exists('ensorlogs_current_lang') ? ensorlogs_current_lang() : 'es';
+$ensor_cache_key = 'ensorlogs_blog_list_v2_' . $ensor_ui_lang;
 $ensor_cached    = (defined('WP_DEBUG') && WP_DEBUG) ? false : get_transient($ensor_cache_key);
 if (is_string($ensor_cached) && $ensor_cached !== '') {
     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -42,18 +43,20 @@ if (is_string($ensor_cached) && $ensor_cached !== '') {
 
 ob_start();
 
-$blog_q = new WP_Query(
-    array(
-        'post_type'      => 'ensor_article',
-        'posts_per_page' => -1,
-        'orderby'        => array(
-            'menu_order' => 'ASC',
-            'date'       => 'DESC',
-        ),
-        'post_status'    => 'publish',
-        'no_found_rows'  => true,
-    )
+$blog_query_args = array(
+    'post_type'      => 'ensor_article',
+    'posts_per_page' => -1,
+    'orderby'        => array(
+        'menu_order' => 'ASC',
+        'date'       => 'DESC',
+    ),
+    'post_status'    => 'publish',
+    'no_found_rows'  => true,
 );
+if (function_exists('ensorlogs_article_lang_meta_query')) {
+    $blog_query_args['meta_query'] = ensorlogs_article_lang_meta_query();
+}
+$blog_q = new WP_Query($blog_query_args);
 
 $t_logo = esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
 
@@ -98,7 +101,13 @@ while ($blog_q->have_posts()) {
             <a href="<?php echo esc_url($link); ?>" class="block h-full">
                 <img src="<?php echo esc_url($img_src); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" width="900" height="506" decoding="async" loading="lazy" class="h-full w-full object-cover transition-all duration-300 group-hover:scale-105">
             </a>
-            <div class="tags absolute right-3 top-3">
+            <div class="tags absolute right-3 top-3 flex flex-wrap gap-1.5 justify-end max-w-[70%]">
+                <?php if (function_exists('ensorlogs_lang_badge_html')) : ?>
+                    <?php
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    echo ensorlogs_lang_badge_html($pid);
+                    ?>
+                <?php endif; ?>
                 <a href="<?php echo esc_url($tema_url); ?>" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm"><?php echo esc_html(ensorlogs_tema_label($primary)); ?></a>
             </div>
         </div>
@@ -109,13 +118,13 @@ while ($blog_q->have_posts()) {
             <div class="meta my-3 text-sm text-darkGray dark:text-pastelGrey">
                 <span class="text-regular inline-flex items-center gap-2">
                     <img class="w-8 h-8 shrink-0 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="<?php echo esc_url($t_logo); ?>" alt="EnsorLogs">
-                    <span class="author-name"><span><?php esc_html_e('Por', 'ensorlogs'); ?></span> EnsorLogs</span>
+                    <span class="author-name"><span><?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('Por', 'By') : __('Por', 'ensorlogs')); ?></span> EnsorLogs</span>
                 </span>
                 <time class="text-regular block mt-1.5 opacity-90" datetime="<?php echo esc_attr($time_attr); ?>"><?php echo esc_html($time_show); ?></time>
             </div>
             <p class="text-sm leading-snug text-darkGray dark:text-pastelGrey line-clamp-3 flex-1"><?php echo esc_html($card_txt); ?></p>
             <p class="mt-4 pt-1">
-                <a href="<?php echo esc_url($link); ?>" class="ensor-cta-hablemos inline-flex w-full items-center justify-center shrink-0 font-semibold py-2 px-4 text-sm leading-snug rounded-full no-underline" aria-label="<?php esc_attr_e('Leer log completo', 'ensorlogs'); ?>"><span><?php esc_html_e('Leer log', 'ensorlogs'); ?></span></a>
+                <a href="<?php echo esc_url($link); ?>" class="ensor-cta-hablemos inline-flex w-full items-center justify-center shrink-0 font-semibold py-2 px-4 text-sm leading-snug rounded-full no-underline" aria-label="<?php echo esc_attr(function_exists('ensorlogs_t') ? ensorlogs_t('Leer log completo', 'Read full log') : __('Leer log completo', 'ensorlogs')); ?>"><span><?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('Leer log', 'Read log') : __('Leer log', 'ensorlogs')); ?></span></a>
             </p>
         </div>
     </div>

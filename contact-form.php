@@ -67,8 +67,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 const WEBMASTER_EMAIL = 'hello@ensorlogs.com';
-const EXPECTED_CAPTCHA = 11;
 const MAX_NAME_LEN = 200;
+
+$ensor_turnstile_secret = '';
+if (is_readable(__DIR__ . '/contact-secrets.php')) {
+    require_once __DIR__ . '/contact-secrets.php';
+    if (defined('ENSOR_TURNSTILE_SECRET')) {
+        $ensor_turnstile_secret = (string) ENSOR_TURNSTILE_SECRET;
+    }
+}
 const MAX_SUBJECT_LEN = 300;
 const MAX_MESSAGE_LEN = 30000;
 
@@ -76,19 +83,60 @@ $name = trim($_POST['clientName'] ?? '');
 $email_address = trim($_POST['clientEmail'] ?? '');
 $subject = trim($_POST['contactSubject'] ?? '');
 $message = trim($_POST['contact__message'] ?? '');
-$captcha_in = trim($_POST['contact_captcha'] ?? '');
+$turnstile_token = trim($_POST['cf-turnstile-response'] ?? '');
 $honeypot = trim($_POST['website'] ?? '');
 
 $result = 'send_failed';
 $page_heading = 'No se pudo enviar';
 $page_message = 'Vuelve a intentarlo desde el formulario de contacto.';
 
+/**
+ * @param string $secret
+ * @param string $token
+ */
+function ensor_static_turnstile_verify(string $secret, string $token): bool
+{
+    if ($secret === '' || $token === '') {
+        return false;
+    }
+    $remote_ip = isset($_SERVER['REMOTE_ADDR']) && is_string($_SERVER['REMOTE_ADDR'])
+        ? $_SERVER['REMOTE_ADDR']
+        : '';
+    $payload = http_build_query(
+        array(
+            'secret'   => $secret,
+            'response' => $token,
+            'remoteip' => $remote_ip,
+        )
+    );
+    $ctx = stream_context_create(
+        array(
+            'http' => array(
+                'method'  => 'POST',
+                'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
+                'content' => $payload,
+                'timeout' => 15,
+            ),
+        )
+    );
+    $raw = @file_get_contents('https://challenges.cloudflare.com/turnstile/v0/siteverify', false, $ctx);
+    if (!is_string($raw) || $raw === '') {
+        return false;
+    }
+    $json = json_decode($raw, true);
+    return is_array($json) && !empty($json['success']);
+}
+
 if ($honeypot !== '') {
     $result = 'spam';
-} elseif ($captcha_in === '' || (int) $captcha_in !== EXPECTED_CAPTCHA) {
+} elseif ($ensor_turnstile_secret === '') {
+    $result = 'captcha_config';
+    $page_heading = 'Formulario no configurado';
+    $page_message = 'Falta contact-secrets.php con la clave secreta de Turnstile (copia contact-secrets.example.php).';
+} elseif (!ensor_static_turnstile_verify($ensor_turnstile_secret, $turnstile_token)) {
     $result = 'captcha';
     $page_heading = 'Verificación incorrecta';
-    $page_message = 'La respuesta anti-spam no coincide. Pulsa atrás en el navegador y revisa la suma (5 + 6).';
+    $page_message = 'No se pudo verificar el captcha. Vuelve al formulario, completa la verificación e inténtalo de nuevo.';
 } elseif ($name === '' || $email_address === '' || $subject === '' || $message === '') {
     $result = 'missing';
     $page_heading = 'Faltan datos';

@@ -107,6 +107,14 @@ while (have_posts()) {
                     <?php the_title(); ?>
                 </h1>
                 <ul class="meta flex flex-wrap items-center gap-3 sm:gap-4 lg:gap-6 mb-6 text-sm lg:text-base text-darkGray dark:text-pastelGrey">
+                    <?php if (function_exists('ensorlogs_lang_badge_html')) : ?>
+                        <li>
+                            <?php
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            echo ensorlogs_lang_badge_html($pid);
+                            ?>
+                        </li>
+                    <?php endif; ?>
                     <?php if ($primary !== '') : ?>
                         <li>
                             <?php
@@ -131,7 +139,10 @@ while (have_posts()) {
                         $words   = str_word_count(wp_strip_all_tags($content));
                         $minutes = max(1, (int) ceil($words / 220));
                         /* translators: %d: minutes to read */
-                        echo esc_html(sprintf(_n('%d min de lectura', '%d min de lectura', $minutes, 'ensorlogs'), $minutes));
+                        $read_fmt = function_exists('ensorlogs_t')
+                            ? ensorlogs_t('%d min de lectura', '%d min read')
+                            : _n('%d min de lectura', '%d min de lectura', $minutes, 'ensorlogs');
+                        echo esc_html(sprintf($read_fmt, $minutes));
                         ?>
                     </li>
                     <?php

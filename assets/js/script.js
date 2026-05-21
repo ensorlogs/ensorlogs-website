@@ -24,7 +24,18 @@
 
     /* Mensaje aleatorio bajo el logo del preloader (estilo geek) */
     (function preloaderRandomMessage() {
-        var messages = [
+        function pageLang() {
+            var path = (document.location && document.location.pathname) || '';
+            if (/\/en(\/|$)/.test(path)) {
+                return 'en';
+            }
+            var meta = document.querySelector('meta[name="ensor-lang"]');
+            if (meta && meta.getAttribute('content') === 'en') {
+                return 'en';
+            }
+            return 'es';
+        }
+        var messagesEs = [
             'Que la fuerza te acompañe',
             'Compilando el universo…',
             'sudo make me a sandwich',
@@ -46,6 +57,29 @@
             'wget la paciencia — conexión lenta',
             'chmod +x ./vida && ./vida'
         ];
+        var messagesEn = [
+            'May the Force be with you',
+            'Compiling the universe…',
+            'sudo make me a sandwich',
+            'There is no place like 127.0.0.1',
+            'The answer is 42. What was the question?',
+            'rm -rf / — probably not, right?',
+            'git commit -m "final_fix_definitive_v3"',
+            'Not a bug — an undocumented feature',
+            'In production I trust… the backups',
+            'Loading pixels with love and caffeine',
+            'Hello, World! (for real)',
+            '*ping* *ping* anyone on the server?',
+            'Aligning the satellites…',
+            'Importing knowledge from the cloud',
+            'Respawning in 3… 2…',
+            'May the source be with you',
+            'Status: thinking in binary',
+            'Optimizing the matrix…',
+            'wget patience — slow connection',
+            'chmod +x ./life && ./life'
+        ];
+        var messages = pageLang() === 'en' ? messagesEn : messagesEs;
         var el = document.querySelector('.ensor-preloader-loading');
         if (!el || !messages.length) {
             return;

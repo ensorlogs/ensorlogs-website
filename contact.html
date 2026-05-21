@@ -2,6 +2,10 @@
 <html lang="es" class="">
 
 <head>
+    <meta name="ensor-lang" content="es">
+    <meta name="ensor-assets-base" content="assets">
+    <meta name="ensor-lang-alt" content="en/contact.html">
+
     <!-- Basic Page Needs
     ================================================== -->
     <meta charset="UTF-8">
@@ -51,6 +55,7 @@
     <link rel="stylesheet" href="assets/css/ensor-newsletter.css">
 
     <link rel="stylesheet" href="assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="assets/css/ensor-lang-switch.css">
     <link rel="stylesheet" href="assets/css/ensor-cookies.css">
     <meta name="ensor-cookies-url" content="legal/cookies.html">
     <link rel="stylesheet" href="assets/css/ensor-quiz.css">
@@ -300,56 +305,31 @@
                 </div>
                 <!-- Contact Information Wrapper Ends -->
 
-                <!-- Contact Form Wrapper Starts -->
+                <!-- Suscripción a la lista -->
                 <div class="rounded-2xl max-md:p-4 p-6 xl:px-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" data-aos="fade-up">
 
-                    <h3 class="font-bold text-darkGray dark:text-pastelGrey text-xl lg:text-2xl ">
-                        Envíame un correo
+                    <h3 class="font-bold text-darkGray dark:text-pastelGrey text-xl lg:text-2xl">
+                        Suscríbete a la lista
                     </h3>
-                    <p>
-                        Cuéntame tu consulta o propuesta
+                    <p class="text-darkGray/90 dark:text-pastelGrey/90">
+                        Entérate cuando publique un log nuevo
                     </p>
 
-                                        <p class="ensor-contact-newsletter">
-                        <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-outline rounded-full text-regular py-2 lg:py-3 px-7 lg:px-10">Notifícame</button>
-                    </p>
-
-<!-- Main Contact Form Starts -->
-                    <form action="contact-form.php" method="post" class="relative mt-8 grid sm:grid-cols-2 gap-6" autocomplete="on">
-                        <!-- Anti-spam: no rellenar (honeypot) -->
-                        <div class="absolute -left-[9999px] top-auto h-0 overflow-hidden" aria-hidden="true">
-                            <label for="website">Sitio web</label>
-                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" value="">
-                        </div>
-                        <div class="input-item">
-                            <input type="text" id="clientName" name="clientName" class="rounded-4xl" placeholder="Nombre" required aria-label="Nombre" maxlength="200" autocomplete="name">
-                        </div>
-                        <div class="input-item">
-                            <input type="email" id="clientEmail" name="clientEmail" class="rounded-4xl" placeholder="Correo electrónico" required aria-label="Correo electrónico" maxlength="254" autocomplete="email">
-                        </div>
-                        <div class="input-item sm:col-span-2">
-                            <input type="text" id="contactSubject" name="contactSubject" class="rounded-4xl" placeholder="Asunto" required aria-label="Asunto" maxlength="300" autocomplete="off">
-                        </div>
-                        <div class="input-item sm:col-span-2">
-                            <textarea id="contact_message" name="contact__message" rows="10" class="rounded-2xl resize-none" placeholder="Escribe tu mensaje..." required aria-label="Mensaje" maxlength="30000"></textarea>
-                        </div>
-                        <div class="input-item sm:col-span-2">
-                            <label for="contact_captcha" class="block text-sm text-darkGray dark:text-pastelGrey mb-2">
-                                Verificación anti-spam: ¿Cuánto es 5 + 6?
-                            </label>
-                            <input type="text" id="contact_captcha" name="contact_captcha" class="rounded-4xl max-w-xs" placeholder="Respuesta numérica" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required aria-describedby="captcha-hint" maxlength="4">
-                          
-                        </div>
-                        <div class="input-item sm:col-span-2 text-center lg:text-end">
-                            <button type="submit" class="ensor-btn ensor-btn-primary text-regular py-2 lg:py-3 px-7 lg:px-10">
-                                Enviar mensaje
+                    <div class="ensor-contact-subscribe">
+                        <p class="text-darkGray dark:text-pastelGrey leading-relaxed max-w-xl">
+                            Recibe un aviso cuando publique un log nuevo: WordPress, datos, automatización y lo que vaya documentando en la bitácora.
+                        </p>
+                        <p class="ensor-contact-newsletter">
+                            <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-primary rounded-full text-regular py-2 lg:py-3 px-7 lg:px-10" aria-haspopup="dialog" aria-controls="ensor-newsletter-modal">
+                                Suscribirme a la lista
                             </button>
-                        </div>
-                    </form>
-                    <!-- Main Contact Form Ends -->
+                        </p>
+                        <p class="text-xs text-nobelGray dark:text-slateGray">
+                            Sin spam. Puedes darte de baja cuando quieras.
+                        </p>
+                    </div>
 
                 </div>
-                <!-- Contact Form Wrapper Ends -->
 
             </div>
 
@@ -430,46 +410,8 @@
     <script defer src="assets/js/script.js"></script>
     <script defer src="assets/js/nav-volver.js"></script>
     <script defer src="assets/js/theme-mode.js"></script>
-    <script>
-    (function () {
-        var params = new URLSearchParams(window.location.search);
-        var key = params.get('servicio');
-        if (!key) return;
-        var map = {
-            'desarrollo-web-app': {
-                subject: 'Consulta: Desarrollo Web / APP',
-                hint: 'Hola Ensor,\n\nMe interesa contratar desarrollo web o una aplicación. Te cuento el contexto:\n\n'
-            },
-            'ecommerce': {
-                subject: 'Consulta: E-commerce',
-                hint: 'Hola Ensor,\n\nNecesito ayuda con una tienda online (plataforma, catálogo, pagos o integraciones). Detalle:\n\n'
-            },
-            'marketing': {
-                subject: 'Consulta: Marketing digital',
-                hint: 'Hola Ensor,\n\nBusco apoyo en marketing digital medible (Ads, Analytics, reporting). Objetivo:\n\n'
-            },
-            'data-analyst': {
-                subject: 'Consulta: Data Analyst',
-                hint: 'Hola Ensor,\n\nNecesito reporting / tableros / análisis de datos. Fuentes y objetivo:\n\n'
-            },
-            'soporte-it-server': {
-                subject: 'Consulta: Soporte IT / Server',
-                hint: 'Hola Ensor,\n\nNecesito soporte IT (Windows y Linux), Microsoft 365, Azure o infraestructura. Entorno actual:\n\n'
-            },
-            'formacion': {
-                subject: 'Consulta: Formación / Talleres',
-                hint: 'Hola Ensor,\n\nMe gustaría planificar un taller o curso (universidad, empresa, evento o comunidad). Cuéntame:\n  • Tema y objetivo del taller/curso:\n  • Audiencia (nivel y nº de participantes):\n  • Formato (online, presencial, híbrido) y duración:\n  • Fechas tentativas:\n\n'
-            }
-        };
-        var conf = map[key];
-        if (!conf) return;
-        var sub = document.getElementById('contactSubject');
-        var msg = document.getElementById('contact_message');
-        if (sub && !sub.value.trim()) sub.value = conf.subject;
-        if (msg && !msg.value.trim()) msg.value = conf.hint;
-    })();
-    </script>
     <!-- Js Library End -->
+    <script defer src="assets/js/ensor-lang-switch.js"></script>
     <script defer src="assets/js/ensor-a11y.js"></script>
     <script defer src="assets/js/ensor-cookies.js"></script>
     <script defer src="assets/js/ensor-newsletter.js"></script>

@@ -91,61 +91,21 @@
                 </div>
                 <!-- Contact Information Wrapper Ends -->
 
-                <!-- Contact Form Wrapper Starts -->
+                <!-- Suscripción a la lista (sin formulario de contacto) -->
                 <div class="rounded-2xl max-md:p-4 p-6 xl:px-10 bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" data-aos="fade-up">
 
                     <!-- ensor:editable -->
-                    <h3 class="font-bold text-darkGray dark:text-pastelGrey text-xl lg:text-2xl ">
-                        Envíame un correo
+                    <h3 class="font-bold text-darkGray dark:text-pastelGrey text-xl lg:text-2xl">
+                        Suscríbete a la lista
                     </h3>
-                    <p>
-                        Cuéntame tu consulta o propuesta
+                    <p class="text-darkGray/90 dark:text-pastelGrey/90">
+                        Entérate cuando publique un log nuevo
                     </p>
                     <!-- /ensor:editable -->
 
-                    <p class="ensor-contact-newsletter">
-                        %%NEWSLETTER_BUTTON%%
-                    </p>
-
-                    <!-- Main Contact Form Starts -->
-                    %%CONTACT_STATUS%%
-                    <form id="contact-form" action="%%CONTACT_FORM_ACTION%%" method="post" class="relative mt-8 grid sm:grid-cols-2 gap-6" autocomplete="on">
-                        <input type="hidden" name="action" value="ensorlogs_contact">
-                        %%CONTACT_FORM_NONCE%%
-                        <!-- Anti-spam: no rellenar (honeypot) -->
-                        <div class="absolute -left-[9999px] top-auto h-0 overflow-hidden" aria-hidden="true">
-                            <label for="website">Sitio web</label>
-                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" value="">
-                        </div>
-                        <div class="input-item">
-                            <input type="text" id="clientName" name="clientName" class="rounded-4xl" placeholder="Nombre" required aria-label="Nombre" maxlength="200" autocomplete="name">
-                        </div>
-                        <div class="input-item">
-                            <input type="email" id="clientEmail" name="clientEmail" class="rounded-4xl" placeholder="Correo electrónico" required aria-label="Correo electrónico" maxlength="254" autocomplete="email">
-                        </div>
-                        <div class="input-item sm:col-span-2">
-                            <input type="text" id="contactSubject" name="contactSubject" class="rounded-4xl" placeholder="Asunto" required aria-label="Asunto" maxlength="300" autocomplete="off">
-                        </div>
-                        <div class="input-item sm:col-span-2">
-                            <textarea id="contact_message" name="contact__message" rows="10" class="rounded-2xl resize-none" placeholder="Escribe tu mensaje..." required aria-label="Mensaje" maxlength="30000"></textarea>
-                        </div>
-                        <div class="input-item sm:col-span-2">
-                            <label for="contact_captcha" class="block text-sm text-darkGray dark:text-pastelGrey mb-2">
-                                Verificación anti-spam: ¿Cuánto es 5 + 6?
-                            </label>
-                            <input type="text" id="contact_captcha" name="contact_captcha" class="rounded-4xl max-w-xs" placeholder="Respuesta numérica" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required aria-describedby="captcha-hint" maxlength="4">
-                            <p id="captcha-hint" class="text-xs text-nobelGray dark:text-slateGray mt-1">Necesario para evitar envíos automáticos.</p>
-                        </div>
-                        <div class="input-item sm:col-span-2 text-center lg:text-end">
-                            <button type="submit" class="ensor-btn ensor-btn-primary text-regular py-2 lg:py-3 px-7 lg:px-10">
-                                Enviar mensaje
-                            </button>
-                        </div>
-                    </form>
-                    <!-- Main Contact Form Ends -->
+                    %%CONTACT_SUBSCRIBE_BLOCK%%
 
                 </div>
-                <!-- Contact Form Wrapper Ends -->
 
             </div>
 

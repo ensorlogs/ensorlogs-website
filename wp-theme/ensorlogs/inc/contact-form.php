@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) {
 }
 
 const ENSORLOGS_CONTACT_RECIPIENT = 'hello@ensorlogs.com';
-const ENSORLOGS_CONTACT_CAPTCHA = 11;
 const ENSORLOGS_CONTACT_MAX_NAME = 200;
 const ENSORLOGS_CONTACT_MAX_SUBJECT = 300;
 const ENSORLOGS_CONTACT_MAX_MESSAGE = 30000;
@@ -26,9 +25,9 @@ add_action('admin_post_ensorlogs_contact', 'ensorlogs_handle_contact_form');
 function ensorlogs_contact_fragment_tokens(): array
 {
     return array(
-        '%%CONTACT_FORM_ACTION%%' => esc_url(admin_url('admin-post.php')),
-        '%%CONTACT_FORM_NONCE%%'  => wp_nonce_field('ensorlogs_contact_form', 'ensorlogs_contact_nonce', false, false),
-        '%%CONTACT_STATUS%%'      => ensorlogs_contact_status_notice(),
+        '%%CONTACT_SUBSCRIBE_BLOCK%%' => function_exists('ensorlogs_contact_subscribe_block')
+            ? ensorlogs_contact_subscribe_block()
+            : '',
     );
 }
 
@@ -46,14 +45,17 @@ function ensorlogs_handle_contact_form(): void
     $email    = sanitize_email(ensorlogs_contact_post_field('clientEmail'));
     $subject  = sanitize_text_field(ensorlogs_contact_post_field('contactSubject'));
     $message  = sanitize_textarea_field(ensorlogs_contact_post_field('contact__message'));
-    $captcha  = sanitize_text_field(ensorlogs_contact_post_field('contact_captcha'));
-    $website  = sanitize_text_field(ensorlogs_contact_post_field('website'));
+    $website = sanitize_text_field(ensorlogs_contact_post_field('website'));
 
     if ($website !== '') {
         ensorlogs_contact_redirect('spam');
     }
 
-    if ($captcha === '' || (int) $captcha !== ENSORLOGS_CONTACT_CAPTCHA) {
+    if (!function_exists('ensorlogs_turnstile_is_configured') || !ensorlogs_turnstile_is_configured()) {
+        ensorlogs_contact_redirect('captcha_config');
+    }
+
+    if (!ensorlogs_turnstile_verify_submission()) {
         ensorlogs_contact_redirect('captcha');
     }
 
@@ -117,7 +119,8 @@ function ensorlogs_contact_status_notice(): string
 
     $messages = array(
         'sent'      => array('success', __('Mensaje enviado. Gracias por escribir, te responderé lo antes posible.', 'ensorlogs')),
-        'captcha'   => array('error', __('La verificación anti-spam no coincide. Revisa la suma e inténtalo de nuevo.', 'ensorlogs')),
+        'captcha'   => array('error', __('No se pudo verificar el captcha. Marca la casilla de verificación e inténtalo de nuevo.', 'ensorlogs')),
+        'captcha_config' => array('error', __('El formulario no está configurado en el servidor. Inténtalo más tarde o escribe a hello@ensorlogs.com.', 'ensorlogs')),
         'missing'   => array('error', __('Completa todos los campos obligatorios antes de enviar el formulario.', 'ensorlogs')),
         'too_long'  => array('error', __('El texto es demasiado largo. Acorta el nombre, asunto o mensaje e inténtalo de nuevo.', 'ensorlogs')),
         'bad_email' => array('error', __('Indica una dirección de correo electrónico válida.', 'ensorlogs')),

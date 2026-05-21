@@ -129,7 +129,8 @@ add_action(
         }
         $url = esc_url($url);
         $img = esc_url(ensorlogs_social_image_url());
-        echo '<meta property="og:locale" content="es_ES">' . "\n";
+        $og_locale = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en' ? 'en_US' : 'es_ES';
+        echo '<meta property="og:locale" content="' . esc_attr($og_locale) . '">' . "\n";
         $og_type = (is_singular('ensor_article') || is_singular('post')) ? 'article' : 'website';
         echo '<meta property="og:type" content="' . esc_attr($og_type) . '">' . "\n";
         echo '<meta property="og:title" content="' . esc_attr($title) . '">' . "\n";

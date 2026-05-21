@@ -173,6 +173,17 @@ html.dark .ensor-newsletter-form :where(input[type="email"], input[type="text"],
     margin-top: 0.75rem;
 }
 
+.ensor-contact-subscribe {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ensor-contact-subscribe .ensor-contact-newsletter {
+    margin-top: 0.25rem;
+}
+
 .ensor-reader-footer .ensor-newsletter-open {
     border-radius: 999px;
 }

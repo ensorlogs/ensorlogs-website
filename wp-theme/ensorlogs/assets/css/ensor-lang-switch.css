@@ -1,0 +1,114 @@
+/* Ensorlogs · Language switch — ES arriba, EN abajo; alineado con FAB accesibilidad */
+.ensor-lang-switch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    margin: 0;
+    padding: 0;
+}
+
+/* Escritorio / tablet: centrado sobre el FAB de accesibilidad (48px, left 1rem) */
+.ensor-lang-switch--floating {
+    position: fixed;
+    left: calc(1rem + 24px);
+    bottom: calc(1rem + 48px + 0.5rem);
+    transform: translateX(-50%);
+    z-index: 88;
+}
+
+.ensor-lang-switch__btn {
+    width: 34px;
+    min-height: 22px;
+    padding: 2px 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    color: #1a1a1a;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transition: transform 0.15s ease, background 0.15s ease;
+    flex-shrink: 0;
+}
+
+html.dark .ensor-lang-switch__btn {
+    background: #1c1d22;
+    color: #f3f4f6;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.ensor-lang-switch__flag {
+    display: block;
+    width: 16px;
+    height: 11px;
+    object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.ensor-lang-switch__code {
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    line-height: 1;
+}
+
+.ensor-lang-switch__btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.ensor-lang-switch__btn.is-active {
+    background: var(--ensor-accent, #d9a300);
+    border-color: transparent;
+    cursor: default;
+}
+
+.ensor-lang-switch__btn:disabled {
+    opacity: 1;
+}
+
+/* Móvil: dentro del menú lateral, debajo de Claro / oscuro */
+.ensor-lang-switch--mobile {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.ensor-lang-switch--mobile .ensor-lang-switch__btn {
+    width: 100%;
+    min-height: 2.75rem;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.65rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    box-shadow: none;
+}
+
+.ensor-lang-switch--mobile .ensor-lang-switch__flag {
+    width: 22px;
+    height: 15px;
+}
+
+.ensor-lang-switch--mobile .ensor-lang-switch__code {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+}
+
+/* lg:hidden en el menú móvil → 1024px */
+@media (max-width: 1023px) {
+    .ensor-lang-switch--floating {
+        display: none !important;
+    }
+
+    .ensor-lang-switch--mobile {
+        display: flex;
+    }
+}
+

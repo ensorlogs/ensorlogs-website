@@ -21,6 +21,69 @@
     var d = document;
     var STORAGE_KEY = 'ensorlogs_completed_logs_v1';
 
+    function pageLang() {
+        var path = (d.location && d.location.pathname) || '';
+        if (/\/en(\/|$)/.test(path)) {
+            return 'en';
+        }
+        var meta = d.querySelector('meta[name="ensor-lang"]');
+        if (meta && meta.getAttribute('content') === 'en') {
+            return 'en';
+        }
+        return 'es';
+    }
+
+    var STR = {
+        es: {
+            counterText: 'Logs Completados',
+            counterAria: 'Logs completados: ',
+            logDone: 'Log completado',
+            logPending: 'Pendiente · quiz al final',
+            cardDone: 'Completado',
+            cardPending: 'Pendiente',
+            verify: 'Verificar respuesta',
+            retry: 'Volver a intentar',
+            quizEyebrow: 'QUIZ.LOG · COMPRENSIÓN',
+            quizTitle: 'Pon a prueba lo que aprendiste',
+            quizDesc: 'Responde estas preguntas para confirmar que el log quedó claro. Cuando aciertes todas se desbloquea el botón para marcar el log como leído.',
+            progress: ' de ',
+            progressSuffix: ' aciertos',
+            completeLabel: 'He leído y comprendido el log',
+            verifyOk: '✓ Respuesta correcta',
+            verifyBad: '✗ No es esa',
+            feedbackOk: 'Correcto, ese punto quedó claro.',
+            feedbackBadPrefix: 'Aún no. ',
+            feedbackBad: 'No es esa. Repasa el log y vuelve a intentarlo.',
+            doneBtn: 'Completado'
+        },
+        en: {
+            counterText: 'Completed Logs',
+            counterAria: 'Completed logs: ',
+            logDone: 'Log completed',
+            logPending: 'Pending · quiz at the end',
+            cardDone: 'Completed',
+            cardPending: 'Pending',
+            verify: 'Check answer',
+            retry: 'Try again',
+            quizEyebrow: 'QUIZ.LOG · CHECK',
+            quizTitle: 'Test what you learned',
+            quizDesc: 'Answer these questions to confirm the log stuck. When you get them all right, you can mark the log as read.',
+            progress: ' of ',
+            progressSuffix: ' correct',
+            completeLabel: 'I have read and understood this log',
+            verifyOk: '✓ Correct answer',
+            verifyBad: '✗ Not that one',
+            feedbackOk: 'Correct — that point is clear.',
+            feedbackBadPrefix: 'Not yet. ',
+            feedbackBad: 'Not that one. Re-read the log and try again.',
+            doneBtn: 'Completed'
+        }
+    };
+
+    function L() {
+        return STR[pageLang()] || STR.es;
+    }
+
     /* --------------------------------------------------------------- helpers */
     function loadCompleted() {
         try {
@@ -82,9 +145,9 @@
         var a = d.createElement('a');
         a.className = 'ensor-completed-counter';
         a.href = blogHref;
-        a.setAttribute('aria-label', 'Logs completados: 0');
+        a.setAttribute('aria-label', L().counterAria + '0');
         a.innerHTML =
-            '<span class="ensor-completed-counter__text">Logs Completados</span>' +
+            '<span class="ensor-completed-counter__text">' + L().counterText + '</span>' +
             '<span class="ensor-completed-counter__num" aria-hidden="true">0</span>';
         host.insertBefore(a, logoLink.nextSibling);
         return a;
@@ -95,7 +158,7 @@
         counters.forEach(function (c) {
             var num = c.querySelector('.ensor-completed-counter__num');
             if (num) num.textContent = String(n);
-            c.setAttribute('aria-label', 'Logs completados: ' + String(n));
+            c.setAttribute('aria-label', L().counterAria + String(n));
             c.classList.toggle('is-empty', n === 0);
         });
         // Cuando cambian los completados, también refrescamos las cards del listado.
@@ -113,7 +176,7 @@
         badges.forEach(function (b) {
             b.classList.toggle('is-done', !!done);
             var label = b.querySelector('.ensor-log-status__label');
-            if (label) label.textContent = done ? 'Log completado' : 'Pendiente · quiz al final';
+            if (label) label.textContent = done ? L().logDone : L().logPending;
         });
     }
 
@@ -158,7 +221,7 @@
         badge.classList.toggle('is-done', !!done);
         badge.classList.toggle('is-pending', !done);
         var lbl = badge.querySelector('.ensor-log-card-status__label');
-        if (lbl) lbl.textContent = done ? 'Completado' : 'Pendiente';
+        if (lbl) lbl.textContent = done ? L().cardDone : L().cardPending;
     }
 
     function refreshLogCards() {
@@ -208,14 +271,14 @@
         var verify = d.createElement('button');
         verify.type = 'button';
         verify.className = 'ensor-quiz__verify';
-        verify.textContent = 'Verificar respuesta';
+        verify.textContent = L().verify;
         verify.disabled = true;
         actions.appendChild(verify);
 
         var retry = d.createElement('button');
         retry.type = 'button';
         retry.className = 'ensor-quiz__retry';
-        retry.textContent = 'Volver a intentar';
+        retry.textContent = L().retry;
         retry.style.display = 'none';
         actions.appendChild(retry);
 
@@ -244,9 +307,9 @@
         intro.className = 'ensor-quiz__intro';
         intro.innerHTML =
             '<div>' +
-                '<p class="ensor-quiz__eyebrow">QUIZ.LOG · COMPRENSIÓN</p>' +
-                '<h2 class="ensor-quiz__title">Pon a prueba lo que aprendiste</h2>' +
-                '<p class="ensor-quiz__desc">Responde estas preguntas para confirmar que el log quedó claro. Cuando aciertes todas se desbloquea el botón para marcar el log como leído.</p>' +
+                '<p class="ensor-quiz__eyebrow">' + L().quizEyebrow + '</p>' +
+                '<h2 class="ensor-quiz__title">' + L().quizTitle + '</h2>' +
+                '<p class="ensor-quiz__desc">' + L().quizDesc + '</p>' +
             '</div>';
         section.appendChild(intro);
 
@@ -258,11 +321,11 @@
         summary.className = 'ensor-quiz__summary';
         summary.innerHTML =
             '<div>' +
-                '<div class="ensor-quiz__progress js-progress">0 de ' + questions.length + ' aciertos</div>' +
+                '<div class="ensor-quiz__progress js-progress">0' + L().progress + questions.length + L().progressSuffix + '</div>' +
                 '<div class="ensor-quiz__progress-bar" aria-hidden="true"><div class="ensor-quiz__progress-fill js-progress-fill"></div></div>' +
             '</div>' +
             '<button type="button" class="ensor-quiz__complete" disabled aria-disabled="true">' +
-                '<span class="ensor-quiz__complete-label">He leído y comprendido el log</span>' +
+                '<span class="ensor-quiz__complete-label">' + L().completeLabel + '</span>' +
             '</button>';
         section.appendChild(summary);
 
@@ -272,13 +335,13 @@
 
         function updateProgress() {
             var rights = qStates.filter(function (s) { return s === 'right'; }).length;
-            progressEl.textContent = rights + ' de ' + questions.length + ' aciertos';
+            progressEl.textContent = rights + L().progress + questions.length + L().progressSuffix;
             fillEl.style.width = Math.round((rights / questions.length) * 100) + '%';
             if (rights === questions.length) {
                 completeBtn.classList.add('is-unlocked');
                 completeBtn.disabled = false;
                 completeBtn.removeAttribute('aria-disabled');
-                completeBtn.querySelector('.ensor-quiz__complete-label').textContent = 'He leído y comprendido el log';
+                completeBtn.querySelector('.ensor-quiz__complete-label').textContent = L().completeLabel;
             } else {
                 completeBtn.classList.remove('is-unlocked');
                 completeBtn.disabled = true;
@@ -307,9 +370,9 @@
                     b.el.setAttribute('data-state', 'right');
                     qStates[i] = 'right';
                     options[picked].classList.add('is-correct');
-                    b.verifyBtn.textContent = '✓ Respuesta correcta';
+                    b.verifyBtn.textContent = L().verifyOk;
                     b.retryBtn.style.display = 'none';
-                    b.feedback.textContent = questions[i].explanation || 'Correcto, ese punto quedó claro.';
+                    b.feedback.textContent = questions[i].explanation || L().feedbackOk;
                     // Bloquea radios
                     radios.forEach(function (r) { r.disabled = true; });
                 } else {
@@ -317,22 +380,22 @@
                     qStates[i] = 'wrong';
                     options[picked].classList.add('is-wrong');
                     options[correct].classList.add('is-correct');
-                    b.verifyBtn.textContent = '✗ No es esa';
+                    b.verifyBtn.textContent = L().verifyBad;
                     b.retryBtn.style.display = '';
                     b.feedback.textContent = questions[i].explanation
-                        ? 'Aún no. ' + questions[i].explanation
-                        : 'No es esa. Repasa el log y vuelve a intentarlo.';
+                        ? L().feedbackBadPrefix + questions[i].explanation
+                        : L().feedbackBad;
                 }
                 updateProgress();
             });
             b.retryBtn.addEventListener('click', function () {
                 b.el.setAttribute('data-state', 'idle');
                 qStates[i] = 'idle';
-                b.verifyBtn.textContent = 'Verificar respuesta';
+                b.verifyBtn.textContent = L().verify;
                 b.verifyBtn.disabled = true;
                 b.retryBtn.style.display = 'none';
-                var radios = b.el.querySelectorAll('input[type="radio"]');
-                radios.forEach(function (r) { r.disabled = false; r.checked = false; });
+                var radiosRetry = b.el.querySelectorAll('input[type="radio"]');
+                radiosRetry.forEach(function (r) { r.disabled = false; r.checked = false; });
                 var options = b.el.querySelectorAll('.ensor-quiz__option');
                 options.forEach(function (op) { op.classList.remove('is-correct', 'is-wrong'); });
                 b.feedback.textContent = '';
@@ -360,7 +423,7 @@
             completeBtn.classList.add('is-done');
             completeBtn.classList.remove('is-unlocked');
             completeBtn.disabled = true;
-            completeBtn.querySelector('.ensor-quiz__complete-label').textContent = 'Completado';
+            completeBtn.querySelector('.ensor-quiz__complete-label').textContent = L().doneBtn;
             applyLogStatusBadge(slug, true);
             refreshCounters();
         }

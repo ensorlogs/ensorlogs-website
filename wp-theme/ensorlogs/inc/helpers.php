@@ -24,7 +24,8 @@ function ensorlogs_theme_uri(string $path = ''): string
  */
 function ensorlogs_latest_log_fragment_tokens(): array
 {
-    $blog_url     = trailingslashit(esc_url(home_url('/'))) . 'blog/';
+    $blog_base    = function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/blog/') : home_url('/blog/');
+    $blog_url     = trailingslashit(esc_url($blog_base));
     $fallback_img = esc_url(ensorlogs_theme_uri('assets/img/Ensorlogs%20Blog.png'));
 
     $defaults = array(
@@ -34,19 +35,21 @@ function ensorlogs_latest_log_fragment_tokens(): array
         '%%LATEST_LOG_IMG%%'         => $fallback_img,
     );
 
-    $posts = get_posts(
-        array(
-            'post_type'              => 'ensor_article',
-            'post_status'            => 'publish',
-            'posts_per_page'         => 1,
-            'orderby'                => 'date',
-            'order'                  => 'DESC',
-            'no_found_rows'          => true,
-            'ignore_sticky_posts'    => true,
-            'update_post_meta_cache' => false,
-            'update_post_term_cache' => false,
-        )
+    $latest_args = array(
+        'post_type'              => 'ensor_article',
+        'post_status'            => 'publish',
+        'posts_per_page'         => 1,
+        'orderby'                => 'date',
+        'order'                  => 'DESC',
+        'no_found_rows'          => true,
+        'ignore_sticky_posts'    => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false,
     );
+    if (function_exists('ensorlogs_article_lang_meta_query')) {
+        $latest_args['meta_query'] = ensorlogs_article_lang_meta_query();
+    }
+    $posts = get_posts($latest_args);
     if (empty($posts[0]) || !($posts[0] instanceof WP_Post)) {
         return $defaults;
     }
@@ -87,19 +90,21 @@ function ensorlogs_latest_log_fragment_tokens(): array
  */
 function ensorlogs_home_log_ticker_segments_html(): string
 {
-    $posts = get_posts(
-        array(
-            'post_type'              => 'ensor_article',
-            'post_status'            => 'publish',
-            'posts_per_page'         => 12,
-            'orderby'                => 'date',
-            'order'                  => 'DESC',
-            'no_found_rows'          => true,
-            'ignore_sticky_posts'    => true,
-            'update_post_meta_cache' => false,
-            'update_term_meta_cache' => false,
-        )
+    $ticker_args = array(
+        'post_type'              => 'ensor_article',
+        'post_status'            => 'publish',
+        'posts_per_page'         => 12,
+        'orderby'                => 'date',
+        'order'                  => 'DESC',
+        'no_found_rows'          => true,
+        'ignore_sticky_posts'    => true,
+        'update_post_meta_cache' => false,
+        'update_term_meta_cache' => false,
     );
+    if (function_exists('ensorlogs_article_lang_meta_query')) {
+        $ticker_args['meta_query'] = ensorlogs_article_lang_meta_query();
+    }
+    $posts = get_posts($ticker_args);
 
     $prefix = '<span class="ensor-terminal-ticker__prefix">' . esc_html__('tail -f bitácora.log —', 'ensorlogs') . ' </span>';
 
@@ -145,14 +150,18 @@ function ensorlogs_home_log_ticker_segments_html(): string
  */
 function ensorlogs_render_fragment(string $filename): string
 {
+    if (function_exists('ensorlogs_i18n_fragment_filename')) {
+        $filename = ensorlogs_i18n_fragment_filename($filename);
+    }
     $dir = get_template_directory() . '/partials/';
     $path = $dir . ltrim($filename, '/');
     if (!is_readable($path)) {
         return '<!-- ensorlogs: falta el fragmento ' . esc_html($filename) . ' -->';
     }
     $html = (string) file_get_contents($path);
+    $home    = function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/') : home_url('/');
     $search  = array('%%THEME_URI%%', '%%HOME%%');
-    $replace = array(esc_url(get_template_directory_uri()), trailingslashit(esc_url(home_url('/'))));
+    $replace = array(esc_url(get_template_directory_uri()), trailingslashit(esc_url($home)));
     $html    = str_replace($search, $replace, $html);
     if (strpos($html, '%%LATEST_LOG_') !== false) {
         $latest = ensorlogs_latest_log_fragment_tokens();

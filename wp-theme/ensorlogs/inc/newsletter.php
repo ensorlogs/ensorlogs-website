@@ -89,10 +89,14 @@ function ensorlogs_get_mailchimp_form_html(): string
         . '</p>';
 }
 
-function ensorlogs_render_newsletter_button(string $extra_classes = ''): string
+function ensorlogs_render_newsletter_button(string $extra_classes = '', string $label = ''): string
 {
     if (!ensorlogs_newsletter_enabled()) {
         return '';
+    }
+
+    if ($label === '') {
+        $label = __('Notifícame', 'ensorlogs');
     }
 
     $classes = trim(
@@ -102,8 +106,43 @@ function ensorlogs_render_newsletter_button(string $extra_classes = ''): string
     return sprintf(
         '<button type="button" class="%1$s" aria-haspopup="dialog" aria-controls="ensor-newsletter-modal">%2$s</button>',
         esc_attr($classes),
-        esc_html__('Notifícame', 'ensorlogs')
+        esc_html($label)
     );
+}
+
+/**
+ * Bloque de suscripción para la página Contacto (sin formulario de mensajes).
+ */
+function ensorlogs_contact_subscribe_block(): string
+{
+    if (!ensorlogs_newsletter_enabled()) {
+        return '<p class="text-sm text-nobelGray dark:text-slateGray">'
+            . esc_html__(
+                'La suscripción por correo se activa cuando conectas Mailchimp en WordPress.',
+                'ensorlogs'
+            )
+            . '</p>';
+    }
+
+    $button = ensorlogs_render_newsletter_button(
+        'ensor-btn-primary',
+        __('Suscribirme a la lista', 'ensorlogs')
+    );
+
+    return '<div class="ensor-contact-subscribe">'
+        . '<p class="text-darkGray dark:text-pastelGrey leading-relaxed max-w-xl">'
+        . esc_html__(
+            'Recibe un aviso cuando publique un log nuevo: WordPress, datos, automatización y lo que vaya documentando en la bitácora.',
+            'ensorlogs'
+        )
+        . '</p>'
+        . '<p class="ensor-contact-newsletter">'
+        . $button
+        . '</p>'
+        . '<p class="text-xs text-nobelGray dark:text-slateGray">'
+        . esc_html__('Sin spam. Puedes darte de baja cuando quieras.', 'ensorlogs')
+        . '</p>'
+        . '</div>';
 }
 
 /**

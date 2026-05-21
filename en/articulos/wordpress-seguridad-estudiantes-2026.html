@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+    <meta name="ensor-lang" content="en">
+    <meta name="ensor-assets-base" content="../../assets">
+    <meta name="ensor-lang-alt" content="../../articulos/wordpress-seguridad-estudiantes-2026.html">
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <meta charset="UTF-8">
+    <script>(function(){try{if(localStorage.theme==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();</script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Specific Meta
+    ================================================== -->
+    <meta name="viewport" 
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
+        <meta name="keywords"
+        content="WordPress, seguridad, backups, plugins, hosting, IA">
+    <meta name="description"
+        content="Backups, plugins, hosting y buenas prácticas con mirada de freelancer y estudiante. Cómo usar IA para revisar logs y checklists sin filtrar credenciales ni confiar ciegamente.">
+    <meta name="author" content="EnsorLogs">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ensorlogs.com/en/articulos/wordpress-seguridad-estudiantes-2026.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Ensorlogs">
+    <meta property="og:locale" content="es_VE">
+    <meta property="og:title" content="WordPress seguridad 2026 + IA como copiloto | Ensorlogs">
+    <meta property="og:description" content="Backups, plugins, hosting y buenas prácticas con mirada de freelancer y estudiante. Cómo usar IA para revisar logs y checklists sin filtrar credenciales ni confiar ciegamente.">
+    <meta property="og:url" content="https://ensorlogs.com/en/articulos/wordpress-seguridad-estudiantes-2026.html">
+
+    <!-- Site Title
+    ================================================== -->
+    <title>WordPress seguridad 2026 + IA como copiloto | Ensorlogs</title>
+
+    <!-- Site Favicon
+    ================================================== -->
+    <link rel="shortcut icon" href="../../assets/img/favicon.png" sizes="any">
+
+    <!-- Google Fonts
+    ================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+
+    <!-- All CSS Here
+    ================================================== -->
+    <link rel="stylesheet" href="../../assets/css/fontAwesome5Pro.css">
+    <link rel="stylesheet" href="../../assets/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="../../assets/css/aos-2.3.1.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.min.css">
+    <link rel="stylesheet" href="../../assets/css/ensor-brand.css">
+    <link rel="stylesheet" href="../../assets/css/ensor-newsletter.css">
+    <link rel="stylesheet" href="../../assets/css/ensor-reader.css">
+
+    <link rel="stylesheet" href="../../assets/css/ensor-a11y.css">
+    <link rel="stylesheet" href="../../assets/css/ensor-lang-switch.css">
+    <link rel="stylesheet" href="../../assets/css/ensor-cookies.css">
+    <link rel="stylesheet" href="../../assets/css/ensor-podcast.css">
+    <meta name="ensor-cookies-url" content="../legal/cookies.html">
+    <link rel="stylesheet" href="../../assets/css/ensor-quiz.css">
+</head>
+<body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Start Preloader
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <div class="preloader fixed z-999 h-screen w-full left-0 top-0 flex flex-col items-center justify-center bg-white dark:bg-powerBlack" role="status" aria-live="polite" aria-busy="true">
+        <div class="ensor-preloader-inner flex flex-col items-center gap-7 px-6">
+            <div class="ensor-preloader-logo">
+                <div class="ensor-preloader-logo-zoom" aria-hidden="true">
+                    <img src="../../assets/img/Logos/ensorlogs2.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
+                    <div class="ensor-preloader-fill">
+                        <img src="../../assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                    </div>
+                </div>
+            </div>
+            <p class="ensor-preloader-loading text-center text-[11px] font-semibold text-powerBlack md:text-xs dark:text-pastelGrey"></p>
+        </div>
+    </div>
+    <!--~~./ end Preloader ~~-->
+
+    <main class="app">
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Start Header
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <header class="my-4 lg:my-6 fixed top-0 w-full left-0 z-50 transition-all duration-300 [&.is-sticky]:mt-0">
+        <div class="container">
+            <div class="nav max-md:py-3 py-5 px-4 lg:px-6 xl:px-8 flex items-center justify-between bg-white dark:bg-[#1B1C1C] rounded-xl shadow-lg shadow-black/5">
+                <a href="../index.html" class="inline-flex items-center gap-3 min-w-0">
+                    <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 grid place-content-center p-1.5">
+                        <img src="../../assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
+                    </span>
+                    <span class="flex flex-col justify-center min-w-0 leading-none">
+                        <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
+                            ENSOR.<span class="ensor-logo-accent">LOGS</span>
+                        </span>
+                        <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
+                            A geek's logbook <img src="../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                        </span>
+                        <span class="ensor-tagline-rule mt-1.5 h-0.5 max-w-[12rem] rounded-full" aria-hidden="true"></span>
+                    </span>
+                </a>
+                <div class="main-menu *:transition-all *:text-darkGray *:inline-flex *:items-center dark:*:text-pastelGrey *:border *:border-transparent *:duration-300 *:px-6 *:py-2 *:leading-normal *:rounded-4xl *:font-semibold max-lg:hidden">
+
+                    <a href="../index.html" class="ensor-nav-volver dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Home
+                    </a>
+                    <a href="../blog.html" class="active dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Let's talk…
+                    </a>
+                    <a href="../about.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        About me
+                    </a>
+                    <a href="../projects.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        Projects
+                    </a>
+                    <a href="../services.html" class="dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
+                        How can I help?
+                    </a>
+                </div>
+                <div class="button-groups flex items-center gap-4 *:border *:border-flasWhite *:dark:border-flasBlack *:bg-gradient-to-b *:from-milkWhite *:to-seashell dark:*:from-metalBlack dark:*:to-oilBlack">
+                    <button class="btn_theme_switch max-lg:hidden w-13 h-13 max-md:w-12 max-md:h-12 relative rounded-full group *:w-5 *:h-5 *:max-md:w-6 *:max-md:h-6 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                        <svg  class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <svg class="moon opacity-0 group-[&.btn-light]:opacity-100" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <a href="../contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
+                        <span>Let's talk</span>
+                    </a>
+                            <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-outline rounded-full text-regular py-2 px-5 md:py-2.5 md:px-7 leading-snug">Notify me</button>
+                    <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
+                        <i class="fal fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Mobile Menu Start -->
+    <div class="mobile_menu fixed transition-all duration-300 top-0 -left-96 h-full bg-white dark:bg-powerBlack z-999 p-6 w-80 shadow-lg [&.is-menu-open]:left-0 flex flex-col lg:hidden">
+        <div class="relative">
+            <a href="../index.html" class="inline-flex items-center gap-2.5 pr-10">
+                <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 grid place-content-center p-1.5">
+                    <img src="../../assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
+                </span>
+                <span class="flex flex-col justify-center min-w-0 leading-none">
+                    <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">
+                        ENSOR.<span class="ensor-logo-accent">LOGS</span>
+                    </span>
+                    <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
+                        A geek's logbook <img src="../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                    </span>
+                    <span class="ensor-tagline-rule mt-1 h-0.5 max-w-[10rem] rounded-full" aria-hidden="true"></span>
+                </span>
+            </a>
+            <button class="close_menu absolute right-0 top-0 w-8 h-8 bg-powerBlack dark:bg-pastelGrey text-white dark:text-black flex items-center justify-center text-sm rounded-sm">
+                <i class="fal fa-times"></i>
+            </button>
+        </div>
+        <div class="my-12 h-calc(100vh_-_16rem) overflow-y-scroll space-y-2 *:text-powerBlack *:bg-slate-50 dark:*:bg-metalBlack dark:*:text-white *:flex *:items-center *:justify-between *:py-2.5 *:px-4 *:rounded-md *:text-regular">
+            <a href="../index.html" class="ensor-nav-volver [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Home
+            </a>
+            <a href="../blog.html" class="active [&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Let's talk…
+            </a>
+            <a href="../about.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                About me
+            </a>
+            <a href="../projects.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                Projects
+            </a>
+            <a href="../services.html" class="[&.active]:bg-powerBlack dark:[&.active]:bg-black [&.active]:text-white dark:[&.active]:text-white">
+                How can I help?
+            </a>
+        
+            <div class="ensor-mobile-theme-toggle flex items-center justify-between gap-3 py-2.5 px-4 rounded-md bg-slate-50 dark:bg-metalBlack text-powerBlack dark:text-white">
+                <span class="font-medium">Light / dark</span>
+                <button type="button" class="btn_theme_switch w-13 h-13 relative rounded-full group border border-flasWhite dark:border-flasBlack bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack *:w-5 *:h-5 *:absolute *:top-1/2 *:left-1/2 *:-translate-x-1/2 *:-translate-y-1/2 " aria-label="Dark - Light Switch">
+                    <svg class="sun group-[&.btn-light]:opacity-0" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 17.5C14.5899 17.5 17.5 14.5899 17.5 11C17.5 7.41015 14.5899 4.5 11 4.5C7.41015 4.5 4.5 7.41015 4.5 11C4.5 14.5899 7.41015 17.5 11 17.5Z" stroke="#CDD0DA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18.14 18.14L18.01 18.01M18.01 3.99L18.14 3.86L18.01 3.99ZM3.86 18.14L3.99 18.01L3.86 18.14ZM11 1.08V1V1.08ZM11 21V20.92V21ZM1.08 11H1H1.08ZM21 11H20.92H21ZM3.99 3.99L3.86 3.86L3.99 3.99Z" stroke="#CDD0DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <svg class="moon opacity-0 group-[&.btn-light]:opacity-100" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.03009 11.42C1.39009 16.57 5.76009 20.76 10.9901 20.99C14.6801 21.15 17.9801 19.43 19.9601 16.72C20.7801 15.61 20.3401 14.87 18.9701 15.12C18.3001 15.24 17.6101 15.29 16.8901 15.26C12.0001 15.06 8.00009 10.97 7.98009 6.13996C7.97009 4.83996 8.24009 3.60996 8.73009 2.48996C9.27009 1.24996 8.62009 0.659961 7.37009 1.18996C3.41009 2.85996 0.70009 6.84996 1.03009 11.42Z" stroke="#2F3236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="mt-auto">
+            <div class="cta_button text-center space-y-1">
+                <p  class="font-medium">
+                    Shall we talk?
+                </p>
+                <a href="../contact.html" class="bg-darkGray dark:bg-metalBlack inline-flex text-white font-semibold py-3 px-16 leading-1.75 rounded-md">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile menu end -->
+
+    <!-- Overlay for mobile menu visible -->
+    <div class="mobile_overlay fixed inset-0 z-50 bg-black/60 transition-all opacity-0 invisible [&.is-menu-open]:opacity-100 [&.is-menu-open]:visible lg:hidden"></div>
+    <!--~~./ end Header ~~-->
+
+    
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Start Main Content
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    
+    <div class="ensor-reader-progress" aria-hidden="true">
+        <div class="ensor-reader-progress__fill"></div>
+    </div>
+    <div class="ensor-reader-topic" role="status" aria-live="polite">
+        <span class="ensor-reader-topic__dot" aria-hidden="true"></span>
+        <span class="ensor-reader-topic__text"></span>
+    </div>
+
+    <article class="ensor-reader main-content mt-28 md:mt-32 lg:mt-36 xl:mt-44" data-aos="fade-up">
+        <div class="container">
+            <header class="ensor-reader-head max-w-[1180px] mx-auto">
+                <h1 class="font-bold text-3xl lg:text-4xl xl:text-5xl text-powerBlack dark:text-pastelGrey mb-3 leading-tight">
+                    Secure WordPress in 2026: what hurts at 3 a.m. and how AI helps without replacing you
+                </h1>
+                <ul class="meta flex flex-wrap items-center gap-3 sm:gap-4 lg:gap-6 mb-6 text-sm lg:text-base text-darkGray dark:text-pastelGrey">
+                    <li>
+                        <a href="../blog.html?tema=wordpress" class="ensor-reader-stack ensor-reader-stack--xl" style="--ensor-stack-color:#21759b" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.2 9.5h7.6M5.5 14.5l3.5-9M14.7 14.5l3.5-9M16 6.5l-2 8M9 6.5l2 8"/></svg></span><span class="ensor-reader-stack__label">WordPress</span></a>
+                    </li>
+                    <li>
+                        <i class="fal fa-clock" aria-hidden="true"></i>
+                        Mayo 2026
+                    </li>
+                    <li>
+                        <i class="fal fa-map-marker-alt" aria-hidden="true"></i>
+                        Caracas, Venezuela
+                    </li>
+                    <li>
+                        <i class="fal fa-user" aria-hidden="true"></i>
+                        EnsorLogs
+                    </li>
+                    <li>
+                        <i class="fal fa-book-open" aria-hidden="true"></i>
+                        3 min read
+                    </li>
+                    
+                </ul>
+
+                <div class="ensor-reader-headcard">
+                    <div class="ensor-reader-stacks" aria-label="Stacks tratados en este log">
+                                <a href="../blog.html?tema=wordpress" class="ensor-reader-stack" style="--ensor-stack-color:#21759b" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.2 9.5h7.6M5.5 14.5l3.5-9M14.7 14.5l3.5-9M16 6.5l-2 8M9 6.5l2 8"/></svg></span><span class="ensor-reader-stack__label">WordPress</span></a>
+                                <a href="../blog.html?tema=ia" class="ensor-reader-stack" style="--ensor-stack-color:#7c3aed" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="6" width="14" height="12" rx="3"/><circle cx="9.5" cy="12" r="1.1" fill="currentColor"/><circle cx="14.5" cy="12" r="1.1" fill="currentColor"/><path d="M12 3v3M8 21v-3M16 21v-3"/></svg></span><span class="ensor-reader-stack__label">AI</span></a>
+                                <a href="../blog.html?tema=servidores" class="ensor-reader-stack" style="--ensor-stack-color:#10b981" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="2"/><rect x="4" y="14" width="16" height="6" rx="2"/><circle cx="8" cy="7" r=".7" fill="currentColor"/><circle cx="8" cy="17" r=".7" fill="currentColor"/><path d="M14 7h3M14 17h3"/></svg></span><span class="ensor-reader-stack__label">Servers</span></a>
+                    </div>
+                    
+                </div>
+                
+            </header>
+
+            <div class="ensor-reader-hero max-w-screen-lg mx-auto mt-2 mb-8 md:mb-10">
+                <img
+                    src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1600&q=82"
+                    alt="Concepto de seguridad digital y protección de accesos en WordPress"
+                    width="1600" height="900"
+                    decoding="async" loading="eager" fetchpriority="high"
+                    class="ensor-article-hero rounded-xl xl:rounded-2xl w-full object-cover object-center">
+            </div>
+
+            <div class="ensor-reader-layout max-w-[1180px] mx-auto">
+                <aside class="ensor-reader-toc hidden lg:block" aria-label="Contents del log">
+                    <p class="ensor-reader-toc__title">In this log</p>
+                    <ul class="ensor-reader-toc__list">
+                                <li class="ensor-reader-toc__item"><a href="#la-base-que-nadie-quiere-escuchar" class="ensor-reader-toc__link" data-target="la-base-que-nadie-quiere-escuchar">The baseline nobody wants to hear</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#backups-tu-red-de-seguridad-emocional-tambien" class="ensor-reader-toc__link" data-target="backups-tu-red-de-seguridad-emocional-tambien">Backups: your emotional safety net too</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#plugins-gratis-que-salen-carisimos" class="ensor-reader-toc__link" data-target="plugins-gratis-que-salen-carisimos">“Free” plugins that cost a fortune</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#como-uso-la-ia-en-seguridad-sin-volverme-flojo" class="ensor-reader-toc__link" data-target="como-uso-la-ia-en-seguridad-sin-volverme-flojo">How I use AI in security (without getting lazy)</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#hosting-y-entorno" class="ensor-reader-toc__link" data-target="hosting-y-entorno">Hosting y entorno</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#si-algo-huele-mal" class="ensor-reader-toc__link" data-target="si-algo-huele-mal">Si algo huele mal</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#la-frase-que-me-repito" class="ensor-reader-toc__link" data-target="la-frase-que-me-repito">The phrase I repeat to myself</a></li>
+                    </ul>
+                </aside>
+                <div>
+                    <div class="ensor-reader-body entry-content ensor-wp-content max-w-none">
+                        <p class="text-lg font-medium text-powerBlack dark:text-pastelGrey border-l-4 border-[var(--ensor-accent)] pl-4 mb-8">
+Lo que hubiera querido que me gritaran antes del primer sitio comprometido por un plugin pirata y una contraseña que parecía piñata de cumpleaños.
+</p>
+
+<p>Si estás aprendiendo WordPress para facturar como freelance, para un negocio familiar o para sumar experiencia mientras estudias, la seguridad no es un capítulo que “dejas para cuando tengas tiempo”. Es lo que separa un proyecto tranquilo de una llamada a las dos de la mañana porque la web redirige a una tienda de zapatos que no existe.</p>
+<p>No necesitas volverte analista de CERT. Sí necesitas <strong>hábitos</strong> y criterio —y en 2026 la IA puede helpte a ordenar checklists o entender un log si la usas con cabeza.</p>
+<h1 id="la-base-que-nadie-quiere-escuchar">The baseline nobody wants to hear</h1>
+<p>Contraseñas fuertes y únicas para administradores, panel solo por HTTPS, correo de recuperación que sí revisas. Suena aburrido; es el cimiento. Si reutilizas la misma clave del streaming y del WordPress, estás en modo lotería.</p>
+<p><strong>Actualizar con cabeza</strong>: núcleo, temas y plugins desde fuentes legítimas. Antes de darle a “actualizar todo” un viernes a las diez de la noche, ten backup reciente. Las actualizaciones cierran fallos conocidos; los bots buscan versiones viejas.</p>
+<figure class="my-10 overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
+<img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1200&q=80" alt="Candado y seguridad digital en aplicaciones web" width="1200" height="675" decoding="async" loading="lazy" class="w-full object-cover max-h-[380px] md:max-h-[420px]" />
+<figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">Disciplina aburrida &gt; drama técnico a las 3 a.m.</figcaption>
+</figure>
+
+<h1 id="backups-tu-red-de-seguridad-emocional-tambien">Backups: your emotional safety net too</h1>
+<p>Sin backup <strong>probado</strong> no tienes plan; tienes esperanza. Copia archivos + base de datos fuera del mismo servidor, restaura una vez en staging y respira. Muchos hostings traen backups automáticos: mira cuántos días guardan y cómo restaurar. Un plugin mal configurado que genera ZIP vacíos es peor que no tener nada —porque te dabas por cubierto.</p>
+<h1 id="plugins-gratis-que-salen-carisimos">“Free” plugins that cost a fortune</h1>
+<p>Los <strong>nulled</strong> a veces vienen con regalo de malware. El ahorro es mentira: pierdes sitio, correo del cliente y reputación. Para practicar, repositorio oficial, demos legales o código abierto serio.</p>
+<p>Antes de instalar: ¿lo necesito?, ¿se actualiza?, ¿qué opinan quienes ya lo sufrieron? Menos plugins activos = menos superficie de ataque y menos peleas raras entre extensiones.</p>
+<h1 id="como-uso-la-ia-en-seguridad-sin-volverme-flojo">How I use AI in security (without getting lazy)</h1>
+<p>La IA no “protege” tu servidor mientras duermes. Lo que sí hace bien es helpte a <strong>redactar</strong> políticas simples para clientes, <strong>resumir</strong> artículos largos de hardening, <strong>traducir</strong> mensajes de error a pasos concretos o armar <strong>checklists</strong> mensuales de revisión.</p>
+<p>Si pego un fragmento de log, lo anonimizo: quito IPs completas, dominios del cliente y rutas del servidor. Nunca meto credenciales ni capturas con cookies.</p>
+<figure class="my-10 overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
+<img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1200&q=80" alt="Teclado y pantalla con ambiente de trabajo seguro" width="1200" height="675" decoding="async" loading="lazy" class="w-full object-cover max-h-[380px] md:max-h-[420px]" />
+<figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">La IA como intérprete y organizador; tú sigues siendo quien toca el servidor.</figcaption>
+</figure>
+
+<p>Prompt ejemplo: “Convierte esta lista de plugins en una tabla con riesgo (bajo/medio/alto) y razón en una línea” —luego <strong>compruebas</strong> cada fila con fuentes oficiales. La IA se equivoca; tú firmas.</p>
+<h1 id="hosting-y-entorno">Hosting y entorno</h1>
+<p>Hosting barato sin aislamiento puede contaminarte por vecinos. Busca PHP actualizado, opciones de firewall, bloqueo de intentos de login. Usuario MySQL con permisos mínimos para esa base. Usuario WP que no se llame <code>admin</code>.</p>
+<h1 id="si-algo-huele-mal">Si algo huele mal</h1>
+<p>Pantalla en blanco tras actualizar, redirecciones raras, archivos PHP donde no tocan: respira, corta el pánico, restaura desde backup. Sin backup, al menos cambia claves, revoca tokens y usa escaneo del hosting antes de seguir a ciegas.</p>
+<h1 id="la-frase-que-me-repito">The phrase I repeat to myself</h1>
+<p>La seguridad en WordPress es <strong>disciplina</strong>: lo mismo que te haría mejor estudiante —leer antes de instalar, document lo que hiciste, no confundir suerte con conocimiento. La IA acelera el aprendizaje; no reemplaza la responsabilidad frente al cliente que confió en ti.</p>
+                    </div>
+
+                    
+
+                    <footer class="ensor-reader-footer mt-10 grid md:grid-cols-2 gap-4 md:gap-6 items-center">
+                        <div class="ensor-reader-stacks-block flex flex-wrap items-center gap-3" aria-label="Stacks del log">
+                            <span class="ensor-reader-stacks-label">Stacks usados:</span>
+                            <div class="ensor-reader-stacks flex flex-wrap gap-2">
+                                <a href="../blog.html?tema=wordpress" class="ensor-reader-stack" style="--ensor-stack-color:#21759b" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.2 9.5h7.6M5.5 14.5l3.5-9M14.7 14.5l3.5-9M16 6.5l-2 8M9 6.5l2 8"/></svg></span><span class="ensor-reader-stack__label">WordPress</span></a>
+                                <a href="../blog.html?tema=ia" class="ensor-reader-stack" style="--ensor-stack-color:#7c3aed" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="6" width="14" height="12" rx="3"/><circle cx="9.5" cy="12" r="1.1" fill="currentColor"/><circle cx="14.5" cy="12" r="1.1" fill="currentColor"/><path d="M12 3v3M8 21v-3M16 21v-3"/></svg></span><span class="ensor-reader-stack__label">AI</span></a>
+                                <a href="../blog.html?tema=servidores" class="ensor-reader-stack" style="--ensor-stack-color:#10b981" rel="tag"><span class="ensor-reader-stack__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="2"/><rect x="4" y="14" width="16" height="6" rx="2"/><circle cx="8" cy="7" r=".7" fill="currentColor"/><circle cx="8" cy="17" r=".7" fill="currentColor"/><path d="M14 7h3M14 17h3"/></svg></span><span class="ensor-reader-stack__label">Servers</span></a>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 md:justify-end">
+                            <a href="../blog.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full no-underline"><span>Más logs</span></a>
+                            <a href="../contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full no-underline"><span>Let's talk</span></a>
+                        </div>
+                    </footer>
+
+                                        <div class="recent-posts mt-12">
+                        <h3 class="text-xl lg:text-2xl text-darkGray dark:text-pastelGrey font-bold mb-4">
+                            Otros logs
+                        </h3>
+                        <div class="grid sm:grid-cols-2 gap-6 *:p-2 *:rounded-xl xl:*:rounded-3xl *:bg-gradient-to-b *:from-milkWhite *:to-seashell *:dark:from-metalBlack *:dark:to-oilBlack *:border *:border-gray-100 dark:*:border-white/5">
+                            
+                            <div class="blog-item group">
+                                <div class="thumbnail relative overflow-hidden rounded-xl">
+                                    <a href="wordpress-rendimiento-estudiantes-2026.html">
+                                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=82" alt="Pantallas con métricas — rendimiento web medido con criterio" class="w-full transition-all duration-300 group-hover:scale-110" width="800" height="450" decoding="async">
+                                    </a>
+                                    <div class="tags absolute right-4 top-4">
+                                        <a href="../blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
+                                    </div>
+                                </div>
+                                <div class="description py-6 px-4 pb-4">
+                                    <h4 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
+                                        <a href="wordpress-rendimiento-estudiantes-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">Rendimiento WordPress + IA en 2026: velocidad que se nota en el bolsillo…</a>
+                                    </h4>
+                                    <p class="line-clamp-2 !leading-normal text-sm mt-2">Log de Ensorlogs — bitácora técnica y pedagógica.</p>
+                                    <p class="mt-4"><a href="wordpress-rendimiento-estudiantes-2026.html" class="font-semibold text-base text-darkGray dark:text-pastelGrey">Seguir leyendo →</a></p>
+                                </div>
+                            </div>
+                            <div class="blog-item group">
+                                <div class="thumbnail relative overflow-hidden rounded-xl">
+                                    <a href="wordpress-vale-pena-aprender-2026.html">
+                                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=82" alt="Escritorio con analytics y trabajo web — contexto para hablar de WordPress en 2026" class="w-full transition-all duration-300 group-hover:scale-110" width="800" height="450" decoding="async">
+                                    </a>
+                                    <div class="tags absolute right-4 top-4">
+                                        <a href="../blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
+                                    </div>
+                                </div>
+                                <div class="description py-6 px-4 pb-4">
+                                    <h4 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
+                                        <a href="wordpress-vale-pena-aprender-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">WordPress in 2026: still worth learning or already "dead"?</a>
+                                    </h4>
+                                    <p class="line-clamp-2 !leading-normal text-sm mt-2">Log de Ensorlogs — bitácora técnica y pedagógica.</p>
+                                    <p class="mt-4"><a href="wordpress-vale-pena-aprender-2026.html" class="font-semibold text-base text-darkGray dark:text-pastelGrey">Seguir leyendo →</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <button type="button" class="ensor-reader-toc-toggle lg:hidden" aria-label="Ver índice">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h13M4 12h13M4 18h13"/>
+            <circle cx="20" cy="6" r="1.2" fill="currentColor"/>
+            <circle cx="20" cy="12" r="1.2" fill="currentColor"/>
+            <circle cx="20" cy="18" r="1.2" fill="currentColor"/>
+        </svg>
+    </button>
+    <div class="ensor-reader-toc-sheet" role="dialog" aria-label="Contents del log">
+        <div class="ensor-reader-toc-sheet__panel">
+            <p class="ensor-reader-toc__title">In this log</p>
+            <ul class="ensor-reader-toc__list">
+                                <li class="ensor-reader-toc__item"><a href="#la-base-que-nadie-quiere-escuchar" class="ensor-reader-toc__link" data-target="la-base-que-nadie-quiere-escuchar">The baseline nobody wants to hear</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#backups-tu-red-de-seguridad-emocional-tambien" class="ensor-reader-toc__link" data-target="backups-tu-red-de-seguridad-emocional-tambien">Backups: your emotional safety net too</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#plugins-gratis-que-salen-carisimos" class="ensor-reader-toc__link" data-target="plugins-gratis-que-salen-carisimos">“Free” plugins that cost a fortune</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#como-uso-la-ia-en-seguridad-sin-volverme-flojo" class="ensor-reader-toc__link" data-target="como-uso-la-ia-en-seguridad-sin-volverme-flojo">How I use AI in security (without getting lazy)</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#hosting-y-entorno" class="ensor-reader-toc__link" data-target="hosting-y-entorno">Hosting y entorno</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#si-algo-huele-mal" class="ensor-reader-toc__link" data-target="si-algo-huele-mal">Si algo huele mal</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#la-frase-que-me-repito" class="ensor-reader-toc__link" data-target="la-frase-que-me-repito">The phrase I repeat to myself</a></li>
+            </ul>
+        </div>
+    </div>
+<!--~~./ end Main Content ~~-->
+
+
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Start Footer
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <footer class="mt-24 pb-8" data-aos="fade-up">
+        <div class="container text-center">
+            <div class="ensor-footer-cta" data-aos="fade-up">
+                <span class="ensor-footer-cta__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
+                    </svg>
+                </span>
+                <h5 class="ensor-footer-cta__heading">
+                    Interested in working with me? <a href="../contact.html" class="ensor-footer-cta__link">Contact me</a>
+                </h5>
+                <p class="ensor-footer-cta__lead">
+                    Write to me about a project, a technical collaboration, a workshop, or a course. I also enjoy talking with people in the community and learning from those who know their craft.
+                </p>
+                                <p class="ensor-footer-cta__newsletter">
+                    <button type="button" class="ensor-newsletter-open ensor-btn ensor-btn-outline rounded-full text-regular py-2 lg:py-3 px-7 lg:px-10">Notify me</button>
+                </p>
+<p class="ensor-footer-cta__alt">
+                    <a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__alt-link">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <span>Prefer a call? Book 30 minutes on Calendly</span>
+                        <i class="fal fa-arrow-right text-xs" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="ensor-footer-cta__copy">
+                    &copy;2026 <a href="#top" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>. All rights reserved
+                    <span class="ensor-footer-cta__love" aria-label="Built with care and WordPress">
+                        · Built with <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span> and <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
+                    </span>
+                </p>
+            </div>
+        </div>
+    <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Legal links" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
+            <a href="../legal/aviso-legal.html" class="hover:underline">Legal notice</a>
+            <a href="../legal/privacidad.html" class="hover:underline">Privacy</a>
+            <a href="../legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="../legal/accesibilidad.html" class="hover:underline">Accessibility</a>
+            <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Cookie preferences</button>
+        </nav>
+    </div>
+</footer>
+    <!--~~ Footer End ~~-->
+
+    </main>
+    <!--~~ Main End ~~-->
+    
+    
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Start ScrollToTop
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <a href='#top' title='Scroll to top' id='scroll-top' class='topbutton fixed right-4 xl:right-7 2xl:right-8 bottom-6 xl:bottom-7.5 w-13 h-13 text-lg rounded-full bg-white dark:bg-powerBlack shadow-sm shadow-slate-400 grid place-content-center text-black dark:text-white opacity-0 invisible transition duration-200 [&.btn-show]:opacity-100 [&.btn-show]:visible z-[9999]'>
+        <i class='far fa-level-up-alt'></i>
+    </a>
+    <!--~~ End Scroll to Top ~~-->
+
+    <!-- Js Library Start -->
+    <script defer src="../../assets/js/jquery-3.6.0.min.js"></script>
+    <script defer src="../../assets/js/waypoints.min.js"></script>
+    <script defer src="../../assets/js/tw-elements.umd.min.js"></script>
+    <script defer src="../../assets/js/swiper-bundle.min.js"></script>
+    <script defer src="../../assets/js/aos.js"></script>
+    <script defer src="../../assets/js/tilt.jquery.min.js"></script>
+    <script defer src="../../assets/js/script.js"></script>
+    <script defer src="../../assets/js/nav-volver.js"></script>
+    <script defer src="../../assets/js/theme-mode.js"></script>
+    <script defer src="../../assets/js/ensor-reader.js"></script>
+    <!-- Js Library End -->
+    <script defer src="../../assets/js/ensor-lang-switch.js"></script>
+    <script defer src="../../assets/js/ensor-a11y.js"></script>
+    <script defer src="../../assets/js/ensor-cookies.js"></script>
+    <script defer src="../../assets/js/ensor-newsletter.js"></script>
+    <script defer src="../../assets/js/ensor-podcast.js"></script>
+    <script defer src="../../assets/js/ensor-quiz.js"></script>
+
+<div
+    id="ensor-newsletter-modal"
+    class="ensor-newsletter-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ensor-newsletter-title"
+    aria-describedby="ensor-newsletter-desc"
+    aria-hidden="true"
+    hidden
+>
+    <div class="ensor-newsletter-modal__overlay" data-ensor-newsletter-close tabindex="-1"></div>
+    <div class="ensor-newsletter-modal__panel">
+        <button type="button" class="ensor-newsletter-modal__close" data-ensor-newsletter-close aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 id="ensor-newsletter-title" class="ensor-newsletter-modal__title">Get notified about new logs</h2>
+        <p id="ensor-newsletter-desc" class="ensor-newsletter-modal__lead">
+            Subscribe to the list for free — I will let you know when I publish a new log on WordPress, data, automation and whatever I learn in the logbook.
+        </p>
+        <div class="ensor-newsletter-modal__form ensor-newsletter-form">
+            <form action="../contact.html" method="get">
+                <label for="ensor-newsletter-email-static">Your email address</label>
+                <input type="email" id="ensor-newsletter-email-static" name="clientEmail" placeholder="Your email address" required autocomplete="email">
+                <input type="hidden" name="contactSubject" value="Subscribe newsletter Ensorlogs">
+                <button type="submit">Subscribe</button>
+            </form>        </div>
+        <p class="ensor-newsletter-modal__legal">
+            By subscribing you agree to receive emails from the Ensorlogs list.
+            See the <a href="../legal/privacidad.html">privacy policy</a>.
+        </p>
+    </div>
+</div>
+
+</body>
+
+</html>

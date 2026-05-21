@@ -6,6 +6,24 @@ Aquí dejo solo lo necesario para publicar el sitio y el theme de WordPress. Las
 
 Sitio: https://ensorlogs.com
 
+## Vista local (sitio estático ES / EN)
+
+No abras los `.html` con doble clic (`file://`): el botón **EN** no navegará bien. Usa un servidor local:
+
+```bash
+./scripts/serve-static.sh
+# o: python3 -m http.server 8080
+```
+
+- Español: http://127.0.0.1:8080/index.html  
+- Inglés: http://127.0.0.1:8080/en/index.html  
+
+Tras cambiar textos en español, regenera inglés:
+
+```bash
+python3 scripts/generate_en_static.py
+```
+
 ## Calidad y CI
 
 Antes de desplegar a producción, el workflow **Quality Gate** (`.github/workflows/quality-gate.yml`) ejecuta pruebas de seguridad, estándares HTML, enlaces y Lighthouse. Ver `tests/README.md` para ejecutarlas en local.
