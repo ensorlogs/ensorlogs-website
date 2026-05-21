@@ -39,6 +39,9 @@ function ensorlogs_newsletter_privacy_url(): string
     if (!$page) {
         $page = get_page_by_path('privacidad');
     }
+    if (function_exists('ensorlogs_lang_url')) {
+        return ensorlogs_lang_url('/legal/privacidad/');
+    }
     if ($page instanceof WP_Post) {
         $permalink = get_permalink($page);
         if (is_string($permalink) && $permalink !== '') {
@@ -200,10 +203,16 @@ function ensorlogs_render_newsletter_modal(): void
             </div>
             <p class="ensor-newsletter-modal__legal">
                 <?php
+                $legal_line = function_exists('ensorlogs_t')
+                    ? ensorlogs_t(
+                        'Al suscribirte aceptas recibir correos de la lista Ensorlogs. Consulta la <a href="%s">política de privacidad</a>.',
+                        'By subscribing you agree to receive emails from the Ensorlogs list. See the <a href="%s">privacy policy</a>.'
+                    )
+                    : __('Al suscribirte aceptas recibir correos de la lista Ensorlogs. Consulta la <a href="%s">política de privacidad</a>.', 'ensorlogs');
                 echo wp_kses(
                     sprintf(
                         /* translators: %s: privacy policy URL */
-                        __('Al suscribirte aceptas recibir correos de la lista Ensorlogs. Consulta la <a href="%s">política de privacidad</a>.', 'ensorlogs'),
+                        $legal_line,
                         esc_url($privacy_url)
                     ),
                     array(

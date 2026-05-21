@@ -17,7 +17,9 @@ src/
 CV-CONTENIDO.md
 assets/audio/README.md
 wp-theme/ensorlogs/INSTALL.txt
-wp-theme/ensorlogs/seed-html/
+wp-theme/ensorlogs/seed-html/**
+!wp-theme/ensorlogs/seed-html/legal/
+!wp-theme/ensorlogs/seed-html/legal/**
 wp-theme/*.zip
 .cursor/
 tests/lighthouse-reports/
