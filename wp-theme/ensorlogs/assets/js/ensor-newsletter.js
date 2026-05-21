@@ -7,11 +7,15 @@
     var cfg = typeof window.ensorNewsletter === 'object' ? window.ensorNewsletter : {};
     var BODY_LOCK = 'ensor-newsletter-open';
 
-    var modal = null;
     var lastFocus = null;
 
     function getModal() {
         return d.getElementById('ensor-newsletter-modal');
+    }
+
+    function isOpen() {
+        var m = getModal();
+        return !!(m && m.classList.contains('is-open'));
     }
 
     function getFocusables(root) {
@@ -38,7 +42,7 @@
     }
 
     function openModal() {
-        modal = getModal();
+        var modal = getModal();
         if (!modal) {
             return;
         }
@@ -57,12 +61,12 @@
     }
 
     function closeModal() {
-        modal = getModal();
+        var modal = getModal();
         if (!modal) {
             return;
         }
-        modal.setAttribute('aria-hidden', 'true');
         modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
         modal.setAttribute('hidden', '');
         d.body.classList.remove(BODY_LOCK);
 
@@ -72,7 +76,38 @@
         lastFocus = null;
     }
 
+    function onCloseActivate(e) {
+        if (!isOpen()) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        closeModal();
+    }
+
+    function bindModal() {
+        var modal = getModal();
+        if (!modal || modal.getAttribute('data-ensor-newsletter-bound') === '1') {
+            return;
+        }
+        modal.setAttribute('data-ensor-newsletter-bound', '1');
+
+        modal.addEventListener('click', function (e) {
+            if (!isOpen()) {
+                return;
+            }
+            if (e.target.closest('[data-ensor-newsletter-close]')) {
+                onCloseActivate(e);
+            }
+        }, true);
+
+        modal.querySelectorAll('[data-ensor-newsletter-close]').forEach(function (el) {
+            el.addEventListener('click', onCloseActivate);
+        });
+    }
+
     function onKeydown(e) {
+        var modal = getModal();
         if (!modal || !modal.classList.contains('is-open')) {
             return;
         }
@@ -160,18 +195,22 @@
             });
     }
 
+    function ready(fn) {
+        if (d.readyState !== 'loading') {
+            fn();
+        } else {
+            d.addEventListener('DOMContentLoaded', fn);
+        }
+    }
+
     d.addEventListener('click', function (e) {
         if (e.target.closest('.ensor-newsletter-open')) {
             e.preventDefault();
             openModal();
-            return;
-        }
-        if (e.target.closest('[data-ensor-newsletter-close]')) {
-            e.preventDefault();
-            closeModal();
         }
     });
 
     d.addEventListener('submit', handleFormSubmit);
     d.addEventListener('keydown', onKeydown);
+    ready(bindModal);
 })();

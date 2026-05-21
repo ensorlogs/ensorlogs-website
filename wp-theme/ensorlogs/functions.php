@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.14');
+define('ENSORLOGS_THEME_VERSION', '1.10.15');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';

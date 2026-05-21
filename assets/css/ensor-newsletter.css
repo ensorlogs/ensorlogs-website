@@ -8,7 +8,7 @@ body.ensor-newsletter-open {
     position: fixed;
     inset: 0;
     z-index: 10050;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 1rem;
@@ -19,6 +19,7 @@ body.ensor-newsletter-open {
 }
 
 .ensor-newsletter-modal.is-open {
+    display: flex;
     pointer-events: auto;
     visibility: visible;
     opacity: 1;
@@ -27,8 +28,10 @@ body.ensor-newsletter-open {
 .ensor-newsletter-modal__overlay {
     position: absolute;
     inset: 0;
+    z-index: 0;
     background: rgba(10, 10, 12, 0.62);
     backdrop-filter: blur(4px);
+    cursor: pointer;
 }
 
 .ensor-newsletter-modal__panel {
@@ -55,6 +58,7 @@ html.dark .ensor-newsletter-modal__panel {
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
+    z-index: 2;
     width: 2.25rem;
     height: 2.25rem;
     border: 0;
@@ -67,6 +71,8 @@ html.dark .ensor-newsletter-modal__panel {
     display: grid;
     place-content: center;
     opacity: 0.75;
+    touch-action: manipulation;
+    pointer-events: auto;
     transition: opacity 0.15s ease, background-color 0.15s ease;
 }
 
