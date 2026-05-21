@@ -1102,19 +1102,6 @@ html.dark .ensor-section-hero-title {
     max-width: 56rem;
 }
 
-/* Cloudflare Turnstile en formulario de contacto */
-.ensor-contact-turnstile-wrap {
-    min-height: 4.5rem;
-}
-.ensor-contact-turnstile iframe {
-    border-radius: 0.75rem;
-}
-#contact-form button[type="submit"][aria-disabled="true"],
-#contact-form button[type="submit"]:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
 /* Editor WP en página projects/blog: el h1 suele perder ensor-section-hero-title */
 section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
 section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type,

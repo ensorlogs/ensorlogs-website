@@ -386,42 +386,6 @@ add_action(
             ),
         ));
 
-        /* ---------- Formulario de contacto (Turnstile) ---------- */
-        $wp_customize->add_section(
-            'ensor_section_contact',
-            array(
-                'title'       => __('Formulario de contacto', 'ensorlogs'),
-                'description' => __(
-                    'Crea un widget en Cloudflare Turnstile (gratis) y pega aquí las claves. Sin plugin extra.',
-                    'ensorlogs'
-                ),
-                'panel'       => 'ensorlogs',
-            )
-        );
-
-        $wp_customize->add_setting('ensor_contact_turnstile_site_key', array(
-            'default'           => '',
-            'transport'         => 'refresh',
-            'sanitize_callback' => 'sanitize_text_field',
-        ));
-        $wp_customize->add_control('ensor_contact_turnstile_site_key', array(
-            'label'       => __('Turnstile — Site Key (pública)', 'ensorlogs'),
-            'description' => __('Dashboard Cloudflare → Turnstile → tu sitio → Site Key.', 'ensorlogs'),
-            'section'     => 'ensor_section_contact',
-            'type'        => 'text',
-        ));
-
-        $wp_customize->add_setting('ensor_contact_turnstile_secret_key', array(
-            'default'           => '',
-            'transport'         => 'refresh',
-            'sanitize_callback' => 'sanitize_text_field',
-        ));
-        $wp_customize->add_control('ensor_contact_turnstile_secret_key', array(
-            'label'       => __('Turnstile — Secret Key (privada)', 'ensorlogs'),
-            'description' => __('Solo en el servidor. No la compartas.', 'ensorlogs'),
-            'section'     => 'ensor_section_contact',
-            'type'        => 'password',
-        ));
     }
 );
 

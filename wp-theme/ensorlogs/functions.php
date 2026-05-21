@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.12');
+define('ENSORLOGS_THEME_VERSION', '1.10.13');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -19,8 +19,6 @@ require_once get_template_directory() . '/inc/cpt-admin-ui.php';
 require_once get_template_directory() . '/inc/seed.php';
 require_once get_template_directory() . '/inc/seo-performance.php';
 require_once get_template_directory() . '/inc/security.php';
-require_once get_template_directory() . '/inc/contact-turnstile.php';
-require_once get_template_directory() . '/inc/contact-form.php';
 require_once get_template_directory() . '/inc/newsletter.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/updater.php';

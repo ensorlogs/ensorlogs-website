@@ -29,7 +29,6 @@ tests/lighthouse-reports/
 # Archivos sensibles o de trabajo local.
 .env
 .env.*
-contact-secrets.php
 *.log
 *.sql
 *.sqlite

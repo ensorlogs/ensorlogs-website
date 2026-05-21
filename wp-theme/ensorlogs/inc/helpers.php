@@ -155,6 +155,20 @@ function ensorlogs_home_log_ticker_segments_html(): string
 }
 
 /**
+ * Tokens dinámicos del fragmento de contacto (suscripción a la lista).
+ *
+ * @return array<string, string>
+ */
+function ensorlogs_contact_fragment_tokens(): array
+{
+    return array(
+        '%%CONTACT_SUBSCRIBE_BLOCK%%' => function_exists('ensorlogs_contact_subscribe_block')
+            ? ensorlogs_contact_subscribe_block()
+            : '',
+    );
+}
+
+/**
  * Lee un fragmento en partials/*.fragment.html y sustituye marcadores.
  *
  * Marcadores: %%THEME_URI%%, %%HOME%%, %%LATEST_LOG_*%% (último ensor_article publicado),
