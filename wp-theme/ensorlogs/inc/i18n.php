@@ -56,6 +56,58 @@ function ensorlogs_i18n_register(): void
 add_action('init', 'ensorlogs_i18n_register', 10);
 
 /**
+ * Fuerza ensor_lang=en en cualquier petición bajo /en/ (antes de la consulta).
+ *
+ * @param WP $wp
+ */
+function ensorlogs_i18n_parse_request_lang(WP $wp): void
+{
+    if (!ensorlogs_i18n_uri_is_en()) {
+        return;
+    }
+    $wp->query_vars[ENSORLOGS_LANG_QUERY_VAR] = 'en';
+}
+add_action('parse_request', 'ensorlogs_i18n_parse_request_lang', 1);
+
+/**
+ * Evita que redirect_canonical mande /en/ → / (causa principal del “vuelve a español”).
+ *
+ * @param string|false $redirect_url
+ * @param string       $requested_url
+ * @return string|false
+ */
+function ensorlogs_i18n_disable_canonical_redirect($redirect_url, string $requested_url)
+{
+    unset($requested_url);
+    if (ensorlogs_i18n_uri_is_en()) {
+        return false;
+    }
+    if (get_query_var(ENSORLOGS_LANG_QUERY_VAR) === 'en') {
+        return false;
+    }
+    return $redirect_url;
+}
+add_filter('redirect_canonical', 'ensorlogs_i18n_disable_canonical_redirect', 0, 2);
+
+/**
+ * Canonical correcto en rutas /en/.
+ *
+ * @param string|false $canonical_url
+ */
+function ensorlogs_i18n_canonical_url($canonical_url)
+{
+    if (!ensorlogs_i18n_uri_is_en() && get_query_var(ENSORLOGS_LANG_QUERY_VAR) !== 'en') {
+        return $canonical_url;
+    }
+    $rel = ensorlogs_i18n_relative_path();
+    if ($rel === '/') {
+        return $canonical_url;
+    }
+    return trailingslashit(home_url($rel));
+}
+add_filter('wp_get_canonical_url', 'ensorlogs_i18n_canonical_url', 10, 1);
+
+/**
  * Refresca permalinks cuando cambia la versión del tema (producción sin re-guardar enlaces).
  */
 function ensorlogs_i18n_maybe_flush_rewrites(): void

@@ -29,10 +29,14 @@ function ensorlogs_latest_log_fragment_tokens(): array
     $fallback_img = esc_url(ensorlogs_theme_uri('assets/img/Ensorlogs%20Blog.png'));
 
     $defaults = array(
-        '%%LATEST_LOG_URL%%'         => $blog_url,
-        '%%LATEST_LOG_TITLE%%'       => esc_html__('Ver artículos y aprendizajes', 'ensorlogs'),
-        '%%LATEST_LOG_TITLE_ATTR%%'  => esc_attr__('Bitácora ENSOR.LOGS', 'ensorlogs'),
-        '%%LATEST_LOG_IMG%%'         => $fallback_img,
+        '%%LATEST_LOG_URL%%'        => $blog_url,
+        '%%LATEST_LOG_TITLE%%'      => function_exists('ensorlogs_t')
+            ? ensorlogs_t('Ver artículos y aprendizajes', 'View articles and learnings')
+            : esc_html__('Ver artículos y aprendizajes', 'ensorlogs'),
+        '%%LATEST_LOG_TITLE_ATTR%%' => function_exists('ensorlogs_t')
+            ? ensorlogs_t('Bitácora ENSOR.LOGS', 'ENSOR.LOGS logbook')
+            : esc_attr__('Bitácora ENSOR.LOGS', 'ensorlogs'),
+        '%%LATEST_LOG_IMG%%'        => $fallback_img,
     );
 
     $latest_args = array(
@@ -106,10 +110,18 @@ function ensorlogs_home_log_ticker_segments_html(): string
     }
     $posts = get_posts($ticker_args);
 
-    $prefix = '<span class="ensor-terminal-ticker__prefix">' . esc_html__('tail -f bitácora.log —', 'ensorlogs') . ' </span>';
+    $prefix = '<span class="ensor-terminal-ticker__prefix">' . esc_html(
+        function_exists('ensorlogs_t') ? ensorlogs_t('tail -f bitácora.log —', 'tail -f logbook.log —') : __('tail -f bitácora.log —', 'ensorlogs')
+    ) . ' </span>';
 
     if ($posts === array()) {
-        $inner = $prefix . '<span class="ensor-terminal-ticker__fallback">' . esc_html__('automatización · PropTech · CRM · analítica · infraestructura · aprendizaje continuo', 'ensorlogs') . '</span>';
+        $fallback = function_exists('ensorlogs_t')
+            ? ensorlogs_t(
+                'automatización · PropTech · CRM · analítica · infraestructura · aprendizaje continuo',
+                'automation · PropTech · CRM · analytics · infrastructure · continuous learning'
+            )
+            : __('automatización · PropTech · CRM · analítica · infraestructura · aprendizaje continuo', 'ensorlogs');
+        $inner = $prefix . '<span class="ensor-terminal-ticker__fallback">' . esc_html($fallback) . '</span>';
     } else {
         $chunks = array();
         foreach ($posts as $p) {
@@ -194,6 +206,11 @@ function ensorlogs_render_fragment(string $filename): string
  */
 function ensorlogs_render_fragment_editable(string $filename, string $editable_html = ''): string
 {
+    // En /en/ usamos solo el fragmento .en.fragment.html (no el editor WP en español).
+    if (function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en') {
+        $editable_html = '';
+    }
+
     $html = ensorlogs_render_fragment($filename);
     if (trim(wp_strip_all_tags($editable_html)) === '') {
         return $html;
