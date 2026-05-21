@@ -19,7 +19,7 @@
         <meta name="keywords"
         content="WordPress, instalación, hosting, SSL, IA, seguridad">
     <meta name="description"
-        content="Hosting, dominio, SSL, PHP, base de datos y buenas prácticas desde la primera instalación. Experiencia personal y cómo usar IA sin filtrar contraseñas ni sustituir el pensamiento.">
+        content="Hosting, domain, SSL, PHP, database and good practices from the first install. Personal experience and how to use AI without leaking passwords or replacing judgment.">
     <meta name="author" content="EnsorLogs">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://ensorlogs.com/en/articulos/wordpress-instalacion-ia-2026.html">
@@ -27,7 +27,7 @@
     <meta property="og:site_name" content="Ensorlogs">
     <meta property="og:locale" content="es_VE">
     <meta property="og:title" content="Install WordPress 2026 with judgment + AI as copilot | Ensorlogs">
-    <meta property="og:description" content="Hosting, dominio, SSL, PHP, base de datos y buenas prácticas desde la primera instalación. Experiencia personal y cómo usar IA sin filtrar contraseñas ni sustituir el pensamiento.">
+    <meta property="og:description" content="Hosting, domain, SSL, PHP, database and good practices from the first install. Personal experience and how to use AI without leaking passwords or replacing judgment.">
     <meta property="og:url" content="https://ensorlogs.com/en/articulos/wordpress-instalacion-ia-2026.html">
 
     <!-- Site Title
@@ -58,7 +58,7 @@
     <link rel="stylesheet" href="../../assets/css/ensor-lang-switch.css">
     <link rel="stylesheet" href="../../assets/css/ensor-cookies.css">
     <link rel="stylesheet" href="../../assets/css/ensor-podcast.css">
-    <meta name="ensor-cookies-url" content="../legal/cookies.html">
+    <meta name="ensor-cookies-url" content="../../legal/cookies.html">
     <link rel="stylesheet" href="../../assets/css/ensor-quiz.css">
 </head>
 <body class="relative bg-[#F5F7F9] dark:bg-powerBlack">
@@ -97,7 +97,7 @@
                             ENSOR.<span class="ensor-logo-accent">LOGS</span>
                         </span>
                         <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
-                            A geek's logbook <img src="../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                            A geek's logbook <img src="../../assets/img/flag-venezuela.svg" alt="Made in Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                         </span>
                         <span class="ensor-tagline-rule mt-1.5 h-0.5 max-w-[12rem] rounded-full" aria-hidden="true"></span>
                     </span>
@@ -153,7 +153,7 @@
                         ENSOR.<span class="ensor-logo-accent">LOGS</span>
                     </span>
                     <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
-                        A geek's logbook <img src="../../assets/img/flag-venezuela.svg" alt="Hecho desde Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
+                        A geek's logbook <img src="../../assets/img/flag-venezuela.svg" alt="Made in Venezuela" width="20" height="14" loading="lazy" decoding="async" class="ensor-flag-ve inline-block align-[-2px] ml-1"/>
                     </span>
                     <span class="ensor-tagline-rule mt-1 h-0.5 max-w-[10rem] rounded-full" aria-hidden="true"></span>
                 </span>
@@ -265,7 +265,7 @@
             <div class="ensor-reader-hero max-w-screen-lg mx-auto mt-2 mb-8 md:mb-10">
                 <img
                     src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=82"
-                    alt="Servidor y trabajo técnico — metáfora de instalar WordPress en producción"
+                    alt="Server and technical work — metaphor for installing WordPress in production"
                     width="1600" height="900"
                     decoding="async" loading="eager" fetchpriority="high"
                     class="ensor-article-hero rounded-xl xl:rounded-2xl w-full object-cover object-center">
@@ -281,57 +281,57 @@
                                 <li class="ensor-reader-toc__item"><a href="#https-desde-el-dia-uno" class="ensor-reader-toc__link" data-target="https-desde-el-dia-uno">HTTPS from day one</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#base-de-datos-y-prefijo-de-tablas" class="ensor-reader-toc__link" data-target="base-de-datos-y-prefijo-de-tablas">Base de datos y prefijo de tablas</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#entorno-local-vs-hosting-directo" class="ensor-reader-toc__link" data-target="entorno-local-vs-hosting-directo">Entorno local vs hosting directo</a></li>
-                                <li class="ensor-reader-toc__item"><a href="#donde-entra-la-ia-y-donde-no" class="ensor-reader-toc__link" data-target="donde-entra-la-ia-y-donde-no">Dónde entra la IA (y dónde no)</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#donde-entra-la-ia-y-donde-no" class="ensor-reader-toc__link" data-target="donde-entra-la-ia-y-donde-no">Where AI fits (and where it does not)</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#usuario-administrador-y-primer-login" class="ensor-reader-toc__link" data-target="usuario-administrador-y-primer-login">Usuario administrador y primer login</a></li>
-                                <li class="ensor-reader-toc__item"><a href="#actualizaciones-y-backups-antes-del-cafe" class="ensor-reader-toc__link" data-target="actualizaciones-y-backups-antes-del-cafe">Actualizaciones y backups antes del café</a></li>
-                                <li class="ensor-reader-toc__item"><a href="#el-error-tipico-que-segui-viendo-en-venezuela-y-fuera" class="ensor-reader-toc__link" data-target="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">El error típico que seguí viendo en Venezuela y fuera</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#actualizaciones-y-backups-antes-del-cafe" class="ensor-reader-toc__link" data-target="actualizaciones-y-backups-antes-del-cafe">Updates and backups before coffee</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#el-error-tipico-que-segui-viendo-en-venezuela-y-fuera" class="ensor-reader-toc__link" data-target="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">The typical mistake I kept seeing in Venezuela and elsewhere</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#cierre-honesto" class="ensor-reader-toc__link" data-target="cierre-honesto">Cierre honesto</a></li>
                     </ul>
                 </aside>
                 <div>
                     <div class="ensor-reader-body entry-content ensor-wp-content max-w-none">
-                        <p class="text-lg font-medium text-powerBlack dark:text-pastelGrey border-l-4 border-[var(--ensor-accent)] pl-4 mb-8">
-No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de decirle que sí a un proyecto, mezclando lo que aprendí desde Caracas, lo que aplico desde Madrid y lo que la IA puede acelerar sin quitarte la responsabilidad.
+<p class="text-lg font-medium text-powerBlack dark:text-pastelGrey border-l-4 border-[var(--ensor-accent)] pl-4 mb-8">
+This is not the “official” Codex checklist: it is what I would review today before saying yes to a project, mixing what I learned from Caracas, what I apply from Madrid, and what AI can speed up without taking responsibility off your shoulders.
 </p>
 
-<p>Instalar WordPress en 2026 sigue siendo “subir un ZIP y darle al instalador” solo en los tutoriales más cortos. En la vida real hay dominio, DNS, correo, SSL, versión de PHP, límites del hosting, usuarios con permisos razonables y la primera decisión que define el resto: <strong>¿vas a aprender el stack o solo a clicar hasta que funcione?</strong> Yo prefiero la primera; la segunda te cobra factura más adelante.</p>
+<p>Installing WordPress in 2026 is still “upload a ZIP and run the installer” only in the shortest tutorials. In real life you have domain, DNS, email, SSL, PHP version, hosting limits, users with sensible permissions, and the first decision that defines everything else: <strong>are you going to learn the stack or just click until it works?</strong> I prefer the first; the second sends you the bill later.</p>
 <h1 id="antes-del-clic-wordpress-org-vs-el-resto">Before you click: WordPress.org vs the rest</h1>
-<p>Si tu objetivo es entender la web de verdad y poder escalar, normalmente querrás <strong>WordPress.org</strong> (software libre) sobre tu hosting. Los builders todo-en-uno tienen su lugar cuando el tiempo manda y no quieres tocar servidor; aquí el foco es <strong>instalación clásica</strong> porque es la que te enseña qué hay detrás del panel.</p>
+<p>If your goal is to understand the web for real and be able to scale, you usually want <strong>WordPress.org</strong> (open-source software) on your own hosting. All-in-one builders have their place when time is tight and you do not want to touch the server; here the focus is <strong>classic installation</strong> because it teaches you what is behind the dashboard.</p>
 <h1 id="hosting-el-terreno-donde-crece-todo">Hosting: the ground everything grows on</h1>
-<p>No todos los planes aguantan el mismo tráfico ni la misma versión de PHP. En 2026 reviso siempre: PHP compatible con la última WordPress estable (y margen para subir), extensiones comunes (mysqli, curl, imagick si toca imágenes pesadas), límites de memoria y tiempo de ejecución razonables para actualizaciones y backups.</p>
-<p>Si el panel parece de 2009 y te obliga a PHP viejo “por compartido”, estás comprando problemas.</p>
+<p>Not every plan handles the same traffic or the same PHP version. In 2026 I always check: PHP compatible with the latest stable WordPress (with room to upgrade), common extensions (mysqli, curl, imagick if you handle heavy images), and reasonable memory and execution time limits for updates and backups.</p>
+<p>If the panel looks like 2009 and forces old PHP “because shared,” you are buying problems.</p>
 <figure class="my-10 overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
-<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Portátil con editor de código y workspace de desarrollo" width="1200" height="675" decoding="async" loading="lazy" class="w-full object-cover max-h-[380px] md:max-h-[420px]" />
-<figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">Instalar bien es leer el panel del hosting sin hacerse el sorprendido cuando algo falla.</figcaption>
+<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Laptop with code editor and development workspace" width="1200" height="675" decoding="async" loading="lazy" class="w-full object-cover max-h-[380px] md:max-h-[420px]" />
+<figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">Installing well means reading the hosting panel without acting surprised when something breaks.</figcaption>
 </figure>
 
 <h1 id="dominio-dns-y-correo-el-triangulo-aburrido">Domain, DNS and email (the boring triangle)</h1>
-<p>El dominio apunta al hosting con registros <strong>A</strong> o <strong>CNAME</strong>; si algo “no resuelve”, la culpa suele estar antes del WordPress. El correo del dominio (Google Workspace, Microsoft 365, Zoho…) puede pelear con el DNS si copias plantillas sin mirar: revisa MX, SPF y DKIM cuando cambias proveedor.</p>
-<p>Traducción práctica: cuando instalo para un cliente, dejo <strong>documentado</strong> qué DNS toqué y por qué. El yo del futuro —o el cliente nuevo que llegó tres años después— te lo agradece.</p>
+<p>The domain points to hosting with <strong>A</strong> or <strong>CNAME</strong> records; if something “does not resolve,” the fault is usually before WordPress. Domain email (Google Workspace, Microsoft 365, Zoho…) can fight with DNS if you copy templates without looking: check MX, SPF and DKIM when you change provider.</p>
+<p>Practical translation: when I install for a client, I leave <strong>documented</strong> what DNS I touched and why. Future you — or the new client who shows up three years later — will thank you.</p>
 <h1 id="https-desde-el-dia-uno">HTTPS from day one</h1>
-<p>Sin certificado válido ni redirección sensata, navegadores y buscadores te tratan como segunda opción. La mayoría de hostings facilitan Let’s Encrypt o equivalente; activa <strong>forzar HTTPS</strong> en WordPress cuando el sitio ya responde bien por TLS.</p>
-<h1 id="base-de-datos-y-prefijo-de-tablas">Base de datos y prefijo de tablas</h1>
-<p>El instalador crea tablas con prefijo <code>wp_</code>. En entornos compartidos o cuando llevo años viendo ataques automatizados, cambiar el prefijo es una capa más —no magia, pero reduce ruido en logs de bots que buscan lo obvio. Lo importante es <strong>usuario de MySQL con permisos mínimos</strong> para esa base, no root del servidor.</p>
-<h1 id="entorno-local-vs-hosting-directo">Entorno local vs hosting directo</h1>
-<p>Para romper cosas sin culpa uso entorno local (Docker, Local WP, lo que prefieras) y subo cuando el flujo está claro. Instalar directo en producción está bien si sabes que vas a meter backups desde el minuto cero; si no, estás jugando a ruleta con el index del cliente.</p>
-<h1 id="donde-entra-la-ia-y-donde-no">Dónde entra la IA (y dónde no)</h1>
-<p>La IA en 2026 es brutal para <strong>organizar</strong>: checklist previa a instalación, recordarte extensiones PHP típicas, resumir documentación del hosting en español claro o helpte a redactar un correo técnico al soporte con datos ordenados.</p>
-<p>Lo que <strong>no</strong> hago: pegar en el chat público contraseñas de FTP, claves de base de datos, URLs del wp-admin con usuarios reales o capturas con tokens. La IA no es tu cofre fuerte; es tu ayudante de estudio. Anonymiza antes de pedir ayuda.</p>
+<p>Without a valid certificate and sensible redirects, browsers and search engines treat you as second choice. Most hostings make Let’s Encrypt or equivalent easy; turn on <strong>force HTTPS</strong> in WordPress when the site already responds cleanly over TLS.</p>
+<h1 id="base-de-datos-y-prefijo-de-tablas">Database and table prefix</h1>
+<p>The installer creates tables with the <code>wp_</code> prefix. On shared environments or after years of watching automated attacks, changing the prefix is one more layer — not magic, but it cuts noise in bot logs hunting the obvious. What matters is a <strong>MySQL user with minimum permissions</strong> for that database, not server root.</p>
+<h1 id="entorno-local-vs-hosting-directo">Local environment vs direct hosting</h1>
+<p>To break things without guilt I use a local environment (Docker, Local WP, whatever you prefer) and deploy when the flow is clear. Installing straight on production is fine if you know you will set up backups from minute zero; if not, you are playing roulette with the client’s index.</p>
+<h1 id="donde-entra-la-ia-y-donde-no">Where AI fits (and where it does not)</h1>
+<p>AI in 2026 is brutal for <strong>organizing</strong>: pre-install checklist, reminding you of typical PHP extensions, summarizing hosting docs in plain English, or helping you draft a technical email to support with ordered facts.</p>
+<p>What I <strong>do not</strong> do: paste FTP passwords, database keys, wp-admin URLs with real users, or screenshots with tokens into a public chat. AI is not your safe; it is your study buddy. Anonymize before you ask for help.</p>
 <figure class="my-10 overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
-<img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80" alt="Representación abstracta de IA aplicada al trabajo digital" width="1200" height="675" decoding="async" loading="lazy" class="w-full object-cover max-h-[380px] md:max-h-[420px]" />
-<figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">Uso la IA para ordenar ideas y borradores de procedimiento; la decisión final sigue siendo humana.</figcaption>
+<img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80" alt="Abstract representation of AI applied to digital work" width="1200" height="675" decoding="async" loading="lazy" class="w-full object-cover max-h-[380px] md:max-h-[420px]" />
+<figcaption class="mt-3 px-1 text-sm text-darkGray/85 dark:text-pastelGrey/80">I use AI to organize ideas and procedure drafts; the final decision stays human.</figcaption>
 </figure>
 
-<p>Prompt útiles (sin datos sensibles): “Lista verificación post-instalación WordPress en hosting compartido”, “Explica en tres frases qué valida el archivo wp-config.php”, “Propón mensaje corto al soporte si el instalador falla con error de permisos en wp-content”.</p>
-<h1 id="usuario-administrador-y-primer-login">Usuario administrador y primer login</h1>
-<p>Evita <code>admin</code> como nombre de usuario. Activa <strong>autenticación fuerte</strong> donde puedas. Si el hosting ofrece 2FA a nivel cuenta, úsalo: muchos ataques son por credenciales robadas, no por “magia hacker”.</p>
-<h1 id="actualizaciones-y-backups-antes-del-cafe">Actualizaciones y backups antes del café</h1>
-<p>Primera regla después de que el sitio arranque: plugin de backup <strong>probado</strong> o backup del panel + prueba de restauración en staging. Segunda: plan de actualizar núcleo, temas y plugins desde fuentes legítimas. La IA puede helpte a montar una <strong>política de mantenimiento</strong> en texto claro para tu cliente universitario o tu propio negocio —lo firmas tú.</p>
-<h1 id="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">El error típico que seguí viendo en Venezuela y fuera</h1>
-<p>Instalar demasiados plugins “por si acaso” antes de tener contenido real. Cada plugin es superficie de ataque y de conflicto. Mejor una web simple que cargue y se pueda mantener que un festival de extensiones que nadie actualiza.</p>
-<h1 id="cierre-honesto">Cierre honesto</h1>
-<p>Instalar WordPress bien es deshow que entiendes <strong>hosting + DNS + seguridad mínima + disciplina</strong>. La IA acelera lectura y redacción; no absuelve de leer el error real en pantalla cuando algo truena.</p>
-<p>Si empiezas con ese marco, lo que viene después —temas, SEO, WooCommerce— se apoya en cimientos que no tiemblan cada martes.</p>
+<p>Useful prompts (no sensitive data): “WordPress post-install checklist on shared hosting,” “Explain in three sentences what wp-config.php validates,” “Draft a short message to support if the installer fails with wp-content permission errors.”</p>
+<h1 id="usuario-administrador-y-primer-login">Admin user and first login</h1>
+<p>Avoid <code>admin</code> as the username. Turn on <strong>strong authentication</strong> wherever you can. If the hosting offers account-level 2FA, use it: many attacks are stolen credentials, not “hacker magic.”</p>
+<h1 id="actualizaciones-y-backups-antes-del-cafe">Updates and backups before coffee</h1>
+<p>First rule after the site is live: a <strong>tested</strong> backup plugin or panel backup + a restore test on staging. Second: a plan to update core, themes and plugins from legitimate sources. AI can help you draft a clear <strong>maintenance policy</strong> in plain language for your university client or your own business — you sign it.</p>
+<h1 id="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">The typical mistake I kept seeing in Venezuela and elsewhere</h1>
+<p>Installing too many plugins “just in case” before you have real content. Every plugin is attack surface and conflict risk. Better a simple site that loads and can be maintained than a festival of extensions nobody updates.</p>
+<h1 id="cierre-honesto">Honest closing</h1>
+<p>Installing WordPress well shows you understand <strong>hosting + DNS + minimum security + discipline</strong>. AI speeds up reading and writing; it does not absolve you from reading the real error on screen when something blows up.</p>
+<p>If you start with that frame, what comes next — themes, SEO, WooCommerce — rests on foundations that do not shake every Tuesday.</p>
                     </div>
 
                     
@@ -346,21 +346,21 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-3 md:justify-end">
-                            <a href="../blog.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full no-underline"><span>Más logs</span></a>
+                            <a href="../blog.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full no-underline"><span>More logs</span></a>
                             <a href="../contact.html" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full no-underline"><span>Let's talk</span></a>
                         </div>
                     </footer>
 
                                         <div class="recent-posts mt-12">
                         <h3 class="text-xl lg:text-2xl text-darkGray dark:text-pastelGrey font-bold mb-4">
-                            Otros logs
+                            Other logs
                         </h3>
                         <div class="grid sm:grid-cols-2 gap-6 *:p-2 *:rounded-xl xl:*:rounded-3xl *:bg-gradient-to-b *:from-milkWhite *:to-seashell *:dark:from-metalBlack *:dark:to-oilBlack *:border *:border-gray-100 dark:*:border-white/5">
                             
                             <div class="blog-item group">
                                 <div class="thumbnail relative overflow-hidden rounded-xl">
                                     <a href="wordpress-seguridad-estudiantes-2026.html">
-                                        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=82" alt="Concepto de seguridad digital y protección de accesos en WordPress" class="w-full transition-all duration-300 group-hover:scale-110" width="800" height="450" decoding="async">
+                                        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=82" alt="Digital security and access protection concept in WordPress" class="w-full transition-all duration-300 group-hover:scale-110" width="800" height="450" decoding="async">
                                     </a>
                                     <div class="tags absolute right-4 top-4">
                                         <a href="../blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
@@ -370,14 +370,14 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
                                     <h4 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
                                         <a href="wordpress-seguridad-estudiantes-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">WordPress seguro en 2026: lo que duele en la madrugada y cómo la IA te a…</a>
                                     </h4>
-                                    <p class="line-clamp-2 !leading-normal text-sm mt-2">Log de Ensorlogs — bitácora técnica y pedagógica.</p>
+                                    <p class="line-clamp-2 !leading-normal text-sm mt-2">Ensorlogs log — technical and teaching logbook.</p>
                                     <p class="mt-4"><a href="wordpress-seguridad-estudiantes-2026.html" class="font-semibold text-base text-darkGray dark:text-pastelGrey">Seguir leyendo →</a></p>
                                 </div>
                             </div>
                             <div class="blog-item group">
                                 <div class="thumbnail relative overflow-hidden rounded-xl">
                                     <a href="wordpress-rendimiento-estudiantes-2026.html">
-                                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=82" alt="Pantallas con métricas — rendimiento web medido con criterio" class="w-full transition-all duration-300 group-hover:scale-110" width="800" height="450" decoding="async">
+                                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=82" alt="Screens with metrics — web performance measured with judgment" class="w-full transition-all duration-300 group-hover:scale-110" width="800" height="450" decoding="async">
                                     </a>
                                     <div class="tags absolute right-4 top-4">
                                         <a href="../blog.html?tema=wordpress" class="bg-white/60 dark:bg-black/50 transition-all px-3 py-1 rounded-3xl text-darkGray dark:text-pastelGrey text-sm">WordPress</a>
@@ -387,7 +387,7 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
                                     <h4 class="text-xl 2xl:text-2xl font-bold text-darkGray dark:text-pastelGrey mb-1">
                                         <a href="wordpress-rendimiento-estudiantes-2026.html" class="inline bg-gradient-to-r from-current from-0% to-current to-100% bg-no-repeat bg-[length:0_1px] bg-[0_95%] ease-in-out duration-200 transition-[background-size] hover:bg-[length:100%_1px]">Rendimiento WordPress + IA en 2026: velocidad que se nota en el bolsillo…</a>
                                     </h4>
-                                    <p class="line-clamp-2 !leading-normal text-sm mt-2">Log de Ensorlogs — bitácora técnica y pedagógica.</p>
+                                    <p class="line-clamp-2 !leading-normal text-sm mt-2">Ensorlogs log — technical and teaching logbook.</p>
                                     <p class="mt-4"><a href="wordpress-rendimiento-estudiantes-2026.html" class="font-semibold text-base text-darkGray dark:text-pastelGrey">Seguir leyendo →</a></p>
                                 </div>
                             </div>
@@ -417,10 +417,10 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
                                 <li class="ensor-reader-toc__item"><a href="#https-desde-el-dia-uno" class="ensor-reader-toc__link" data-target="https-desde-el-dia-uno">HTTPS from day one</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#base-de-datos-y-prefijo-de-tablas" class="ensor-reader-toc__link" data-target="base-de-datos-y-prefijo-de-tablas">Base de datos y prefijo de tablas</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#entorno-local-vs-hosting-directo" class="ensor-reader-toc__link" data-target="entorno-local-vs-hosting-directo">Entorno local vs hosting directo</a></li>
-                                <li class="ensor-reader-toc__item"><a href="#donde-entra-la-ia-y-donde-no" class="ensor-reader-toc__link" data-target="donde-entra-la-ia-y-donde-no">Dónde entra la IA (y dónde no)</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#donde-entra-la-ia-y-donde-no" class="ensor-reader-toc__link" data-target="donde-entra-la-ia-y-donde-no">Where AI fits (and where it does not)</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#usuario-administrador-y-primer-login" class="ensor-reader-toc__link" data-target="usuario-administrador-y-primer-login">Usuario administrador y primer login</a></li>
-                                <li class="ensor-reader-toc__item"><a href="#actualizaciones-y-backups-antes-del-cafe" class="ensor-reader-toc__link" data-target="actualizaciones-y-backups-antes-del-cafe">Actualizaciones y backups antes del café</a></li>
-                                <li class="ensor-reader-toc__item"><a href="#el-error-tipico-que-segui-viendo-en-venezuela-y-fuera" class="ensor-reader-toc__link" data-target="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">El error típico que seguí viendo en Venezuela y fuera</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#actualizaciones-y-backups-antes-del-cafe" class="ensor-reader-toc__link" data-target="actualizaciones-y-backups-antes-del-cafe">Updates and backups before coffee</a></li>
+                                <li class="ensor-reader-toc__item"><a href="#el-error-tipico-que-segui-viendo-en-venezuela-y-fuera" class="ensor-reader-toc__link" data-target="el-error-tipico-que-segui-viendo-en-venezuela-y-fuera">The typical mistake I kept seeing in Venezuela and elsewhere</a></li>
                                 <li class="ensor-reader-toc__item"><a href="#cierre-honesto" class="ensor-reader-toc__link" data-target="cierre-honesto">Cierre honesto</a></li>
             </ul>
         </div>
@@ -467,10 +467,10 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
         </div>
     <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
         <nav aria-label="Legal links" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
-            <a href="../legal/aviso-legal.html" class="hover:underline">Legal notice</a>
-            <a href="../legal/privacidad.html" class="hover:underline">Privacy</a>
-            <a href="../legal/cookies.html" class="hover:underline">Cookies</a>
-            <a href="../legal/accesibilidad.html" class="hover:underline">Accessibility</a>
+            <a href="../../legal/aviso-legal.html" class="hover:underline">Legal notice</a>
+            <a href="../../legal/privacidad.html" class="hover:underline">Privacy</a>
+            <a href="../../legal/cookies.html" class="hover:underline">Cookies</a>
+            <a href="../../legal/accesibilidad.html" class="hover:underline">Accessibility</a>
             <button type="button" class="ensor-cookies-reopen" data-ensor-cookies-open>Cookie preferences</button>
         </nav>
     </div>
@@ -536,7 +536,7 @@ No es la lista “oficial” del Codex: es lo que yo revisaría hoy antes de dec
             </form>        </div>
         <p class="ensor-newsletter-modal__legal">
             By subscribing you agree to receive emails from the Ensorlogs list.
-            See the <a href="../legal/privacidad.html">privacy policy</a>.
+            See the <a href="../../legal/privacidad.html">privacy policy</a>.
         </p>
     </div>
 </div>

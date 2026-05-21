@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.13');
+define('ENSORLOGS_THEME_VERSION', '1.10.14');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -175,6 +175,21 @@ add_action('wp_enqueue_scripts', static function (): void {
             array(),
             $v,
             true
+        );
+        wp_localize_script(
+            'ensorlogs-newsletter',
+            'ensorNewsletter',
+            array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'action'  => 'ensor_newsletter_subscribe',
+                'nonce'   => wp_create_nonce('ensor_newsletter_subscribe'),
+                'sending' => function_exists('ensorlogs_t')
+                    ? ensorlogs_t('Enviando…', 'Sending…')
+                    : __('Enviando…', 'ensorlogs'),
+                'errorGeneric' => function_exists('ensorlogs_t')
+                    ? ensorlogs_t('No se pudo suscribir. Inténtalo de nuevo.', 'Could not subscribe. Please try again.')
+                    : __('No se pudo suscribir. Inténtalo de nuevo.', 'ensorlogs'),
+            )
         );
     }
 

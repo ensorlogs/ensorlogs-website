@@ -1,9 +1,10 @@
 /*!
- * Ensorlogs · Modal newsletter (Mailchimp plugin)
+ * Ensorlogs · Modal newsletter (Mailchimp API)
  */
 (function () {
     'use strict';
     var d = document;
+    var cfg = typeof window.ensorNewsletter === 'object' ? window.ensorNewsletter : {};
     var BODY_LOCK = 'ensor-newsletter-open';
 
     var modal = null;
@@ -14,13 +15,26 @@
     }
 
     function getFocusables(root) {
-        return Array.prototype.slice.call(
-            root.querySelectorAll(
-                'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        return Array.prototype.slice
+            .call(
+                root.querySelectorAll(
+                    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                )
             )
-        ).filter(function (el) {
-            return !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true';
-        });
+            .filter(function (el) {
+                return !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true';
+            });
+    }
+
+    function setStatus(form, message, isError) {
+        var status = form.querySelector('.ensor-newsletter-form__status');
+        if (!status) {
+            return;
+        }
+        status.textContent = message;
+        status.hidden = !message;
+        status.classList.toggle('is-error', !!isError);
+        status.classList.toggle('is-success', !isError && !!message);
     }
 
     function openModal() {
@@ -85,6 +99,67 @@
         }
     }
 
+    function handleFormSubmit(e) {
+        var form = e.target.closest('.ensor-newsletter-native-form');
+        if (!form || !cfg.ajaxUrl) {
+            return;
+        }
+        e.preventDefault();
+
+        var emailInput = form.querySelector('input[type="email"]');
+        var submitBtn = form.querySelector('.ensor-newsletter-submit');
+        var email = emailInput ? String(emailInput.value || '').trim() : '';
+
+        if (!email) {
+            setStatus(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
+            return;
+        }
+
+        setStatus(form, '', false);
+        if (submitBtn) {
+            submitBtn.disabled = true;
+        }
+
+        var body = new FormData();
+        body.append('action', cfg.action || 'ensor_newsletter_subscribe');
+        body.append('nonce', cfg.nonce || '');
+        body.append('email', email);
+
+        fetch(cfg.ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: body,
+        })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (data) {
+                if (data && data.success) {
+                    var msg =
+                        (data.data && data.data.message) ||
+                        '¡Listo! Revisa tu correo si hace falta confirmar.';
+                    setStatus(form, msg, false);
+                    if (emailInput) {
+                        emailInput.value = '';
+                    }
+                    return;
+                }
+                var errMsg =
+                    (data && data.data && data.data.message) ||
+                    cfg.errorGeneric ||
+                    'No se pudo suscribir.';
+                setStatus(form, errMsg, true);
+            })
+            .catch(function () {
+                setStatus(form, cfg.errorGeneric || 'No se pudo suscribir.', true);
+            })
+            .finally(function () {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                }
+            });
+    }
+
     d.addEventListener('click', function (e) {
         if (e.target.closest('.ensor-newsletter-open')) {
             e.preventDefault();
@@ -97,5 +172,6 @@
         }
     });
 
+    d.addEventListener('submit', handleFormSubmit);
     d.addEventListener('keydown', onKeydown);
 })();

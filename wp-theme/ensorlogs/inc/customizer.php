@@ -318,10 +318,9 @@ add_action(
         $wp_customize->add_control(
             'ensor_newsletter_title',
             array(
-                'label'       => __('Título del modal', 'ensorlogs'),
-                'description' => __('Deja el encabezado del plugin Mailchimp en blanco o corto para no duplicar este texto.', 'ensorlogs'),
-                'section'     => 'ensor_section_newsletter',
-                'type'        => 'text',
+                'label'   => __('Título del modal', 'ensorlogs'),
+                'section' => 'ensor_section_newsletter',
+                'type'    => 'text',
             )
         );
 
@@ -342,6 +341,65 @@ add_action(
                 'label'   => __('Descripción del modal', 'ensorlogs'),
                 'section' => 'ensor_section_newsletter',
                 'type'    => 'textarea',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'ensor_mailchimp_api_key',
+            array(
+                'default'           => '',
+                'transport'         => 'refresh',
+                'sanitize_callback' => 'sanitize_text_field',
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_mailchimp_api_key',
+            array(
+                'label'       => __('Mailchimp API key', 'ensorlogs'),
+                'description' => __('Mailchimp → Account → Extras → API keys. Formato: xxxxx-us21', 'ensorlogs'),
+                'section'     => 'ensor_section_newsletter',
+                'type'        => 'password',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'ensor_mailchimp_list_id',
+            array(
+                'default'           => '',
+                'transport'         => 'refresh',
+                'sanitize_callback' => 'sanitize_text_field',
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_mailchimp_list_id',
+            array(
+                'label'       => __('Audience ID (List ID)', 'ensorlogs'),
+                'description' => __('Audience → Settings → Audience ID (cadena alfanumérica).', 'ensorlogs'),
+                'section'     => 'ensor_section_newsletter',
+                'type'        => 'text',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'ensor_mailchimp_status',
+            array(
+                'default'           => 'subscribed',
+                'transport'         => 'refresh',
+                'sanitize_callback' => static function ($value): string {
+                    return $value === 'pending' ? 'pending' : 'subscribed';
+                },
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_mailchimp_status',
+            array(
+                'label'   => __('Estado del suscriptor en Mailchimp', 'ensorlogs'),
+                'section' => 'ensor_section_newsletter',
+                'type'    => 'select',
+                'choices' => array(
+                    'subscribed' => __('Suscrito (alta directa)', 'ensorlogs'),
+                    'pending'    => __('Pendiente (doble opt-in)', 'ensorlogs'),
+                ),
             )
         );
 

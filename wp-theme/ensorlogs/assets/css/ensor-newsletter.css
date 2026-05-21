@@ -116,23 +116,18 @@ html.dark .ensor-newsletter-modal__legal {
     text-decoration: underline;
 }
 
-.ensor-newsletter-form__fallback {
+.ensor-newsletter-native-form {
     margin: 0;
-    font-size: 0.9rem;
 }
 
-.ensor-newsletter-form :where(h1, h2, h3, h4, .mc_header, #mc_subheader) {
-    display: none;
-}
-
-.ensor-newsletter-form :where(label, .mc_var_label) {
+.ensor-newsletter-native-form label {
     display: block;
     margin-bottom: 0.35rem;
     font-size: 0.82rem;
     font-weight: 600;
 }
 
-.ensor-newsletter-form :where(input[type="email"], input[type="text"], .mc_input) {
+.ensor-newsletter-native-form input[type="email"] {
     width: 100%;
     border-radius: 999px;
     border: 1px solid rgba(0, 0, 0, 0.12);
@@ -143,12 +138,12 @@ html.dark .ensor-newsletter-modal__legal {
     margin-bottom: 0.75rem;
 }
 
-html.dark .ensor-newsletter-form :where(input[type="email"], input[type="text"], .mc_input) {
+html.dark .ensor-newsletter-native-form input[type="email"] {
     border-color: rgba(255, 255, 255, 0.14);
     background: rgba(0, 0, 0, 0.25);
 }
 
-.ensor-newsletter-form :where(input[type="submit"], button[type="submit"], #mc_signup_submit, .button, .mc_signup_submit) {
+.ensor-newsletter-native-form .ensor-newsletter-submit {
     width: 100%;
     border: 0;
     border-radius: 999px;
@@ -161,8 +156,46 @@ html.dark .ensor-newsletter-form :where(input[type="email"], input[type="text"],
     transition: filter 0.15s ease, transform 0.15s ease;
 }
 
-.ensor-newsletter-form :where(input[type="submit"], button[type="submit"], #mc_signup_submit, .button, .mc_signup_submit):hover {
+.ensor-newsletter-native-form .ensor-newsletter-submit:hover:not(:disabled) {
     filter: brightness(0.95);
+}
+
+.ensor-newsletter-native-form .ensor-newsletter-submit:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.ensor-newsletter-form__hint {
+    margin: -0.35rem 0 0.75rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: rgba(26, 19, 0, 0.65);
+}
+
+html.dark .ensor-newsletter-form__hint {
+    color: rgba(243, 244, 246, 0.65);
+}
+
+.ensor-newsletter-form__status {
+    margin: 0.75rem 0 0;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.ensor-newsletter-form__status.is-success {
+    color: #166534;
+}
+
+.ensor-newsletter-form__status.is-error {
+    color: #b91c1c;
+}
+
+html.dark .ensor-newsletter-form__status.is-success {
+    color: #86efac;
+}
+
+html.dark .ensor-newsletter-form__status.is-error {
+    color: #fca5a5;
 }
 
 .ensor-footer-cta__newsletter {
