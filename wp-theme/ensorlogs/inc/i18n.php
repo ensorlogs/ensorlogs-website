@@ -10,6 +10,37 @@ if (!defined('ABSPATH')) {
 }
 
 define('ENSORLOGS_LANG_QUERY_VAR', 'ensor_lang');
+define('ENSORLOGS_I18N_REWRITE_OPTION', 'ensorlogs_i18n_rewrite_ver');
+
+/**
+ * Ruta relativa al home de WordPress (p. ej. /en/about/).
+ */
+function ensorlogs_i18n_relative_path(): string
+{
+    $request = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/';
+    $path    = (string) wp_parse_url($request, PHP_URL_PATH);
+    if ($path === '') {
+        $path = '/';
+    }
+
+    $home_path = (string) wp_parse_url(home_url('/'), PHP_URL_PATH);
+    $home_path = $home_path !== '' ? untrailingslashit($home_path) : '';
+    if ($home_path !== '' && str_starts_with($path, $home_path)) {
+        $path = substr($path, strlen($home_path)) ?: '/';
+    }
+
+    $path = '/' . ltrim($path, '/');
+    return $path === '/' ? '/' : rtrim($path, '/') . '/';
+}
+
+/**
+ * ¿La URL actual está bajo /en/?
+ */
+function ensorlogs_i18n_uri_is_en(): bool
+{
+    $path = ensorlogs_i18n_relative_path();
+    return $path === '/en/' || str_starts_with($path, '/en/');
+}
 
 /**
  * Registra query var y reglas de reescritura.
@@ -22,7 +53,24 @@ function ensorlogs_i18n_register(): void
     add_rewrite_rule('^en/legal/([^/]+)/?$', 'index.php?pagename=legal/$matches[1]&' . ENSORLOGS_LANG_QUERY_VAR . '=en', 'top');
     add_rewrite_rule('^en/([^/]+)/?$', 'index.php?pagename=$matches[1]&' . ENSORLOGS_LANG_QUERY_VAR . '=en', 'top');
 }
-add_action('init', 'ensorlogs_i18n_register');
+add_action('init', 'ensorlogs_i18n_register', 10);
+
+/**
+ * Refresca permalinks cuando cambia la versión del tema (producción sin re-guardar enlaces).
+ */
+function ensorlogs_i18n_maybe_flush_rewrites(): void
+{
+    if (!function_exists('get_option') || !defined('ENSORLOGS_THEME_VERSION')) {
+        return;
+    }
+    $stored = (string) get_option(ENSORLOGS_I18N_REWRITE_OPTION, '');
+    if ($stored === ENSORLOGS_THEME_VERSION) {
+        return;
+    }
+    flush_rewrite_rules(false);
+    update_option(ENSORLOGS_I18N_REWRITE_OPTION, ENSORLOGS_THEME_VERSION);
+}
+add_action('init', 'ensorlogs_i18n_maybe_flush_rewrites', 99);
 
 /**
  * @param string[] $vars
@@ -36,27 +84,106 @@ function ensorlogs_i18n_query_vars(array $vars): array
 add_filter('query_vars', 'ensorlogs_i18n_query_vars');
 
 /**
- * Resuelve portada en /en/.
- *
- * @param WP $wp
+ * Resuelve ID de página desde ruta /en/...
  */
-function ensorlogs_i18n_parse_request(WP $wp): void
+function ensorlogs_i18n_resolve_page_id_from_path(string $rel_path): int
 {
-    $lang = $wp->query_vars[ENSORLOGS_LANG_QUERY_VAR] ?? '';
-    if ($lang !== 'en') {
-        return;
+    $rel_path = '/' . trim($rel_path, '/');
+    if ($rel_path === '/en' || $rel_path === '/en/') {
+        if (get_option('show_on_front') === 'page') {
+            return (int) get_option('page_on_front');
+        }
+        return 0;
     }
-    if (!empty($wp->query_vars['pagename']) || !empty($wp->query_vars['page_id'])) {
-        return;
+
+    if (!str_starts_with($rel_path, '/en/')) {
+        return 0;
     }
-    $front = (int) get_option('page_on_front');
-    if ($front > 0) {
-        $wp->query_vars['page_id'] = $front;
-        unset($wp->query_vars[ENSORLOGS_LANG_QUERY_VAR]);
-        $wp->query_vars[ENSORLOGS_LANG_QUERY_VAR] = 'en';
+
+    $sub = trim(substr($rel_path, 4), '/');
+    if ($sub === '') {
+        return (int) get_option('page_on_front');
     }
+
+    // Artículos CPT: lo resuelven las reglas de article-lang.php.
+    if (str_starts_with($sub, 'articulos/')) {
+        return 0;
+    }
+
+    $page = get_page_by_path($sub);
+    return $page instanceof WP_Post ? (int) $page->ID : 0;
 }
-add_action('parse_request', 'ensorlogs_i18n_parse_request', 5);
+
+/**
+ * Asigna page_id a /en/ (portada) antes de la consulta principal.
+ *
+ * @param array<string, mixed> $query_vars
+ * @return array<string, mixed>
+ */
+function ensorlogs_i18n_request(array $query_vars): array
+{
+    $lang = isset($query_vars[ENSORLOGS_LANG_QUERY_VAR]) ? (string) $query_vars[ENSORLOGS_LANG_QUERY_VAR] : '';
+    if ($lang !== 'en') {
+        return $query_vars;
+    }
+
+    if (!empty($query_vars['pagename']) || !empty($query_vars['page_id']) || !empty($query_vars['name'])) {
+        return $query_vars;
+    }
+
+    if (get_option('show_on_front') === 'page') {
+        $front = (int) get_option('page_on_front');
+        if ($front > 0) {
+            $query_vars['page_id'] = $front;
+        }
+    }
+
+    return $query_vars;
+}
+add_filter('request', 'ensorlogs_i18n_request');
+
+/**
+ * Evita 404 en /en/ si los permalinks no se regeneraron o la consulta falló.
+ *
+ * @param bool     $preempt
+ * @param WP_Query $wp_query
+ */
+function ensorlogs_i18n_pre_handle_404(bool $preempt, WP_Query $wp_query): bool
+{
+    if ($preempt || !$wp_query->is_main_query()) {
+        return $preempt;
+    }
+
+    $rel = ensorlogs_i18n_relative_path();
+    if (!str_starts_with($rel, '/en')) {
+        return $preempt;
+    }
+
+    $page_id = ensorlogs_i18n_resolve_page_id_from_path($rel);
+    if ($page_id <= 0) {
+        return $preempt;
+    }
+
+    $wp_query->query(
+        array(
+            'page_id'                => $page_id,
+            ENSORLOGS_LANG_QUERY_VAR => 'en',
+        )
+    );
+
+    $wp_query->is_404         = false;
+    $wp_query->is_page        = true;
+    $wp_query->is_singular    = true;
+    $wp_query->is_archive     = false;
+    $wp_query->is_home        = false;
+    $wp_query->is_front_page  = (
+        get_option('show_on_front') === 'page'
+        && $page_id === (int) get_option('page_on_front')
+    );
+
+    return true;
+}
+add_filter('pre_handle_404', 'ensorlogs_i18n_pre_handle_404', 10, 2);
 
 /**
  * Idioma activo: es | en.
@@ -64,7 +191,13 @@ add_action('parse_request', 'ensorlogs_i18n_parse_request', 5);
 function ensorlogs_current_lang(): string
 {
     $lang = get_query_var(ENSORLOGS_LANG_QUERY_VAR);
-    return $lang === 'en' ? 'en' : 'es';
+    if ($lang === 'en') {
+        return 'en';
+    }
+    if (ensorlogs_i18n_uri_is_en()) {
+        return 'en';
+    }
+    return 'es';
 }
 
 /**
@@ -101,21 +234,13 @@ function ensorlogs_lang_url(string $path = '/'): string
 function ensorlogs_lang_alternate_url(): string
 {
     $lang = ensorlogs_current_lang();
-    $request = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/';
-    $path    = (string) wp_parse_url($request, PHP_URL_PATH);
-    if (!is_string($path) || $path === '') {
-        $path = '/';
-    }
-
-    $home_path = (string) wp_parse_url(home_url('/'), PHP_URL_PATH);
-    if ($home_path && str_starts_with($path, $home_path)) {
-        $path = substr($path, strlen($home_path)) ?: '/';
-    }
-    $path = '/' . ltrim($path, '/');
+    $path = ensorlogs_i18n_relative_path();
 
     if ($lang === 'en') {
-        if (str_starts_with($path, '/en')) {
+        if (str_starts_with($path, '/en/')) {
             $path = substr($path, 3) ?: '/';
+        } elseif ($path === '/en/') {
+            $path = '/';
         }
         return home_url($path === '/' ? '/' : $path);
     }
@@ -131,8 +256,8 @@ function ensorlogs_lang_alternate_url(): string
  */
 function ensorlogs_i18n_head_meta(): void
 {
-    $lang = ensorlogs_current_lang();
-    $alt  = ensorlogs_lang_alternate_url();
+    $lang        = ensorlogs_current_lang();
+    $alt         = ensorlogs_lang_alternate_url();
     $assets_base = trailingslashit(get_template_directory_uri()) . 'assets';
     echo '<meta name="ensor-lang" content="' . esc_attr($lang) . '">' . "\n";
     echo '<meta name="ensor-lang-alt" content="' . esc_url($alt) . '">' . "\n";
@@ -178,12 +303,7 @@ function ensorlogs_i18n_hreflang(): void
 add_action('wp_head', 'ensorlogs_i18n_hreflang', 4);
 
 /**
- * Resuelve fragmento .en.fragment.html si existe.
- *
- * @param string $filename Nombre del fragmento.
- */
-/**
- * Bandera del encabezado según idioma (VE = ES, US = EN).
+ * Bandera del encabezado (siempre Venezuela).
  */
 function ensorlogs_header_flag_html(): string
 {
@@ -200,6 +320,11 @@ function ensorlogs_get_tagline_localized(): string
     return ensorlogs_t($es, "A geek's logbook");
 }
 
+/**
+ * Resuelve fragmento .en.fragment.html si existe.
+ *
+ * @param string $filename Nombre del fragmento.
+ */
 function ensorlogs_i18n_fragment_filename(string $filename): string
 {
     if (ensorlogs_current_lang() !== 'en') {
