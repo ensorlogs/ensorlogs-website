@@ -17,17 +17,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Crear ensorlogs.zip (sin seed-html ni INSTALL.txt)
+      - name: Crear ensorlogs.zip (incluye seed-html/legal para EN; sin INSTALL.txt)
         run: |
           cd wp-theme
           rm -f ensorlogs.zip
           zip -r ensorlogs.zip ensorlogs \
-            -x "ensorlogs/seed-html/*" \
-            -x "ensorlogs/seed-html/**" \
+            -x "ensorlogs/seed-html/articulos/*" \
+            -x "ensorlogs/seed-html/articulos/**" \
+            -x "ensorlogs/seed-html/proyectos/*" \
+            -x "ensorlogs/seed-html/proyectos/**" \
             -x "ensorlogs/INSTALL.txt" \
             -x "*.DS_Store" \
             -x "*/.DS_Store"
           test -f ensorlogs.zip
+          unzip -l ensorlogs.zip | grep -q 'seed-html/legal/privacidad.en.html'
 
       - name: Publicar release en GitHub con ensorlogs.zip
         uses: softprops/action-gh-release@v2
