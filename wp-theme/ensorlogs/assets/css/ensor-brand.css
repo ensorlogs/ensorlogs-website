@@ -379,7 +379,7 @@ html.dark .btn_theme_switch::before {
 /* Muy estrecho: oculta tagline + regla para dar sitio a CTA y menú */
 @media (max-width: 479px) {
     header .nav > a:first-of-type > span.flex.flex-col > span:nth-of-type(2),
-    header .nav > a:first-of-type > span.flex.flex-col > span:nth-of-type(3) {
+    header .nav > a:first-of-type > span.flex.flex-col > .ensor-tagline-rule {
         display: none !important;
     }
 }

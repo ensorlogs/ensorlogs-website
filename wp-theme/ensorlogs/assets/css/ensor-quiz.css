@@ -367,7 +367,8 @@ html.dark .ensor-quiz__complete.is-unlocked::before {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    margin-top: 0.3rem;
+    margin-top: 0.35rem;
+    align-self: flex-start;
     padding: 0.2rem 0.1rem;
     min-height: 24px;
     min-width: 24px;

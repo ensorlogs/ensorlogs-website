@@ -122,15 +122,29 @@
             return logoLink.querySelector('.ensor-wordmark');
         });
     }
+    function findBrandColumn(logoLink) {
+        return logoLink.querySelector('span.flex.flex-col, span.flex-col');
+    }
+
     function ensureCounter(logoLink) {
+        var col = findBrandColumn(logoLink);
         var host = logoLink.parentNode;
         if (!host) return null;
-        var existing = logoLink.nextElementSibling;
-        if (existing && existing.classList && existing.classList.contains('ensor-completed-counter')) {
-            return existing;
+
+        // Quitar contador antiguo (hermano del <a>) de versiones anteriores.
+        var stale = logoLink.nextElementSibling;
+        if (stale && stale.classList && stale.classList.contains('ensor-completed-counter')) {
+            stale.remove();
         }
-        existing = host.querySelector(':scope > .ensor-completed-counter');
-        if (existing) return existing;
+
+        if (!col) {
+            var fallback = host.querySelector(':scope > .ensor-completed-counter');
+            if (fallback) return fallback;
+        } else {
+            var existing = col.querySelector(':scope > .ensor-completed-counter');
+            if (existing) return existing;
+        }
+
         var blogHref = (function () {
             // Si estamos en /articulos/ vamos a ../blog.html, si no, blog.html
             try {
@@ -149,7 +163,17 @@
         a.innerHTML =
             '<span class="ensor-completed-counter__text">' + L().counterText + '</span>' +
             '<span class="ensor-completed-counter__num" aria-hidden="true">0</span>';
-        host.insertBefore(a, logoLink.nextSibling);
+
+        if (col) {
+            var rule = col.querySelector('.ensor-tagline-rule');
+            if (rule) {
+                col.insertBefore(a, rule);
+            } else {
+                col.appendChild(a);
+            }
+        } else {
+            host.insertBefore(a, logoLink.nextSibling);
+        }
         return a;
     }
     function refreshCounters() {
