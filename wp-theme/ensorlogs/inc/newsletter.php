@@ -60,11 +60,25 @@ function ensorlogs_newsletter_privacy_url(): string
 
 function ensorlogs_mailchimp_api_key(): string
 {
+    if (defined('ENSOR_MAILCHIMP_API_KEY') && is_string(ENSOR_MAILCHIMP_API_KEY)) {
+        $from_const = trim(ENSOR_MAILCHIMP_API_KEY);
+        if ($from_const !== '') {
+            return $from_const;
+        }
+    }
+
     return trim((string) get_theme_mod('ensor_mailchimp_api_key', ''));
 }
 
 function ensorlogs_mailchimp_list_id(): string
 {
+    if (defined('ENSOR_MAILCHIMP_LIST_ID') && is_string(ENSOR_MAILCHIMP_LIST_ID)) {
+        $from_const = trim(ENSOR_MAILCHIMP_LIST_ID);
+        if ($from_const !== '') {
+            return $from_const;
+        }
+    }
+
     return trim((string) get_theme_mod('ensor_mailchimp_list_id', ''));
 }
 
@@ -100,9 +114,75 @@ function ensorlogs_mailchimp_parse_api_key(string $api_key): ?array
 
 function ensorlogs_mailchimp_configured(): bool
 {
-    $parsed = ensorlogs_mailchimp_parse_api_key(ensorlogs_mailchimp_api_key());
+    return ensorlogs_mailchimp_config_issue() === '';
+}
 
-    return $parsed !== null && ensorlogs_mailchimp_list_id() !== '';
+/**
+ * Motivo por el que Mailchimp no está listo (cadena vacía = OK).
+ */
+function ensorlogs_mailchimp_config_issue(): string
+{
+    $api_key = ensorlogs_mailchimp_api_key();
+    $list_id = ensorlogs_mailchimp_list_id();
+
+    if ($api_key === '') {
+        return 'api_key_missing';
+    }
+
+    if (ensorlogs_mailchimp_parse_api_key($api_key) === null) {
+        return 'api_key_invalid';
+    }
+
+    if ($list_id === '') {
+        return 'list_id_missing';
+    }
+
+    return '';
+}
+
+function ensorlogs_mailchimp_config_hint_message(): string
+{
+    $issue = ensorlogs_mailchimp_config_issue();
+
+    if ($issue === 'api_key_missing') {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t(
+                'Falta la API key. En Personalizar → Ensorlogs → Newsletter pégala de nuevo y pulsa «Publicar» (el campo en blanco no la guarda).',
+                'API key missing. In Customize → Ensorlogs → Newsletter paste it again and click «Publish» (a blank field does not save it).'
+            )
+            : __(
+                'Falta la API key. En Personalizar → Ensorlogs → Newsletter pégala de nuevo y pulsa «Publicar» (el campo en blanco no la guarda).',
+                'ensorlogs'
+            );
+    }
+
+    if ($issue === 'api_key_invalid') {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t(
+                'La API key no tiene el formato correcto (debe terminar en -us21, -us22, etc.).',
+                'The API key format is invalid (it must end with -us21, -us22, etc.).'
+            )
+            : __(
+                'La API key no tiene el formato correcto (debe terminar en -us21, -us22, etc.).',
+                'ensorlogs'
+            );
+    }
+
+    if ($issue === 'list_id_missing') {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t(
+                'Falta el Audience ID. Cópialo en Mailchimp → Audience → Settings.',
+                'Audience ID missing. Copy it from Mailchimp → Audience → Settings.'
+            )
+            : __('Falta el Audience ID. Cópialo en Mailchimp → Audience → Settings.', 'ensorlogs');
+    }
+
+    return function_exists('ensorlogs_t')
+        ? ensorlogs_t(
+            'Configura API key y Audience ID en Personalizar → Ensorlogs → Newsletter.',
+            'Set the API key and Audience ID under Customize → Ensorlogs → Newsletter.'
+        )
+        : __('Configura API key y Audience ID en Personalizar → Ensorlogs → Newsletter.', 'ensorlogs');
 }
 
 function ensorlogs_mailchimp_subscriber_hash(string $email): string
@@ -328,6 +408,25 @@ function ensorlogs_ajax_newsletter_refresh_nonce(): void
 add_action('wp_ajax_ensor_newsletter_refresh_nonce', 'ensorlogs_ajax_newsletter_refresh_nonce');
 add_action('wp_ajax_nopriv_ensor_newsletter_refresh_nonce', 'ensorlogs_ajax_newsletter_refresh_nonce');
 
+/**
+ * Estado de configuración (no expone secretos). Sirve para corregir avisos en HTML cacheado.
+ */
+function ensorlogs_ajax_newsletter_status(): void
+{
+    $issue = ensorlogs_mailchimp_config_issue();
+
+    wp_send_json_success(
+        array(
+            'configured' => $issue === '',
+            'issue'      => $issue,
+            'message'    => $issue === '' ? '' : ensorlogs_mailchimp_config_hint_message(),
+        )
+    );
+}
+
+add_action('wp_ajax_ensor_newsletter_status', 'ensorlogs_ajax_newsletter_status');
+add_action('wp_ajax_nopriv_ensor_newsletter_status', 'ensorlogs_ajax_newsletter_status');
+
 function ensorlogs_render_newsletter_button(string $extra_classes = '', string $label = ''): string
 {
     if (!ensorlogs_newsletter_enabled()) {
@@ -361,7 +460,7 @@ function ensorlogs_render_newsletter_form(): string
         : __('Suscribirme', 'ensorlogs');
     $placeholder = $email_label;
 
-    $configured = ensorlogs_mailchimp_configured();
+    $config_issue = ensorlogs_mailchimp_config_issue();
 
     ob_start();
     ?>
@@ -374,18 +473,15 @@ function ensorlogs_render_newsletter_form(): string
             placeholder="<?php echo esc_attr($placeholder); ?>"
             required
             autocomplete="email"
-            <?php echo $configured ? '' : ' aria-describedby="ensor-newsletter-config-hint"'; ?>
+            aria-describedby="ensor-newsletter-config-hint"
         >
-        <?php if (!$configured) : ?>
-            <p id="ensor-newsletter-config-hint" class="ensor-newsletter-form__hint" role="status">
-                <?php
-                echo esc_html__(
-                    'Configura API key y Audience ID en Personalizar → Ensorlogs → Newsletter.',
-                    'ensorlogs'
-                );
-                ?>
-            </p>
-        <?php endif; ?>
+        <p
+            id="ensor-newsletter-config-hint"
+            class="ensor-newsletter-form__hint"
+            role="status"
+            data-ensor-config-hint
+            <?php echo $config_issue === '' ? 'hidden' : ''; ?>
+        ><?php echo esc_html(ensorlogs_mailchimp_config_hint_message()); ?></p>
         <div class="ensor-newsletter-form__feedback" role="status" aria-live="polite" aria-atomic="true" hidden></div>
         <button type="submit" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
     </form>

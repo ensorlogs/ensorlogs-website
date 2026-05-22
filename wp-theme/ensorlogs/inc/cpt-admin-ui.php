@@ -767,14 +767,15 @@ function ensorlogs_render_article_podcast_metabox($post): void
  *     B: Opción 2 *
  *     C: Opción 3
  *     D: Opción 4
- *     E: Explicación cuando se acierta.
+ *     P: Pista tras un intento fallido (hasta el 2.º; al 3.º se revela la correcta).
+ *     E: Explicación al acertar o al 3.º fallo.
  *
  * La opción correcta se marca con un asterisco final (` *`). El asterisco
  * es opcional si se prefiere marcar con `*:` al principio.
  *
  * Devuelve un array de preguntas listo para JSON.
  *
- * @return list<array{q:string,options:list<string>,correct:int,explanation:string}>
+ * @return list<array{q:string,options:list<string>,correct:int,hint:string,explanation:string}>
  */
 function ensorlogs_parse_quiz_textarea(string $raw): array
 {
@@ -785,7 +786,8 @@ function ensorlogs_parse_quiz_textarea(string $raw): array
         $lines = preg_split('/\r\n|\r|\n/', $block) ?: array();
         $q          = '';
         $options    = array();
-        $correctIdx = -1;
+        $correctIdx  = -1;
+        $hint        = '';
         $explanation = '';
         foreach ($lines as $line) {
             $line = trim($line);
@@ -801,6 +803,8 @@ function ensorlogs_parse_quiz_textarea(string $raw): array
                     $text = rtrim(rtrim($text, '*'));
                 }
                 $options[] = $text;
+            } elseif (preg_match('/^P:\s*(.+)$/iu', $line, $m)) {
+                $hint = $m[1];
             } elseif (preg_match('/^E:\s*(.+)$/iu', $line, $m)) {
                 $explanation = $m[1];
             }
@@ -813,6 +817,7 @@ function ensorlogs_parse_quiz_textarea(string $raw): array
                 'q'           => $q,
                 'options'     => $options,
                 'correct'     => $correctIdx,
+                'hint'        => $hint,
                 'explanation' => $explanation,
             );
         }
@@ -881,14 +886,15 @@ function ensorlogs_render_article_quiz_metabox($post): void
             <ul style="margin-left:1rem;list-style:disc;font-size:13px;line-height:1.55;">
                 <li><code>Q:</code> <?php esc_html_e('pregunta', 'ensorlogs'); ?></li>
                 <li><code>A:</code> <code>B:</code> <code>C:</code> <code>D:</code>… <?php esc_html_e('opciones (mínimo 2). Marca la correcta con un asterisco al final.', 'ensorlogs'); ?></li>
-                <li><code>E:</code> <?php esc_html_e('explicación opcional que se muestra al verificar.', 'ensorlogs'); ?></li>
+                <li><code>P:</code> <?php esc_html_e('pista opcional tras el 1.º y 2.º intento fallido (no revela la respuesta correcta).', 'ensorlogs'); ?></li>
+                <li><code>E:</code> <?php esc_html_e('explicación al acertar o al 3.º fallo (cuando se muestra la opción correcta).', 'ensorlogs'); ?></li>
                 <li><code>---</code> <?php esc_html_e('separador entre preguntas.', 'ensorlogs'); ?></li>
             </ul>
         </div>
         <div class="ensor-cpt-meta__section">
             <h4 class="ensor-cpt-meta__title"><?php esc_html_e('Preguntas', 'ensorlogs'); ?></h4>
             <div class="ensor-cpt-meta__row">
-                <textarea id="ensor_quiz" name="_ensor_quiz" rows="18" class="large-text code" placeholder="Q: ¿Pregunta?&#10;A: Opción 1&#10;B: Opción 2 *&#10;C: Opción 3&#10;D: Opción 4&#10;E: Por qué la B es correcta.&#10;---&#10;Q: ¿Otra pregunta?&#10;A: ..."><?php echo esc_textarea($raw); ?></textarea>
+                <textarea id="ensor_quiz" name="_ensor_quiz" rows="18" class="large-text code" placeholder="Q: ¿Pregunta?&#10;A: Opción 1&#10;B: Opción 2 *&#10;C: Opción 3&#10;D: Opción 4&#10;P: Pista si falla (1.º y 2.º intento).&#10;E: Por qué la B es correcta.&#10;---&#10;Q: ¿Otra pregunta?&#10;A: ..."><?php echo esc_textarea($raw); ?></textarea>
             </div>
         </div>
         <?php

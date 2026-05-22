@@ -20,6 +20,7 @@
     'use strict';
     var d = document;
     var STORAGE_KEY = 'ensorlogs_completed_logs_v1';
+    var MAX_WRONG_BEFORE_REVEAL = 3;
 
     function pageLang() {
         var path = (d.location && d.location.pathname) || '';
@@ -52,8 +53,10 @@
             verifyOk: '✓ Respuesta correcta',
             verifyBad: '✗ No es esa',
             feedbackOk: 'Correcto, ese punto quedó claro.',
-            feedbackBadPrefix: 'Aún no. ',
+            feedbackHintPrefix: 'No es esa. Pista: ',
             feedbackBad: 'No es esa. Repasa el log y vuelve a intentarlo.',
+            feedbackRevealPrefix: 'Tras tres intentos, la respuesta correcta es la que ves marcada. ',
+            feedbackReveal: 'Tras tres intentos, la respuesta correcta queda marcada. Repasa el log con calma.',
             doneBtn: 'Completado'
         },
         en: {
@@ -74,8 +77,10 @@
             verifyOk: '✓ Correct answer',
             verifyBad: '✗ Not that one',
             feedbackOk: 'Correct — that point is clear.',
-            feedbackBadPrefix: 'Not yet. ',
+            feedbackHintPrefix: 'Not that one. Hint: ',
             feedbackBad: 'Not that one. Re-read the log and try again.',
+            feedbackRevealPrefix: 'After three tries, the correct option is highlighted. ',
+            feedbackReveal: 'After three tries, the correct option is highlighted. Re-read the log carefully.',
             doneBtn: 'Completed'
         }
     };
@@ -313,7 +318,7 @@
         fb.id = 'ensor-quiz-q' + idx + '-fb';
         li.appendChild(fb);
 
-        return { el: li, verifyBtn: verify, retryBtn: retry, feedback: fb };
+        return { el: li, verifyBtn: verify, retryBtn: retry, feedback: fb, wrongAttempts: 0 };
     }
 
     function mountQuiz(section) {
@@ -400,19 +405,33 @@
                     // Bloquea radios
                     radios.forEach(function (r) { r.disabled = true; });
                 } else {
-                    b.el.setAttribute('data-state', 'wrong');
-                    qStates[i] = 'wrong';
+                    b.wrongAttempts += 1;
                     options[picked].classList.add('is-wrong');
-                    options[correct].classList.add('is-correct');
                     b.verifyBtn.textContent = L().verifyBad;
                     b.retryBtn.style.display = '';
-                    b.feedback.textContent = questions[i].explanation
-                        ? L().feedbackBadPrefix + questions[i].explanation
-                        : L().feedbackBad;
+                    qStates[i] = 'wrong';
+
+                    if (b.wrongAttempts >= MAX_WRONG_BEFORE_REVEAL) {
+                        b.el.setAttribute('data-state', 'revealed');
+                        options[correct].classList.add('is-correct');
+                        var revealText = (questions[i].explanation || '').trim();
+                        b.feedback.textContent = revealText
+                            ? L().feedbackRevealPrefix + revealText
+                            : L().feedbackReveal;
+                    } else {
+                        b.el.setAttribute('data-state', 'wrong');
+                        var hintText = (questions[i].hint || '').trim();
+                        b.feedback.textContent = hintText
+                            ? L().feedbackHintPrefix + hintText
+                            : L().feedbackBad;
+                    }
                 }
                 updateProgress();
             });
             b.retryBtn.addEventListener('click', function () {
+                if (b.el.getAttribute('data-state') === 'revealed') {
+                    b.wrongAttempts = 0;
+                }
                 b.el.setAttribute('data-state', 'idle');
                 qStates[i] = 'idle';
                 b.verifyBtn.textContent = L().verify;

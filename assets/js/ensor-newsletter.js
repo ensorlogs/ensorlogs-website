@@ -223,16 +223,16 @@
         });
     }
 
-    function fetchFreshNonce() {
-        if (!cfg.ajaxUrl) {
-            return Promise.resolve();
+    function fetchAjaxAction(actionName) {
+        if (!cfg.ajaxUrl || !actionName) {
+            return Promise.resolve(null);
         }
         var sep = cfg.ajaxUrl.indexOf('?') >= 0 ? '&' : '?';
         var url =
             cfg.ajaxUrl +
             sep +
             'action=' +
-            encodeURIComponent(cfg.nonceAction || 'ensor_newsletter_refresh_nonce');
+            encodeURIComponent(actionName);
         return fetch(url, {
             method: 'GET',
             credentials: 'same-origin',
@@ -241,8 +241,43 @@
                 'Cache-Control': 'no-cache',
                 Pragma: 'no-cache',
             },
-        })
-            .then(parseAjaxResponse)
+        }).then(parseAjaxResponse);
+    }
+
+    function syncConfigHints() {
+        return fetchAjaxAction(cfg.statusAction || 'ensor_newsletter_status')
+            .then(function (data) {
+                if (!data || !data.success || !data.data) {
+                    return;
+                }
+                var configured = !!data.data.configured;
+                var message = data.data.message || '';
+                d.querySelectorAll('[data-ensor-config-hint]').forEach(function (hint) {
+                    if (configured) {
+                        hint.hidden = true;
+                        hint.textContent = '';
+                        var input = hint.closest('form');
+                        if (input) {
+                            var email = input.querySelector('input[type="email"]');
+                            if (email) {
+                                email.removeAttribute('aria-describedby');
+                            }
+                        }
+                        return;
+                    }
+                    if (message) {
+                        hint.textContent = message;
+                    }
+                    hint.hidden = false;
+                });
+            })
+            .catch(function () {
+                /* Si falla la comprobación, se mantiene el aviso del HTML. */
+            });
+    }
+
+    function fetchFreshNonce() {
+        return fetchAjaxAction(cfg.nonceAction || 'ensor_newsletter_refresh_nonce')
             .then(function (data) {
                 if (data && data.success && data.data && data.data.nonce) {
                     cfg.nonce = data.data.nonce;
@@ -361,5 +396,8 @@
     });
 
     d.addEventListener('keydown', onKeydown);
-    ready(bindModal);
+    ready(function () {
+        bindModal();
+        syncConfigHints();
+    });
 })();

@@ -13,7 +13,8 @@ def test_newsletter_php_registers_ajax_and_put_upsert():
     assert "wp_ajax_nopriv_ensor_newsletter_subscribe" in php
     assert "members/%s" in php
     assert "'method'  => 'PUT'" in php
-    assert "check_ajax_referer('ensor_newsletter_subscribe'" in php
+    assert "wp_verify_nonce($nonce, 'ensor_newsletter_subscribe')" in php
+    assert "ensor_newsletter_status" in php
 
 
 def test_newsletter_js_posts_to_admin_ajax():
@@ -21,7 +22,9 @@ def test_newsletter_js_posts_to_admin_ajax():
     assert "ensor-newsletter-native-form" in js
     assert "cfg.ajaxUrl" in js
     assert "ensor_newsletter_subscribe" in js
-    assert "ensor_newsletter_refresh_nonce" in php
+    assert "ensor_newsletter_refresh_nonce" in js
+    assert "syncConfigHints" in js
+    assert "statusAction" in (THEME_ROOT / "functions.php").read_text(encoding="utf-8")
     assert "fetchFreshNonce" in js
     assert "body.append('nonce'" in js
     assert "ensor-newsletter-form__feedback" in js

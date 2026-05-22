@@ -360,13 +360,25 @@ add_action(
                 },
             )
         );
+        $mailchimp_key_desc = __(
+            'Mailchimp → Account → Extras → API keys. Formato: xxxxx-us21. Deja el campo vacío al publicar para mantener la clave guardada.',
+            'ensorlogs'
+        );
+        if (trim((string) get_theme_mod('ensor_mailchimp_api_key', '')) !== '') {
+            $mailchimp_key_desc .= ' ' . __('(Clave guardada en el servidor.)', 'ensorlogs');
+        }
         $wp_customize->add_control(
             'ensor_mailchimp_api_key',
             array(
                 'label'       => __('Mailchimp API key', 'ensorlogs'),
-                'description' => __('Mailchimp → Account → Extras → API keys. Formato: xxxxx-us21', 'ensorlogs'),
+                'description' => $mailchimp_key_desc,
                 'section'     => 'ensor_section_newsletter',
-                'type'        => 'password',
+                'type'        => 'text',
+                'input_attrs' => array(
+                    'autocomplete' => 'off',
+                    'spellcheck'   => 'false',
+                    'placeholder'  => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-us21',
+                ),
             )
         );
 

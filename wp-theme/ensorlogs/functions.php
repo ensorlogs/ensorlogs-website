@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.19');
+define('ENSORLOGS_THEME_VERSION', '1.10.20');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -182,6 +182,7 @@ add_action('wp_enqueue_scripts', static function (): void {
             array(
                 'ajaxUrl'      => admin_url('admin-ajax.php'),
                 'action'       => 'ensor_newsletter_subscribe',
+                'statusAction' => 'ensor_newsletter_status',
                 'nonceAction'  => 'ensor_newsletter_refresh_nonce',
                 'nonce'        => wp_create_nonce('ensor_newsletter_subscribe'),
                 'sending' => function_exists('ensorlogs_t')
