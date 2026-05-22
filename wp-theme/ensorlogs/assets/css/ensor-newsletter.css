@@ -186,26 +186,41 @@ html.dark .ensor-newsletter-form__hint {
     color: rgba(243, 244, 246, 0.65);
 }
 
-.ensor-newsletter-form__status {
-    margin: 0.75rem 0 0;
-    font-size: 0.82rem;
+.ensor-newsletter-form__feedback {
+    margin: 0 0 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.92rem;
+    font-weight: 600;
     line-height: 1.45;
 }
 
-.ensor-newsletter-form__status.is-success {
-    color: #166534;
+.ensor-newsletter-form__feedback.is-success {
+    color: #14532d;
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.35);
 }
 
-.ensor-newsletter-form__status.is-error {
-    color: #b91c1c;
+.ensor-newsletter-form__feedback.is-error {
+    color: #991b1b;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.28);
 }
 
-html.dark .ensor-newsletter-form__status.is-success {
-    color: #86efac;
+html.dark .ensor-newsletter-form__feedback.is-success {
+    color: #bbf7d0;
+    background: rgba(34, 197, 94, 0.16);
+    border-color: rgba(134, 239, 172, 0.35);
 }
 
-html.dark .ensor-newsletter-form__status.is-error {
-    color: #fca5a5;
+html.dark .ensor-newsletter-form__feedback.is-error {
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.14);
+    border-color: rgba(252, 165, 165, 0.3);
+}
+
+.ensor-newsletter-form--success .ensor-newsletter-submit {
+    filter: brightness(0.98);
 }
 
 .ensor-footer-cta__newsletter {

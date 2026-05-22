@@ -110,6 +110,32 @@ function ensorlogs_mailchimp_subscriber_hash(string $email): string
     return md5(strtolower(trim($email)));
 }
 
+function ensorlogs_newsletter_success_message(bool $already_member = false): string
+{
+    if ($already_member) {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t(
+                'Este correo ya estaba en la lista. ¡Gracias por seguir aquí!',
+                'This email was already on the list. Thanks for staying with us!'
+            )
+            : __('Este correo ya estaba en la lista. ¡Gracias por seguir aquí!', 'ensorlogs');
+    }
+
+    $status = ensorlogs_mailchimp_member_status();
+    if ($status === 'pending') {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t(
+                'Te has suscrito correctamente. Revisa tu correo para confirmar.',
+                'You subscribed successfully. Check your inbox to confirm.'
+            )
+            : __('Te has suscrito correctamente. Revisa tu correo para confirmar.', 'ensorlogs');
+    }
+
+    return function_exists('ensorlogs_t')
+        ? ensorlogs_t('Te has suscrito correctamente. ¡Gracias!', 'You subscribed successfully. Thank you!')
+        : __('Te has suscrito correctamente. ¡Gracias!', 'ensorlogs');
+}
+
 /**
  * @param array<string, mixed>|null $data
  */
@@ -120,9 +146,7 @@ function ensorlogs_mailchimp_error_message(int $code, ?array $data): string
         $detail = isset($data['detail']) ? (string) $data['detail'] : '';
 
         if ($title === 'Member Exists') {
-            return function_exists('ensorlogs_t')
-                ? ensorlogs_t('Este correo ya está en la lista.', 'This email is already on the list.')
-                : __('Este correo ya está en la lista.', 'ensorlogs');
+            return ensorlogs_newsletter_success_message(true);
         }
 
         if (
@@ -240,17 +264,9 @@ function ensorlogs_mailchimp_subscribe_email(string $email): array
     $data = is_array($data) ? $data : null;
 
     if ($code >= 200 && $code < 300) {
-        $success_message = $status === 'pending'
-            ? (function_exists('ensorlogs_t')
-                ? ensorlogs_t('¡Listo! Revisa tu correo para confirmar la suscripción.', 'Done! Check your inbox to confirm your subscription.')
-                : __('¡Listo! Revisa tu correo para confirmar la suscripción.', 'ensorlogs'))
-            : (function_exists('ensorlogs_t')
-                ? ensorlogs_t('¡Listo! Ya estás en la lista.', 'Done! You are on the list.')
-                : __('¡Listo! Ya estás en la lista.', 'ensorlogs'));
-
         return array(
             'ok'      => true,
-            'message' => $success_message,
+            'message' => ensorlogs_newsletter_success_message(false),
         );
     }
 
@@ -270,7 +286,19 @@ function ensorlogs_mailchimp_subscribe_email(string $email): array
 
 function ensorlogs_ajax_newsletter_subscribe(): void
 {
-    check_ajax_referer('ensor_newsletter_subscribe', 'nonce');
+    $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash((string) $_POST['nonce'])) : '';
+    if ($nonce === '' || !wp_verify_nonce($nonce, 'ensor_newsletter_subscribe')) {
+        wp_send_json_error(
+            array(
+                'message' => function_exists('ensorlogs_t')
+                    ? ensorlogs_t(
+                        'La sesión caducó. Recarga la página e inténtalo de nuevo.',
+                        'Your session expired. Reload the page and try again.'
+                    )
+                    : __('La sesión caducó. Recarga la página e inténtalo de nuevo.', 'ensorlogs'),
+            )
+        );
+    }
 
     $email = isset($_POST['email']) ? sanitize_email(wp_unslash((string) $_POST['email'])) : '';
     $result = ensorlogs_mailchimp_subscribe_email($email);
@@ -343,8 +371,8 @@ function ensorlogs_render_newsletter_form(): string
                 ?>
             </p>
         <?php endif; ?>
+        <div class="ensor-newsletter-form__feedback" role="status" aria-live="polite" aria-atomic="true" hidden></div>
         <button type="submit" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
-        <p class="ensor-newsletter-form__status" role="status" aria-live="polite" hidden></p>
     </form>
     <?php
     return (string) ob_get_clean();

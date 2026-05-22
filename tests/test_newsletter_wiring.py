@@ -22,6 +22,8 @@ def test_newsletter_js_posts_to_admin_ajax():
     assert "cfg.ajaxUrl" in js
     assert "ensor_newsletter_subscribe" in js
     assert "body.append('nonce'" in js
+    assert "ensor-newsletter-form__feedback" in js
+    assert "successMessage" in (THEME_ROOT / "functions.php").read_text(encoding="utf-8")
 
 
 def test_functions_localize_newsletter_config():

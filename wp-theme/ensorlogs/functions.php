@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.17');
+define('ENSORLOGS_THEME_VERSION', '1.10.18');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -189,6 +189,9 @@ add_action('wp_enqueue_scripts', static function (): void {
                 'errorGeneric' => function_exists('ensorlogs_t')
                     ? ensorlogs_t('No se pudo suscribir. Inténtalo de nuevo.', 'Could not subscribe. Please try again.')
                     : __('No se pudo suscribir. Inténtalo de nuevo.', 'ensorlogs'),
+                'successMessage' => function_exists('ensorlogs_t')
+                    ? ensorlogs_t('Te has suscrito correctamente. ¡Gracias!', 'You subscribed successfully. Thank you!')
+                    : __('Te has suscrito correctamente. ¡Gracias!', 'ensorlogs'),
             )
         );
     }

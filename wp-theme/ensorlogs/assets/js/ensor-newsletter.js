@@ -30,15 +30,42 @@
             });
     }
 
-    function setStatus(form, message, isError) {
-        var status = form.querySelector('.ensor-newsletter-form__status');
-        if (!status) {
+    function getFeedback(form) {
+        return form.querySelector('.ensor-newsletter-form__feedback');
+    }
+
+    function clearFeedback(form) {
+        if (!form) {
             return;
         }
-        status.textContent = message;
-        status.hidden = !message;
-        status.classList.toggle('is-error', !!isError);
-        status.classList.toggle('is-success', !isError && !!message);
+        form.classList.remove('ensor-newsletter-form--success', 'ensor-newsletter-form--error');
+        var feedback = getFeedback(form);
+        if (!feedback) {
+            return;
+        }
+        feedback.textContent = '';
+        feedback.hidden = true;
+        feedback.classList.remove('is-error', 'is-success');
+    }
+
+    function setFeedback(form, message, isError) {
+        var feedback = getFeedback(form);
+        if (!feedback) {
+            return;
+        }
+
+        form.classList.remove('ensor-newsletter-form--success', 'ensor-newsletter-form--error');
+        feedback.textContent = message || '';
+        feedback.hidden = !message;
+        feedback.classList.toggle('is-error', !!isError && !!message);
+        feedback.classList.toggle('is-success', !isError && !!message);
+
+        if (message) {
+            form.classList.add(isError ? 'ensor-newsletter-form--error' : 'ensor-newsletter-form--success');
+            if (typeof feedback.scrollIntoView === 'function') {
+                feedback.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+        }
     }
 
     function openModal() {
@@ -51,6 +78,8 @@
         modal.setAttribute('aria-hidden', 'false');
         modal.classList.add('is-open');
         d.body.classList.add(BODY_LOCK);
+
+        modal.querySelectorAll('.ensor-newsletter-native-form').forEach(clearFeedback);
 
         var emailInput = modal.querySelector(
             '.ensor-newsletter-native-form input[type="email"]'
@@ -144,26 +173,34 @@
 
     function parseAjaxResponse(res) {
         return res.text().then(function (text) {
-            if (!text) {
+            var trimmed = (text || '').trim();
+            if (trimmed === '0' || trimmed === '-1') {
+                return {
+                    success: false,
+                    data: {
+                        message:
+                            'La sesión caducó. Recarga la página e inténtalo de nuevo.',
+                    },
+                };
+            }
+            if (!trimmed) {
                 return null;
             }
             try {
-                return JSON.parse(text);
+                return JSON.parse(trimmed);
             } catch (err) {
                 return null;
             }
         });
     }
 
-    function handleFormSubmit(e) {
-        var form = e.target.closest('.ensor-newsletter-native-form');
-        if (!form) {
+    function submitNewsletterForm(form) {
+        if (!form || !form.classList.contains('ensor-newsletter-native-form')) {
             return;
         }
-        e.preventDefault();
 
         if (!cfg.ajaxUrl) {
-            setStatus(
+            setFeedback(
                 form,
                 'No se pudo enviar la suscripción. Recarga la página e inténtalo de nuevo.',
                 true
@@ -176,14 +213,14 @@
         var email = emailInput ? String(emailInput.value || '').trim() : '';
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setStatus(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
+            setFeedback(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
             if (emailInput && typeof emailInput.focus === 'function') {
                 emailInput.focus();
             }
             return;
         }
 
-        setStatus(form, cfg.sending || 'Enviando…', false);
+        setFeedback(form, cfg.sending || 'Enviando…', false);
         if (submitBtn) {
             submitBtn.disabled = true;
         }
@@ -203,8 +240,9 @@
                 if (data && data.success) {
                     var msg =
                         (data.data && data.data.message) ||
-                        '¡Listo! Revisa tu correo si hace falta confirmar.';
-                    setStatus(form, msg, false);
+                        cfg.successMessage ||
+                        'Te has suscrito correctamente. ¡Gracias!';
+                    setFeedback(form, msg, false);
                     if (emailInput) {
                         emailInput.value = '';
                     }
@@ -213,17 +251,33 @@
                 var errMsg =
                     (data && data.data && data.data.message) ||
                     cfg.errorGeneric ||
-                    'No se pudo suscribir.';
-                setStatus(form, errMsg, true);
+                    'No se pudo suscribir. Inténtalo de nuevo.';
+                setFeedback(form, errMsg, true);
             })
             .catch(function () {
-                setStatus(form, cfg.errorGeneric || 'No se pudo suscribir.', true);
+                setFeedback(
+                    form,
+                    cfg.errorGeneric || 'No se pudo suscribir. Inténtalo de nuevo.',
+                    true
+                );
             })
             .finally(function () {
                 if (submitBtn) {
                     submitBtn.disabled = false;
                 }
             });
+    }
+
+    function handleFormSubmit(e) {
+        var form = e.target.closest
+            ? e.target.closest('.ensor-newsletter-native-form')
+            : null;
+        if (!form) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        submitNewsletterForm(form);
     }
 
     function ready(fn) {
@@ -238,10 +292,19 @@
         if (e.target.closest('.ensor-newsletter-open')) {
             e.preventDefault();
             openModal();
+            return;
+        }
+        var submitBtn = e.target.closest('.ensor-newsletter-submit');
+        if (submitBtn) {
+            var form = submitBtn.closest('.ensor-newsletter-native-form');
+            if (form) {
+                e.preventDefault();
+                submitNewsletterForm(form);
+            }
         }
     });
 
-    d.addEventListener('submit', handleFormSubmit);
+    d.addEventListener('submit', handleFormSubmit, true);
     d.addEventListener('keydown', onKeydown);
     ready(bindModal);
 })();
