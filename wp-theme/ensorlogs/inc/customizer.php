@@ -349,7 +349,15 @@ add_action(
             array(
                 'default'           => '',
                 'transport'         => 'refresh',
-                'sanitize_callback' => 'sanitize_text_field',
+                'sanitize_callback' => static function ($value): string {
+                    $value = sanitize_text_field((string) $value);
+                    if ($value !== '') {
+                        return $value;
+                    }
+                    $stored = get_theme_mod('ensor_mailchimp_api_key', '');
+
+                    return is_string($stored) ? $stored : '';
+                },
             )
         );
         $wp_customize->add_control(

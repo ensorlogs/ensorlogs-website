@@ -31,12 +31,13 @@ body.ensor-newsletter-open {
     z-index: 0;
     background: rgba(10, 10, 12, 0.62);
     backdrop-filter: blur(4px);
-    cursor: pointer;
+    pointer-events: none;
 }
 
 .ensor-newsletter-modal__panel {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    pointer-events: auto;
     width: min(100%, 28rem);
     max-height: min(92vh, 40rem);
     overflow: auto;
@@ -142,6 +143,9 @@ html.dark .ensor-newsletter-modal__legal {
     padding: 0.7rem 1rem;
     font-size: 0.92rem;
     margin-bottom: 0.75rem;
+    pointer-events: auto;
+    user-select: text;
+    -webkit-user-select: text;
 }
 
 html.dark .ensor-newsletter-native-form input[type="email"] {

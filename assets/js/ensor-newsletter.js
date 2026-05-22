@@ -52,9 +52,12 @@
         modal.classList.add('is-open');
         d.body.classList.add(BODY_LOCK);
 
+        var emailInput = modal.querySelector(
+            '.ensor-newsletter-native-form input[type="email"]'
+        );
         var closeBtn = modal.querySelector('.ensor-newsletter-modal__close');
         var focusables = getFocusables(modal);
-        var target = closeBtn || focusables[0] || modal;
+        var target = emailInput || closeBtn || focusables[0] || modal;
         if (typeof target.focus === 'function') {
             target.focus();
         }
@@ -85,21 +88,26 @@
         closeModal();
     }
 
+    function onModalClick(e) {
+        if (!isOpen()) {
+            return;
+        }
+        if (e.target.closest('[data-ensor-newsletter-close]')) {
+            onCloseActivate(e);
+            return;
+        }
+        if (e.target === e.currentTarget) {
+            onCloseActivate(e);
+        }
+    }
+
     function bindModal() {
         var modal = getModal();
         if (!modal || modal.getAttribute('data-ensor-newsletter-bound') === '1') {
             return;
         }
         modal.setAttribute('data-ensor-newsletter-bound', '1');
-
-        modal.addEventListener('click', function (e) {
-            if (!isOpen()) {
-                return;
-            }
-            if (e.target.closest('[data-ensor-newsletter-close]')) {
-                onCloseActivate(e);
-            }
-        }, true);
+        modal.addEventListener('click', onModalClick);
 
         modal.querySelectorAll('[data-ensor-newsletter-close]').forEach(function (el) {
             el.addEventListener('click', onCloseActivate);
@@ -134,23 +142,48 @@
         }
     }
 
+    function parseAjaxResponse(res) {
+        return res.text().then(function (text) {
+            if (!text) {
+                return null;
+            }
+            try {
+                return JSON.parse(text);
+            } catch (err) {
+                return null;
+            }
+        });
+    }
+
     function handleFormSubmit(e) {
         var form = e.target.closest('.ensor-newsletter-native-form');
-        if (!form || !cfg.ajaxUrl) {
+        if (!form) {
             return;
         }
         e.preventDefault();
+
+        if (!cfg.ajaxUrl) {
+            setStatus(
+                form,
+                'No se pudo enviar la suscripción. Recarga la página e inténtalo de nuevo.',
+                true
+            );
+            return;
+        }
 
         var emailInput = form.querySelector('input[type="email"]');
         var submitBtn = form.querySelector('.ensor-newsletter-submit');
         var email = emailInput ? String(emailInput.value || '').trim() : '';
 
-        if (!email) {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             setStatus(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
+            if (emailInput && typeof emailInput.focus === 'function') {
+                emailInput.focus();
+            }
             return;
         }
 
-        setStatus(form, '', false);
+        setStatus(form, cfg.sending || 'Enviando…', false);
         if (submitBtn) {
             submitBtn.disabled = true;
         }
@@ -165,9 +198,7 @@
             credentials: 'same-origin',
             body: body,
         })
-            .then(function (res) {
-                return res.json();
-            })
+            .then(parseAjaxResponse)
             .then(function (data) {
                 if (data && data.success) {
                     var msg =

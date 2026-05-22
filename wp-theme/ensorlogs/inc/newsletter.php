@@ -105,6 +105,64 @@ function ensorlogs_mailchimp_configured(): bool
     return $parsed !== null && ensorlogs_mailchimp_list_id() !== '';
 }
 
+function ensorlogs_mailchimp_subscriber_hash(string $email): string
+{
+    return md5(strtolower(trim($email)));
+}
+
+/**
+ * @param array<string, mixed>|null $data
+ */
+function ensorlogs_mailchimp_error_message(int $code, ?array $data): string
+{
+    if (is_array($data)) {
+        $title  = isset($data['title']) ? (string) $data['title'] : '';
+        $detail = isset($data['detail']) ? (string) $data['detail'] : '';
+
+        if ($title === 'Member Exists') {
+            return function_exists('ensorlogs_t')
+                ? ensorlogs_t('Este correo ya está en la lista.', 'This email is already on the list.')
+                : __('Este correo ya está en la lista.', 'ensorlogs');
+        }
+
+        if (
+            $title === 'Member In Compliance State'
+            || stripos($detail, 'confirm') !== false
+            || stripos($detail, 'opt-in') !== false
+        ) {
+            return function_exists('ensorlogs_t')
+                ? ensorlogs_t(
+                    'Tu audiencia usa doble opt-in. En Personalizar elige «Pendiente (doble opt-in)» o confirma el correo que envía Mailchimp.',
+                    'Your audience uses double opt-in. Choose «Pending (double opt-in)» in Customize or confirm the email Mailchimp sends.'
+                )
+                : __(
+                    'Tu audiencia usa doble opt-in. En Personalizar elige «Pendiente (doble opt-in)» o confirma el correo que envía Mailchimp.',
+                    'ensorlogs'
+                );
+        }
+
+        if ($detail !== '') {
+            return $detail;
+        }
+    }
+
+    if ($code === 401 || $code === 403) {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t('API key de Mailchimp no válida. Revísala en Personalizar.', 'Invalid Mailchimp API key. Check it in Customize.')
+            : __('API key de Mailchimp no válida. Revísala en Personalizar.', 'ensorlogs');
+    }
+
+    if ($code === 404) {
+        return function_exists('ensorlogs_t')
+            ? ensorlogs_t('Audience ID incorrecto. Copia el ID de Mailchimp → Audience → Settings.', 'Wrong Audience ID. Copy it from Mailchimp → Audience → Settings.')
+            : __('Audience ID incorrecto. Copia el ID de Mailchimp → Audience → Settings.', 'ensorlogs');
+    }
+
+    return function_exists('ensorlogs_t')
+        ? ensorlogs_t('No se pudo completar la suscripción. Revisa la configuración de Mailchimp.', 'Subscription could not be completed. Check your Mailchimp settings.')
+        : __('No se pudo completar la suscripción. Revisa la configuración de Mailchimp.', 'ensorlogs');
+}
+
 /**
  * @return array{ok: bool, message: string}
  */
@@ -133,32 +191,41 @@ function ensorlogs_mailchimp_subscribe_email(string $email): array
 
     $parsed  = ensorlogs_mailchimp_parse_api_key(ensorlogs_mailchimp_api_key());
     $list_id = ensorlogs_mailchimp_list_id();
+    $status  = ensorlogs_mailchimp_member_status();
     $url     = sprintf(
-        'https://%s.api.mailchimp.com/3.0/lists/%s/members',
+        'https://%s.api.mailchimp.com/3.0/lists/%s/members/%s',
         rawurlencode($parsed['dc']),
-        rawurlencode($list_id)
+        rawurlencode($list_id),
+        ensorlogs_mailchimp_subscriber_hash($email)
     );
 
-    $body = wp_json_encode(
+    $payload = wp_json_encode(
         array(
             'email_address' => $email,
-            'status'        => ensorlogs_mailchimp_member_status(),
+            'status_if_new' => $status,
+            'status'        => $status,
         )
     );
 
-    $response = wp_remote_post(
+    $response = wp_remote_request(
         $url,
         array(
+            'method'  => 'PUT',
             'timeout' => 15,
             'headers' => array(
                 'Authorization' => 'apikey ' . $parsed['key'],
                 'Content-Type'  => 'application/json',
             ),
-            'body'    => $body,
+            'body'    => $payload,
         )
     );
 
     if (is_wp_error($response)) {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log('Ensorlogs Mailchimp: ' . $response->get_error_message());
+        }
+
         return array(
             'ok'      => false,
             'message' => function_exists('ensorlogs_t')
@@ -170,39 +237,34 @@ function ensorlogs_mailchimp_subscribe_email(string $email): array
     $code = (int) wp_remote_retrieve_response_code($response);
     $raw  = (string) wp_remote_retrieve_body($response);
     $data = json_decode($raw, true);
+    $data = is_array($data) ? $data : null;
 
     if ($code >= 200 && $code < 300) {
+        $success_message = $status === 'pending'
+            ? (function_exists('ensorlogs_t')
+                ? ensorlogs_t('¡Listo! Revisa tu correo para confirmar la suscripción.', 'Done! Check your inbox to confirm your subscription.')
+                : __('¡Listo! Revisa tu correo para confirmar la suscripción.', 'ensorlogs'))
+            : (function_exists('ensorlogs_t')
+                ? ensorlogs_t('¡Listo! Ya estás en la lista.', 'Done! You are on the list.')
+                : __('¡Listo! Ya estás en la lista.', 'ensorlogs'));
+
         return array(
             'ok'      => true,
-            'message' => function_exists('ensorlogs_t')
-                ? ensorlogs_t('¡Listo! Revisa tu correo si hace falta confirmar la suscripción.', 'Done! Check your inbox if you need to confirm your subscription.')
-                : __('¡Listo! Revisa tu correo si hace falta confirmar la suscripción.', 'ensorlogs'),
+            'message' => $success_message,
         );
     }
 
-    if ($code === 400 && is_array($data)) {
-        $title = isset($data['title']) ? (string) $data['title'] : '';
-        if ($title === 'Member Exists') {
-            return array(
-                'ok'      => true,
-                'message' => function_exists('ensorlogs_t')
-                    ? ensorlogs_t('Este correo ya está en la lista.', 'This email is already on the list.')
-                    : __('Este correo ya está en la lista.', 'ensorlogs'),
-            );
-        }
-        if (!empty($data['detail']) && is_string($data['detail'])) {
-            return array(
-                'ok'      => false,
-                'message' => $data['detail'],
-            );
-        }
+    if (defined('WP_DEBUG') && WP_DEBUG && $raw !== '') {
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        error_log('Ensorlogs Mailchimp HTTP ' . $code . ': ' . $raw);
     }
 
+    $error_message = ensorlogs_mailchimp_error_message($code, $data);
+    $is_duplicate  = is_array($data) && isset($data['title']) && (string) $data['title'] === 'Member Exists';
+
     return array(
-        'ok'      => false,
-        'message' => function_exists('ensorlogs_t')
-            ? ensorlogs_t('No se pudo completar la suscripción. Revisa la configuración de Mailchimp.', 'Subscription could not be completed. Check your Mailchimp settings.')
-            : __('No se pudo completar la suscripción. Revisa la configuración de Mailchimp.', 'ensorlogs'),
+        'ok'      => $is_duplicate,
+        'message' => $error_message,
     );
 }
 
@@ -369,7 +431,7 @@ function ensorlogs_render_newsletter_modal(): void
         aria-hidden="true"
         hidden
     >
-        <div class="ensor-newsletter-modal__overlay" data-ensor-newsletter-close tabindex="-1"></div>
+        <div class="ensor-newsletter-modal__overlay" aria-hidden="true"></div>
         <div class="ensor-newsletter-modal__panel">
             <button
                 type="button"
