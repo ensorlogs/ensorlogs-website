@@ -21,6 +21,8 @@ def test_newsletter_js_posts_to_admin_ajax():
     assert "ensor-newsletter-native-form" in js
     assert "cfg.ajaxUrl" in js
     assert "ensor_newsletter_subscribe" in js
+    assert "ensor_newsletter_refresh_nonce" in php
+    assert "fetchFreshNonce" in js
     assert "body.append('nonce'" in js
     assert "ensor-newsletter-form__feedback" in js
     assert "successMessage" in (THEME_ROOT / "functions.php").read_text(encoding="utf-8")

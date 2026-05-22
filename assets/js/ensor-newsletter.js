@@ -31,7 +31,30 @@
     }
 
     function getFeedback(form) {
-        return form.querySelector('.ensor-newsletter-form__feedback');
+        return (
+            form.querySelector('.ensor-newsletter-form__feedback') ||
+            form.querySelector('.ensor-newsletter-form__status')
+        );
+    }
+
+    function ensureFeedback(form) {
+        var feedback = getFeedback(form);
+        if (feedback) {
+            return feedback;
+        }
+        var submitBtn = form.querySelector('.ensor-newsletter-submit');
+        feedback = d.createElement('div');
+        feedback.className = 'ensor-newsletter-form__feedback';
+        feedback.setAttribute('role', 'status');
+        feedback.setAttribute('aria-live', 'polite');
+        feedback.setAttribute('aria-atomic', 'true');
+        feedback.hidden = true;
+        if (submitBtn && submitBtn.parentNode) {
+            submitBtn.parentNode.insertBefore(feedback, submitBtn);
+        } else {
+            form.appendChild(feedback);
+        }
+        return feedback;
     }
 
     function clearFeedback(form) {
@@ -46,17 +69,15 @@
         feedback.textContent = '';
         feedback.hidden = true;
         feedback.classList.remove('is-error', 'is-success');
+        feedback.removeAttribute('style');
     }
 
     function setFeedback(form, message, isError) {
-        var feedback = getFeedback(form);
-        if (!feedback) {
-            return;
-        }
-
+        var feedback = ensureFeedback(form);
         form.classList.remove('ensor-newsletter-form--success', 'ensor-newsletter-form--error');
         feedback.textContent = message || '';
         feedback.hidden = !message;
+        feedback.removeAttribute('style');
         feedback.classList.toggle('is-error', !!isError && !!message);
         feedback.classList.toggle('is-success', !isError && !!message);
 
@@ -141,6 +162,14 @@
         modal.querySelectorAll('[data-ensor-newsletter-close]').forEach(function (el) {
             el.addEventListener('click', onCloseActivate);
         });
+
+        modal.querySelectorAll('.ensor-newsletter-native-form').forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                submitNewsletterForm(form);
+            });
+        });
     }
 
     function onKeydown(e) {
@@ -194,45 +223,48 @@
         });
     }
 
-    function submitNewsletterForm(form) {
-        if (!form || !form.classList.contains('ensor-newsletter-native-form')) {
-            return;
-        }
-
+    function fetchFreshNonce() {
         if (!cfg.ajaxUrl) {
-            setFeedback(
-                form,
-                'No se pudo enviar la suscripción. Recarga la página e inténtalo de nuevo.',
-                true
-            );
-            return;
+            return Promise.resolve();
         }
+        var sep = cfg.ajaxUrl.indexOf('?') >= 0 ? '&' : '?';
+        var url =
+            cfg.ajaxUrl +
+            sep +
+            'action=' +
+            encodeURIComponent(cfg.nonceAction || 'ensor_newsletter_refresh_nonce');
+        return fetch(url, {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache',
+                Pragma: 'no-cache',
+            },
+        })
+            .then(parseAjaxResponse)
+            .then(function (data) {
+                if (data && data.success && data.data && data.data.nonce) {
+                    cfg.nonce = data.data.nonce;
+                }
+            })
+            .catch(function () {
+                /* Sigue con el nonce embebido en la página. */
+            });
+    }
 
+    function postSubscribe(form, email) {
         var emailInput = form.querySelector('input[type="email"]');
         var submitBtn = form.querySelector('.ensor-newsletter-submit');
-        var email = emailInput ? String(emailInput.value || '').trim() : '';
-
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setFeedback(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
-            if (emailInput && typeof emailInput.focus === 'function') {
-                emailInput.focus();
-            }
-            return;
-        }
-
-        setFeedback(form, cfg.sending || 'Enviando…', false);
-        if (submitBtn) {
-            submitBtn.disabled = true;
-        }
-
         var body = new FormData();
         body.append('action', cfg.action || 'ensor_newsletter_subscribe');
         body.append('nonce', cfg.nonce || '');
         body.append('email', email);
 
-        fetch(cfg.ajaxUrl, {
+        return fetch(cfg.ajaxUrl, {
             method: 'POST',
             credentials: 'same-origin',
+            cache: 'no-store',
             body: body,
         })
             .then(parseAjaxResponse)
@@ -268,16 +300,40 @@
             });
     }
 
-    function handleFormSubmit(e) {
-        var form = e.target.closest
-            ? e.target.closest('.ensor-newsletter-native-form')
-            : null;
-        if (!form) {
+    function submitNewsletterForm(form) {
+        if (!form || !form.classList.contains('ensor-newsletter-native-form')) {
             return;
         }
-        e.preventDefault();
-        e.stopPropagation();
-        submitNewsletterForm(form);
+
+        if (!cfg.ajaxUrl) {
+            setFeedback(
+                form,
+                'No se pudo enviar la suscripción. Recarga la página e inténtalo de nuevo.',
+                true
+            );
+            return;
+        }
+
+        var emailInput = form.querySelector('input[type="email"]');
+        var submitBtn = form.querySelector('.ensor-newsletter-submit');
+        var email = emailInput ? String(emailInput.value || '').trim() : '';
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setFeedback(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
+            if (emailInput && typeof emailInput.focus === 'function') {
+                emailInput.focus();
+            }
+            return;
+        }
+
+        setFeedback(form, cfg.sending || 'Enviando…', false);
+        if (submitBtn) {
+            submitBtn.disabled = true;
+        }
+
+        fetchFreshNonce().then(function () {
+            return postSubscribe(form, email);
+        });
     }
 
     function ready(fn) {
@@ -304,7 +360,6 @@
         }
     });
 
-    d.addEventListener('submit', handleFormSubmit, true);
     d.addEventListener('keydown', onKeydown);
     ready(bindModal);
 })();

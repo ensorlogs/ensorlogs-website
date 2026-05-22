@@ -313,6 +313,21 @@ function ensorlogs_ajax_newsletter_subscribe(): void
 add_action('wp_ajax_ensor_newsletter_subscribe', 'ensorlogs_ajax_newsletter_subscribe');
 add_action('wp_ajax_nopriv_ensor_newsletter_subscribe', 'ensorlogs_ajax_newsletter_subscribe');
 
+/**
+ * Devuelve un nonce nuevo (admin-ajax no suele ir en caché de página).
+ */
+function ensorlogs_ajax_newsletter_refresh_nonce(): void
+{
+    wp_send_json_success(
+        array(
+            'nonce' => wp_create_nonce('ensor_newsletter_subscribe'),
+        )
+    );
+}
+
+add_action('wp_ajax_ensor_newsletter_refresh_nonce', 'ensorlogs_ajax_newsletter_refresh_nonce');
+add_action('wp_ajax_nopriv_ensor_newsletter_refresh_nonce', 'ensorlogs_ajax_newsletter_refresh_nonce');
+
 function ensorlogs_render_newsletter_button(string $extra_classes = '', string $label = ''): string
 {
     if (!ensorlogs_newsletter_enabled()) {
