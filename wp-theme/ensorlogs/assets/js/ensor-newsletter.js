@@ -461,7 +461,7 @@
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             setFeedback(
                 form,
-                cfg.errorGeneric || 'Introduce un correo válido.',
+                cfg.invalidEmail || 'Introduce un correo válido.',
                 'error'
             );
             if (emailInput && typeof emailInput.focus === 'function') {

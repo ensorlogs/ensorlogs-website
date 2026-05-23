@@ -466,10 +466,14 @@ add_filter(
         if (!in_array($handle, $no_combine, true)) {
             return $tag;
         }
-        if (str_contains($tag, 'data-no-optimize')) {
+        if (str_contains($tag, 'data-cfasync="false"')) {
             return $tag;
         }
-        return preg_replace('/<script/i', '<script data-no-optimize="1"', $tag, 1) ?? $tag;
+        $tag = preg_replace('/<script/i', '<script data-cfasync="false"', $tag, 1) ?? $tag;
+        if (!str_contains($tag, 'data-no-optimize')) {
+            $tag = preg_replace('/<script/i', '<script data-no-optimize="1"', $tag, 1) ?? $tag;
+        }
+        return $tag;
     },
     20,
     3

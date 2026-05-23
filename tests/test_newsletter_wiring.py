@@ -57,8 +57,10 @@ def test_ensor_theme_js_block_comments_have_no_backticks():
 def test_newsletter_standalone_script_in_footer():
     php = (THEME_ROOT / "inc" / "newsletter.php").read_text(encoding="utf-8")
     assert "ensorlogs_print_newsletter_script_standalone" in php
+    assert "ensorlogs_print_newsletter_inline_boot" in php
     assert "data-cfasync=\"false\"" in php
     assert "ensor-newsletter.js" in php
+    assert "invalidEmail" in php
 
 
 def test_customizer_preserves_mailchimp_api_key_on_empty_save():

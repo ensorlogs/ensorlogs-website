@@ -137,6 +137,9 @@ function ensorlogs_newsletter_client_config(): array
         'sending'        => function_exists('ensorlogs_t')
             ? ensorlogs_t('Enviando…', 'Sending…')
             : __('Enviando…', 'ensorlogs'),
+        'invalidEmail'   => function_exists('ensorlogs_t')
+            ? ensorlogs_t('Introduce un correo válido.', 'Enter a valid email address.')
+            : __('Introduce un correo válido.', 'ensorlogs'),
         'errorGeneric'   => function_exists('ensorlogs_t')
             ? ensorlogs_t('No se pudo suscribir. Inténtalo de nuevo.', 'Could not subscribe. Please try again.')
             : __('No se pudo suscribir. Inténtalo de nuevo.', 'ensorlogs'),
@@ -661,7 +664,7 @@ function ensorlogs_render_newsletter_modal(): void
 }
 
 /**
- * Carga ensor-newsletter.js fuera del bundle de SiteGround (el combine puede romper el JS).
+ * Carga ensor-newsletter.js al final del body (después de plugins) y fuera de Rocket Loader.
  */
 function ensorlogs_print_newsletter_script_standalone(): void
 {
@@ -680,3 +683,159 @@ function ensorlogs_print_newsletter_script_standalone(): void
 }
 
 add_action('wp_footer', 'ensorlogs_print_newsletter_script_standalone', 9999);
+
+/**
+ * Respaldo inline: validación + AJAX aunque el .js externo falle o cargue tarde (SiteGround).
+ */
+function ensorlogs_print_newsletter_inline_boot(): void
+{
+    if (!ensorlogs_newsletter_enabled()) {
+        return;
+    }
+
+    $cfg_json = wp_json_encode(ensorlogs_newsletter_client_config());
+    if (!is_string($cfg_json)) {
+        $cfg_json = '{}';
+    }
+    ?>
+    <script id="ensor-newsletter-inline-boot" data-cfasync="false" data-no-optimize="1">
+    (function () {
+        'use strict';
+        if (window.__ensorNewsletterInlineBoot) {
+            return;
+        }
+        window.__ensorNewsletterInlineBoot = true;
+        var cfg = <?php echo $cfg_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+        var d = document;
+
+        function isConfigured() {
+            var c = cfg.configured;
+            return c === true || c === 1 || c === '1' || c === 'true';
+        }
+
+        function setBox(form, message, kind) {
+            var box = form.querySelector('.ensor-newsletter-form__feedback');
+            if (!box) {
+                return;
+            }
+            box.textContent = message || '';
+            box.classList.remove('is-error', 'is-success', 'is-pending', 'is-visible');
+            if (message) {
+                box.hidden = false;
+                box.removeAttribute('hidden');
+                box.setAttribute('aria-hidden', 'false');
+                box.classList.add('is-visible');
+                if (kind) {
+                    box.classList.add('is-' + kind);
+                }
+            } else {
+                box.hidden = true;
+                box.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        function bindForm(form) {
+            if (!form || form.getAttribute('data-ensor-nl-inline') === '1') {
+                return;
+            }
+            form.setAttribute('data-ensor-nl-inline', '1');
+            form.addEventListener(
+                'submit',
+                function (e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    var emailEl = form.querySelector('input[type="email"]');
+                    var email = emailEl ? String(emailEl.value || '').trim() : '';
+                    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        setBox(form, cfg.invalidEmail || 'Introduce un correo válido.', 'error');
+                        if (emailEl) {
+                            emailEl.focus();
+                        }
+                        return;
+                    }
+                    if (!isConfigured()) {
+                        setBox(form, cfg.configMessage || 'Falta configurar Mailchimp en el tema.', 'error');
+                        return;
+                    }
+                    if (!cfg.ajaxUrl) {
+                        setBox(form, 'No se pudo enviar. Recarga la página.', 'error');
+                        return;
+                    }
+                    var btn = form.querySelector('.ensor-newsletter-submit');
+                    var label = btn ? btn.textContent : '';
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = cfg.sending || 'Enviando…';
+                    }
+                    setBox(form, cfg.sending || 'Enviando…', 'pending');
+                    var body = new FormData();
+                    body.append('action', cfg.action || 'ensor_newsletter_subscribe');
+                    body.append('nonce', cfg.nonce || '');
+                    body.append('email', email);
+                    fetch(cfg.ajaxUrl, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        cache: 'no-store',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                        body: body,
+                    })
+                        .then(function (res) {
+                            return res.text();
+                        })
+                        .then(function (text) {
+                            var data = null;
+                            try {
+                                data = JSON.parse(text);
+                            } catch (err) {
+                                data = null;
+                            }
+                            if (data && data.success) {
+                                setBox(
+                                    form,
+                                    (data.data && data.data.message) ||
+                                        cfg.successMessage ||
+                                        'Te has suscrito correctamente. ¡Gracias!',
+                                    'success'
+                                );
+                                if (emailEl) {
+                                    emailEl.value = '';
+                                }
+                                return;
+                            }
+                            setBox(
+                                form,
+                                (data && data.data && data.data.message) ||
+                                    cfg.errorGeneric ||
+                                    'No se pudo suscribir.',
+                                'error'
+                            );
+                        })
+                        .catch(function () {
+                            setBox(form, cfg.errorGeneric || 'No se pudo suscribir.', 'error');
+                        })
+                        .finally(function () {
+                            if (btn) {
+                                btn.disabled = false;
+                                btn.textContent = label;
+                            }
+                        });
+                },
+                true
+            );
+        }
+
+        function init() {
+            d.querySelectorAll('.ensor-newsletter-native-form').forEach(bindForm);
+        }
+
+        if (d.readyState === 'loading') {
+            d.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+    <?php
+}
+
+add_action('wp_footer', 'ensorlogs_print_newsletter_inline_boot', 10001);
