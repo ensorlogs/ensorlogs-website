@@ -1024,7 +1024,7 @@ img.ensor-article-hero {
     display: none !important;
 }
 
-/* Títulos de intro blog / proyectos / home: sin barra decorativa bajo el texto */
+/* Títulos principales: tipografía + subrayado de marca al 50% del ancho */
 .main-content .container > section:first-child h1,
 .ensor-intro-card h1,
 .ensor-section-hero-title,
@@ -1043,6 +1043,29 @@ img.ensor-article-hero {
     background-image: none;
 }
 
+.main-content .container > section:first-child h1::after,
+.ensor-intro-card h1::after,
+.ensor-section-hero-title::after,
+.ensor-services-hero__title::after,
+.ensor-legal-hero__title::after,
+.blog-details-wrapper .blog-details-content > h1:first-child::after,
+.ensor-home-hero-name::after {
+    content: '';
+    display: block;
+    width: 50%;
+    max-width: 14rem;
+    height: 2px;
+    margin-top: 0.65rem;
+    border-radius: 999px;
+    background: linear-gradient(
+        to right,
+        var(--ensor-accent) 0%,
+        var(--ensor-accent) 50%,
+        rgba(26, 26, 26, 0.14) 50%,
+        rgba(26, 26, 26, 0.14) 100%
+    );
+}
+
 html.dark .main-content .container > section:first-child h1,
 html.dark .ensor-intro-card h1,
 html.dark .ensor-section-hero-title,
@@ -1051,6 +1074,22 @@ html.dark .ensor-legal-hero__title,
 html.dark .blog-details-wrapper .blog-details-content > h1:first-child,
 html.dark .ensor-home-hero-name {
     color: var(--ensor-paper);
+}
+
+html.dark .main-content .container > section:first-child h1::after,
+html.dark .ensor-intro-card h1::after,
+html.dark .ensor-section-hero-title::after,
+html.dark .ensor-services-hero__title::after,
+html.dark .ensor-legal-hero__title::after,
+html.dark .blog-details-wrapper .blog-details-content > h1:first-child::after,
+html.dark .ensor-home-hero-name::after {
+    background: linear-gradient(
+        to right,
+        var(--ensor-accent-on-dark) 0%,
+        var(--ensor-accent-on-dark) 50%,
+        rgba(255, 255, 255, 0.18) 50%,
+        rgba(255, 255, 255, 0.18) 100%
+    );
 }
 
 #proyectos-intro-heading.ensor-section-hero-title {
@@ -1072,6 +1111,39 @@ section[aria-labelledby="blog-temas-heading"] h2:first-of-type {
     max-width: 56rem;
     display: block;
     background-image: none;
+}
+
+section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type::after,
+section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type::after,
+section[aria-labelledby="blog-temas-heading"] h1:first-of-type::after,
+section[aria-labelledby="blog-temas-heading"] h2:first-of-type::after {
+    content: '';
+    display: block;
+    width: 50%;
+    max-width: 14rem;
+    height: 2px;
+    margin-top: 0.65rem;
+    border-radius: 999px;
+    background: linear-gradient(
+        to right,
+        var(--ensor-accent) 0%,
+        var(--ensor-accent) 50%,
+        rgba(26, 26, 26, 0.14) 50%,
+        rgba(26, 26, 26, 0.14) 100%
+    );
+}
+
+html.dark section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type::after,
+html.dark section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type::after,
+html.dark section[aria-labelledby="blog-temas-heading"] h1:first-of-type::after,
+html.dark section[aria-labelledby="blog-temas-heading"] h2:first-of-type::after {
+    background: linear-gradient(
+        to right,
+        var(--ensor-accent-on-dark) 0%,
+        var(--ensor-accent-on-dark) 50%,
+        rgba(255, 255, 255, 0.18) 50%,
+        rgba(255, 255, 255, 0.18) 100%
+    );
 }
 
 html.dark section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
