@@ -19,6 +19,7 @@ def test_newsletter_php_registers_ajax_and_put_upsert():
 
 def test_newsletter_js_posts_to_admin_ajax():
     js = (THEME_ROOT / "assets" / "js" / "ensor-newsletter.js").read_text(encoding="utf-8")
+    php = (THEME_ROOT / "inc" / "newsletter.php").read_text(encoding="utf-8")
     assert "ensor-newsletter-native-form" in js
     assert "cfg.ajaxUrl" in js
     assert "ensor_newsletter_subscribe" in js
@@ -26,11 +27,11 @@ def test_newsletter_js_posts_to_admin_ajax():
     assert "syncConfigHints" in js
     assert "hydrateCfg" in js
     assert "isMailchimpReady" in js
-    assert "statusAction" in (THEME_ROOT / "functions.php").read_text(encoding="utf-8")
+    assert "statusAction" in php
+    assert "successMessage" in php
     assert "fetchFreshNonce" in js
     assert "body.append('nonce'" in js
     assert "ensor-newsletter-form__feedback" in js
-    assert "successMessage" in (THEME_ROOT / "functions.php").read_text(encoding="utf-8")
 
 
 def test_functions_localize_newsletter_config():
