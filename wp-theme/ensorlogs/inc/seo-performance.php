@@ -386,7 +386,7 @@ add_filter(
 );
 
 /**
- * SiteGround Optimizer: no combinar/minificar el JS del newsletter (conserva wp_localize).
+ * SiteGround Optimizer: no combinar scripts del tema (evita romper IIFE y wp_localize).
  */
 add_filter(
     'sgo_js_combine_exclude',
@@ -394,8 +394,21 @@ add_filter(
         if (!is_array($exclude)) {
             $exclude = array();
         }
-        $exclude[] = 'ensor-newsletter.js';
+        $files = array(
+            'ensor-a11y.js',
+            'ensor-cookies.js',
+            'ensor-lang-switch.js',
+            'ensor-newsletter.js',
+            'ensor-quiz.js',
+            'ensor-reader.js',
+        );
+        foreach ($files as $file) {
+            $exclude[] = $file;
+        }
         $exclude[] = 'ensorlogs-newsletter';
+        $exclude[] = 'ensorlogs-a11y';
+        $exclude[] = 'ensorlogs-cookies';
+        $exclude[] = 'ensorlogs-quiz';
 
         return $exclude;
     }
@@ -407,10 +420,59 @@ add_filter(
         if (!is_array($exclude)) {
             $exclude = array();
         }
+        $files = array(
+            'ensor-a11y.js',
+            'ensor-cookies.js',
+            'ensor-lang-switch.js',
+            'ensor-newsletter.js',
+            'ensor-quiz.js',
+            'ensor-reader.js',
+        );
+        foreach ($files as $file) {
+            $exclude[] = $file;
+        }
+
+        return $exclude;
+    }
+);
+
+add_filter(
+    'sgo_javascript_minify_exclude',
+    static function ($exclude): array {
+        if (!is_array($exclude)) {
+            $exclude = array();
+        }
+        $exclude[] = 'ensor-a11y.js';
         $exclude[] = 'ensor-newsletter.js';
 
         return $exclude;
     }
+);
+
+/**
+ * Marca scripts críticos del tema para que Optimizer no los fusione (atributo en el tag).
+ */
+add_filter(
+    'script_loader_tag',
+    static function (string $tag, string $handle, string $src): string {
+        $no_combine = array(
+            'ensorlogs-a11y',
+            'ensorlogs-cookies',
+            'ensorlogs-lang',
+            'ensorlogs-newsletter',
+            'ensorlogs-quiz',
+            'ensorlogs-reader',
+        );
+        if (!in_array($handle, $no_combine, true)) {
+            return $tag;
+        }
+        if (str_contains($tag, 'data-no-optimize')) {
+            return $tag;
+        }
+        return preg_replace('/<script/i', '<script data-no-optimize="1"', $tag, 1) ?? $tag;
+    },
+    20,
+    3
 );
 
 /**

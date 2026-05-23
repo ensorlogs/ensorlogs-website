@@ -37,7 +37,8 @@
 
     function isMailchimpReady() {
         hydrateCfg();
-        return cfg.configured === true || cfg.configured === 'true' || cfg.configured === 1;
+        var c = cfg.configured;
+        return c === true || c === 'true' || c === 1 || c === '1';
     }
 
     function configHintMessage() {

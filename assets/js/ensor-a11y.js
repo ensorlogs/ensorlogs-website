@@ -4,8 +4,8 @@
  * - Preferencias persistentes en localStorage.
  * - Se autoinyecta en cualquier página que cargue este script.
  *
- * Las preferencias también respetan `prefers-reduced-motion` y
- * `prefers-contrast: more` para usuarios que no abren el panel.
+ * Las preferencias también respetan prefers-reduced-motion y
+ * prefers-contrast: more para usuarios que no abren el panel.
  */
 (function () {
     'use strict';
