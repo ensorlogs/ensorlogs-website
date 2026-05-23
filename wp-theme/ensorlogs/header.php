@@ -66,7 +66,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                         }
                         ?>
                     </span>
-</span>
+                </span>
             </a>
             <div class="main-menu *:transition-all *:text-darkGray *:inline-flex *:items-center dark:*:text-pastelGrey *:border *:border-transparent *:duration-300 *:px-6 *:py-2 *:leading-normal *:rounded-4xl *:font-semibold max-lg:hidden">
                 <a href="<?php echo esc_url(function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/') : home_url('/')); ?>" class="ensor-nav-volver dark:[&.active]:text-white [&.active]:border-nobelGray dark:[&.active]:border-white/20 hover:text-smokeGray dark:hover:text-white">
@@ -125,7 +125,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                     }
                     ?>
                 </span>
-</span>
+            </span>
         </a>
         <button class="close_menu absolute right-0 top-0 w-8 h-8 bg-powerBlack dark:bg-pastelGrey text-white dark:text-black flex items-center justify-center text-sm rounded-sm">
             <i class="fal fa-times"></i>

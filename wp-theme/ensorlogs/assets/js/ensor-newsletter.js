@@ -13,6 +13,41 @@
         return d.getElementById('ensor-newsletter-modal');
     }
 
+    function hydrateCfg() {
+        var modal = getModal();
+        if (!modal) {
+            return cfg;
+        }
+        var raw = modal.getAttribute('data-ensor-newsletter');
+        if (!raw) {
+            return cfg;
+        }
+        try {
+            var parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') {
+                Object.keys(parsed).forEach(function (key) {
+                    cfg[key] = parsed[key];
+                });
+            }
+        } catch (e) {
+            /* Mantiene wp_localize_script / inline de respaldo. */
+        }
+        return cfg;
+    }
+
+    function isMailchimpReady() {
+        hydrateCfg();
+        return cfg.configured === true || cfg.configured === 'true' || cfg.configured === 1;
+    }
+
+    function configHintMessage() {
+        hydrateCfg();
+        return (
+            cfg.configMessage ||
+            'Configura API key y Audience ID en Personalizar → Ensorlogs → Newsletter.'
+        );
+    }
+
     function isOpen() {
         var m = getModal();
         return !!(m && m.classList.contains('is-open'));
@@ -49,7 +84,12 @@
         feedback.setAttribute('aria-atomic', 'true');
         feedback.setAttribute('aria-hidden', 'true');
         feedback.hidden = true;
-        form.appendChild(feedback);
+        var submitBtn = form.querySelector('.ensor-newsletter-submit');
+        if (submitBtn) {
+            form.insertBefore(feedback, submitBtn);
+        } else {
+            form.appendChild(feedback);
+        }
         return feedback;
     }
 
@@ -57,7 +97,11 @@
         if (!form) {
             return;
         }
-        form.classList.remove('ensor-newsletter-form--success', 'ensor-newsletter-form--error');
+        form.classList.remove(
+            'ensor-newsletter-form--success',
+            'ensor-newsletter-form--error',
+            'ensor-newsletter-form--pending'
+        );
         var feedback = getFeedback(form);
         if (!feedback) {
             return;
@@ -65,23 +109,36 @@
         feedback.textContent = '';
         feedback.hidden = true;
         feedback.setAttribute('aria-hidden', 'true');
-        feedback.classList.remove('is-error', 'is-success', 'is-visible');
+        feedback.classList.remove('is-error', 'is-success', 'is-visible', 'is-pending');
     }
 
-    function setFeedback(form, message, isError) {
+    function setFeedback(form, message, state) {
         var feedback = ensureFeedback(form);
-        form.classList.remove('ensor-newsletter-form--success', 'ensor-newsletter-form--error');
+        form.classList.remove(
+            'ensor-newsletter-form--success',
+            'ensor-newsletter-form--error',
+            'ensor-newsletter-form--pending'
+        );
         feedback.textContent = message || '';
-        feedback.classList.remove('is-error', 'is-success', 'is-visible');
+        feedback.classList.remove('is-error', 'is-success', 'is-visible', 'is-pending');
 
         if (message) {
             feedback.hidden = false;
             feedback.removeAttribute('hidden');
             feedback.setAttribute('aria-hidden', 'false');
             feedback.classList.add('is-visible');
-            feedback.classList.toggle('is-error', !!isError);
-            feedback.classList.toggle('is-success', !isError);
-            form.classList.add(isError ? 'ensor-newsletter-form--error' : 'ensor-newsletter-form--success');
+
+            if (state === 'error') {
+                feedback.classList.add('is-error');
+                form.classList.add('ensor-newsletter-form--error');
+            } else if (state === 'success') {
+                feedback.classList.add('is-success');
+                form.classList.add('ensor-newsletter-form--success');
+            } else if (state === 'pending') {
+                feedback.classList.add('is-pending');
+                form.classList.add('ensor-newsletter-form--pending');
+            }
+
             if (typeof feedback.scrollIntoView === 'function') {
                 feedback.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }
@@ -107,11 +164,45 @@
             : submitBtn.dataset.ensorDefaultLabel;
     }
 
+    function applyConfigHints(configured, message) {
+        cfg.configured = !!configured;
+        if (message) {
+            cfg.configMessage = message;
+        }
+
+        d.querySelectorAll('[data-ensor-config-hint]').forEach(function (hint) {
+            var form = hint.closest('form');
+            var email = form ? form.querySelector('input[type="email"]') : null;
+
+            if (configured) {
+                hint.hidden = true;
+                hint.setAttribute('hidden', '');
+                hint.textContent = '';
+                hint.classList.remove('is-warning');
+                if (email) {
+                    email.removeAttribute('aria-describedby');
+                }
+                return;
+            }
+
+            if (message) {
+                hint.textContent = message;
+            }
+            hint.hidden = false;
+            hint.removeAttribute('hidden');
+            hint.classList.add('is-warning');
+            if (email && hint.id) {
+                email.setAttribute('aria-describedby', hint.id);
+            }
+        });
+    }
+
     function openModal() {
         var modal = getModal();
         if (!modal) {
             return;
         }
+        hydrateCfg();
         lastFocus = d.activeElement;
         modal.removeAttribute('hidden');
         modal.setAttribute('aria-hidden', 'false');
@@ -248,6 +339,7 @@
     }
 
     function fetchAjaxAction(actionName) {
+        hydrateCfg();
         if (!cfg.ajaxUrl || !actionName) {
             return Promise.resolve(null);
         }
@@ -273,32 +365,15 @@
         return fetchAjaxAction(cfg.statusAction || 'ensor_newsletter_status')
             .then(function (data) {
                 if (!data || !data.success || !data.data) {
+                    applyConfigHints(isMailchimpReady(), configHintMessage());
                     return;
                 }
                 var configured = !!data.data.configured;
                 var message = data.data.message || '';
-                d.querySelectorAll('[data-ensor-config-hint]').forEach(function (hint) {
-                    if (configured) {
-                        hint.hidden = true;
-                        hint.textContent = '';
-                        var input = hint.closest('form');
-                        if (input) {
-                            var email = input.querySelector('input[type="email"]');
-                            if (email) {
-                                email.removeAttribute('aria-describedby');
-                            }
-                        }
-                        return;
-                    }
-                    if (message) {
-                        hint.textContent = message;
-                    }
-                    hint.hidden = false;
-                    hint.removeAttribute('hidden');
-                });
+                applyConfigHints(configured, message);
             })
             .catch(function () {
-                /* Si falla la comprobación, se mantiene el aviso del HTML. */
+                applyConfigHints(isMailchimpReady(), configHintMessage());
             });
     }
 
@@ -315,6 +390,7 @@
     }
 
     function postSubscribe(form, email, isRetry) {
+        hydrateCfg();
         var emailInput = form.querySelector('input[type="email"]');
         var body = new FormData();
         body.append('action', cfg.action || 'ensor_newsletter_subscribe');
@@ -337,7 +413,7 @@
                         (data.data && data.data.message) ||
                         cfg.successMessage ||
                         'Te has suscrito correctamente. ¡Gracias!';
-                    setFeedback(form, msg, false);
+                    setFeedback(form, msg, 'success');
                     if (emailInput) {
                         emailInput.value = '';
                     }
@@ -358,7 +434,7 @@
                     });
                 }
 
-                setFeedback(form, errMsg, true);
+                setFeedback(form, errMsg, 'error');
             });
     }
 
@@ -367,11 +443,13 @@
             return;
         }
 
+        hydrateCfg();
+
         if (!cfg.ajaxUrl) {
             setFeedback(
                 form,
                 'No se pudo enviar la suscripción. Recarga la página e inténtalo de nuevo.',
-                true
+                'error'
             );
             return;
         }
@@ -383,7 +461,7 @@
             setFeedback(
                 form,
                 cfg.errorGeneric || 'Introduce un correo válido.',
-                true
+                'error'
             );
             if (emailInput && typeof emailInput.focus === 'function') {
                 emailInput.focus();
@@ -391,8 +469,13 @@
             return;
         }
 
+        if (!isMailchimpReady()) {
+            setFeedback(form, configHintMessage(), 'error');
+            return;
+        }
+
         setSubmitting(form, true);
-        setFeedback(form, cfg.sending || 'Enviando…', false);
+        setFeedback(form, cfg.sending || 'Enviando…', 'pending');
 
         fetchFreshNonce()
             .then(function () {
@@ -402,7 +485,7 @@
                 setFeedback(
                     form,
                     cfg.errorGeneric || 'No se pudo suscribir. Inténtalo de nuevo.',
-                    true
+                    'error'
                 );
             })
             .finally(function () {
@@ -454,7 +537,9 @@
 
     d.addEventListener('keydown', onKeydown);
     ready(function () {
+        hydrateCfg();
         bindModal();
+        applyConfigHints(isMailchimpReady(), configHintMessage());
         syncConfigHints();
     });
 })();

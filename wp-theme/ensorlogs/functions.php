@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.26');
+define('ENSORLOGS_THEME_VERSION', '1.10.27');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -178,25 +178,14 @@ add_action('wp_enqueue_scripts', static function (): void {
             $v,
             true
         );
-        wp_localize_script(
+        $newsletter_cfg = ensorlogs_newsletter_client_config();
+        wp_localize_script('ensorlogs-newsletter', 'ensorNewsletter', $newsletter_cfg);
+        wp_add_inline_script(
             'ensorlogs-newsletter',
-            'ensorNewsletter',
-            array(
-                'ajaxUrl'      => admin_url('admin-ajax.php'),
-                'action'       => 'ensor_newsletter_subscribe',
-                'statusAction' => 'ensor_newsletter_status',
-                'nonceAction'  => 'ensor_newsletter_refresh_nonce',
-                'nonce'        => wp_create_nonce('ensor_newsletter_subscribe'),
-                'sending' => function_exists('ensorlogs_t')
-                    ? ensorlogs_t('Enviando…', 'Sending…')
-                    : __('Enviando…', 'ensorlogs'),
-                'errorGeneric' => function_exists('ensorlogs_t')
-                    ? ensorlogs_t('No se pudo suscribir. Inténtalo de nuevo.', 'Could not subscribe. Please try again.')
-                    : __('No se pudo suscribir. Inténtalo de nuevo.', 'ensorlogs'),
-                'successMessage' => function_exists('ensorlogs_t')
-                    ? ensorlogs_t('Te has suscrito correctamente. ¡Gracias!', 'You subscribed successfully. Thank you!')
-                    : __('Te has suscrito correctamente. ¡Gracias!', 'ensorlogs'),
-            )
+            'window.ensorNewsletter=Object.assign(window.ensorNewsletter||{},'
+            . wp_json_encode($newsletter_cfg)
+            . ');',
+            'before'
         );
     }
 

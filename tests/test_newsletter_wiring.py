@@ -24,6 +24,8 @@ def test_newsletter_js_posts_to_admin_ajax():
     assert "ensor_newsletter_subscribe" in js
     assert "ensor_newsletter_refresh_nonce" in js
     assert "syncConfigHints" in js
+    assert "hydrateCfg" in js
+    assert "isMailchimpReady" in js
     assert "statusAction" in (THEME_ROOT / "functions.php").read_text(encoding="utf-8")
     assert "fetchFreshNonce" in js
     assert "body.append('nonce'" in js
@@ -33,8 +35,11 @@ def test_newsletter_js_posts_to_admin_ajax():
 
 def test_functions_localize_newsletter_config():
     php = (THEME_ROOT / "functions.php").read_text(encoding="utf-8")
+    newsletter = (THEME_ROOT / "inc" / "newsletter.php").read_text(encoding="utf-8")
     assert "ensorNewsletter" in php
-    assert "admin_url('admin-ajax.php')" in php
+    assert "ensorlogs_newsletter_client_config" in php
+    assert "data-ensor-newsletter" in newsletter
+    assert "'configured'" in newsletter
 
 
 def test_customizer_preserves_mailchimp_api_key_on_empty_save():

@@ -182,8 +182,24 @@ html.dark .ensor-newsletter-native-form input[type="email"] {
     color: rgba(26, 19, 0, 0.65);
 }
 
+.ensor-newsletter-form__hint.is-warning {
+    margin: 0 0 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.65rem;
+    font-weight: 600;
+    color: #7c4a03;
+    background: rgba(217, 163, 0, 0.14);
+    border: 1px solid rgba(217, 163, 0, 0.38);
+}
+
 html.dark .ensor-newsletter-form__hint {
     color: rgba(243, 244, 246, 0.65);
+}
+
+html.dark .ensor-newsletter-form__hint.is-warning {
+    color: #fde68a;
+    background: rgba(217, 163, 0, 0.12);
+    border-color: rgba(250, 204, 21, 0.35);
 }
 
 .ensor-newsletter-form__feedback,
@@ -217,6 +233,20 @@ html.dark .ensor-newsletter-form__hint {
     color: #991b1b;
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.ensor-newsletter-form__feedback.is-pending,
+.ensor-newsletter-form__status.is-pending {
+    color: rgba(26, 19, 0, 0.85);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+html.dark .ensor-newsletter-form__feedback.is-pending,
+html.dark .ensor-newsletter-form__status.is-pending {
+    color: rgba(243, 244, 246, 0.9);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 html.dark .ensor-newsletter-form__feedback.is-success,

@@ -131,50 +131,70 @@
         return logoLink.querySelector('span.flex.flex-col, span.flex-col');
     }
 
-    function ensureCounter(logoLink) {
-        var col = findBrandColumn(logoLink);
-        var host = logoLink.parentNode;
-        if (!host) return null;
+    function counterBlogHref() {
+        try {
+            var parts = (location.pathname || '/').split('/').filter(Boolean);
+            if (parts.length >= 2 && parts[parts.length - 2] === 'articulos') return '../blog.html';
+            var meta = d.querySelector('meta[name="ensor-blog-url"]');
+            if (meta && meta.content) return meta.content;
+        } catch (e) {}
+        return 'blog.html';
+    }
 
-        // Quitar contador antiguo (hermano del <a>) de versiones anteriores.
-        var stale = logoLink.nextElementSibling;
-        if (stale && stale.classList && stale.classList.contains('ensor-completed-counter')) {
-            stale.remove();
-        }
-
-        if (!col) {
-            var fallback = host.querySelector(':scope > .ensor-completed-counter');
-            if (fallback) return fallback;
-        } else {
-            var existing = col.querySelector(':scope > .ensor-completed-counter');
-            if (existing) return existing;
-        }
-
-        var blogHref = (function () {
-            // Si estamos en /articulos/ vamos a ../blog.html, si no, blog.html
-            try {
-                var parts = (location.pathname || '/').split('/').filter(Boolean);
-                if (parts.length >= 2 && parts[parts.length - 2] === 'articulos') return '../blog.html';
-                // En WP: la página de blog suele estar en /blog/
-                var meta = d.querySelector('meta[name="ensor-blog-url"]');
-                if (meta && meta.content) return meta.content;
-            } catch (e) {}
-            return 'blog.html';
-        })();
+    function buildCounterEl() {
         var a = d.createElement('a');
         a.className = 'ensor-completed-counter';
-        a.href = blogHref;
+        a.href = counterBlogHref();
         a.setAttribute('aria-label', L().counterAria + '0');
         a.innerHTML =
             '<span class="ensor-completed-counter__text">' + L().counterText + '</span>' +
             '<span class="ensor-completed-counter__num" aria-hidden="true">0</span>';
-
-        if (col) {
-            col.appendChild(a);
-        } else {
-            host.insertBefore(a, logoLink.nextSibling);
-        }
         return a;
+    }
+
+    /** Quita contadores dentro de la columna marca (wordmark → tagline, sin contador en medio). */
+    function stripCounterFromBrandColumn(logoLink) {
+        var col = findBrandColumn(logoLink);
+        if (!col) return;
+        var inside = col.querySelector(':scope > .ensor-completed-counter');
+        if (inside) inside.remove();
+    }
+
+    function stripStaleHeaderCounter(logoLink) {
+        var host = logoLink.parentNode;
+        if (!host) return;
+        var stale = logoLink.nextElementSibling;
+        if (stale && stale.classList && stale.classList.contains('ensor-completed-counter')) {
+            stale.remove();
+        }
+        var nav = logoLink.closest('.nav');
+        if (nav) {
+            var inNav = nav.querySelector(':scope > .ensor-completed-counter');
+            if (inNav) inNav.remove();
+        }
+    }
+
+    /** Contador solo en el listado del menú lateral (no junto al wordmark). */
+    function ensureMobileNavCounter(mobileRoot) {
+        var nav = mobileRoot.querySelector('.my-12');
+        if (!nav) return null;
+        var existing = nav.querySelector(':scope > .ensor-completed-counter');
+        if (existing) return existing;
+        var a = buildCounterEl();
+        a.classList.add('ensor-completed-counter--drawer');
+        nav.insertBefore(a, nav.firstChild);
+        return a;
+    }
+
+    function ensureCounter(logoLink) {
+        stripCounterFromBrandColumn(logoLink);
+        stripStaleHeaderCounter(logoLink);
+
+        var mobileRoot = logoLink.closest('.mobile_menu');
+        if (mobileRoot) {
+            return ensureMobileNavCounter(mobileRoot);
+        }
+        return null;
     }
     function refreshCounters() {
         var n = countCompleted();
@@ -190,7 +210,24 @@
     }
     function initHeaderCounter() {
         var hosts = findBrandHosts();
-        hosts.forEach(ensureCounter);
+        var mobileDone = false;
+        hosts.forEach(function (logoLink) {
+            if (logoLink.closest('.mobile_menu')) {
+                if (!mobileDone) {
+                    ensureCounter(logoLink);
+                    mobileDone = true;
+                } else {
+                    stripCounterFromBrandColumn(logoLink);
+                }
+            } else {
+                stripCounterFromBrandColumn(logoLink);
+                stripStaleHeaderCounter(logoLink);
+            }
+        });
+        var drawer = d.querySelector('.mobile_menu');
+        if (drawer && !drawer.querySelector('.my-12 .ensor-completed-counter')) {
+            ensureMobileNavCounter(drawer);
+        }
         refreshCounters();
     }
 

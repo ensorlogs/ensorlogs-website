@@ -393,7 +393,7 @@ add_action(
             )
         );
         $mailchimp_key_desc = __(
-            'Mailchimp → Account → Extras → API keys. Formato: xxxxx-us21. Deja el campo vacío al publicar para mantener la clave guardada.',
+            'Mailchimp → Account → Extras → API keys. Formato: xxxxx-us21. Deja el campo vacío al publicar para mantener la clave guardada. Sin API key y Audience ID el botón «Suscribirme» mostrará un aviso en el modal.',
             'ensorlogs'
         );
         if (trim((string) get_theme_mod('ensor_mailchimp_api_key', '')) !== '') {

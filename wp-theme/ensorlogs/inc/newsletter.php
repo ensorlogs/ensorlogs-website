@@ -118,6 +118,35 @@ function ensorlogs_mailchimp_configured(): bool
 }
 
 /**
+ * Configuración expuesta al navegador (sin secretos).
+ *
+ * @return array<string, mixed>
+ */
+function ensorlogs_newsletter_client_config(): array
+{
+    $issue = ensorlogs_mailchimp_config_issue();
+
+    return array(
+        'ajaxUrl'        => admin_url('admin-ajax.php'),
+        'action'         => 'ensor_newsletter_subscribe',
+        'statusAction'   => 'ensor_newsletter_status',
+        'nonceAction'    => 'ensor_newsletter_refresh_nonce',
+        'nonce'          => wp_create_nonce('ensor_newsletter_subscribe'),
+        'configured'     => $issue === '',
+        'configMessage'  => $issue === '' ? '' : ensorlogs_mailchimp_config_hint_message(),
+        'sending'        => function_exists('ensorlogs_t')
+            ? ensorlogs_t('Enviando…', 'Sending…')
+            : __('Enviando…', 'ensorlogs'),
+        'errorGeneric'   => function_exists('ensorlogs_t')
+            ? ensorlogs_t('No se pudo suscribir. Inténtalo de nuevo.', 'Could not subscribe. Please try again.')
+            : __('No se pudo suscribir. Inténtalo de nuevo.', 'ensorlogs'),
+        'successMessage' => function_exists('ensorlogs_t')
+            ? ensorlogs_t('Te has suscrito correctamente. ¡Gracias!', 'You subscribed successfully. Thank you!')
+            : __('Te has suscrito correctamente. ¡Gracias!', 'ensorlogs'),
+    );
+}
+
+/**
  * Motivo por el que Mailchimp no está listo (cadena vacía = OK).
  */
 function ensorlogs_mailchimp_config_issue(): string
@@ -473,16 +502,15 @@ function ensorlogs_render_newsletter_form(): string
             placeholder="<?php echo esc_attr($placeholder); ?>"
             required
             autocomplete="email"
-            aria-describedby="ensor-newsletter-config-hint"
+            <?php echo $config_issue === '' ? '' : ' aria-describedby="ensor-newsletter-config-hint"'; ?>
         >
         <p
             id="ensor-newsletter-config-hint"
-            class="ensor-newsletter-form__hint"
+            class="ensor-newsletter-form__hint<?php echo $config_issue === '' ? '' : ' is-warning'; ?>"
             role="status"
             data-ensor-config-hint
             <?php echo $config_issue === '' ? 'hidden' : ''; ?>
         ><?php echo esc_html(ensorlogs_mailchimp_config_hint_message()); ?></p>
-        <button type="submit" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
         <div
             class="ensor-newsletter-form__feedback"
             role="status"
@@ -491,6 +519,7 @@ function ensorlogs_render_newsletter_form(): string
             aria-hidden="true"
             hidden
         ></div>
+        <button type="submit" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
     </form>
     <?php
     return (string) ob_get_clean();
@@ -566,6 +595,10 @@ function ensorlogs_render_newsletter_modal(): void
     $close_label = function_exists('ensorlogs_t')
         ? ensorlogs_t('Cerrar', 'Close')
         : __('Cerrar', 'ensorlogs');
+    $client_config_json = wp_json_encode(ensorlogs_newsletter_client_config());
+    if (!is_string($client_config_json)) {
+        $client_config_json = '{}';
+    }
     ?>
     <div
         id="ensor-newsletter-modal"
@@ -576,6 +609,7 @@ function ensorlogs_render_newsletter_modal(): void
         aria-describedby="ensor-newsletter-desc"
         aria-hidden="true"
         hidden
+        data-ensor-newsletter="<?php echo esc_attr($client_config_json); ?>"
     >
         <div class="ensor-newsletter-modal__overlay" aria-hidden="true"></div>
         <div class="ensor-newsletter-modal__panel">

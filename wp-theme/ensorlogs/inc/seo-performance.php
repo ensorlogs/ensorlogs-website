@@ -386,6 +386,34 @@ add_filter(
 );
 
 /**
+ * SiteGround Optimizer: no combinar/minificar el JS del newsletter (conserva wp_localize).
+ */
+add_filter(
+    'sgo_js_combine_exclude',
+    static function ($exclude): array {
+        if (!is_array($exclude)) {
+            $exclude = array();
+        }
+        $exclude[] = 'ensor-newsletter.js';
+        $exclude[] = 'ensorlogs-newsletter';
+
+        return $exclude;
+    }
+);
+
+add_filter(
+    'sgo_javascript_combine_exclude',
+    static function ($exclude): array {
+        if (!is_array($exclude)) {
+            $exclude = array();
+        }
+        $exclude[] = 'ensor-newsletter.js';
+
+        return $exclude;
+    }
+);
+
+/**
  * Añade decoding async y lazy a imágenes del contenido (cuando WordPress no lo hace).
  */
 add_filter(

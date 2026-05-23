@@ -421,20 +421,19 @@ html.dark .ensor-completed-counter.is-empty .ensor-completed-counter__num {
 
 .ensor-completed-counter:hover { text-decoration: underline; }
 
-/* En pantallas estrechas o headers compactos: oculta del header desktop.
-   Sigue visible en el menú móvil (que tiene su propio brand area). */
-@media (max-width: 1023.98px) {
-    header .ensor-completed-counter {
-        display: none;
-    }
+/* No mostrar en la barra superior: el logo queda wordmark + tagline. */
+header .ensor-completed-counter,
+header .nav .ensor-completed-counter {
+    display: none !important;
 }
 
-/* En el menú móvil/lateral, deja el contador con margen reducido. */
-.mobile_menu .ensor-completed-counter {
-    margin-top: 0.25rem;
+/* Contador al inicio del listado del drawer móvil. */
+.mobile_menu .my-12 > .ensor-completed-counter--drawer {
+    display: inline-flex;
+    margin: 0 0 0.65rem 0.25rem;
     font-size: 0.65rem;
 }
-.mobile_menu .ensor-completed-counter__num {
+.mobile_menu .my-12 > .ensor-completed-counter--drawer .ensor-completed-counter__num {
     min-width: 1.1rem;
     height: 1.1rem;
     font-size: 0.66rem;
