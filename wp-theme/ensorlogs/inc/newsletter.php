@@ -482,6 +482,159 @@ function ensorlogs_render_newsletter_button(string $extra_classes = '', string $
     );
 }
 
+/**
+ * Script pegado al formulario del modal (no depende del pie ni de SiteGround combine).
+ */
+function ensorlogs_newsletter_form_wire_script(): string
+{
+    return <<<'JS'
+<script data-cfasync="false" data-no-optimize="1">
+(function (w, d) {
+    'use strict';
+    function parseCfg(form) {
+        var modal = form.closest('#ensor-newsletter-modal');
+        if (!modal) {
+            return w.ensorNewsletter || {};
+        }
+        try {
+            var raw = modal.getAttribute('data-ensor-newsletter');
+            if (raw) {
+                return JSON.parse(raw);
+            }
+        } catch (e) {}
+        return w.ensorNewsletter || {};
+    }
+    function isConfigured(cfg) {
+        var c = cfg.configured;
+        return c === true || c === 1 || c === '1' || c === 'true';
+    }
+    function setBox(form, message, kind) {
+        var box = form.querySelector('.ensor-newsletter-form__feedback');
+        if (!box) {
+            return;
+        }
+        box.textContent = message || '';
+        box.classList.remove('is-error', 'is-success', 'is-pending', 'is-visible');
+        if (message) {
+            box.hidden = false;
+            box.removeAttribute('hidden');
+            box.setAttribute('aria-hidden', 'false');
+            box.classList.add('is-visible');
+            if (kind) {
+                box.classList.add('is-' + kind);
+            }
+        } else {
+            box.hidden = true;
+            box.setAttribute('aria-hidden', 'true');
+        }
+    }
+    function handleSubmit(form) {
+        var cfg = parseCfg(form);
+        var emailEl = form.querySelector('input[type="email"]');
+        var email = emailEl ? String(emailEl.value || '').trim() : '';
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setBox(form, cfg.invalidEmail || 'Introduce un correo válido.', 'error');
+            if (emailEl) {
+                emailEl.focus();
+            }
+            return;
+        }
+        if (!isConfigured(cfg)) {
+            setBox(form, cfg.configMessage || 'Falta configurar Mailchimp en el tema.', 'error');
+            return;
+        }
+        if (!cfg.ajaxUrl) {
+            setBox(form, 'No se pudo enviar. Recarga la página.', 'error');
+            return;
+        }
+        var btn = form.querySelector('.ensor-newsletter-submit');
+        var label = btn ? btn.textContent : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = cfg.sending || 'Enviando…';
+        }
+        setBox(form, cfg.sending || 'Enviando…', 'pending');
+        var body = new FormData();
+        body.append('action', cfg.action || 'ensor_newsletter_subscribe');
+        body.append('nonce', cfg.nonce || '');
+        body.append('email', email);
+        fetch(cfg.ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: body,
+        })
+            .then(function (res) {
+                return res.text();
+            })
+            .then(function (text) {
+                var data = null;
+                try {
+                    data = JSON.parse(text);
+                } catch (err) {
+                    data = null;
+                }
+                if (data && data.success) {
+                    setBox(
+                        form,
+                        (data.data && data.data.message) ||
+                            cfg.successMessage ||
+                            'Te has suscrito correctamente. ¡Gracias!',
+                        'success'
+                    );
+                    if (emailEl) {
+                        emailEl.value = '';
+                    }
+                    return;
+                }
+                setBox(
+                    form,
+                    (data && data.data && data.data.message) ||
+                        cfg.errorGeneric ||
+                        'No se pudo suscribir.',
+                    'error'
+                );
+            })
+            .catch(function () {
+                setBox(form, cfg.errorGeneric || 'No se pudo suscribir.', 'error');
+            })
+            .finally(function () {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = label;
+                }
+            });
+    }
+    w.ensorNewsletterWireForm = function (form) {
+        if (!form || form.getAttribute('data-ensor-wired') === '1') {
+            return;
+        }
+        form.setAttribute('data-ensor-wired', '1');
+        form.setAttribute('action', '#');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            handleSubmit(form);
+        }, true);
+        var btn = form.querySelector('.ensor-newsletter-submit');
+        if (btn) {
+            btn.setAttribute('type', 'button');
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                handleSubmit(form);
+            });
+        }
+    };
+    var form = d.getElementById('ensor-newsletter-form-native');
+    if (form) {
+        w.ensorNewsletterWireForm(form);
+    }
+})(window, document);
+</script>
+JS;
+}
+
 function ensorlogs_render_newsletter_form(): string
 {
     $email_label = function_exists('ensorlogs_t')
@@ -496,7 +649,7 @@ function ensorlogs_render_newsletter_form(): string
 
     ob_start();
     ?>
-    <form class="ensor-newsletter-native-form" action="#" method="post" novalidate>
+    <form id="ensor-newsletter-form-native" class="ensor-newsletter-native-form" action="#" method="post" novalidate>
         <label for="ensor-newsletter-email"><?php echo esc_html($email_label); ?></label>
         <input
             type="email"
@@ -522,9 +675,12 @@ function ensorlogs_render_newsletter_form(): string
             aria-hidden="true"
             hidden
         ></div>
-        <button type="submit" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
+        <button type="button" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
     </form>
     <?php
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo ensorlogs_newsletter_form_wire_script();
+
     return (string) ob_get_clean();
 }
 
@@ -699,14 +855,13 @@ function ensorlogs_print_newsletter_inline_boot(): void
     }
     ?>
     <script id="ensor-newsletter-inline-boot" data-cfasync="false" data-no-optimize="1">
-    (function () {
+    (function (w, d) {
         'use strict';
-        if (window.__ensorNewsletterInlineBoot) {
+        if (w.__ensorNewsletterInlineBoot) {
             return;
         }
-        window.__ensorNewsletterInlineBoot = true;
+        w.__ensorNewsletterInlineBoot = true;
         var cfg = <?php echo $cfg_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-        var d = document;
 
         function isConfigured() {
             var c = cfg.configured;
@@ -825,6 +980,10 @@ function ensorlogs_print_newsletter_inline_boot(): void
         }
 
         function init() {
+            if (typeof w.ensorNewsletterWireForm === 'function') {
+                d.querySelectorAll('.ensor-newsletter-native-form').forEach(w.ensorNewsletterWireForm);
+                return;
+            }
             d.querySelectorAll('.ensor-newsletter-native-form').forEach(bindForm);
         }
 
@@ -833,7 +992,7 @@ function ensorlogs_print_newsletter_inline_boot(): void
         } else {
             init();
         }
-    })();
+    })(window, document);
     </script>
     <?php
 }

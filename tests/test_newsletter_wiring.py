@@ -61,6 +61,8 @@ def test_newsletter_standalone_script_in_footer():
     assert "data-cfasync=\"false\"" in php
     assert "ensor-newsletter.js" in php
     assert "invalidEmail" in php
+    assert "ensorNewsletterWireForm" in php
+    assert "ensor-newsletter-form-native" in php
 
 
 def test_customizer_preserves_mailchimp_api_key_on_empty_save():
