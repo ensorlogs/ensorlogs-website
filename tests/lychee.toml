@@ -23,6 +23,6 @@ exclude = [
 include = [
   "index.html",
   "services.html",
-  "articulos/wordpress-seguridad-estudiantes-2026.html",
+  "en/articulos/wordpress-seguridad-estudiantes-2026.html",
   "legal/privacidad.html",
 ]

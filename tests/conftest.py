@@ -10,11 +10,23 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 THEME_ROOT = REPO_ROOT / "wp-theme" / "ensorlogs"
 
 # Muestra representativa del sitio (CI rápido; no recorre cada HTML).
+def _sample_page(*candidates: str) -> Path:
+    """Primera ruta existente; si ninguna, la primera (fallará el assert con lista clara)."""
+    paths = [REPO_ROOT / c for c in candidates]
+    for path in paths:
+        if path.is_file():
+            return path
+    return paths[0]
+
+
 QUALITY_SAMPLE_HTML = (
-    REPO_ROOT / "index.html",
-    REPO_ROOT / "services.html",
-    REPO_ROOT / "articulos" / "wordpress-seguridad-estudiantes-2026.html",
-    REPO_ROOT / "legal" / "privacidad.html",
+    _sample_page("index.html"),
+    _sample_page("services.html"),
+    _sample_page(
+        "en/articulos/wordpress-seguridad-estudiantes-2026.html",
+        "articulos/wordpress-seguridad-estudiantes-2026.html",
+    ),
+    _sample_page("legal/privacidad.html", "en/legal/privacidad.html"),
 )
 
 PUBLIC_HTML_SKIP = frozenset(
@@ -25,7 +37,7 @@ PUBLIC_HTML_SKIP = frozenset(
 
 
 def iter_quality_html() -> list[Path]:
-    missing = [p for p in QUALITY_SAMPLE_HTML if not p.is_file()]
+    missing = [p.relative_to(REPO_ROOT).as_posix() for p in QUALITY_SAMPLE_HTML if not p.is_file()]
     assert not missing, f"Faltan páginas de la muestra CI: {missing}"
     return list(QUALITY_SAMPLE_HTML)
 
