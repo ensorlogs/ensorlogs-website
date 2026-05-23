@@ -482,8 +482,15 @@ function ensorlogs_render_newsletter_form(): string
             data-ensor-config-hint
             <?php echo $config_issue === '' ? 'hidden' : ''; ?>
         ><?php echo esc_html(ensorlogs_mailchimp_config_hint_message()); ?></p>
-        <div class="ensor-newsletter-form__feedback" role="status" aria-live="polite" aria-atomic="true" hidden></div>
         <button type="submit" class="ensor-newsletter-submit"><?php echo esc_html($submit_label); ?></button>
+        <div
+            class="ensor-newsletter-form__feedback"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            aria-hidden="true"
+            hidden
+        ></div>
     </form>
     <?php
     return (string) ob_get_clean();

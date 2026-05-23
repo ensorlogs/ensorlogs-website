@@ -42,18 +42,14 @@
         if (feedback) {
             return feedback;
         }
-        var submitBtn = form.querySelector('.ensor-newsletter-submit');
         feedback = d.createElement('div');
         feedback.className = 'ensor-newsletter-form__feedback';
         feedback.setAttribute('role', 'status');
         feedback.setAttribute('aria-live', 'polite');
         feedback.setAttribute('aria-atomic', 'true');
+        feedback.setAttribute('aria-hidden', 'true');
         feedback.hidden = true;
-        if (submitBtn && submitBtn.parentNode) {
-            submitBtn.parentNode.insertBefore(feedback, submitBtn);
-        } else {
-            form.appendChild(feedback);
-        }
+        form.appendChild(feedback);
         return feedback;
     }
 
@@ -68,25 +64,47 @@
         }
         feedback.textContent = '';
         feedback.hidden = true;
-        feedback.classList.remove('is-error', 'is-success');
-        feedback.removeAttribute('style');
+        feedback.setAttribute('aria-hidden', 'true');
+        feedback.classList.remove('is-error', 'is-success', 'is-visible');
     }
 
     function setFeedback(form, message, isError) {
         var feedback = ensureFeedback(form);
         form.classList.remove('ensor-newsletter-form--success', 'ensor-newsletter-form--error');
         feedback.textContent = message || '';
-        feedback.hidden = !message;
-        feedback.removeAttribute('style');
-        feedback.classList.toggle('is-error', !!isError && !!message);
-        feedback.classList.toggle('is-success', !isError && !!message);
+        feedback.classList.remove('is-error', 'is-success', 'is-visible');
 
         if (message) {
+            feedback.hidden = false;
+            feedback.removeAttribute('hidden');
+            feedback.setAttribute('aria-hidden', 'false');
+            feedback.classList.add('is-visible');
+            feedback.classList.toggle('is-error', !!isError);
+            feedback.classList.toggle('is-success', !isError);
             form.classList.add(isError ? 'ensor-newsletter-form--error' : 'ensor-newsletter-form--success');
             if (typeof feedback.scrollIntoView === 'function') {
                 feedback.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }
+            return;
         }
+
+        feedback.hidden = true;
+        feedback.setAttribute('aria-hidden', 'true');
+    }
+
+    function setSubmitting(form, isSubmitting) {
+        var submitBtn = form.querySelector('.ensor-newsletter-submit');
+        if (!submitBtn) {
+            return;
+        }
+        if (!submitBtn.dataset.ensorDefaultLabel) {
+            submitBtn.dataset.ensorDefaultLabel = submitBtn.textContent || '';
+        }
+        submitBtn.disabled = !!isSubmitting;
+        submitBtn.setAttribute('aria-busy', isSubmitting ? 'true' : 'false');
+        submitBtn.textContent = isSubmitting
+            ? cfg.sending || 'Enviando…'
+            : submitBtn.dataset.ensorDefaultLabel;
     }
 
     function openModal() {
@@ -162,14 +180,6 @@
         modal.querySelectorAll('[data-ensor-newsletter-close]').forEach(function (el) {
             el.addEventListener('click', onCloseActivate);
         });
-
-        modal.querySelectorAll('.ensor-newsletter-native-form').forEach(function (form) {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                submitNewsletterForm(form);
-            });
-        });
     }
 
     function onKeydown(e) {
@@ -213,12 +223,26 @@
                 };
             }
             if (!trimmed) {
-                return null;
+                return {
+                    success: false,
+                    data: {
+                        message:
+                            cfg.errorGeneric ||
+                            'No se pudo suscribir. Inténtalo de nuevo.',
+                    },
+                };
             }
             try {
                 return JSON.parse(trimmed);
             } catch (err) {
-                return null;
+                return {
+                    success: false,
+                    data: {
+                        message:
+                            cfg.errorGeneric ||
+                            'No se pudo suscribir. Inténtalo de nuevo.',
+                    },
+                };
             }
         });
     }
@@ -240,6 +264,7 @@
             headers: {
                 'Cache-Control': 'no-cache',
                 Pragma: 'no-cache',
+                'X-Requested-With': 'XMLHttpRequest',
             },
         }).then(parseAjaxResponse);
     }
@@ -269,6 +294,7 @@
                         hint.textContent = message;
                     }
                     hint.hidden = false;
+                    hint.removeAttribute('hidden');
                 });
             })
             .catch(function () {
@@ -288,9 +314,8 @@
             });
     }
 
-    function postSubscribe(form, email) {
+    function postSubscribe(form, email, isRetry) {
         var emailInput = form.querySelector('input[type="email"]');
-        var submitBtn = form.querySelector('.ensor-newsletter-submit');
         var body = new FormData();
         body.append('action', cfg.action || 'ensor_newsletter_subscribe');
         body.append('nonce', cfg.nonce || '');
@@ -300,6 +325,9 @@
             method: 'POST',
             credentials: 'same-origin',
             cache: 'no-store',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
             body: body,
         })
             .then(parseAjaxResponse)
@@ -319,19 +347,18 @@
                     (data && data.data && data.data.message) ||
                     cfg.errorGeneric ||
                     'No se pudo suscribir. Inténtalo de nuevo.';
-                setFeedback(form, errMsg, true);
-            })
-            .catch(function () {
-                setFeedback(
-                    form,
-                    cfg.errorGeneric || 'No se pudo suscribir. Inténtalo de nuevo.',
-                    true
-                );
-            })
-            .finally(function () {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
+
+                if (
+                    !isRetry &&
+                    errMsg &&
+                    errMsg.toLowerCase().indexOf('sesión caducó') !== -1
+                ) {
+                    return fetchFreshNonce().then(function () {
+                        return postSubscribe(form, email, true);
+                    });
                 }
+
+                setFeedback(form, errMsg, true);
             });
     }
 
@@ -350,25 +377,37 @@
         }
 
         var emailInput = form.querySelector('input[type="email"]');
-        var submitBtn = form.querySelector('.ensor-newsletter-submit');
         var email = emailInput ? String(emailInput.value || '').trim() : '';
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setFeedback(form, cfg.errorGeneric || 'Introduce un correo válido.', true);
+            setFeedback(
+                form,
+                cfg.errorGeneric || 'Introduce un correo válido.',
+                true
+            );
             if (emailInput && typeof emailInput.focus === 'function') {
                 emailInput.focus();
             }
             return;
         }
 
+        setSubmitting(form, true);
         setFeedback(form, cfg.sending || 'Enviando…', false);
-        if (submitBtn) {
-            submitBtn.disabled = true;
-        }
 
-        fetchFreshNonce().then(function () {
-            return postSubscribe(form, email);
-        });
+        fetchFreshNonce()
+            .then(function () {
+                return postSubscribe(form, email, false);
+            })
+            .catch(function () {
+                setFeedback(
+                    form,
+                    cfg.errorGeneric || 'No se pudo suscribir. Inténtalo de nuevo.',
+                    true
+                );
+            })
+            .finally(function () {
+                setSubmitting(form, false);
+            });
     }
 
     function ready(fn) {
@@ -378,6 +417,24 @@
             d.addEventListener('DOMContentLoaded', fn);
         }
     }
+
+    d.addEventListener(
+        'submit',
+        function (e) {
+            var form = e.target;
+            if (
+                !form ||
+                !form.classList ||
+                !form.classList.contains('ensor-newsletter-native-form')
+            ) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            submitNewsletterForm(form);
+        },
+        true
+    );
 
     d.addEventListener('click', function (e) {
         if (e.target.closest('.ensor-newsletter-open')) {
