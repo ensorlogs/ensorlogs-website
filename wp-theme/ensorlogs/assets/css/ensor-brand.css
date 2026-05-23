@@ -499,42 +499,6 @@ html.dark .ensor-bitacora-word {
     border-bottom-color: var(--ensor-accent-on-dark);
 }
 
-/* Titulares principales de páginas internas: negrita + subrayado amarillo de marca. */
-.main-content .container > section:first-child h1,
-.ensor-intro-card h1,
-.ensor-section-hero-title,
-.ensor-services-hero__title,
-.ensor-legal-hero__title,
-.blog-details-wrapper .blog-details-content > h1:first-child,
-.ensor-home-hero-name {
-    display: inline;
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -0.055em;
-    padding-inline: 0.035em;
-    background-image: linear-gradient(
-        to top,
-        rgba(var(--ensor-accent-rgb), 0.78) 0 0.32em,
-        transparent 0.32em 100%
-    );
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-}
-
-html.dark .main-content .container > section:first-child h1,
-html.dark .ensor-intro-card h1,
-html.dark .ensor-section-hero-title,
-html.dark .ensor-services-hero__title,
-html.dark .ensor-legal-hero__title,
-html.dark .blog-details-wrapper .blog-details-content > h1:first-child,
-html.dark .ensor-home-hero-name {
-    background-image: linear-gradient(
-        to top,
-        rgba(var(--ensor-accent-rgb), 0.62) 0 0.32em,
-        transparent 0.32em 100%
-    );
-}
-
 #proyectos-intro-heading + div {
     display: grid;
     gap: 0.95rem;
@@ -1060,8 +1024,15 @@ img.ensor-article-hero {
     display: none !important;
 }
 
-/* Títulos de intro blog / proyectos: mismo tamaño que servicios */
-.ensor-section-hero-title {
+/* Títulos de intro blog / proyectos / home: sin barra decorativa bajo el texto */
+.main-content .container > section:first-child h1,
+.ensor-intro-card h1,
+.ensor-section-hero-title,
+.ensor-services-hero__title,
+.ensor-legal-hero__title,
+.blog-details-wrapper .blog-details-content > h1:first-child,
+.ensor-home-hero-name {
+    display: block;
     font-size: clamp(1.75rem, 4.2vw, 3.2rem);
     font-weight: 700;
     line-height: 1.15;
@@ -1069,9 +1040,16 @@ img.ensor-article-hero {
     color: var(--ensor-ink);
     margin: 0;
     text-wrap: balance;
+    background-image: none;
 }
 
-html.dark .ensor-section-hero-title {
+html.dark .main-content .container > section:first-child h1,
+html.dark .ensor-intro-card h1,
+html.dark .ensor-section-hero-title,
+html.dark .ensor-services-hero__title,
+html.dark .ensor-legal-hero__title,
+html.dark .blog-details-wrapper .blog-details-content > h1:first-child,
+html.dark .ensor-home-hero-name {
     color: var(--ensor-paper);
 }
 
@@ -1092,6 +1070,8 @@ section[aria-labelledby="blog-temas-heading"] h2:first-of-type {
     margin: 0;
     text-wrap: balance;
     max-width: 56rem;
+    display: block;
+    background-image: none;
 }
 
 html.dark section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
