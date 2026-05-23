@@ -659,3 +659,24 @@ function ensorlogs_render_newsletter_modal(): void
     </div>
     <?php
 }
+
+/**
+ * Carga ensor-newsletter.js fuera del bundle de SiteGround (el combine puede romper el JS).
+ */
+function ensorlogs_print_newsletter_script_standalone(): void
+{
+    if (!ensorlogs_newsletter_enabled()) {
+        return;
+    }
+
+    $uri = get_template_directory_uri();
+    $v   = defined('ENSORLOGS_THEME_VERSION') ? ENSORLOGS_THEME_VERSION : '1';
+
+    printf(
+        '<script src="%1$s" defer data-cfasync="false" data-no-optimize="1" id="ensor-newsletter-standalone-js"></script>%2$s',
+        esc_url($uri . '/assets/js/ensor-newsletter.js?ver=' . rawurlencode($v)),
+        "\n"
+    );
+}
+
+add_action('wp_footer', 'ensorlogs_print_newsletter_script_standalone', 9999);

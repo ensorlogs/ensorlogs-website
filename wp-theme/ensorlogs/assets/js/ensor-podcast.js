@@ -1,7 +1,7 @@
 /*!
  * Ensorlogs · Podcast del log ("Comentarios del autor")
  *
- * Convierte una card `.ensor-podcast-card[data-audio]` en un mini reproductor
+ * Convierte una card .ensor-podcast-card[data-audio] en un mini reproductor
  * sticky con: play/pause, ±15s, velocidad, barra de progreso, lista de
  * capítulos clicables.
  *

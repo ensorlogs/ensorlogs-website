@@ -43,11 +43,22 @@ def test_functions_localize_newsletter_config():
     assert "'configured'" in newsletter
 
 
-def test_a11y_js_block_comment_has_no_backticks():
-    """Backticks en comentarios rompen el bundle combinado de SiteGround (tw-elements + a11y)."""
-    js = (THEME_ROOT / "assets" / "js" / "ensor-a11y.js").read_text(encoding="utf-8")
-    header, _, rest = js.partition("*/")
-    assert "`" not in header, "Quita backticks del bloque de comentario inicial en ensor-a11y.js"
+def test_ensor_theme_js_block_comments_have_no_backticks():
+    """Backticks en comentarios rompen el bundle JS combinado de SiteGround (tras tw-elements)."""
+    js_dir = THEME_ROOT / "assets" / "js"
+    offenders: list[str] = []
+    for path in sorted(js_dir.glob("ensor-*.js")):
+        header, _, _ = path.read_text(encoding="utf-8").partition("*/")
+        if "`" in header:
+            offenders.append(path.name)
+    assert not offenders, "Quita backticks del comentario inicial en: " + ", ".join(offenders)
+
+
+def test_newsletter_standalone_script_in_footer():
+    php = (THEME_ROOT / "inc" / "newsletter.php").read_text(encoding="utf-8")
+    assert "ensorlogs_print_newsletter_script_standalone" in php
+    assert "data-cfasync=\"false\"" in php
+    assert "ensor-newsletter.js" in php
 
 
 def test_customizer_preserves_mailchimp_api_key_on_empty_save():

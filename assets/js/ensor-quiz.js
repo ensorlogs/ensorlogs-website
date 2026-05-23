@@ -9,10 +9,10 @@
  *     <!-- vacío, lo monta este script -->
  *   </section>
  *
- * Estado completado: localStorage `ensorlogs_completed_logs_v1`
+ * Estado completado: localStorage ensorlogs_completed_logs_v1
  *   { "<slug>": { "completedAt": "<ISO>", "score": N } }
  *
- * Eventos emitidos en `document`:
+ * Eventos emitidos en document:
  *   - "ensorlogs:quiz-ready"    → tras montar
  *   - "ensorlogs:completed"     → tras marcar un log como completado
  */
@@ -119,7 +119,7 @@
 
     /* ------------------------------------------------------ contador header */
     function findBrandHosts() {
-        // Cada nodo `.ensor-wordmark` está dentro de un contenedor de marca;
+        // Cada nodo .ensor-wordmark está dentro de un contenedor de marca;
         // Anclas del logo en header (no dentro del <a> para evitar enlaces anidados).
         return Array.prototype.slice.call(
             d.querySelectorAll('header .nav > a.inline-flex, .mobile_menu > a.inline-flex')
@@ -244,7 +244,7 @@
     /* ----------------------------------------------- cards del listado blog */
     function slugFromHref(href) {
         if (!href) return '';
-        // Soporta rutas estáticas (`articulos/xxx.html`) y WP (`/blog/xxx/`).
+        // Soporta rutas estáticas (articulos/xxx.html) y WP (/blog/xxx/).
         var staticMatch = href.match(/articulos\/([^./?#]+)\.html?/i);
         if (staticMatch) return staticMatch[1];
         var wpMatch = href.match(/\/(?:blog|logs|articulos?)\/([^/?#]+)\/?$/i);

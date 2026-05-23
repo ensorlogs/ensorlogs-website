@@ -8,7 +8,7 @@
  *    por encima del chip, para no tapar el h1 al cargar.
  *  - TOC sticky (desktop) o sheet flotante (mobile) generado solo desde h1 del cuerpo.
  *  - Filtro por audiencia (estudiante, profesional, profesor, datos, etc.)
- *    cuando hay secciones marcadas con `.ensor-aud-section[data-aud="..."]`.
+ *    cuando hay secciones marcadas con .ensor-aud-section[data-aud].
  *
  * No depende de jQuery; jQuery puede seguir cargado para otros scripts.
  */
