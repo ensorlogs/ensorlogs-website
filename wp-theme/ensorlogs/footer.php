@@ -10,9 +10,11 @@ if (!defined('ABSPATH')) {
 ?>
     <footer class="mt-24 pb-8" data-aos="fade-up">
         <?php
-        $ensor_footer_heading_default = function_exists('ensorlogs_t')
-            ? ensorlogs_t('¿Interesado en trabajar conmigo?', 'Interested in working with me?')
-            : __('¿Interesado en trabajar conmigo?', 'ensorlogs');
+        $ensor_footer_heading_default = function_exists('ensorlogs_get_footer_cta')
+            ? ensorlogs_get_footer_cta()
+            : (function_exists('ensorlogs_t')
+                ? ensorlogs_t('¿Interesado en trabajar conmigo?', 'Interested in working with me?')
+                : __('¿Interesado en trabajar conmigo?', 'ensorlogs'));
         $ensor_footer_cta_link        = function_exists('ensorlogs_t')
             ? ensorlogs_t('Contáctame', 'Contact me')
             : __('Contáctame', 'ensorlogs');
@@ -25,9 +27,6 @@ if (!defined('ABSPATH')) {
                 'Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.',
                 'ensorlogs'
             );
-        if (function_exists('ensorlogs_get_footer_cta')) {
-            $ensor_footer_heading_default = ensorlogs_get_footer_cta();
-        }
         ?>
         <div class="container text-center">
             <div class="ensor-footer-cta" data-aos="fade-up">
@@ -63,10 +62,10 @@ if (!defined('ABSPATH')) {
                     &copy;<?php echo esc_html(gmdate('Y')); ?>
                     <a href="<?php echo esc_url(home_url('/')); ?>" class="text-darkGray font-medium dark:text-white">Ensorlogs</a>.
                     <?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('Todos los derechos reservados', 'All rights reserved') : __('Todos los derechos reservados', 'ensorlogs')); ?>
-                    <span class="ensor-footer-cta__love" aria-label="<?php esc_attr_e('Hecho con amor y WordPress', 'ensorlogs'); ?>">
-                        · <?php esc_html_e('Hecho con', 'ensorlogs'); ?>
+                    <span class="ensor-footer-cta__love" aria-label="<?php echo esc_attr(function_exists('ensorlogs_t') ? ensorlogs_t('Hecho con amor y WordPress', 'Made with love and WordPress') : __('Hecho con amor y WordPress', 'ensorlogs')); ?>">
+                        · <?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('Hecho con', 'Made with') : __('Hecho con', 'ensorlogs')); ?>
                         <span class="ensor-footer-cta__heart" aria-hidden="true">❤️</span>
-                        <?php esc_html_e('y', 'ensorlogs'); ?>
+                        <?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('y', 'and') : __('y', 'ensorlogs')); ?>
                         <a href="https://wordpress.org/" target="_blank" rel="noopener noreferrer" class="ensor-footer-cta__wp">WordPress</a>
                     </span>
                 </p>

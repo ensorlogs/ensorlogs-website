@@ -378,8 +378,7 @@ html.dark .btn_theme_switch::before {
 
 /* Muy estrecho: oculta tagline + regla para dar sitio a CTA y menú */
 @media (max-width: 479px) {
-    header .nav > a:first-of-type > span.flex.flex-col > span:nth-of-type(2),
-    header .nav > a:first-of-type > span.flex.flex-col > .ensor-tagline-rule {
+    header .nav > a:first-of-type > span.flex.flex-col > span:nth-of-type(2) {
         display: none !important;
     }
 }
@@ -500,50 +499,6 @@ html.dark .ensor-bitacora-word {
     border-bottom-color: var(--ensor-accent-on-dark);
 }
 
-/* Línea decorativa bajo titulares: mitad de ancho, sin depender de utilidades Tailwind */
-.ensor-tagline-rule {
-    display: block;
-    width: 50%;
-    max-width: 14rem;
-    height: 2px;
-    border-radius: 999px;
-    background: linear-gradient(
-        to right,
-        var(--ensor-accent) 0%,
-        var(--ensor-accent) 50%,
-        rgba(26, 26, 26, 0.14) 50%,
-        rgba(26, 26, 26, 0.14) 100%
-    );
-}
-
-html.dark .ensor-tagline-rule {
-    background: linear-gradient(
-        to right,
-        var(--ensor-accent-on-dark) 0%,
-        var(--ensor-accent-on-dark) 50%,
-        rgba(255, 255, 255, 0.18) 50%,
-        rgba(255, 255, 255, 0.18) 100%
-    );
-}
-
-/* Cabecera: línea más corta bajo el logotipo */
-header .ensor-tagline-rule {
-    max-width: 6rem;
-    margin-top: 0.375rem;
-}
-
-header .mobile_menu .ensor-tagline-rule {
-    max-width: 5rem;
-    margin-top: 0.25rem;
-}
-
-/* Intros blog / proyectos: separación bajo el h1 */
-.ensor-section-hero-title + .ensor-tagline-rule,
-section[aria-labelledby="proyectos-intro-heading"] h1 + .ensor-tagline-rule,
-section[aria-labelledby="blog-temas-heading"] h1 + .ensor-tagline-rule {
-    margin-top: 1rem;
-}
-
 /* Titulares principales de páginas internas: negrita + subrayado amarillo de marca. */
 .main-content .container > section:first-child h1,
 .ensor-intro-card h1,
@@ -580,14 +535,14 @@ html.dark .ensor-home-hero-name {
     );
 }
 
-#proyectos-intro-heading + .ensor-tagline-rule + div {
+#proyectos-intro-heading + div {
     display: grid;
     gap: 0.95rem;
     margin-top: clamp(1.15rem, 2vw, 1.5rem);
     line-height: 1.85;
 }
 
-#proyectos-intro-heading + .ensor-tagline-rule + div > p {
+#proyectos-intro-heading + div > p {
     margin: 0;
 }
 

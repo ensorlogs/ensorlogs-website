@@ -285,6 +285,16 @@ function ensorlogs_lang_url(string $path = '/'): string
  */
 function ensorlogs_lang_alternate_url(): string
 {
+    if (is_singular('ensor_article') && function_exists('ensorlogs_get_article_peer_post')) {
+        $peer = ensorlogs_get_article_peer_post((int) get_queried_object_id());
+        if ($peer instanceof WP_Post) {
+            $link = get_permalink($peer);
+            if (is_string($link) && $link !== '') {
+                return $link;
+            }
+        }
+    }
+
     $lang = ensorlogs_current_lang();
     $path = ensorlogs_i18n_relative_path();
 

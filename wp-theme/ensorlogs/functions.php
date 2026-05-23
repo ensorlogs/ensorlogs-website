@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.21');
+define('ENSORLOGS_THEME_VERSION', '1.10.23');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -27,6 +27,7 @@ require_once get_template_directory() . '/inc/block-patterns.php';
 require_once get_template_directory() . '/inc/i18n.php';
 require_once get_template_directory() . '/inc/legal-i18n.php';
 require_once get_template_directory() . '/inc/article-lang.php';
+require_once get_template_directory() . '/inc/article-translations.php';
 require_once get_template_directory() . '/inc/project-content-i18n.php';
 
 add_action(

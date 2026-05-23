@@ -170,12 +170,7 @@
             '<span class="ensor-completed-counter__num" aria-hidden="true">0</span>';
 
         if (col) {
-            var rule = col.querySelector('.ensor-tagline-rule');
-            if (rule) {
-                col.insertBefore(a, rule);
-            } else {
-                col.appendChild(a);
-            }
+            col.appendChild(a);
         } else {
             host.insertBefore(a, logoLink.nextSibling);
         }

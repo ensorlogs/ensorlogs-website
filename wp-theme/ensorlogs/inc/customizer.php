@@ -91,7 +91,27 @@ function ensorlogs_get_tagline(): string
 
 function ensorlogs_get_footer_cta(): string
 {
-    return (string) get_theme_mod('ensor_footer_cta', __('¿Interesado en trabajar conmigo?', 'ensorlogs'));
+    $default_es = '¿Interesado en trabajar conmigo?';
+    $value      = trim((string) get_theme_mod('ensor_footer_cta', $default_es));
+    if ($value === '') {
+        $value = $default_es;
+    }
+
+    if (!function_exists('ensorlogs_current_lang') || ensorlogs_current_lang() !== 'en') {
+        return $value;
+    }
+
+    $default_en = 'Interested in working with me?';
+    if ($value === $default_es) {
+        return $default_en;
+    }
+
+    $custom_en = trim((string) get_theme_mod('ensor_footer_cta_en', 'Interested in working with me?'));
+    if ($custom_en !== '') {
+        return $custom_en;
+    }
+
+    return $default_en;
 }
 
 function ensorlogs_get_author_name(): string
@@ -185,6 +205,18 @@ add_action(
             'transport'         => 'refresh',
             'sanitize_callback' => 'sanitize_text_field',
         ));
+        $wp_customize->add_setting('ensor_footer_cta_en', array(
+            'default'           => 'Interested in working with me?',
+            'transport'         => 'refresh',
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+        $wp_customize->add_control('ensor_footer_cta_en', array(
+            'label'       => __('Pie · titular EN (opcional)', 'ensorlogs'),
+            'description' => __('Sustituye el titular del pie en /en/ si no quieres la traducción automática del texto en español.', 'ensorlogs'),
+            'section'     => 'ensor_section_identity',
+            'type'        => 'text',
+        ));
+
         $wp_customize->add_control('ensor_footer_cta', array(
             'label'   => __('Frase del CTA en el pie', 'ensorlogs'),
             'section' => 'ensor_section_identity',
@@ -420,6 +452,32 @@ add_action(
                     'subscribed' => __('Suscrito (alta directa)', 'ensorlogs'),
                     'pending'    => __('Pendiente (doble opt-in)', 'ensorlogs'),
                 ),
+            )
+        );
+
+        /* ---------- Traducción de logs ---------- */
+        $wp_customize->add_section(
+            'ensor_section_translation',
+            array(
+                'title' => __('Traducción de logs', 'ensorlogs'),
+                'panel' => 'ensorlogs',
+            )
+        );
+        $wp_customize->add_setting(
+            'ensor_translation_mymemory_email',
+            array(
+                'default'           => '',
+                'transport'         => 'refresh',
+                'sanitize_callback' => 'sanitize_email',
+            )
+        );
+        $wp_customize->add_control(
+            'ensor_translation_mymemory_email',
+            array(
+                'label'       => __('Email MyMemory (opcional)', 'ensorlogs'),
+                'description' => __('Más cuota para «Traducir automáticamente» en el editor de logs. Deja vacío para usar el límite gratuito.', 'ensorlogs'),
+                'section'     => 'ensor_section_translation',
+                'type'        => 'email',
             )
         );
 
