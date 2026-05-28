@@ -95,11 +95,11 @@ final class EAE_Admin
             array(
                 'type'              => 'string',
                 'sanitize_callback' => static function ($value): string {
-                    $allowed = array('gpt-5.5', 'gpt-4.1');
+                    $allowed = array('gpt-5.5', 'gpt-4.1', 'gpt-4o', 'gpt-4o-mini');
                     $value   = sanitize_text_field((string) $value);
-                    return in_array($value, $allowed, true) ? $value : 'gpt-5.5';
+                    return in_array($value, $allowed, true) ? $value : 'gpt-4o';
                 },
-                'default'           => 'gpt-5.5',
+                'default'           => 'gpt-4o',
                 'show_in_rest'      => false,
             )
         );
@@ -260,10 +260,12 @@ final class EAE_Admin
                                 <label for="ensorlogs-ai-openai-model"><?php esc_html_e('Modelo', 'ensorlogs'); ?></label>
                             </th>
                             <td>
-                                <?php $model = (string) get_option(self::OPTION_MODEL, 'gpt-5.5'); ?>
+                                <?php $model = (string) get_option(self::OPTION_MODEL, 'gpt-4o'); ?>
                                 <select id="ensorlogs-ai-openai-model" name="<?php echo esc_attr(self::OPTION_MODEL); ?>">
-                                    <option value="gpt-5.5" <?php selected($model, 'gpt-5.5'); ?>>gpt-5.5</option>
+                                    <option value="gpt-4o" <?php selected($model, 'gpt-4o'); ?>>gpt-4o (recomendado)</option>
+                                    <option value="gpt-4o-mini" <?php selected($model, 'gpt-4o-mini'); ?>>gpt-4o-mini</option>
                                     <option value="gpt-4.1" <?php selected($model, 'gpt-4.1'); ?>>gpt-4.1</option>
+                                    <option value="gpt-5.5" <?php selected($model, 'gpt-5.5'); ?>>gpt-5.5 → gpt-4o</option>
                                 </select>
                             </td>
                         </tr>

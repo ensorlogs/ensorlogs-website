@@ -39,9 +39,6 @@ function eae_print_inline_generator_script(array $cfg): void
             el.classList.toggle('is-error', !!isError);
             el.classList.toggle('is-success', !!msg && !isError);
         }
-        if (isError && msg) {
-            window.alert(msg);
-        }
     }
 
     function topicValue() {
@@ -205,7 +202,7 @@ function eae_print_inline_generator_script(array $cfg): void
             .then(parseRes)
             .then(function (r) {
                 if (!r.ok || !r.data || !r.data.ok) {
-                    var m = (r.data && (r.data.message || r.data.error)) || ('Error ' + r.status);
+                    var m = (r.data && (r.data.error || r.data.message)) || ('Error ' + r.status);
                     throw new Error(m);
                 }
                 var html = r.data.html || '';

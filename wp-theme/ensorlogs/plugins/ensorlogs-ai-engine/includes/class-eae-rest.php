@@ -95,18 +95,23 @@ final class EAE_Rest
         }
 
         $prompt = EAE_Prompt::build_master_prompt($input);
-        $model  = (string) get_option(self::OPTION_MODEL, 'gpt-5.5');
-        if (!in_array($model, array('gpt-5.5', 'gpt-4.1'), true)) {
-            $model = 'gpt-5.5';
+        $model = (string) get_option(self::OPTION_MODEL, 'gpt-4o');
+        $allowed_models = array('gpt-5.5', 'gpt-4.1', 'gpt-4o', 'gpt-4o-mini');
+        if (!in_array($model, $allowed_models, true)) {
+            $model = 'gpt-4o';
         }
 
         $result = EAE_OpenAI::generate_html($api_key, $model, $prompt);
         if (!$result['ok']) {
+            $detail = trim((string) ($result['error'] ?? ''));
+            if ($detail !== '') {
+                error_log('Ensorlogs AI Engine: ' . $detail);
+            }
             return new WP_REST_Response(
                 array(
                     'ok'      => false,
-                    'message' => __('No se pudo generar el LOG en este momento.', 'ensorlogs'),
-                    'error'   => $result['error'],
+                    'message' => self::format_openai_error_message($detail),
+                    'error'   => $detail,
                 ),
                 502
             );
@@ -144,6 +149,27 @@ final class EAE_Rest
                 'sync'          => $sync,
             ),
             200
+        );
+    }
+
+    private static function format_openai_error_message(string $detail): string
+    {
+        if ($detail === '') {
+            return __('No se pudo generar el LOG. Revisa la API Key en Ajustes > Ensorlogs AI Engine.', 'ensorlogs');
+        }
+        if (stripos($detail, 'incorrect api key') !== false || stripos($detail, 'invalid_api_key') !== false) {
+            return __('API Key de OpenAI incorrecta. Actualízala en Ajustes > Ensorlogs AI Engine.', 'ensorlogs');
+        }
+        if (stripos($detail, 'insufficient_quota') !== false || stripos($detail, 'billing') !== false) {
+            return __('Sin crédito o facturación en OpenAI. Revisa tu cuenta en platform.openai.com.', 'ensorlogs');
+        }
+        if (stripos($detail, 'model') !== false && stripos($detail, 'not found') !== false) {
+            return __('Modelo no disponible en tu cuenta OpenAI. Prueba gpt-4o en Ajustes > Ensorlogs AI Engine.', 'ensorlogs');
+        }
+        return sprintf(
+            /* translators: %s: detalle técnico devuelto por OpenAI o el servidor. */
+            __('No se pudo generar el LOG: %s', 'ensorlogs'),
+            $detail
         );
     }
 

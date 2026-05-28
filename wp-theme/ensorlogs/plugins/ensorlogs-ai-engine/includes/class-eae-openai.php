@@ -17,34 +17,79 @@ final class EAE_OpenAI
      */
     public static function generate_html(string $api_key, string $model, string $prompt): array
     {
-        $resolved = self::resolve_model($model);
+        $models  = self::models_to_try($model);
+        $errors  = array();
 
-        $chat = self::request_chat($api_key, $resolved, $prompt);
-        if ($chat['ok']) {
-            return $chat;
+        foreach ($models as $try_model) {
+            $chat = self::request_chat($api_key, $try_model, $prompt);
+            if ($chat['ok']) {
+                $chat['content'] = self::normalize_model_output($chat['content']);
+                if ($chat['content'] !== '') {
+                    return $chat;
+                }
+                $errors[] = $try_model . ': respuesta vacía tras normalizar';
+            } else {
+                $errors[] = $try_model . ': ' . $chat['error'];
+            }
+
+            $responses = self::request_responses($api_key, $try_model, $prompt);
+            if ($responses['ok']) {
+                $responses['content'] = self::normalize_model_output($responses['content']);
+                if ($responses['content'] !== '') {
+                    return $responses;
+                }
+                $errors[] = $try_model . ' (responses): respuesta vacía';
+            } else {
+                $errors[] = $try_model . ' (responses): ' . $responses['error'];
+            }
         }
 
-        $responses = self::request_responses($api_key, $resolved, $prompt);
-        if ($responses['ok']) {
-            return $responses;
-        }
-
-        $error = $chat['error'] !== '' ? $chat['error'] : $responses['error'];
         return array(
             'ok'      => false,
             'content' => '',
-            'error'   => $error !== '' ? $error : 'OpenAI no respondió.',
+            'error'   => implode(' | ', array_slice($errors, 0, 3)),
         );
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function models_to_try(string $model): array
+    {
+        $primary = self::resolve_model($model);
+        $list    = array($primary, 'gpt-4o', 'gpt-4o-mini');
+        $out     = array();
+        foreach ($list as $m) {
+            $m = sanitize_text_field($m);
+            if ($m !== '' && !in_array($m, $out, true)) {
+                $out[] = $m;
+            }
+        }
+        return $out;
     }
 
     public static function resolve_model(string $model): string
     {
         $model = sanitize_text_field($model);
         $map   = array(
-            'gpt-5.5' => 'gpt-4.1',
-            'gpt-4.1' => 'gpt-4.1',
+            'gpt-5.5'   => 'gpt-4o',
+            'gpt-4.1'   => 'gpt-4.1',
+            'gpt-4o'    => 'gpt-4o',
+            'gpt-4o-mini' => 'gpt-4o-mini',
         );
-        return $map[$model] ?? 'gpt-4.1';
+        return $map[$model] ?? 'gpt-4o';
+    }
+
+    public static function normalize_model_output(string $text): string
+    {
+        $text = trim($text);
+        if ($text === '') {
+            return '';
+        }
+        if (preg_match('/^```(?:html)?\s*\n?(.*?)\n?```\s*$/is', $text, $m)) {
+            $text = trim((string) $m[1]);
+        }
+        return trim($text);
     }
 
     /**
@@ -55,7 +100,6 @@ final class EAE_OpenAI
         $body = array(
             'model'       => $model,
             'temperature' => 0.7,
-            'max_tokens'  => 4096,
             'messages'    => array(
                 array(
                     'role'    => 'system',
@@ -68,10 +112,16 @@ final class EAE_OpenAI
             ),
         );
 
+        if (self::model_uses_completion_tokens($model)) {
+            $body['max_completion_tokens'] = 4096;
+        } else {
+            $body['max_tokens'] = 4096;
+        }
+
         $response = wp_remote_post(
             self::CHAT_URL,
             array(
-                'timeout' => 90,
+                'timeout' => 120,
                 'headers' => array(
                     'Authorization' => 'Bearer ' . $api_key,
                     'Content-Type'  => 'application/json',
@@ -98,7 +148,7 @@ final class EAE_OpenAI
         $response = wp_remote_post(
             self::RESPONSES_URL,
             array(
-                'timeout' => 90,
+                'timeout' => 120,
                 'headers' => array(
                     'Authorization' => 'Bearer ' . $api_key,
                     'Content-Type'  => 'application/json',
@@ -108,6 +158,13 @@ final class EAE_OpenAI
         );
 
         return self::parse_http_response($response, 'responses');
+    }
+
+    private static function model_uses_completion_tokens(string $model): bool
+    {
+        return preg_match('/^gpt-4(\.|$|-)/', $model) === 1
+            || str_starts_with($model, 'gpt-4o')
+            || str_starts_with($model, 'o');
     }
 
     /**
@@ -131,18 +188,23 @@ final class EAE_OpenAI
         if ($code < 200 || $code >= 300 || !is_array($json)) {
             $detail = '';
             if (is_array($json) && isset($json['error']['message']) && is_string($json['error']['message'])) {
-                $detail = ' — ' . $json['error']['message'];
+                $detail = $json['error']['message'];
+            } elseif ($raw !== '' && strlen($raw) < 400) {
+                $detail = $raw;
             }
             return array(
                 'ok'      => false,
                 'content' => '',
-                'error'   => 'OpenAI HTTP ' . $code . $detail,
+                'error'   => $detail !== '' ? ('HTTP ' . $code . ': ' . $detail) : ('HTTP ' . $code),
             );
         }
 
         $text = '';
-        if ($mode === 'chat' && isset($json['choices'][0]['message']['content']) && is_string($json['choices'][0]['message']['content'])) {
-            $text = $json['choices'][0]['message']['content'];
+        if ($mode === 'chat' && isset($json['choices'][0]['message']['content'])) {
+            $content = $json['choices'][0]['message']['content'];
+            if (is_string($content)) {
+                $text = $content;
+            }
         } elseif ($mode === 'responses') {
             if (isset($json['output_text']) && is_string($json['output_text'])) {
                 $text = $json['output_text'];
@@ -165,7 +227,7 @@ final class EAE_OpenAI
             return array(
                 'ok'      => false,
                 'content' => '',
-                'error'   => 'OpenAI no devolvió contenido.',
+                'error'   => 'OpenAI no devolvió texto en la respuesta.',
             );
         }
 

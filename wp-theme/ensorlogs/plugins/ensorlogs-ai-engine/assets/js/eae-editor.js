@@ -12,10 +12,7 @@
     function setStatus(message, isError) {
         var node = byId('eae-status');
         if (!node) {
-            if (message) {
-                window.alert(message);
-            }
-            return;
+                return;
         }
         node.textContent = message || '';
         node.classList.toggle('is-error', !!isError);
@@ -197,7 +194,7 @@
             .then(function (result) {
                 if (!result.ok || !result.data || !result.data.ok) {
                     var msg =
-                        (result.data && (result.data.message || result.data.error)) ||
+                        (result.data && (result.data.error || result.data.message)) ||
                         ('Error del servidor (' + result.status + ').');
                     throw new Error(msg);
                 }
