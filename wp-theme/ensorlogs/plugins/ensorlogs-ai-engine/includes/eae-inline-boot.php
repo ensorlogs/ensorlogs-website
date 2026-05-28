@@ -139,6 +139,17 @@ function eae_print_inline_generator_script(array $cfg): void
         return insertClassic(html || blockContent || '');
     }
 
+    function syncQuizField(quizText) {
+        if (!quizText) {
+            return;
+        }
+        var field = $('ensor_quiz');
+        if (field) {
+            field.value = quizText;
+            field.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+
     function parseRes(res) {
         return res.text().then(function (text) {
             var data = null;
@@ -210,6 +221,7 @@ function eae_print_inline_generator_script(array $cfg): void
                     }
                     throw new Error('No se pudo insertar en el editor.');
                 }
+                syncQuizField(r.data.quizText || '');
                 setStatus((c.defaultMessages && c.defaultMessages.success) || 'LOG generado.', false);
             })
             .catch(function (err) {

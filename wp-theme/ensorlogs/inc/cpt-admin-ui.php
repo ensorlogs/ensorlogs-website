@@ -397,7 +397,7 @@ add_action(
             'ensorlogs_render_article_quiz_metabox',
             'ensor_article',
             'normal',
-            'default'
+            'high'
         );
         // Una caja meta WYSIWYG por sección pedagógica.
         // Aparecen plegadas por defecto; se inyectan en el contenido del log

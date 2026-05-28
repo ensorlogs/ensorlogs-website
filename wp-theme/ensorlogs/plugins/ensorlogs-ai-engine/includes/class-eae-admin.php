@@ -148,13 +148,14 @@ final class EAE_Admin
             return;
         }
 
+        // Secciones pedagógicas duplicadas (la IA rellena el editor principal).
+        // El quiz sigue en su metabox para editarlo a mano o revisar lo que generó la IA.
         $legacy = array(
             'ensor_article_section_context',
             'ensor_article_section_data',
             'ensor_article_section_student',
             'ensor_article_section_teacher',
             'ensor_article_section_professional',
-            'ensor_article_quiz',
         );
         foreach ($legacy as $id) {
             remove_meta_box($id, 'ensor_article', 'normal');
@@ -272,7 +273,7 @@ final class EAE_Admin
         ?>
         <div class="ensor-cpt-meta eae-panel-wrap">
             <p class="eae-intro">
-                <?php esc_html_e('Completa el brief y pulsa generar: el contenido aparecerá en el editor de abajo (párrafos y secciones) para que lo revises antes de publicar.', 'ensorlogs'); ?>
+                <?php esc_html_e('Completa el brief y pulsa generar: el contenido aparecerá en el editor de abajo (párrafos y secciones) para que lo revises antes de publicar. El quiz de comprensión se edita en la caja «Quiz de comprensión del log» más abajo (también se rellena al generar si la IA lo incluye).', 'ensorlogs'); ?>
             </p>
 
             <div class="ensor-cpt-meta__section">
