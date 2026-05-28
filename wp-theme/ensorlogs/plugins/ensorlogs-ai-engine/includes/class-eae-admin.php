@@ -11,13 +11,16 @@ final class EAE_Admin
 {
     private const OPTION_API_KEY = 'ensorlogs_ai_openai_api_key';
     private const OPTION_MODEL = 'ensorlogs_ai_openai_model';
+    private static bool $panel_rendered = false;
 
     public static function init(): void
     {
         add_action('admin_menu', array(__CLASS__, 'register_settings_page'));
         add_action('admin_init', array(__CLASS__, 'register_settings'));
         add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_assets'));
+        add_action('add_meta_boxes', array(__CLASS__, 'simplify_legacy_metaboxes'), 100);
         add_action('edit_form_after_title', array(__CLASS__, 'render_editor_panel'));
+        add_action('admin_notices', array(__CLASS__, 'render_panel_fallback_notice'));
     }
 
     public static function register_settings_page(): void
@@ -147,7 +150,7 @@ final class EAE_Admin
         wp_enqueue_script(
             'ensorlogs-ai-engine-editor',
             ENSORLOGS_AI_ENGINE_URL . 'assets/js/eae-editor.js',
-            array('wp-data'),
+            array(),
             ENSORLOGS_AI_ENGINE_VERSION,
             true
         );
@@ -174,6 +177,7 @@ final class EAE_Admin
         if ($post->post_type !== 'ensor_article' || !current_user_can('edit_post', $post->ID)) {
             return;
         }
+        self::$panel_rendered = true;
         ?>
         <section class="eae-panel" id="ensorlogs-ai-engine-panel" aria-labelledby="eae-title">
             <header class="eae-panel__header">
@@ -244,5 +248,38 @@ final class EAE_Admin
             </div>
         </section>
         <?php
+    }
+
+    public static function simplify_legacy_metaboxes(string $post_type): void
+    {
+        if ($post_type !== 'ensor_article') {
+            return;
+        }
+        $to_remove = array(
+            'ensor_article_section_context',
+            'ensor_article_section_data',
+            'ensor_article_section_student',
+            'ensor_article_section_teacher',
+            'ensor_article_section_professional',
+            'ensor_article_quiz',
+        );
+        foreach ($to_remove as $id) {
+            remove_meta_box($id, 'ensor_article', 'normal');
+        }
+    }
+
+    public static function render_panel_fallback_notice(): void
+    {
+        if (self::$panel_rendered) {
+            return;
+        }
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        if (!$screen || $screen->base !== 'post' || $screen->post_type !== 'ensor_article') {
+            return;
+        }
+        $post = get_post();
+        if ($post instanceof WP_Post) {
+            self::render_editor_panel($post);
+        }
     }
 }

@@ -32,6 +32,8 @@ def test_admin_panel_has_required_fields() -> None:
     assert "edit_form_after_title" in php
     assert "ensor_article" in php
     assert "ensorlogs_ai_openai_api_key" in php
+    assert "simplify_legacy_metaboxes" in php
+    assert "remove_meta_box" in php
 
 
 def test_rest_endpoint_and_guardrails() -> None:
