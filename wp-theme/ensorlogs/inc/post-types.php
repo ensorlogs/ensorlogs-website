@@ -51,9 +51,8 @@ add_action('init', static function (): void {
             'menu_icon'           => 'dashicons-media-document',
             'capability_type'     => 'post',
             'map_meta_cap'        => true,
-            'template'            => function_exists('ensorlogs_cpt_default_block_template')
-                ? ensorlogs_cpt_default_block_template('ensor_article')
-                : array(),
+            // Sin plantilla de bloques: el log se edita en clásico + panel IA (evita conflictos en post-new).
+            'template'            => array(),
             'template_lock'       => false,
         )
     );

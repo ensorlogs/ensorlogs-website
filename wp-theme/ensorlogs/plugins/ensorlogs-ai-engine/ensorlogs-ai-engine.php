@@ -48,6 +48,10 @@ function ensorlogs_ai_engine_has_incompatible_mix(): bool
  */
 function ensorlogs_ai_engine_load_includes(): bool
 {
+    if (class_exists('EAE_Admin', false) && class_exists('EAE_Rest', false)) {
+        return true;
+    }
+
     if (ensorlogs_ai_engine_has_incompatible_mix()) {
         if (function_exists('error_log')) {
             error_log(
@@ -102,6 +106,14 @@ function ensorlogs_ai_engine_boot(): void
     }
 
     $booted = true;
-    EAE_Admin::init();
-    EAE_Rest::init();
+
+    if (!has_action('edit_form_after_title', array('EAE_Admin', 'render_panel_after_title'))) {
+        EAE_Admin::init();
+    }
+
+    if (did_action('rest_api_init')) {
+        EAE_Rest::register_routes();
+    } else {
+        EAE_Rest::init();
+    }
 }

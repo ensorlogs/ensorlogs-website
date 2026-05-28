@@ -9,8 +9,27 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/** Ruta del plugin suelto en wp-content/plugins (provoca "Cannot redeclare class" si sigue activo). */
+define('ENSORLOGS_AI_ENGINE_PLUGIN_SLUG', 'ensorlogs-ai-engine/ensorlogs-ai-engine.php');
+
 /**
- * Logs usan editor clásico para el panel ENSORLOGS AI ENGINE encima del contenido.
+ * Desactiva copia suelta del plugin IA si está activa (el motor va dentro del tema).
+ */
+function ensorlogs_deactivate_standalone_ai_plugin(): void
+{
+    if (!function_exists('is_plugin_active')) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+    if (!is_plugin_active(ENSORLOGS_AI_ENGINE_PLUGIN_SLUG)) {
+        return;
+    }
+    deactivate_plugins(ENSORLOGS_AI_ENGINE_PLUGIN_SLUG, true);
+}
+
+add_action('plugins_loaded', 'ensorlogs_deactivate_standalone_ai_plugin', 1);
+
+/**
+ * Logs: editor clásico + panel ENSORLOGS AI ENGINE encima del contenido.
  */
 add_filter(
     'use_block_editor_for_post_type',
@@ -20,7 +39,19 @@ add_filter(
         }
         return $use_block_editor;
     },
-    10,
+    100,
+    2
+);
+
+add_filter(
+    'use_block_editor_for_post',
+    static function ($use_block_editor, $post) {
+        if ($post instanceof WP_Post && $post->post_type === 'ensor_article') {
+            return false;
+        }
+        return $use_block_editor;
+    },
+    100,
     2
 );
 
@@ -37,6 +68,20 @@ function ensorlogs_should_load_ai_engine_for_rest(): bool
     }
     $uri = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';
     return strpos($uri, 'ensorlogs-ai/') !== false;
+}
+
+/**
+ * @return bool
+ */
+function ensorlogs_is_log_editor_admin_screen(): bool
+{
+    if (!is_admin()) {
+        return false;
+    }
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    return $screen instanceof WP_Screen
+        && $screen->base === 'post'
+        && $screen->post_type === 'ensor_article';
 }
 
 /**
@@ -68,8 +113,6 @@ function ensorlogs_require_ai_engine_boot(): void
 }
 
 /**
- * Arranca el motor IA en pantallas de admin que lo necesitan.
- *
  * @param WP_Screen|null $screen
  */
 function ensorlogs_boot_ai_engine_for_screen($screen): void
@@ -89,11 +132,25 @@ function ensorlogs_boot_ai_engine_for_screen($screen): void
 }
 
 add_action(
+    'admin_enqueue_scripts',
+    static function (string $hook_suffix): void {
+        if (!in_array($hook_suffix, array('post.php', 'post-new.php'), true)) {
+            return;
+        }
+        if (!ensorlogs_is_log_editor_admin_screen()) {
+            return;
+        }
+        ensorlogs_require_ai_engine_boot();
+    },
+    1
+);
+
+add_action(
     'current_screen',
     static function (): void {
         ensorlogs_boot_ai_engine_for_screen(get_current_screen());
     },
-    5
+    20
 );
 
 add_action(

@@ -137,25 +137,24 @@ add_filter(
 
 add_filter(
     'block_editor_settings_all',
-    static function (array $settings, $context): array {
+    static function ($settings, $context) {
+        if (!is_array($settings)) {
+            return $settings;
+        }
         $post = (is_object($context) && isset($context->post)) ? $context->post : null;
         if (!$post instanceof WP_Post) {
             return $settings;
         }
-        if (!in_array($post->post_type, array('ensor_article', 'ensor_project'), true)) {
+        if ($post->post_type === 'ensor_article') {
             return $settings;
         }
-        if ($post->post_type === 'ensor_article') {
-            $settings['bodyPlaceholder'] = __(
-                'Escribe con bloques (párrafos, columnas, imágenes…). Si importaste HTML, WordPress lo mostrará en un bloque: puedes añadir bloques arriba o abajo sin perder el diseño.',
-                'ensorlogs'
-            );
-        } else {
-            $settings['bodyPlaceholder'] = __(
-                'Describe el caso con bloques. Puedes combinar texto, imágenes y grupos para sustituir poco a poco el HTML importado.',
-                'ensorlogs'
-            );
+        if ($post->post_type !== 'ensor_project') {
+            return $settings;
         }
+        $settings['bodyPlaceholder'] = __(
+            'Describe el caso con bloques. Puedes combinar texto, imágenes y grupos para sustituir poco a poco el HTML importado.',
+            'ensorlogs'
+        );
         return $settings;
     },
     10,
@@ -399,23 +398,7 @@ add_action(
             'normal',
             'high'
         );
-        // Secciones pedagógicas manuales (Contexto, Datos, …): desactivadas por defecto.
-        // El brief + GENERAR LOG ENSORLOGS rellena el editor principal vía IA.
-        if (apply_filters('ensorlogs_register_article_section_metaboxes', false)) {
-            foreach (ensorlogs_article_sections() as $sec_key => $sec_def) {
-                add_meta_box(
-                    'ensor_article_section_' . $sec_key,
-                    /* translators: %s: nombre legible de la sección (Contexto, Datos, …). */
-                    sprintf(__('Sección · %s', 'ensorlogs'), $sec_def['label']),
-                    static function ($post) use ($sec_key): void {
-                        ensorlogs_render_article_section_metabox($post, $sec_key);
-                    },
-                    'ensor_article',
-                    'normal',
-                    'low'
-                );
-            }
-        }
+        // Secciones pedagógicas (Contexto, Datos, …): no se registran; el panel IA genera el HTML en el editor.
         add_meta_box(
             'ensor_project_listing',
             __('Tarjeta del proyecto', 'ensorlogs'),
@@ -1210,6 +1193,25 @@ add_action(
     10,
     2
 );
+
+/**
+ * Quita metaboxes de secciones pedagógicas (Contexto, Datos, …) de instalaciones viejas.
+ */
+function ensorlogs_remove_log_section_metaboxes(): void
+{
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'ensor_article') {
+        return;
+    }
+    foreach (array_keys(ensorlogs_article_sections()) as $sec_key) {
+        $id = 'ensor_article_section_' . $sec_key;
+        foreach (array('normal', 'advanced', 'side') as $ctx) {
+            remove_meta_box($id, 'ensor_article', $ctx);
+        }
+    }
+}
+
+add_action('add_meta_boxes', 'ensorlogs_remove_log_section_metaboxes', 999);
 
 /**
  * Aviso amigable en el editor de las páginas estructurales (inicio, about,

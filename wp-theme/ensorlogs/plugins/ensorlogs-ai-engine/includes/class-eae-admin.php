@@ -143,11 +143,10 @@ final class EAE_Admin
         if (!$post instanceof WP_Post || $post->post_type !== 'ensor_article') {
             return;
         }
-        if ($post->ID > 0) {
-            if (!current_user_can('edit_post', $post->ID)) {
-                return;
-            }
-        } elseif (!current_user_can('edit_posts')) {
+        if (!current_user_can('edit_posts')) {
+            return;
+        }
+        if ($post->ID > 0 && !current_user_can('edit_post', $post->ID)) {
             return;
         }
         self::$panel_rendered = true;
