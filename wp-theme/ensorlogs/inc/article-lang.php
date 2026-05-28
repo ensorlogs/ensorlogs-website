@@ -125,8 +125,11 @@ add_action(
 /**
  * @param WP_Post $post
  */
-function ensorlogs_render_article_lang_metabox(WP_Post $post): void
+function ensorlogs_render_article_lang_metabox($post): void
 {
+    if (!$post instanceof WP_Post) {
+        return;
+    }
     wp_nonce_field('ensorlogs_article_lang', 'ensorlogs_article_lang_nonce');
     $lang      = ensorlogs_get_post_lang((int) $post->ID);
     $peer      = function_exists('ensorlogs_get_article_peer_post') ? ensorlogs_get_article_peer_post((int) $post->ID) : null;

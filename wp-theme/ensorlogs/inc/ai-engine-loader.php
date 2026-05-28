@@ -10,50 +10,33 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Logs usan editor clásico para el panel ENSORLOGS AI ENGINE encima del contenido.
+ */
+add_filter(
+    'use_block_editor_for_post_type',
+    static function ($use_block_editor, $post_type) {
+        if ($post_type === 'ensor_article') {
+            return false;
+        }
+        return $use_block_editor;
+    },
+    10,
+    2
+);
+
+/**
  * @return bool
  */
-function ensorlogs_should_load_ai_engine(): bool
+function ensorlogs_should_load_ai_engine_for_rest(): bool
 {
     if (defined('ENSORLOGS_DISABLE_AI_ENGINE') && ENSORLOGS_DISABLE_AI_ENGINE) {
         return false;
     }
-
-    if (defined('REST_REQUEST') && REST_REQUEST) {
-        $uri = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';
-        if (strpos($uri, 'ensorlogs-ai/') !== false) {
-            return true;
-        }
-    }
-
-    if (!is_admin()) {
+    if (!defined('REST_REQUEST') || !REST_REQUEST) {
         return false;
     }
-
-    global $pagenow;
-    $pagenow = is_string($pagenow) ? $pagenow : '';
-
-    if ($pagenow === 'options-general.php') {
-        $page = isset($_GET['page']) ? sanitize_key((string) wp_unslash($_GET['page'])) : '';
-        return $page === 'ensorlogs-ai-engine';
-    }
-
-    if (!in_array($pagenow, array('post.php', 'post-new.php'), true)) {
-        return false;
-    }
-
-    if ($pagenow === 'post-new.php') {
-        $post_type = isset($_GET['post_type'])
-            ? sanitize_key((string) wp_unslash($_GET['post_type']))
-            : 'post';
-        return $post_type === 'ensor_article';
-    }
-
-    if (!isset($_GET['post'])) {
-        return false;
-    }
-
-    $post = get_post((int) $_GET['post']);
-    return $post instanceof WP_Post && $post->post_type === 'ensor_article';
+    $uri = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';
+    return strpos($uri, 'ensorlogs-ai/') !== false;
 }
 
 /**
@@ -85,51 +68,40 @@ function ensorlogs_require_ai_engine_boot(): void
 }
 
 /**
- * Carga e inicia el motor IA si el contexto actual lo requiere.
+ * Arranca el motor IA en pantallas de admin que lo necesitan.
+ *
+ * @param WP_Screen|null $screen
  */
-function ensorlogs_load_ai_engine(): void
+function ensorlogs_boot_ai_engine_for_screen($screen): void
 {
-    if (!ensorlogs_should_load_ai_engine()) {
+    if (!$screen instanceof WP_Screen) {
         return;
     }
-    ensorlogs_require_ai_engine_boot();
-}
 
-/**
- * Editor de Logs: asegura panel IA y botón GENERAR antes del editor clásico.
- */
-function ensorlogs_load_ai_engine_for_log_editor(): void
-{
-    ensorlogs_require_ai_engine_boot();
-}
+    if ($screen->base === 'post' && $screen->post_type === 'ensor_article') {
+        ensorlogs_require_ai_engine_boot();
+        return;
+    }
 
-add_action('plugins_loaded', 'ensorlogs_load_ai_engine', 20);
-add_action('rest_api_init', 'ensorlogs_load_ai_engine', 5);
+    if ($screen->id === 'settings_page_ensorlogs-ai-engine') {
+        ensorlogs_require_ai_engine_boot();
+    }
+}
 
 add_action(
-    'load-post.php',
+    'current_screen',
     static function (): void {
-        $post_id = isset($_GET['post']) ? absint($_GET['post']) : 0;
-        if ($post_id <= 0) {
-            return;
-        }
-        $post = get_post($post_id);
-        if ($post instanceof WP_Post && $post->post_type === 'ensor_article') {
-            ensorlogs_load_ai_engine_for_log_editor();
-        }
+        ensorlogs_boot_ai_engine_for_screen(get_current_screen());
     },
-    1
+    5
 );
 
 add_action(
-    'load-post-new.php',
+    'rest_api_init',
     static function (): void {
-        $post_type = isset($_GET['post_type'])
-            ? sanitize_key((string) wp_unslash($_GET['post_type']))
-            : 'post';
-        if ($post_type === 'ensor_article') {
-            ensorlogs_load_ai_engine_for_log_editor();
+        if (ensorlogs_should_load_ai_engine_for_rest()) {
+            ensorlogs_require_ai_engine_boot();
         }
     },
-    1
+    5
 );

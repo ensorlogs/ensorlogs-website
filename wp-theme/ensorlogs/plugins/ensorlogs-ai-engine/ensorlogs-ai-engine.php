@@ -40,7 +40,7 @@ function ensorlogs_ai_engine_has_incompatible_mix(): bool
             return true;
         }
     }
-    return is_readable($base . 'class-eae-config.php');
+    return false;
 }
 
 /**

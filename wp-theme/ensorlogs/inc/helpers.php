@@ -707,8 +707,14 @@ add_action(
 
 add_action(
     'save_post',
-    static function (int $post_id, WP_Post $post): void {
+    static function (int $post_id, $post = null): void {
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+        if (!$post instanceof WP_Post) {
+            $post = get_post($post_id);
+        }
+        if (!$post instanceof WP_Post) {
             return;
         }
         if (!in_array($post->post_type, array('ensor_article', 'ensor_project'), true)) {

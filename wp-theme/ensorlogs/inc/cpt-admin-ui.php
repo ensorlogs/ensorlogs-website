@@ -1080,8 +1080,14 @@ function ensorlogs_render_project_listing_metabox($post): void
 
 add_action(
     'save_post',
-    static function (int $post_id, WP_Post $post): void {
+    static function (int $post_id, $post = null): void {
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+        if (!$post instanceof WP_Post) {
+            $post = get_post($post_id);
+        }
+        if (!$post instanceof WP_Post) {
             return;
         }
         if (!isset($_POST['ensor_cpt_meta_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['ensor_cpt_meta_nonce'])), 'ensor_cpt_meta_save')) {
@@ -1213,8 +1219,11 @@ add_action(
  * Se imprime tanto en el editor clásico (`edit_form_after_title`) como
  * en Gutenberg (vía `admin_notices`, que el bloque "notice" recoge).
  */
-function ensorlogs_render_structural_page_notice(WP_Post $post): void
+function ensorlogs_render_structural_page_notice($post): void
 {
+    if (!$post instanceof WP_Post) {
+        return;
+    }
     if ($post->post_type !== 'page' || !function_exists('ensorlogs_page_fragments_map')) {
         return;
     }
