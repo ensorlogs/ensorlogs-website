@@ -9,6 +9,9 @@ if (!defined('ABSPATH')) {
 
 final class EAE_Rest
 {
+    private const OPTION_API_KEY = 'ensorlogs_ai_openai_api_key';
+    private const OPTION_MODEL   = 'ensorlogs_ai_openai_model';
+
     public static function init(): void
     {
         add_action('rest_api_init', array(__CLASS__, 'register_routes'));
@@ -50,8 +53,8 @@ final class EAE_Rest
 
     public static function generate_log(WP_REST_Request $request): WP_REST_Response
     {
-        $openai_credential = trim((string) get_option(EAE_Config::OPENAI_OPTION, ''));
-        if ($openai_credential === '') {
+        $api_key = trim((string) get_option(self::OPTION_API_KEY, ''));
+        if ($api_key === '') {
             return new WP_REST_Response(
                 array(
                     'ok'      => false,
@@ -92,13 +95,13 @@ final class EAE_Rest
         }
 
         $prompt = EAE_Prompt::build_master_prompt($input);
-        $model = (string) get_option(EAE_Config::MODEL_OPTION, 'gpt-4o');
+        $model = (string) get_option(self::OPTION_MODEL, 'gpt-4o');
         $allowed_models = array('gpt-5.5', 'gpt-4.1', 'gpt-4o', 'gpt-4o-mini');
         if (!in_array($model, $allowed_models, true)) {
             $model = 'gpt-4o';
         }
 
-        $result = EAE_OpenAI::generate_html($openai_credential, $model, $prompt);
+        $result = EAE_OpenAI::generate_html($api_key, $model, $prompt);
         if (!$result['ok']) {
             $detail = trim((string) ($result['error'] ?? ''));
             if ($detail !== '') {

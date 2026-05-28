@@ -9,6 +9,8 @@ if (!defined('ABSPATH')) {
 
 final class EAE_Admin
 {
+    private const OPTION_API_KEY = 'ensorlogs_ai_openai_api_key';
+    private const OPTION_MODEL = 'ensorlogs_ai_openai_model';
     private const PANEL_ID = 'ensorlogs_ai_engine_panel';
 
     /** @var bool */
@@ -50,7 +52,7 @@ final class EAE_Admin
             'restUrl'         => esc_url_raw(rest_url('ensorlogs-ai/v1/generate-log')),
             'nonce'           => wp_create_nonce('wp_rest'),
             'postId'          => $post_id,
-            'apiConfigured'   => ((string) get_option(EAE_Config::OPENAI_OPTION, '')) !== '',
+            'apiConfigured'   => ((string) get_option(self::OPTION_API_KEY, '')) !== '',
             'apiSettingsUrl'  => esc_url_raw(admin_url('options-general.php?page=ensorlogs-ai-engine')),
             'isBlockEditor'   => self::post_uses_block_editor($post_id),
             'defaultMessages' => array(
@@ -78,10 +80,10 @@ final class EAE_Admin
     {
         register_setting(
             'ensorlogs_ai_engine',
-            EAE_Config::OPENAI_OPTION,
+            self::OPTION_API_KEY,
             array(
                 'type'              => 'string',
-                'sanitize_callback' => array(__CLASS__, 'sanitize_openai_option'),
+                'sanitize_callback' => array(__CLASS__, 'sanitize_api_key'),
                 'default'           => '',
                 'show_in_rest'      => false,
             )
@@ -89,7 +91,7 @@ final class EAE_Admin
 
         register_setting(
             'ensorlogs_ai_engine',
-            EAE_Config::MODEL_OPTION,
+            self::OPTION_MODEL,
             array(
                 'type'              => 'string',
                 'sanitize_callback' => static function ($value): string {
@@ -103,11 +105,11 @@ final class EAE_Admin
         );
     }
 
-    public static function sanitize_openai_option($value): string
+    public static function sanitize_api_key($value): string
     {
         $value = trim((string) $value);
         if ($value === '') {
-            $stored = get_option(EAE_Config::OPENAI_OPTION, '');
+            $stored = get_option(self::OPTION_API_KEY, '');
             return is_string($stored) ? $stored : '';
         }
         return sanitize_text_field($value);
@@ -221,7 +223,7 @@ final class EAE_Admin
         if (!current_user_can('manage_options')) {
             return;
         }
-        $stored_key = (string) get_option(EAE_Config::OPENAI_OPTION, '');
+        $stored_key = (string) get_option(self::OPTION_API_KEY, '');
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Ensorlogs AI Engine', 'ensorlogs'); ?></h1>
@@ -237,12 +239,12 @@ final class EAE_Admin
                             <td>
                                 <input
                                     id="ensorlogs-ai-openai-key"
-                                    name="<?php echo esc_attr(EAE_Config::OPENAI_OPTION); ?>"
+                                    name="<?php echo esc_attr(self::OPTION_API_KEY); ?>"
                                     type="password"
                                     class="regular-text"
                                     autocomplete="off"
                                     spellcheck="false"
-                                    placeholder="<?php esc_attr_e('Pega tu clave de OpenAI', 'ensorlogs'); ?>"
+                                    placeholder="sk-..."
                                 />
                                 <p class="description">
                                     <?php
@@ -258,8 +260,8 @@ final class EAE_Admin
                                 <label for="ensorlogs-ai-openai-model"><?php esc_html_e('Modelo', 'ensorlogs'); ?></label>
                             </th>
                             <td>
-                                <?php $model = (string) get_option(EAE_Config::MODEL_OPTION, 'gpt-4o'); ?>
-                                <select id="ensorlogs-ai-openai-model" name="<?php echo esc_attr(EAE_Config::MODEL_OPTION); ?>">
+                                <?php $model = (string) get_option(self::OPTION_MODEL, 'gpt-4o'); ?>
+                                <select id="ensorlogs-ai-openai-model" name="<?php echo esc_attr(self::OPTION_MODEL); ?>">
                                     <option value="gpt-4o" <?php selected($model, 'gpt-4o'); ?>>gpt-4o (recomendado)</option>
                                     <option value="gpt-4o-mini" <?php selected($model, 'gpt-4o-mini'); ?>>gpt-4o-mini</option>
                                     <option value="gpt-4.1" <?php selected($model, 'gpt-4.1'); ?>>gpt-4.1</option>

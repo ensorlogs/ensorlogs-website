@@ -23,7 +23,6 @@ def test_plugin_bootstrap_exists_and_loads_classes() -> None:
     assert "class-eae-rest.php" in php
     assert "class-eae-openai.php" in php
     assert "class-eae-prompt.php" in php
-    assert "class-eae-config.php" in php
 
 
 def test_admin_panel_single_metabox_and_stacks() -> None:
@@ -70,7 +69,3 @@ def test_rest_endpoint_stacks_and_guardrails() -> None:
     openai_php = (PLUGIN_ROOT / "includes" / "class-eae-openai.php").read_text(encoding="utf-8")
     assert "chat/completions" in openai_php
     assert "blockContent" in rest_php
-    assert "EAE_Config::OPENAI_OPTION" in rest_php
-    admin_php = (PLUGIN_ROOT / "includes" / "class-eae-admin.php").read_text(encoding="utf-8")
-    assert "OPTION_API_KEY" not in admin_php
-    assert "sk-..." not in admin_php

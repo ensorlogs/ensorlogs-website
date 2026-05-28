@@ -15,13 +15,13 @@ final class EAE_OpenAI
     /**
      * @return array{ok:bool, content:string, error:string}
      */
-    public static function generate_html(string $openai_credential, string $model, string $prompt): array
+    public static function generate_html(string $api_key, string $model, string $prompt): array
     {
         $models  = self::models_to_try($model);
         $errors  = array();
 
         foreach ($models as $try_model) {
-            $chat = self::request_chat($openai_credential, $try_model, $prompt);
+            $chat = self::request_chat($api_key, $try_model, $prompt);
             if ($chat['ok']) {
                 $chat['content'] = self::normalize_model_output($chat['content']);
                 if ($chat['content'] !== '') {
@@ -32,7 +32,7 @@ final class EAE_OpenAI
                 $errors[] = $try_model . ': ' . $chat['error'];
             }
 
-            $responses = self::request_responses($openai_credential, $try_model, $prompt);
+            $responses = self::request_responses($api_key, $try_model, $prompt);
             if ($responses['ok']) {
                 $responses['content'] = self::normalize_model_output($responses['content']);
                 if ($responses['content'] !== '') {
@@ -95,7 +95,7 @@ final class EAE_OpenAI
     /**
      * @return array{ok:bool, content:string, error:string}
      */
-    private static function request_chat(string $openai_credential, string $model, string $prompt): array
+    private static function request_chat(string $api_key, string $model, string $prompt): array
     {
         $system = class_exists('EAE_Prompt') ? EAE_Prompt::build_system_prompt() : '';
 
@@ -125,7 +125,7 @@ final class EAE_OpenAI
             array(
                 'timeout' => 120,
                 'headers' => array(
-                    'Authorization' => 'Bearer ' . $openai_credential,
+                    'Authorization' => 'Bearer ' . $api_key,
                     'Content-Type'  => 'application/json',
                 ),
                 'body'    => wp_json_encode($body),
@@ -138,7 +138,7 @@ final class EAE_OpenAI
     /**
      * @return array{ok:bool, content:string, error:string}
      */
-    private static function request_responses(string $openai_credential, string $model, string $prompt): array
+    private static function request_responses(string $api_key, string $model, string $prompt): array
     {
         $body = array(
             'model'             => $model,
@@ -152,7 +152,7 @@ final class EAE_OpenAI
             array(
                 'timeout' => 120,
                 'headers' => array(
-                    'Authorization' => 'Bearer ' . $openai_credential,
+                    'Authorization' => 'Bearer ' . $api_key,
                     'Content-Type'  => 'application/json',
                 ),
                 'body'    => wp_json_encode($body),
@@ -164,13 +164,9 @@ final class EAE_OpenAI
 
     private static function model_uses_completion_tokens(string $model): bool
     {
-        if (preg_match('/^gpt-4(\.|$|-)/', $model) === 1) {
-            return true;
-        }
-        if (strncmp($model, 'gpt-4o', 6) === 0) {
-            return true;
-        }
-        return isset($model[0]) && $model[0] === 'o';
+        return preg_match('/^gpt-4(\.|$|-)/', $model) === 1
+            || str_starts_with($model, 'gpt-4o')
+            || str_starts_with($model, 'o');
     }
 
     /**
