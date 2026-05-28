@@ -57,17 +57,16 @@ function ensorlogs_should_load_ai_engine(): bool
 }
 
 /**
- * Carga e inicia el motor IA una sola vez por request.
+ * Carga e inicia el motor IA (una vez por request).
  */
-function ensorlogs_load_ai_engine(): void
+function ensorlogs_require_ai_engine_boot(): void
 {
-    static $done = false;
-    if ($done) {
+    static $booted = false;
+    if ($booted) {
         return;
     }
-    $done = true;
 
-    if (!ensorlogs_should_load_ai_engine()) {
+    if (defined('ENSORLOGS_DISABLE_AI_ENGINE') && ENSORLOGS_DISABLE_AI_ENGINE) {
         return;
     }
 
@@ -81,7 +80,56 @@ function ensorlogs_load_ai_engine(): void
     if (function_exists('ensorlogs_ai_engine_boot')) {
         ensorlogs_ai_engine_boot();
     }
+
+    $booted = true;
+}
+
+/**
+ * Carga e inicia el motor IA si el contexto actual lo requiere.
+ */
+function ensorlogs_load_ai_engine(): void
+{
+    if (!ensorlogs_should_load_ai_engine()) {
+        return;
+    }
+    ensorlogs_require_ai_engine_boot();
+}
+
+/**
+ * Editor de Logs: asegura panel IA y botón GENERAR antes del editor clásico.
+ */
+function ensorlogs_load_ai_engine_for_log_editor(): void
+{
+    ensorlogs_require_ai_engine_boot();
 }
 
 add_action('plugins_loaded', 'ensorlogs_load_ai_engine', 20);
 add_action('rest_api_init', 'ensorlogs_load_ai_engine', 5);
+
+add_action(
+    'load-post.php',
+    static function (): void {
+        $post_id = isset($_GET['post']) ? absint($_GET['post']) : 0;
+        if ($post_id <= 0) {
+            return;
+        }
+        $post = get_post($post_id);
+        if ($post instanceof WP_Post && $post->post_type === 'ensor_article') {
+            ensorlogs_load_ai_engine_for_log_editor();
+        }
+    },
+    1
+);
+
+add_action(
+    'load-post-new.php',
+    static function (): void {
+        $post_type = isset($_GET['post_type'])
+            ? sanitize_key((string) wp_unslash($_GET['post_type']))
+            : 'post';
+        if ($post_type === 'ensor_article') {
+            ensorlogs_load_ai_engine_for_log_editor();
+        }
+    },
+    1
+);

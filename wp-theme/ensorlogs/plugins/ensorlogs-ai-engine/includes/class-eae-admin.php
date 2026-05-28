@@ -179,6 +179,8 @@ final class EAE_Admin
         );
         foreach ($legacy as $id) {
             remove_meta_box($id, 'ensor_article', 'normal');
+            remove_meta_box($id, 'ensor_article', 'advanced');
+            remove_meta_box($id, 'ensor_article', 'side');
         }
     }
 

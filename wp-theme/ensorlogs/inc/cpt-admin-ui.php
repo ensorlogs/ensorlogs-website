@@ -399,22 +399,22 @@ add_action(
             'normal',
             'high'
         );
-        // Una caja meta WYSIWYG por sección pedagógica.
-        // Aparecen plegadas por defecto; se inyectan en el contenido del log
-        // si contienen texto. El editor TinyMCE incluye «Añadir medios»
-        // para subir fotos / videos, igual que el editor principal.
-        foreach (ensorlogs_article_sections() as $sec_key => $sec_def) {
-            add_meta_box(
-                'ensor_article_section_' . $sec_key,
-                /* translators: %s: nombre legible de la sección (Contexto, Datos, …). */
-                sprintf(__('Sección · %s', 'ensorlogs'), $sec_def['label']),
-                static function ($post) use ($sec_key): void {
-                    ensorlogs_render_article_section_metabox($post, $sec_key);
-                },
-                'ensor_article',
-                'normal',
-                'low'
-            );
+        // Secciones pedagógicas manuales (Contexto, Datos, …): desactivadas por defecto.
+        // El brief + GENERAR LOG ENSORLOGS rellena el editor principal vía IA.
+        if (apply_filters('ensorlogs_register_article_section_metaboxes', false)) {
+            foreach (ensorlogs_article_sections() as $sec_key => $sec_def) {
+                add_meta_box(
+                    'ensor_article_section_' . $sec_key,
+                    /* translators: %s: nombre legible de la sección (Contexto, Datos, …). */
+                    sprintf(__('Sección · %s', 'ensorlogs'), $sec_def['label']),
+                    static function ($post) use ($sec_key): void {
+                        ensorlogs_render_article_section_metabox($post, $sec_key);
+                    },
+                    'ensor_article',
+                    'normal',
+                    'low'
+                );
+            }
         }
         add_meta_box(
             'ensor_project_listing',
