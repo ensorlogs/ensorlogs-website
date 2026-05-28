@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_AI_ENGINE_VERSION', '0.1.6');
+define('ENSORLOGS_AI_ENGINE_VERSION', '0.1.7');
 define('ENSORLOGS_AI_ENGINE_FILE', __FILE__);
 define('ENSORLOGS_AI_ENGINE_DIR', plugin_dir_path(__FILE__));
 $eae_theme_root = function_exists('get_template_directory') ? get_template_directory() : '';
