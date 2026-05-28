@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.32');
+define('ENSORLOGS_THEME_VERSION', '1.10.33');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -28,6 +28,12 @@ require_once get_template_directory() . '/inc/i18n.php';
 require_once get_template_directory() . '/inc/legal-i18n.php';
 require_once get_template_directory() . '/inc/article-lang.php';
 require_once get_template_directory() . '/inc/article-translations.php';
+
+// Ensorlogs AI Engine (incluido dentro del tema para no depender de wp-content/plugins).
+$ensor_ai_engine = get_template_directory() . '/plugins/ensorlogs-ai-engine/ensorlogs-ai-engine.php';
+if (is_readable($ensor_ai_engine)) {
+    require_once $ensor_ai_engine;
+}
 require_once get_template_directory() . '/inc/project-content-i18n.php';
 
 add_action(
