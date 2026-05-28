@@ -18,12 +18,6 @@ final class EAE_Admin
 
     public static function init(): void
     {
-        add_action('admin_menu', array(__CLASS__, 'register_settings_page'));
-        if (did_action('admin_init')) {
-            self::register_settings();
-        } else {
-            add_action('admin_init', array(__CLASS__, 'register_settings'));
-        }
         add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_assets'));
         add_action('edit_form_after_title', array(__CLASS__, 'render_panel_after_title'), 5);
         add_action('add_meta_boxes', array(__CLASS__, 'hide_legacy_section_metaboxes'), 100);
@@ -74,6 +68,15 @@ final class EAE_Admin
         add_options_page(
             __('Ensorlogs AI Engine', 'ensorlogs'),
             __('Ensorlogs AI Engine', 'ensorlogs'),
+            'manage_options',
+            'ensorlogs-ai-engine',
+            array(__CLASS__, 'render_settings_page')
+        );
+
+        add_submenu_page(
+            'edit.php?post_type=ensor_article',
+            __('Ensorlogs AI Engine', 'ensorlogs'),
+            __('Motor IA (OpenAI)', 'ensorlogs'),
             'manage_options',
             'ensorlogs-ai-engine',
             array(__CLASS__, 'render_settings_page')
@@ -294,10 +297,28 @@ final class EAE_Admin
         $stacks = self::get_stack_choices();
         $selected = self::get_selected_stack_slugs((int) $post->ID);
         ?>
+        <?php
+        $api_key_set = ((string) get_option(self::OPTION_API_KEY, '')) !== '';
+        $settings_url = admin_url('options-general.php?page=ensorlogs-ai-engine');
+        ?>
         <div class="ensor-cpt-meta eae-panel-wrap">
             <p class="eae-intro">
                 <?php esc_html_e('Completa el brief y pulsa generar: el contenido aparecerá en el editor de abajo (párrafos y secciones) para que lo revises antes de publicar. El quiz de comprensión se edita en la caja «Quiz de comprensión del log» más abajo (también se rellena al generar si la IA lo incluye).', 'ensorlogs'); ?>
             </p>
+            <?php if (!$api_key_set) : ?>
+                <p class="eae-api-hint notice notice-warning inline" style="margin:12px 0;padding:8px 12px;">
+                    <?php
+                    printf(
+                        /* translators: %s: URL de ajustes del motor IA */
+                        wp_kses(
+                            __('Falta la API Key de OpenAI. <a href="%s">Configúrala aquí</a> (Ajustes → Ensorlogs AI Engine o Logs → Motor IA).', 'ensorlogs'),
+                            array('a' => array('href' => array()))
+                        ),
+                        esc_url($settings_url)
+                    );
+                    ?>
+                </p>
+            <?php endif; ?>
 
             <div class="ensor-cpt-meta__section">
                 <h3 class="ensor-cpt-meta__title"><?php esc_html_e('Brief del log', 'ensorlogs'); ?></h3>

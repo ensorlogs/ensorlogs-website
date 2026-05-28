@@ -85,6 +85,68 @@ function ensorlogs_is_log_editor_admin_screen(): bool
 }
 
 /**
+ * Carga clases del motor IA sin enganchar el editor (para menú Ajustes).
+ *
+ * @return bool
+ */
+function ensorlogs_ai_engine_ensure_admin_class(): bool
+{
+    static $loaded = false;
+    if ($loaded && class_exists('EAE_Admin', false)) {
+        return true;
+    }
+
+    if (defined('ENSORLOGS_DISABLE_AI_ENGINE') && ENSORLOGS_DISABLE_AI_ENGINE) {
+        return false;
+    }
+
+    $bootstrap = get_template_directory() . '/plugins/ensorlogs-ai-engine/ensorlogs-ai-engine.php';
+    if (!is_readable($bootstrap)) {
+        return false;
+    }
+
+    require_once $bootstrap;
+
+    if (!function_exists('ensorlogs_ai_engine_load_includes') || !ensorlogs_ai_engine_load_includes()) {
+        return false;
+    }
+
+    $loaded = true;
+    return class_exists('EAE_Admin', false);
+}
+
+/**
+ * Registra Ajustes > Ensorlogs AI Engine (antes de abrir el editor de Logs).
+ */
+function ensorlogs_ai_engine_register_admin_menu(): void
+{
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+    if (!ensorlogs_ai_engine_ensure_admin_class()) {
+        return;
+    }
+    EAE_Admin::register_settings_page();
+}
+
+/**
+ * Registra opciones de API key y modelo en admin_init.
+ */
+function ensorlogs_ai_engine_register_settings(): void
+{
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+    if (!ensorlogs_ai_engine_ensure_admin_class()) {
+        return;
+    }
+    EAE_Admin::register_settings();
+}
+
+add_action('admin_menu', 'ensorlogs_ai_engine_register_admin_menu', 9);
+add_action('admin_init', 'ensorlogs_ai_engine_register_settings', 9);
+
+/**
  * Carga e inicia el motor IA (una vez por request).
  */
 function ensorlogs_require_ai_engine_boot(): void
