@@ -56,9 +56,22 @@
 }
 
 #ensorlogs_ai_engine_panel .eae-status.is-error {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.65rem;
     color: #b32d2e;
+    background: #fcf0f1;
+    border-left: 4px solid #d63638;
+    border-radius: 2px;
 }
 
-#ensorlogs_ai_engine_panel .eae-status.is-success {
-    color: #007017;
+#ensorlogs_ai_engine_panel .eae-status.is-success:not(:empty) {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.65rem;
+    background: #edfaef;
+    border-left: 4px solid #00a32a;
+    border-radius: 2px;
 }

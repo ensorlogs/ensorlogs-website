@@ -20,6 +20,47 @@ final class EAE_Admin
         add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_assets'));
         add_action('add_meta_boxes', array(__CLASS__, 'register_meta_box'), 5);
         add_action('add_meta_boxes', array(__CLASS__, 'hide_legacy_section_metaboxes'), 100);
+        add_filter('script_loader_tag', array(__CLASS__, 'script_loader_tag'), 10, 2);
+    }
+
+    /**
+     * Evita que optimizadores (p. ej. SiteGround) rompan o difieran el script del panel.
+     *
+     * @param string $tag
+     * @param string $handle
+     */
+    public static function script_loader_tag(string $tag, string $handle): string
+    {
+        if ($handle !== 'ensorlogs-ai-engine-editor') {
+            return $tag;
+        }
+        if (strpos($tag, 'data-cfasync') === false) {
+            $tag = str_replace('<script ', '<script data-cfasync="false" data-no-optimize="1" ', $tag);
+        }
+        return $tag;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function get_client_config(int $post_id = 0): array
+    {
+        return array(
+            'restUrl'         => esc_url_raw(rest_url('ensorlogs-ai/v1/generate-log')),
+            'nonce'           => wp_create_nonce('wp_rest'),
+            'postId'          => $post_id,
+            'apiConfigured'   => ((string) get_option(self::OPTION_API_KEY, '')) !== '',
+            'apiSettingsUrl'  => esc_url_raw(admin_url('options-general.php?page=ensorlogs-ai-engine')),
+            'isBlockEditor'   => function_exists('use_block_editor_for_post_type')
+                && use_block_editor_for_post_type('ensor_article'),
+            'defaultMessages' => array(
+                'working'       => __('Generando log con ENSORLOGS AI ENGINE…', 'ensorlogs'),
+                'success'       => __('LOG generado e insertado en el editor.', 'ensorlogs'),
+                'savedReload'   => __('LOG guardado. Si no lo ves, guarda borrador y recarga la página.', 'ensorlogs'),
+                'missingApiKey' => __('Falta API Key de OpenAI. Configúrala en Ajustes > Ensorlogs AI Engine.', 'ensorlogs'),
+                'missingTopic'  => __('Escribe el tema del LOG antes de generar.', 'ensorlogs'),
+            ),
+        );
     }
 
     public static function register_settings_page(): void
@@ -131,31 +172,28 @@ final class EAE_Admin
             ENSORLOGS_AI_ENGINE_VERSION
         );
 
+        $script_deps = array();
+        foreach (array('wp-blocks', 'wp-data', 'wp-element') as $handle) {
+            if (wp_script_is($handle, 'registered')) {
+                $script_deps[] = $handle;
+            }
+        }
+
         wp_enqueue_script(
             'ensorlogs-ai-engine-editor',
             ENSORLOGS_AI_ENGINE_URL . 'assets/js/eae-editor.js',
-            array(),
+            $script_deps,
             ENSORLOGS_AI_ENGINE_VERSION,
             true
         );
 
         $post_id = isset($_GET['post']) ? absint($_GET['post']) : 0;
-        wp_localize_script(
+        $cfg     = self::get_client_config($post_id);
+        wp_localize_script('ensorlogs-ai-engine-editor', 'EAE_CFG', $cfg);
+        wp_add_inline_script(
             'ensorlogs-ai-engine-editor',
-            'EAE_CFG',
-            array(
-                'restUrl'        => esc_url_raw(rest_url('ensorlogs-ai/v1/generate-log')),
-                'nonce'          => wp_create_nonce('wp_rest'),
-                'postId'          => $post_id,
-                'apiConfigured'  => ((string) get_option(self::OPTION_API_KEY, '')) !== '',
-                'apiSettingsUrl' => esc_url_raw(admin_url('options-general.php?page=ensorlogs-ai-engine')),
-                'defaultMessages' => array(
-                    'working'       => __('Generando log con ENSORLOGS AI ENGINE…', 'ensorlogs'),
-                    'success'       => __('Log generado e insertado en el editor. Stack actualizado.', 'ensorlogs'),
-                    'missingApiKey' => __('Falta API Key de OpenAI. Configúrala en Ajustes > Ensorlogs AI Engine.', 'ensorlogs'),
-                    'missingTopic'  => __('Escribe el tema del LOG antes de generar.', 'ensorlogs'),
-                ),
-            )
+            'window.EAE_CFG=Object.assign(window.EAE_CFG||{},' . wp_json_encode($cfg) . ');',
+            'before'
         );
     }
 
@@ -282,6 +320,12 @@ final class EAE_Admin
                 <span class="eae-status" id="eae-status" role="status" aria-live="polite"></span>
             </p>
         </div>
+        <?php
+        $cfg = self::get_client_config((int) $post->ID);
+        ?>
+        <script type="text/javascript" data-cfasync="false" data-no-optimize="1">
+            window.EAE_CFG = Object.assign(window.EAE_CFG || {}, <?php echo wp_json_encode($cfg); ?>);
+        </script>
         <?php
     }
 

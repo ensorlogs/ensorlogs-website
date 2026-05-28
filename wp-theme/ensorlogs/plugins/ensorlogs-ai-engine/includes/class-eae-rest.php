@@ -123,23 +123,29 @@ final class EAE_Rest
             );
         }
 
-        $extracted  = EAE_Prompt::extract_quiz_for_meta($clean_html);
+        $extracted   = EAE_Prompt::extract_quiz_for_meta($clean_html);
         $editor_html = $extracted['html'];
         $quiz_text   = $extracted['quiz_text'];
+
+        $block_content = $editor_html;
+        if ($editor_html !== '' && function_exists('ensorlogs_blockify_html_for_editor')) {
+            $block_content = ensorlogs_blockify_html_for_editor($editor_html, 'article');
+        }
 
         $post_id = absint($request->get_param('postId'));
         $sync    = array();
         if ($post_id > 0 && current_user_can('edit_post', $post_id)) {
-            $sync = self::sync_post_meta($post_id, $input['topic'], $stacks, $quiz_text);
+            $sync = self::sync_post_meta($post_id, $input['topic'], $stacks, $quiz_text, $block_content);
         }
 
         return new WP_REST_Response(
             array(
-                'ok'       => true,
-                'message'  => __('LOG generado correctamente.', 'ensorlogs'),
-                'html'     => $editor_html,
-                'quizText' => $quiz_text,
-                'sync'     => $sync,
+                'ok'            => true,
+                'message'       => __('LOG generado correctamente.', 'ensorlogs'),
+                'html'          => $editor_html,
+                'blockContent'  => $block_content,
+                'quizText'      => $quiz_text,
+                'sync'          => $sync,
             ),
             200
         );
@@ -149,13 +155,25 @@ final class EAE_Rest
      * @param list<string> $stacks
      * @return array<string, mixed>
      */
-    private static function sync_post_meta(int $post_id, string $topic, array $stacks, string $quiz_text): array
+    private static function sync_post_meta(int $post_id, string $topic, array $stacks, string $quiz_text, string $block_content): array
     {
         $sync = array(
             'stacks'      => '',
             'primaryTema' => '',
             'title'       => '',
+            'savedPost'   => false,
         );
+
+        if ($block_content !== '') {
+            $updated = wp_update_post(
+                array(
+                    'ID'           => $post_id,
+                    'post_content' => $block_content,
+                ),
+                true
+            );
+            $sync['savedPost'] = !is_wp_error($updated) && $updated > 0;
+        }
 
         if ($stacks) {
             $temas_str = implode(' ', $stacks);

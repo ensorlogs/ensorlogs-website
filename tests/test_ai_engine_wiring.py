@@ -58,4 +58,7 @@ def test_rest_endpoint_stacks_and_guardrails() -> None:
     assert "Público principal:" in prompt_php
     assert "Nivel técnico:" in prompt_php
     assert "Tipo de log:" in prompt_php
-    assert "stacks:" in js or "stacks" in js
+    assert "stacks" in js
+    openai_php = (PLUGIN_ROOT / "includes" / "class-eae-openai.php").read_text(encoding="utf-8")
+    assert "chat/completions" in openai_php
+    assert "blockContent" in rest_php
