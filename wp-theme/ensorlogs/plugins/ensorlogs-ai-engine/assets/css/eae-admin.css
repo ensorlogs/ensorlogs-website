@@ -1,4 +1,9 @@
-/* ENSORLOGS AI ENGINE — dentro del meta box nativo de WordPress */
+/* ENSORLOGS AI ENGINE — encima del editor (after_title) */
+#ensorlogs_ai_engine_panel.postbox {
+    border-color: #2271b1;
+    margin-bottom: 1.25rem;
+}
+
 #ensorlogs_ai_engine_panel .inside {
     margin: 0;
     padding: 0;

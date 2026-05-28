@@ -127,13 +127,9 @@ final class EAE_Rest
         $editor_html = $extracted['html'];
         $quiz_text   = $extracted['quiz_text'];
 
-        $block_content = $editor_html;
-        if ($editor_html !== '' && function_exists('ensorlogs_blockify_html_for_editor')) {
-            $block_content = ensorlogs_blockify_html_for_editor($editor_html, 'article');
-        }
-
-        $post_id = absint($request->get_param('postId'));
-        $sync    = array();
+        $post_id         = absint($request->get_param('postId'));
+        $block_content   = self::content_for_editor_storage($editor_html, $post_id);
+        $sync            = array();
         if ($post_id > 0 && current_user_can('edit_post', $post_id)) {
             $sync = self::sync_post_meta($post_id, $input['topic'], $stacks, $quiz_text, $block_content);
         }
@@ -149,6 +145,22 @@ final class EAE_Rest
             ),
             200
         );
+    }
+
+    private static function content_for_editor_storage(string $editor_html, int $post_id): string
+    {
+        if ($editor_html === '') {
+            return '';
+        }
+        $use_blocks = class_exists('EAE_Admin')
+            ? EAE_Admin::post_uses_block_editor($post_id)
+            : (function_exists('use_block_editor_for_post_type') && use_block_editor_for_post_type('ensor_article'));
+
+        if (!$use_blocks || !function_exists('ensorlogs_blockify_html_for_editor')) {
+            return $editor_html;
+        }
+
+        return ensorlogs_blockify_html_for_editor($editor_html, 'article');
     }
 
     /**

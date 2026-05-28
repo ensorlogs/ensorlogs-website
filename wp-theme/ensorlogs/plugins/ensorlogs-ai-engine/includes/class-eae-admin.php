@@ -51,8 +51,7 @@ final class EAE_Admin
             'postId'          => $post_id,
             'apiConfigured'   => ((string) get_option(self::OPTION_API_KEY, '')) !== '',
             'apiSettingsUrl'  => esc_url_raw(admin_url('options-general.php?page=ensorlogs-ai-engine')),
-            'isBlockEditor'   => function_exists('use_block_editor_for_post_type')
-                && use_block_editor_for_post_type('ensor_article'),
+            'isBlockEditor'   => self::post_uses_block_editor($post_id),
             'defaultMessages' => array(
                 'working'       => __('Generando log con ENSORLOGS AI ENGINE…', 'ensorlogs'),
                 'success'       => __('LOG generado e insertado en el editor.', 'ensorlogs'),
@@ -113,6 +112,17 @@ final class EAE_Admin
         return sanitize_text_field($value);
     }
 
+    public static function post_uses_block_editor(int $post_id = 0): bool
+    {
+        if (!function_exists('use_block_editor_for_post_type')) {
+            return false;
+        }
+        if ($post_id > 0 && function_exists('use_block_editor_for_post')) {
+            return (bool) use_block_editor_for_post($post_id);
+        }
+        return (bool) use_block_editor_for_post_type('ensor_article');
+    }
+
     public static function register_meta_box(): void
     {
         $screen = function_exists('get_current_screen') ? get_current_screen() : null;
@@ -120,12 +130,13 @@ final class EAE_Admin
             return;
         }
 
+        // Encima del editor (título → AI Engine → editor clásico / bloques).
         add_meta_box(
             self::META_BOX_ID,
             __('ENSORLOGS AI ENGINE', 'ensorlogs'),
             array(__CLASS__, 'render_meta_box'),
             'ensor_article',
-            'normal',
+            'after_title',
             'high'
         );
     }
@@ -172,17 +183,10 @@ final class EAE_Admin
             ENSORLOGS_AI_ENGINE_VERSION
         );
 
-        $script_deps = array();
-        foreach (array('wp-blocks', 'wp-data', 'wp-element') as $handle) {
-            if (wp_script_is($handle, 'registered')) {
-                $script_deps[] = $handle;
-            }
-        }
-
         wp_enqueue_script(
             'ensorlogs-ai-engine-editor',
             ENSORLOGS_AI_ENGINE_URL . 'assets/js/eae-editor.js',
-            $script_deps,
+            array(),
             ENSORLOGS_AI_ENGINE_VERSION,
             true
         );
@@ -268,7 +272,7 @@ final class EAE_Admin
         ?>
         <div class="ensor-cpt-meta eae-panel-wrap">
             <p class="eae-intro">
-                <?php esc_html_e('Genera el LOG completo con tono Ensorlogs. El prompt editorial mantiene las secciones por audiencia (estudiante, profesor, profesional); el brief de arriba aporta el contexto general del tema.', 'ensorlogs'); ?>
+                <?php esc_html_e('Completa el brief y pulsa generar: el contenido aparecerá en el editor de abajo (párrafos y secciones) para que lo revises antes de publicar.', 'ensorlogs'); ?>
             </p>
 
             <div class="ensor-cpt-meta__section">
@@ -321,12 +325,9 @@ final class EAE_Admin
             </p>
         </div>
         <?php
-        $cfg = self::get_client_config((int) $post->ID);
-        ?>
-        <script type="text/javascript" data-cfasync="false" data-no-optimize="1">
-            window.EAE_CFG = Object.assign(window.EAE_CFG || {}, <?php echo wp_json_encode($cfg); ?>);
-        </script>
-        <?php
+        if (function_exists('eae_print_inline_generator_script')) {
+            eae_print_inline_generator_script(self::get_client_config((int) $post->ID));
+        }
     }
 
     /**

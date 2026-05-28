@@ -30,6 +30,8 @@ def test_admin_panel_single_metabox_and_stacks() -> None:
     assert "¿Qué quieres hablar en este LOG?" in php
     assert "GENERAR LOG ENSORLOGS" in php
     assert "add_meta_box" in php
+    assert "after_title" in php
+    assert "eae-inline-boot.php" in (PLUGIN_ROOT / "ensorlogs-ai-engine.php").read_text(encoding="utf-8")
     assert "ensorlogs_ai_engine_panel" in php
     assert "ensor_tema" in php
     assert "eae_stack[]" in php

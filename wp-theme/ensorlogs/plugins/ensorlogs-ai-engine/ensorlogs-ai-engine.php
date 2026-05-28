@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_AI_ENGINE_VERSION', '0.1.1');
+define('ENSORLOGS_AI_ENGINE_VERSION', '0.1.2');
 define('ENSORLOGS_AI_ENGINE_FILE', __FILE__);
 define('ENSORLOGS_AI_ENGINE_DIR', plugin_dir_path(__FILE__));
 $eae_theme_root = function_exists('get_template_directory') ? get_template_directory() : '';
@@ -26,6 +26,7 @@ require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-prompt.php';
 require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-openai.php';
 require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-rest.php';
 require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-admin.php';
+require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/eae-inline-boot.php';
 
 $boot = static function (): void {
     EAE_Admin::init();
