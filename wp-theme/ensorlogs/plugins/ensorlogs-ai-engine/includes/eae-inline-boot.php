@@ -1,6 +1,6 @@
 <?php
 /**
- * Script inline del botón GENERAR (no depende de JS externo optimizado).
+ * Script inline del panel IA (fallback si el JS externo no carga).
  *
  * @package Ensorlogs_AI_Engine
  */
@@ -24,6 +24,13 @@ function eae_print_inline_generator_script(array $cfg): void
     'use strict';
     window.EAE_CFG = Object.assign(window.EAE_CFG || {}, <?php echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>);
 
+    if (window.EAE_CFG && window.EAE_CFG._eaeInlineBooted) {
+        return;
+    }
+    if (window.EAE_CFG) {
+        window.EAE_CFG._eaeInlineBooted = true;
+    }
+
     function cfg() {
         return window.EAE_CFG && typeof window.EAE_CFG === 'object' ? window.EAE_CFG : {};
     }
@@ -41,15 +48,6 @@ function eae_print_inline_generator_script(array $cfg): void
         }
     }
 
-    function topicValue() {
-        var t = ($('eae-topic') && $('eae-topic').value) ? $('eae-topic').value.trim() : '';
-        if (t) {
-            return t;
-        }
-        var c = ($('eae-context') && $('eae-context').value) ? $('eae-context').value.trim() : '';
-        return c ? c.slice(0, 220) : '';
-    }
-
     function payload() {
         var stacks = [];
         document.querySelectorAll('#eae-stacks input[name="eae_stack[]"]:checked').forEach(function (n) {
@@ -64,8 +62,9 @@ function eae_print_inline_generator_script(array $cfg): void
         if (!pid) {
             pid = cfg().postId || 0;
         }
+        var topic = ($('eae-topic') && $('eae-topic').value) ? $('eae-topic').value.trim() : '';
         return {
-            topic: topicValue(),
+            topic: topic,
             context: ($('eae-context') && $('eae-context').value) || '',
             experience: ($('eae-experience') && $('eae-experience').value) || '',
             teach: ($('eae-teach') && $('eae-teach').value) || '',
@@ -74,8 +73,26 @@ function eae_print_inline_generator_script(array $cfg): void
         };
     }
 
-    function isClassicEditor() {
-        return !!($('postdivrich') || ($('content') && $('content').tagName === 'TEXTAREA'));
+    function postJson(url, body) {
+        return fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-WP-Nonce': cfg().nonce || ''
+            },
+            body: JSON.stringify(body)
+        }).then(function (res) {
+            return res.text().then(function (text) {
+                var data = null;
+                try {
+                    data = text ? JSON.parse(text) : null;
+                } catch (e) {
+                    data = null;
+                }
+                return { ok: res.ok, data: data, status: res.status };
+            });
+        });
     }
 
     function insertClassic(html) {
@@ -90,50 +107,13 @@ function eae_print_inline_generator_script(array $cfg): void
         var ed = typeof window.tinymce !== 'undefined' ? window.tinymce.get('content') : null;
         if (ed && typeof ed.setContent === 'function') {
             ed.setContent(html);
+            ed.save();
         }
         var ta = $('content');
         if (ta) {
             ta.value = html;
         }
-        if (ed && typeof ed.save === 'function') {
-            ed.save();
-        }
-        var box = $('postdivrich');
-        if (box && box.scrollIntoView) {
-            setTimeout(function () {
-                box.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 200);
-        }
         return !!(ed || ta);
-    }
-
-    function insertBlocks(markup) {
-        if (!markup || !window.wp || !window.wp.blocks || !window.wp.data) {
-            return false;
-        }
-        try {
-            var blocks = window.wp.blocks.parse(markup);
-            if (!blocks || !blocks.length) {
-                blocks = window.wp.blocks.rawHandler({ HTML: markup });
-            }
-            var d = window.wp.data.dispatch('core/block-editor');
-            if (d && d.resetBlocks) {
-                d.resetBlocks(blocks);
-                return true;
-            }
-        } catch (e2) {
-            console.error('EAE blocks', e2);
-        }
-        return false;
-    }
-
-    function insertContent(html, blockContent) {
-        if (cfg().isBlockEditor && !isClassicEditor()) {
-            if (insertBlocks(blockContent || html)) {
-                return true;
-            }
-        }
-        return insertClassic(html || blockContent || '');
     }
 
     function syncQuizField(quizText) {
@@ -143,113 +123,126 @@ function eae_print_inline_generator_script(array $cfg): void
         var field = $('ensor_quiz');
         if (field) {
             field.value = quizText;
-            field.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
 
-    function parseRes(res) {
-        return res.text().then(function (text) {
-            var data = null;
-            try {
-                data = text ? JSON.parse(text) : null;
-            } catch (e3) {
-                data = null;
-            }
-            return { ok: res.ok, data: data, status: res.status };
-        });
-    }
-
-    function onGenerate(ev) {
+    function onCopyPrompt(ev) {
         if (ev) {
             ev.preventDefault();
             ev.stopPropagation();
         }
         var c = cfg();
-        var btn = $('eae-generate');
         var p = payload();
-
         if (!p.topic) {
-            setStatus((c.defaultMessages && c.defaultMessages.missingTopic) || 'Escribe el tema del LOG.', true);
+            setStatus((c.defaultMessages && c.defaultMessages.missingTopic) || 'Escribe el tema.', true);
             return;
         }
-        if (!c.apiConfigured) {
-            setStatus((c.defaultMessages && c.defaultMessages.missingApiKey) || 'Configura la API key en Ajustes.', true);
+        if (!c.buildPromptUrl) {
+            setStatus('Recarga la página.', true);
             return;
         }
-        if (!c.restUrl) {
-            setStatus('No se cargó la configuración. Recarga la página.', true);
-            return;
-        }
-
+        var btn = $('eae-copy-prompt');
         if (btn) {
-            if (!btn.dataset.eaeLabel) {
-                btn.dataset.eaeLabel = btn.textContent || '';
-            }
             btn.disabled = true;
-            btn.textContent = (c.defaultMessages && c.defaultMessages.working) || 'Generando…';
         }
-        setStatus((c.defaultMessages && c.defaultMessages.working) || 'Generando…', false);
-
-        fetch(c.restUrl, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-WP-Nonce': c.nonce || ''
-            },
-            body: JSON.stringify(p)
-        })
-            .then(parseRes)
+        postJson(c.buildPromptUrl, p)
             .then(function (r) {
-                if (!r.ok || !r.data || !r.data.ok) {
-                    var m = (r.data && (r.data.error || r.data.message)) || ('Error ' + r.status);
-                    throw new Error(m);
+                if (!r.ok || !r.data || !r.data.prompt) {
+                    throw new Error((r.data && r.data.message) || 'Error ' + r.status);
                 }
-                var html = r.data.html || '';
-                var blockContent = r.data.blockContent || '';
-                if (!insertContent(html, blockContent)) {
-                    if (r.data.sync && r.data.sync.savedPost) {
-                        setStatus(
-                            (c.defaultMessages && c.defaultMessages.savedReload) ||
-                                'LOG guardado. Recarga para verlo en el editor.',
-                            false
-                        );
-                        return;
-                    }
-                    throw new Error('No se pudo insertar en el editor.');
+                var preview = $('eae-prompt-preview');
+                var wrap = $('eae-prompt-preview-wrap');
+                if (preview) {
+                    preview.value = r.data.prompt;
                 }
-                syncQuizField(r.data.quizText || '');
-                setStatus((c.defaultMessages && c.defaultMessages.success) || 'LOG generado.', false);
+                if (wrap) {
+                    wrap.hidden = false;
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    return navigator.clipboard.writeText(r.data.prompt);
+                }
+            })
+            .then(function () {
+                setStatus((c.defaultMessages && c.defaultMessages.promptCopied) || 'Prompt copiado.', false);
             })
             .catch(function (err) {
-                setStatus(err && err.message ? err.message : 'No se pudo generar.', true);
+                setStatus(err && err.message ? err.message : 'Error al copiar prompt.', true);
             })
             .finally(function () {
                 if (btn) {
                     btn.disabled = false;
-                    btn.textContent = btn.dataset.eaeLabel || 'GENERAR LOG ENSORLOGS';
                 }
             });
     }
 
-    function bind() {
-        var btn = $('eae-generate');
-        if (!btn || btn.dataset.eaeInline === '1') {
+    function onImportHtml(ev) {
+        if (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
+        var c = cfg();
+        var p = payload();
+        var html = ($('eae-html-paste') && $('eae-html-paste').value) ? $('eae-html-paste').value.trim() : '';
+        if (!p.topic) {
+            setStatus((c.defaultMessages && c.defaultMessages.missingTopic) || 'Escribe el tema.', true);
             return;
         }
-        btn.dataset.eaeInline = '1';
-        btn.setAttribute('type', 'button');
-        btn.addEventListener('click', onGenerate);
+        if (!html) {
+            setStatus((c.defaultMessages && c.defaultMessages.missingHtml) || 'Pega el HTML.', true);
+            return;
+        }
+        if (!c.importHtmlUrl) {
+            setStatus('Recarga la página.', true);
+            return;
+        }
+        p.html = html;
+        var btn = $('eae-import-html');
+        if (btn) {
+            btn.disabled = true;
+        }
+        postJson(c.importHtmlUrl, p)
+            .then(function (r) {
+                if (!r.ok || !r.data || !r.data.ok) {
+                    throw new Error((r.data && r.data.message) || 'Error ' + r.status);
+                }
+                if (!insertClassic(r.data.html || r.data.blockContent || '')) {
+                    throw new Error('No se pudo insertar en el editor.');
+                }
+                syncQuizField(r.data.quizText || '');
+                setStatus((c.defaultMessages && c.defaultMessages.importSuccess) || 'Insertado.', false);
+            })
+            .catch(function (err) {
+                setStatus(err && err.message ? err.message : 'Error al insertar.', true);
+            })
+            .finally(function () {
+                if (btn) {
+                    btn.disabled = false;
+                }
+            });
     }
 
-    bind();
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', bind);
+    function bind(id, fn) {
+        var el = $(id);
+        if (!el || el.dataset.eaeInline === '1') {
+            return;
+        }
+        el.dataset.eaeInline = '1';
+        el.addEventListener('click', fn);
     }
+
+    bind('eae-copy-prompt', onCopyPrompt);
+    bind('eae-import-html', onImportHtml);
+
     document.addEventListener('click', function (e) {
         var t = e.target;
-        if (t && t.id === 'eae-generate') {
-            onGenerate(e);
+        if (!t || !t.id) {
+            return;
+        }
+        if (t.id === 'eae-copy-prompt') {
+            onCopyPrompt(e);
+        }
+        if (t.id === 'eae-import-html') {
+            onImportHtml(e);
         }
     });
 })();

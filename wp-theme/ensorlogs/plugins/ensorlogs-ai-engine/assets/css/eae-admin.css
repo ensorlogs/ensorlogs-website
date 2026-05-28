@@ -69,3 +69,29 @@
     border-left: 4px solid #00a32a;
     border-radius: 2px;
 }
+
+.eae-panel-postbox .eae-steps {
+    margin: 0 0 1rem 1.25rem;
+    padding: 0;
+    font-size: 13px;
+    color: #50575e;
+    line-height: 1.6;
+}
+
+.eae-panel-postbox .eae-section-prompt,
+.eae-panel-postbox .eae-section-import {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #dcdcde;
+}
+
+.eae-panel-postbox .eae-prompt-preview-wrap {
+    margin-top: 0.75rem;
+}
+
+.eae-panel-postbox .eae-prompt-preview-wrap textarea,
+.eae-panel-postbox #eae-html-paste {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 12px;
+    line-height: 1.45;
+}

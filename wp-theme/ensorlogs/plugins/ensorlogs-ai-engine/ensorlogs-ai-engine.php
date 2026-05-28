@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Ensorlogs AI Engine
- * Description: Panel de IA para generar Logs editoriales dentro del CPT ensor_article sin tocar el frontend.
- * Version: 0.1.11
+ * Description: Brief + prompt para ChatGPT Plus e importación de HTML en Logs (ensor_article).
+ * Version: 0.2.1
  * Author: Ensorlogs
  * Requires at least: 6.0
  * Requires PHP: 8.0
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_AI_ENGINE_VERSION', '0.1.11');
+define('ENSORLOGS_AI_ENGINE_VERSION', '0.2.1');
 define('ENSORLOGS_AI_ENGINE_FILE', __FILE__);
 define('ENSORLOGS_AI_ENGINE_DIR', plugin_dir_path(__FILE__));
 
@@ -66,7 +66,6 @@ function ensorlogs_ai_engine_load_includes(): bool
     $files = array(
         'editorial-manual.php',
         'class-eae-prompt.php',
-        'class-eae-openai.php',
         'class-eae-rest.php',
         'class-eae-admin.php',
         'eae-inline-boot.php',

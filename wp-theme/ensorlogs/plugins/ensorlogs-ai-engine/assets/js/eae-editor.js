@@ -12,7 +12,7 @@
     function setStatus(message, isError) {
         var node = byId('eae-status');
         if (!node) {
-                return;
+            return;
         }
         node.textContent = message || '';
         node.classList.toggle('is-error', !!isError);
@@ -77,11 +77,17 @@
     }
 
     function insertIntoClassic(html) {
-        var textarea = document.getElementById('content');
+        if (typeof window.switchEditors !== 'undefined') {
+            try {
+                window.switchEditors.go('content', 'tmce');
+            } catch (e1) {}
+        }
         if (window.tinymce && window.tinymce.get('content')) {
             window.tinymce.get('content').setContent(html);
+            window.tinymce.get('content').save();
             return true;
         }
+        var textarea = document.getElementById('content');
         if (textarea) {
             textarea.value = html;
             return true;
@@ -125,7 +131,7 @@
         }
     }
 
-    function setBusy(button, busy) {
+    function setBusy(button, busy, busyLabel) {
         if (!button) {
             return;
         }
@@ -133,9 +139,11 @@
             button.dataset.defaultText = button.textContent || '';
         }
         button.disabled = !!busy;
-        button.textContent = busy
-            ? (cfg().defaultMessages && cfg().defaultMessages.working) || 'Generando…'
-            : button.dataset.defaultText;
+        if (busy && busyLabel) {
+            button.textContent = busyLabel;
+        } else if (!busy) {
+            button.textContent = button.dataset.defaultText;
+        }
     }
 
     function parseResponse(res) {
@@ -152,36 +160,9 @@
         });
     }
 
-    function onGenerateClick(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
+    function postJson(url, payload) {
         var c = cfg();
-        var button = e.currentTarget;
-        var payload = getPayload();
-
-        if (!payload.topic.trim()) {
-            setStatus((c.defaultMessages && c.defaultMessages.missingTopic) || 'Escribe el tema del LOG.', true);
-            return;
-        }
-
-        if (!c.apiConfigured) {
-            var keyMsg =
-                (c.defaultMessages && c.defaultMessages.missingApiKey) ||
-                'Configura la API key en Ajustes > Ensorlogs AI Engine.';
-            setStatus(keyMsg, true);
-            return;
-        }
-
-        if (!c.restUrl) {
-            setStatus('No se cargó la configuración del panel. Recarga la página.', true);
-            return;
-        }
-
-        setBusy(button, true);
-        setStatus((c.defaultMessages && c.defaultMessages.working) || 'Generando…', false);
-
-        fetch(c.restUrl, {
+        return fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
@@ -189,8 +170,180 @@
                 'X-WP-Nonce': c.nonce || '',
             },
             body: JSON.stringify(payload),
-        })
-            .then(parseResponse)
+        }).then(parseResponse);
+    }
+
+    function validateTopic(payload) {
+        if (!payload.topic.trim()) {
+            setStatus(
+                (cfg().defaultMessages && cfg().defaultMessages.missingTopic) ||
+                    'Escribe el tema del LOG.',
+                true
+            );
+            return false;
+        }
+        return true;
+    }
+
+    function showPromptPreview(prompt) {
+        var wrap = byId('eae-prompt-preview-wrap');
+        var area = byId('eae-prompt-preview');
+        var toggle = byId('eae-toggle-prompt');
+        if (area) {
+            area.value = prompt;
+        }
+        if (wrap) {
+            wrap.hidden = false;
+        }
+        if (toggle) {
+            toggle.setAttribute('aria-expanded', 'true');
+            toggle.textContent = toggle.dataset.hideLabel || 'Ocultar prompt';
+        }
+    }
+
+    function copyTextToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function (resolve, reject) {
+            var area = byId('eae-prompt-preview');
+            if (!area) {
+                reject(new Error('no textarea'));
+                return;
+            }
+            area.value = text;
+            area.removeAttribute('readonly');
+            area.focus();
+            area.select();
+            try {
+                var ok = document.execCommand('copy');
+                area.setAttribute('readonly', 'readonly');
+                if (ok) {
+                    resolve();
+                } else {
+                    reject(new Error('execCommand failed'));
+                }
+            } catch (err) {
+                area.setAttribute('readonly', 'readonly');
+                reject(err);
+            }
+        });
+    }
+
+    function onCopyPromptClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var c = cfg();
+        var button = e.currentTarget;
+        var payload = getPayload();
+
+        if (!validateTopic(payload)) {
+            return;
+        }
+        if (!c.buildPromptUrl) {
+            setStatus('No se cargó la configuración del panel. Recarga la página.', true);
+            return;
+        }
+
+        setBusy(
+            button,
+            true,
+            (c.defaultMessages && c.defaultMessages.buildingPrompt) || 'Montando prompt…'
+        );
+        setStatus((c.defaultMessages && c.defaultMessages.buildingPrompt) || 'Montando prompt…', false);
+
+        postJson(c.buildPromptUrl, payload)
+            .then(function (result) {
+                if (!result.ok || !result.data || !result.data.ok || !result.data.prompt) {
+                    var msg =
+                        (result.data && (result.data.error || result.data.message)) ||
+                        ('Error del servidor (' + result.status + ').');
+                    throw new Error(msg);
+                }
+                var prompt = result.data.prompt;
+                showPromptPreview(prompt);
+                return copyTextToClipboard(prompt);
+            })
+            .then(function () {
+                setStatus(
+                    (c.defaultMessages && c.defaultMessages.promptCopied) ||
+                        'Prompt copiado. Pégalo en ChatGPT.',
+                    false
+                );
+            })
+            .catch(function (err) {
+                var preview = byId('eae-prompt-preview');
+                if (preview && preview.value) {
+                    setStatus(
+                        (c.defaultMessages && c.defaultMessages.copyFailed) ||
+                            'Copia el prompt del cuadro de abajo.',
+                        true
+                    );
+                    return;
+                }
+                setStatus(err && err.message ? err.message : 'No se pudo crear el prompt.', true);
+            })
+            .finally(function () {
+                setBusy(button, false);
+            });
+    }
+
+    function onTogglePromptClick(e) {
+        e.preventDefault();
+        var wrap = byId('eae-prompt-preview-wrap');
+        var toggle = e.currentTarget;
+        if (!wrap || !toggle) {
+            return;
+        }
+        var show = wrap.hidden;
+        wrap.hidden = !show;
+        toggle.setAttribute('aria-expanded', show ? 'true' : 'false');
+        if (!toggle.dataset.showLabel) {
+            toggle.dataset.showLabel = toggle.textContent || 'Ver prompt';
+            toggle.dataset.hideLabel = 'Ocultar prompt';
+        }
+        toggle.textContent = show ? toggle.dataset.hideLabel : toggle.dataset.showLabel;
+        if (show && !byId('eae-prompt-preview').value.trim()) {
+            onCopyPromptClick(e);
+        }
+    }
+
+    function onImportHtmlClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var c = cfg();
+        var button = e.currentTarget;
+        var payload = getPayload();
+        var htmlField = byId('eae-html-paste');
+        var html = htmlField ? htmlField.value.trim() : '';
+
+        if (!validateTopic(payload)) {
+            return;
+        }
+        if (!html) {
+            setStatus(
+                (c.defaultMessages && c.defaultMessages.missingHtml) ||
+                    'Pega el HTML de ChatGPT.',
+                true
+            );
+            return;
+        }
+        if (!c.importHtmlUrl) {
+            setStatus('No se cargó la configuración del panel. Recarga la página.', true);
+            return;
+        }
+
+        payload.html = html;
+        setBusy(
+            button,
+            true,
+            (c.defaultMessages && c.defaultMessages.importing) || 'Insertando…'
+        );
+        setStatus((c.defaultMessages && c.defaultMessages.importing) || 'Insertando…', false);
+
+        postJson(c.importHtmlUrl, payload)
             .then(function (result) {
                 if (!result.ok || !result.data || !result.data.ok) {
                     var msg =
@@ -199,43 +352,55 @@
                     throw new Error(msg);
                 }
 
-                var html = result.data.html || '';
+                var editorHtml = result.data.html || '';
                 var blockContent = result.data.blockContent || '';
-                var inserted = insertContent(html, blockContent);
+                var inserted = insertContent(editorHtml, blockContent);
 
                 syncListingFields(result.data.sync, result.data.quizText);
 
                 if (inserted) {
-                    setStatus((c.defaultMessages && c.defaultMessages.success) || 'LOG insertado.', false);
+                    setStatus(
+                        (c.defaultMessages && c.defaultMessages.importSuccess) ||
+                            'LOG insertado.',
+                        false
+                    );
+                    var box = byId('postdivrich');
+                    if (box && box.scrollIntoView) {
+                        setTimeout(function () {
+                            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 200);
+                    }
                 } else if (result.data.sync && result.data.sync.savedPost) {
                     setStatus(
                         (c.defaultMessages && c.defaultMessages.savedReload) ||
-                            'LOG guardado. Recarga la página para verlo en el editor.',
+                            'LOG guardado. Recarga la página.',
                         false
                     );
                 } else {
-                    throw new Error('No se pudo insertar en el editor. Guarda borrador y recarga.');
+                    throw new Error('No se pudo insertar en el editor.');
                 }
             })
             .catch(function (err) {
-                setStatus(err && err.message ? err.message : 'No se pudo generar el LOG.', true);
+                setStatus(err && err.message ? err.message : 'No se pudo insertar el HTML.', true);
             })
             .finally(function () {
                 setBusy(button, false);
             });
     }
 
-    function bindGenerateButton() {
-        var button = byId('eae-generate');
-        if (!button || button.dataset.eaeBound === '1') {
+    function bindButton(id, handler, flag) {
+        var button = byId(id);
+        if (!button || button.dataset[flag] === '1') {
             return;
         }
-        button.dataset.eaeBound = '1';
-        button.addEventListener('click', onGenerateClick);
+        button.dataset[flag] = '1';
+        button.addEventListener('click', handler);
     }
 
     function init() {
-        bindGenerateButton();
+        bindButton('eae-copy-prompt', onCopyPromptClick, 'eaeBoundCopy');
+        bindButton('eae-import-html', onImportHtmlClick, 'eaeBoundImport');
+        bindButton('eae-toggle-prompt', onTogglePromptClick, 'eaeBoundToggle');
     }
 
     if (document.readyState === 'loading') {
@@ -246,8 +411,15 @@
 
     document.addEventListener('click', function (e) {
         var t = e.target;
-        if (t && t.id === 'eae-generate') {
-            onGenerateClick(e);
+        if (!t || !t.id) {
+            return;
+        }
+        if (t.id === 'eae-copy-prompt') {
+            onCopyPromptClick(e);
+        } else if (t.id === 'eae-import-html') {
+            onImportHtmlClick(e);
+        } else if (t.id === 'eae-toggle-prompt') {
+            onTogglePromptClick(e);
         }
     });
 })();

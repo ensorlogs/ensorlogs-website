@@ -10,24 +10,38 @@ if (!defined('ABSPATH')) {
 final class EAE_Prompt
 {
     /**
-     * System prompt: manual editorial EnsorLogs (se envía en cada llamada a OpenAI con la API key del sitio).
+     * Prompt único para pegar en ChatGPT (Plus): manual editorial + brief del log.
+     *
+     * @param array<string,mixed> $input
      */
-    public static function build_system_prompt(): string
+    public static function build_chatgpt_prompt(array $input): string
     {
         $manual = function_exists('eae_get_editorial_manual') ? eae_get_editorial_manual() : '';
+        $brief  = self::build_brief_block($input);
+
         return trim(
-            "Eres EnsorLogs AI ENGINE. Sigue el manual editorial al pie de la letra.\n\n"
+            "=== ENSORLOGS — PROMPT PARA CHATGPT ===\n\n"
+            . "Copia todo este mensaje en un chat nuevo de ChatGPT (con tu cuenta Plus).\n"
+            . "Cuando ChatGPT responda, copia solo el HTML y pégalo en WordPress con «Insertar HTML en el editor».\n\n"
+            . "--- MANUAL EDITORIAL (obligatorio) ---\n\n"
             . $manual
-            . "\n\nResponde únicamente con HTML válido del log, sin markdown ni comentarios fuera del HTML."
+            . "\n\n--- BRIEF DE ESTE LOG ---\n\n"
+            . $brief
+            . "\n\n--- INSTRUCCIÓN DE SALIDA ---\n\n"
+            . "Genera el LOG completo para EnsorLogs siguiendo el manual editorial.\n"
+            . "Responde ÚNICAMENTE con HTML válido del log, sin markdown, sin explicaciones fuera del HTML "
+            . "y sin bloques de código.\n"
+            . "Incluye todas las secciones obligatorias (Algunas Palabras, Datos Reales, audiencias, "
+            . "Reflexión EnsorLogs, LOG QUESTIONS con 5 ítems y LOG CHECK en data-quiz con 3 preguntas)."
         );
     }
 
     /**
-     * User prompt: brief del log concreto desde el panel de WordPress.
+     * Bloque de brief reutilizable.
      *
      * @param array<string,mixed> $input
      */
-    public static function build_master_prompt(array $input): string
+    public static function build_brief_block(array $input): string
     {
         $topic      = trim((string) ($input['topic'] ?? ''));
         $context    = trim((string) ($input['context'] ?? ''));
@@ -46,7 +60,6 @@ final class EAE_Prompt
             $term = get_term_by('slug', $slug, 'ensor_tema');
             $stack_labels[] = $term instanceof WP_Term ? $term->name : $slug;
         }
-        // Tipo de log: stacks del sitio (taxonomía ensor_tema). Nivel/público: valores editoriales por defecto del panel.
         $log_type = $stack_labels ? implode(', ', $stack_labels) : 'General';
         $level    = 'Básico';
         $audience = 'Estudiantes';
@@ -54,20 +67,13 @@ final class EAE_Prompt
         return implode(
             "\n",
             array(
-                'Genera el LOG completo para EnsorLogs siguiendo el manual editorial del system prompt.',
-                '',
-                'Datos del brief (este log concreto):',
                 'Tema: ' . $topic,
                 'Contexto/enfoque: ' . $context,
-                'Experiencia personal: ' . $experience,
+                'Experiencia personal: ' . ($experience !== '' ? $experience : '(ninguna indicada)'),
                 'Qué enseñar: ' . $teach,
-                'Tipo de log: ' . $log_type,
+                'Stacks / tipo de log: ' . $log_type,
                 'Nivel técnico: ' . $level,
                 'Público principal: ' . $audience,
-                '',
-                'Para LOG QUESTIONS genera 5 preguntas concretas en lista.',
-                'Para LOG CHECK en data-quiz devuelve 3 preguntas con formato:',
-                '{"questions":[{"q":"...","options":["...","...","...","..."],"correct":1,"hint":"...","explanation":"..."}]}',
             )
         );
     }

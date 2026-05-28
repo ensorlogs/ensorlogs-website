@@ -1,6 +1,6 @@
 <?php
 /**
- * Manual editorial EnsorLogs enviado a OpenAI en cada generación (system prompt).
+ * Manual editorial EnsorLogs (incluido en el prompt para ChatGPT y en modo API).
  *
  * @package Ensorlogs_AI_Engine
  */

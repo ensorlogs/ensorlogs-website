@@ -1,6 +1,6 @@
 <?php
 /**
- * REST endpoint for AI log generation.
+ * REST endpoints: prompt para ChatGPT e importación de HTML.
  */
 
 if (!defined('ABSPATH')) {
@@ -9,9 +9,6 @@ if (!defined('ABSPATH')) {
 
 final class EAE_Rest
 {
-    private const OPTION_API_KEY = 'ensorlogs_ai_openai_api_key';
-    private const OPTION_MODEL   = 'ensorlogs_ai_openai_model';
-
     public static function init(): void
     {
         if (did_action('rest_api_init')) {
@@ -23,30 +20,49 @@ final class EAE_Rest
 
     public static function register_routes(): void
     {
+        $common_args = array(
+            'topic'      => array('required' => true, 'type' => 'string'),
+            'context'    => array('required' => false, 'type' => 'string'),
+            'experience' => array('required' => false, 'type' => 'string'),
+            'teach'      => array('required' => false, 'type' => 'string'),
+            'postId'     => array('required' => false, 'type' => 'integer'),
+            'stacks'     => array(
+                'required' => false,
+                'type'     => 'array',
+                'items'    => array('type' => 'string'),
+            ),
+        );
+
         register_rest_route(
             'ensorlogs-ai/v1',
-            '/generate-log',
+            '/build-prompt',
             array(
                 'methods'             => WP_REST_Server::CREATABLE,
-                'permission_callback' => array(__CLASS__, 'can_generate'),
-                'callback'            => array(__CLASS__, 'generate_log'),
-                'args'                => array(
-                    'topic'      => array('required' => true, 'type' => 'string'),
-                    'context'    => array('required' => false, 'type' => 'string'),
-                    'experience' => array('required' => false, 'type' => 'string'),
-                    'teach'      => array('required' => false, 'type' => 'string'),
-                    'postId'     => array('required' => false, 'type' => 'integer'),
-                    'stacks'     => array(
-                        'required' => false,
-                        'type'     => 'array',
-                        'items'    => array('type' => 'string'),
-                    ),
+                'permission_callback' => array(__CLASS__, 'can_use_panel'),
+                'callback'            => array(__CLASS__, 'build_prompt'),
+                'args'                => $common_args,
+            )
+        );
+
+        register_rest_route(
+            'ensorlogs-ai/v1',
+            '/import-html',
+            array(
+                'methods'             => WP_REST_Server::CREATABLE,
+                'permission_callback' => array(__CLASS__, 'can_use_panel'),
+                'callback'            => array(__CLASS__, 'import_html'),
+                'args'                => array_merge(
+                    $common_args,
+                    array(
+                        'html' => array('required' => true, 'type' => 'string'),
+                    )
                 ),
             )
         );
+
     }
 
-    public static function can_generate(WP_REST_Request $request): bool
+    public static function can_use_panel(WP_REST_Request $request): bool
     {
         if (!current_user_can('edit_posts')) {
             return false;
@@ -55,19 +71,54 @@ final class EAE_Rest
         return is_string($nonce) && wp_verify_nonce($nonce, 'wp_rest');
     }
 
-    public static function generate_log(WP_REST_Request $request): WP_REST_Response
+    public static function build_prompt(WP_REST_Request $request): WP_REST_Response
     {
-        $api_key = trim((string) get_option(self::OPTION_API_KEY, ''));
-        if ($api_key === '') {
+        $parsed = self::parse_request_input($request);
+        if ($parsed instanceof WP_REST_Response) {
+            return $parsed;
+        }
+
+        return new WP_REST_Response(
+            array(
+                'ok'     => true,
+                'prompt' => EAE_Prompt::build_chatgpt_prompt($parsed['input']),
+            ),
+            200
+        );
+    }
+
+    public static function import_html(WP_REST_Request $request): WP_REST_Response
+    {
+        $parsed = self::parse_request_input($request);
+        if ($parsed instanceof WP_REST_Response) {
+            return $parsed;
+        }
+
+        $raw_html = (string) $request->get_param('html');
+        $raw_html = self::strip_markdown_fences($raw_html);
+        if (trim($raw_html) === '') {
             return new WP_REST_Response(
                 array(
                     'ok'      => false,
-                    'message' => __('Falta API Key de OpenAI en Ajustes > Ensorlogs AI Engine.', 'ensorlogs'),
+                    'message' => __('Pega el HTML que devolvió ChatGPT.', 'ensorlogs'),
                 ),
                 400
             );
         }
 
+        return self::response_from_html(
+            $raw_html,
+            $parsed['input']['topic'],
+            $parsed['stacks'],
+            absint($request->get_param('postId'))
+        );
+    }
+
+    /**
+     * @return array{input: array<string, string>, stacks: list<string>}|WP_REST_Response
+     */
+    private static function parse_request_input(WP_REST_Request $request)
+    {
         $stacks_raw = $request->get_param('stacks');
         $stacks     = array();
         if (is_array($stacks_raw)) {
@@ -98,35 +149,27 @@ final class EAE_Rest
             );
         }
 
-        $prompt = EAE_Prompt::build_master_prompt($input);
-        $model = (string) get_option(self::OPTION_MODEL, 'gpt-4o');
-        $allowed_models = array('gpt-5.5', 'gpt-4.1', 'gpt-4o', 'gpt-4o-mini');
-        if (!in_array($model, $allowed_models, true)) {
-            $model = 'gpt-4o';
-        }
+        return array(
+            'input'  => $input,
+            'stacks' => $stacks,
+        );
+    }
 
-        $result = EAE_OpenAI::generate_html($api_key, $model, $prompt);
-        if (!$result['ok']) {
-            $detail = trim((string) ($result['error'] ?? ''));
-            if ($detail !== '') {
-                error_log('Ensorlogs AI Engine: ' . $detail);
-            }
-            return new WP_REST_Response(
-                array(
-                    'ok'      => false,
-                    'message' => self::format_openai_error_message($detail),
-                    'error'   => $detail,
-                ),
-                502
-            );
-        }
-
-        $clean_html = EAE_Prompt::sanitize_generated_html($result['content']);
+    /**
+     * @param list<string> $stacks
+     */
+    private static function response_from_html(
+        string $raw_html,
+        string $topic,
+        array $stacks,
+        int $post_id
+    ): WP_REST_Response {
+        $clean_html = EAE_Prompt::sanitize_generated_html($raw_html);
         if ($clean_html === '') {
             return new WP_REST_Response(
                 array(
                     'ok'      => false,
-                    'message' => __('La IA no devolvió contenido utilizable.', 'ensorlogs'),
+                    'message' => __('El HTML no es válido o está vacío. Revisa la respuesta de ChatGPT.', 'ensorlogs'),
                 ),
                 422
             );
@@ -136,45 +179,32 @@ final class EAE_Rest
         $editor_html = $extracted['html'];
         $quiz_text   = $extracted['quiz_text'];
 
-        $post_id         = absint($request->get_param('postId'));
-        $block_content   = self::content_for_editor_storage($editor_html, $post_id);
-        $sync            = array();
+        $block_content = self::content_for_editor_storage($editor_html, $post_id);
+        $sync          = array();
         if ($post_id > 0 && current_user_can('edit_post', $post_id)) {
-            $sync = self::sync_post_meta($post_id, $input['topic'], $stacks, $quiz_text, $block_content);
+            $sync = self::sync_post_meta($post_id, $topic, $stacks, $quiz_text, $block_content);
         }
 
         return new WP_REST_Response(
             array(
-                'ok'            => true,
-                'message'       => __('LOG generado correctamente.', 'ensorlogs'),
-                'html'          => $editor_html,
-                'blockContent'  => $block_content,
-                'quizText'      => $quiz_text,
-                'sync'          => $sync,
+                'ok'           => true,
+                'message'      => __('LOG insertado en el editor.', 'ensorlogs'),
+                'html'         => $editor_html,
+                'blockContent' => $block_content,
+                'quizText'     => $quiz_text,
+                'sync'         => $sync,
             ),
             200
         );
     }
 
-    private static function format_openai_error_message(string $detail): string
+    private static function strip_markdown_fences(string $text): string
     {
-        if ($detail === '') {
-            return __('No se pudo generar el LOG. Revisa la API Key en Ajustes > Ensorlogs AI Engine.', 'ensorlogs');
+        $text = trim($text);
+        if (preg_match('/^```(?:html)?\s*\n?(.*?)\n?```\s*$/is', $text, $m)) {
+            return trim($m[1]);
         }
-        if (stripos($detail, 'incorrect api key') !== false || stripos($detail, 'invalid_api_key') !== false) {
-            return __('API Key de OpenAI incorrecta. Actualízala en Ajustes > Ensorlogs AI Engine.', 'ensorlogs');
-        }
-        if (stripos($detail, 'insufficient_quota') !== false || stripos($detail, 'billing') !== false) {
-            return __('Sin crédito o facturación en OpenAI. Revisa tu cuenta en platform.openai.com.', 'ensorlogs');
-        }
-        if (stripos($detail, 'model') !== false && stripos($detail, 'not found') !== false) {
-            return __('Modelo no disponible en tu cuenta OpenAI. Prueba gpt-4o en Ajustes > Ensorlogs AI Engine.', 'ensorlogs');
-        }
-        return sprintf(
-            /* translators: %s: detalle técnico devuelto por OpenAI o el servidor. */
-            __('No se pudo generar el LOG: %s', 'ensorlogs'),
-            $detail
-        );
+        return $text;
     }
 
     private static function content_for_editor_storage(string $editor_html, int $post_id): string
