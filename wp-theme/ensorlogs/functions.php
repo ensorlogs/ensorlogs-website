@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.45');
+define('ENSORLOGS_THEME_VERSION', '1.10.47');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -29,11 +29,7 @@ require_once get_template_directory() . '/inc/legal-i18n.php';
 require_once get_template_directory() . '/inc/article-lang.php';
 require_once get_template_directory() . '/inc/article-translations.php';
 
-// Ensorlogs AI Engine (incluido en el tema). Si falta un include, el sitio sigue sin panel IA.
-$ensor_ai_engine = get_template_directory() . '/plugins/ensorlogs-ai-engine/ensorlogs-ai-engine.php';
-if (is_readable($ensor_ai_engine)) {
-    require_once $ensor_ai_engine; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-}
+require_once get_template_directory() . '/inc/ai-engine-loader.php';
 require_once get_template_directory() . '/inc/project-content-i18n.php';
 
 add_action(

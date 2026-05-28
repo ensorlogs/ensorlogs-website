@@ -14,7 +14,11 @@ final class EAE_Rest
 
     public static function init(): void
     {
-        add_action('rest_api_init', array(__CLASS__, 'register_routes'));
+        if (did_action('rest_api_init')) {
+            self::register_routes();
+        } else {
+            add_action('rest_api_init', array(__CLASS__, 'register_routes'));
+        }
     }
 
     public static function register_routes(): void

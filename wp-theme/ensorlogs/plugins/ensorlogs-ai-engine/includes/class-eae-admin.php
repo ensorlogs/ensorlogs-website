@@ -19,7 +19,11 @@ final class EAE_Admin
     public static function init(): void
     {
         add_action('admin_menu', array(__CLASS__, 'register_settings_page'));
-        add_action('admin_init', array(__CLASS__, 'register_settings'));
+        if (did_action('admin_init')) {
+            self::register_settings();
+        } else {
+            add_action('admin_init', array(__CLASS__, 'register_settings'));
+        }
         add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_assets'));
         add_action('edit_form_after_title', array(__CLASS__, 'render_panel_after_title'), 5);
         add_action('add_meta_boxes', array(__CLASS__, 'hide_legacy_section_metaboxes'), 100);
