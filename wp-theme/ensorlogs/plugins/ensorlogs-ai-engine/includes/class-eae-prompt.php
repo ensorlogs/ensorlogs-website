@@ -10,6 +10,21 @@ if (!defined('ABSPATH')) {
 final class EAE_Prompt
 {
     /**
+     * System prompt: manual editorial EnsorLogs (se envía en cada llamada a OpenAI con la API key del sitio).
+     */
+    public static function build_system_prompt(): string
+    {
+        $manual = function_exists('eae_get_editorial_manual') ? eae_get_editorial_manual() : '';
+        return trim(
+            "Eres EnsorLogs AI ENGINE. Sigue el manual editorial al pie de la letra.\n\n"
+            . $manual
+            . "\n\nResponde únicamente con HTML válido del log, sin markdown ni comentarios fuera del HTML."
+        );
+    }
+
+    /**
+     * User prompt: brief del log concreto desde el panel de WordPress.
+     *
      * @param array<string,mixed> $input
      */
     public static function build_master_prompt(array $input): string
@@ -39,30 +54,9 @@ final class EAE_Prompt
         return implode(
             "\n",
             array(
-                'Eres EnsorLogs AI ENGINE.',
-                'Tono obligatorio: 70% cercano y humano, 30% técnico.',
-                'Contexto editorial: venezolano geek enseñando lo que aprende.',
-                'Prohibido tono corporativo, SEO fake, clickbait o frases robóticas.',
+                'Genera el LOG completo para EnsorLogs siguiendo el manual editorial del system prompt.',
                 '',
-                'Genera SOLO HTML semántico, sin markdown ni texto fuera del HTML.',
-                'Mantén exactamente estas secciones y clases:',
-                '- <section class="ensor-aud-section" data-aud="context"><h2>Algunas Palabras</h2>...</section>',
-                '- <section class="ensor-aud-section" data-aud="data"><h2>Datos Reales</h2>...</section>',
-                '- <section class="ensor-aud-section" data-aud="student"><h2>¿Eres estudiante?</h2>...</section>',
-                '- <section class="ensor-aud-section" data-aud="teacher"><h2>¿Eres profesor?</h2>...</section>',
-                '- <section class="ensor-aud-section" data-aud="professional"><h2>Como profesional</h2>...</section>',
-                '- <section class="ensor-aud-section" data-aud="context"><h2>Reflexión EnsorLogs</h2>...</section>',
-                '- <section class="ensor-aud-section" data-aud="student"><h2>LOG QUESTIONS</h2><ul>...</ul></section>',
-                '- <section class="ensor-quiz" data-quiz=\'{"questions":[...]}\'></section>',
-                '',
-                'Reglas de salida:',
-                '- Usa H2 obligatoriamente en cada sección.',
-                '- Explica simple y luego técnico.',
-                '- Incluye analogías humanas cuando ayuden.',
-                '- No inventes clases CSS nuevas.',
-                '- No añadas <script>, <style>, iframes ni inline JS.',
-                '',
-                'Datos del log a desarrollar:',
+                'Datos del brief (este log concreto):',
                 'Tema: ' . $topic,
                 'Contexto/enfoque: ' . $context,
                 'Experiencia personal: ' . $experience,

@@ -227,7 +227,7 @@ final class EAE_Admin
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Ensorlogs AI Engine', 'ensorlogs'); ?></h1>
-            <p><?php esc_html_e('Configura la clave de OpenAI para generar Logs desde el editor del CPT Logs.', 'ensorlogs'); ?></p>
+            <p><?php esc_html_e('La API Key conecta tu cuenta de OpenAI (facturación y límites en tu panel). En cada generación enviamos el manual editorial EnsorLogs completo más el brief del log, para que el HTML respete tono, secciones y estructura del sitio.', 'ensorlogs'); ?></p>
             <form method="post" action="options.php">
                 <?php settings_fields('ensorlogs_ai_engine'); ?>
                 <table class="form-table" role="presentation">

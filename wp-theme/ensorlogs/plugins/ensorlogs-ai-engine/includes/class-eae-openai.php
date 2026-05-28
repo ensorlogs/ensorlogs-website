@@ -97,13 +97,15 @@ final class EAE_OpenAI
      */
     private static function request_chat(string $api_key, string $model, string $prompt): array
     {
+        $system = class_exists('EAE_Prompt') ? EAE_Prompt::build_system_prompt() : '';
+
         $body = array(
             'model'       => $model,
             'temperature' => 0.7,
             'messages'    => array(
                 array(
                     'role'    => 'system',
-                    'content' => 'Eres EnsorLogs AI ENGINE. Devuelve solo HTML semántico válido, sin markdown ni explicaciones fuera del HTML.',
+                    'content' => $system !== '' ? $system : 'Eres EnsorLogs AI ENGINE. Devuelve solo HTML semántico válido.',
                 ),
                 array(
                     'role'    => 'user',

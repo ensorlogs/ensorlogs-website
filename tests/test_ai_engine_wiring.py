@@ -33,6 +33,9 @@ def test_admin_panel_single_metabox_and_stacks() -> None:
     assert "render_panel_after_title" in php
     bootstrap = (PLUGIN_ROOT / "ensorlogs-ai-engine.php").read_text(encoding="utf-8")
     assert "eae-inline-boot.php" in bootstrap
+    assert "editorial-manual.php" in bootstrap
+    prompt_php = (PLUGIN_ROOT / "includes" / "class-eae-prompt.php").read_text(encoding="utf-8")
+    assert "build_system_prompt" in prompt_php
     assert "ensorlogs_ai_engine_panel" in php
     assert "ensor_tema" in php
     assert "eae_stack[]" in php
