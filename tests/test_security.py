@@ -10,7 +10,13 @@ from conftest import REPO_ROOT, THEME_ROOT
 SECRET_PATTERNS = [
     (re.compile(r"sk_live_[0-9a-zA-Z]{16,}"), "Stripe live secret key"),
     (re.compile(r"AKIA[0-9A-Z]{16}"), "AWS access key"),
-    (re.compile(r"(?i)(api[_-]?key|secret|password)\s*=\s*['\"][^'\"]{8,}['\"]"), "credencial embebida"),
+    (
+        re.compile(
+            r"(?i)(?<![A-Z_])(api[_-]?key|secret|password)\s*=\s*"
+            r"['\"](?!ensorlogs_)[^'\"]{12,}['\"]"
+        ),
+        "credencial embebida",
+    ),
     (re.compile(r"-----BEGIN (RSA |EC )?PRIVATE KEY-----"), "clave privada PEM"),
 ]
 

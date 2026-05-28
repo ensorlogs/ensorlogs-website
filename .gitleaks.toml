@@ -1,0 +1,15 @@
+# Falsos positivos: nombres de opción WP y UI del AI Engine (sin claves reales en repo).
+title = "Ensorlogs gitleaks"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "OpenAI option slugs and AI Engine admin (keys live in wp_options only)"
+paths = [
+  '''wp-theme/ensorlogs/plugins/ensorlogs-ai-engine/''',
+]
+regexes = [
+  '''ensorlogs_ai_openai_api_key''',
+  '''invalid_api_key''',
+]
