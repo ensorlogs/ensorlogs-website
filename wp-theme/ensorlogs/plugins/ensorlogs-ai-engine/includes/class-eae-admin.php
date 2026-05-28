@@ -11,14 +11,17 @@ final class EAE_Admin
 {
     private const OPTION_API_KEY = 'ensorlogs_ai_openai_api_key';
     private const OPTION_MODEL = 'ensorlogs_ai_openai_model';
-    private const META_BOX_ID = 'ensorlogs_ai_engine_panel';
+    private const PANEL_ID = 'ensorlogs_ai_engine_panel';
+
+    /** @var bool */
+    private static $panel_rendered = false;
 
     public static function init(): void
     {
         add_action('admin_menu', array(__CLASS__, 'register_settings_page'));
         add_action('admin_init', array(__CLASS__, 'register_settings'));
         add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_assets'));
-        add_action('add_meta_boxes', array(__CLASS__, 'register_meta_box'), 5);
+        add_action('edit_form_after_title', array(__CLASS__, 'render_panel_after_title'), 5);
         add_action('add_meta_boxes', array(__CLASS__, 'hide_legacy_section_metaboxes'), 100);
         add_filter('script_loader_tag', array(__CLASS__, 'script_loader_tag'), 10, 2);
     }
@@ -123,22 +126,35 @@ final class EAE_Admin
         return (bool) use_block_editor_for_post_type('ensor_article');
     }
 
-    public static function register_meta_box(): void
+    /**
+     * Justo después del título y antes de «Añadir medios» / el editor (editor clásico).
+     *
+     * @param WP_Post $post
+     */
+    public static function render_panel_after_title($post): void
     {
-        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
-        if (!$screen || $screen->post_type !== 'ensor_article') {
+        if (self::$panel_rendered) {
             return;
         }
-
-        // Encima del editor (título → AI Engine → editor clásico / bloques).
-        add_meta_box(
-            self::META_BOX_ID,
-            __('ENSORLOGS AI ENGINE', 'ensorlogs'),
-            array(__CLASS__, 'render_meta_box'),
-            'ensor_article',
-            'after_title',
-            'high'
-        );
+        if (!$post instanceof WP_Post || $post->post_type !== 'ensor_article') {
+            return;
+        }
+        if (!current_user_can('edit_post', $post->ID)) {
+            return;
+        }
+        self::$panel_rendered = true;
+        ?>
+        <div id="<?php echo esc_attr(self::PANEL_ID); ?>" class="postbox eae-panel-postbox">
+            <div class="postbox-header">
+                <h2 class="hndle ui-sortable-handle">
+                    <span><?php esc_html_e('ENSORLOGS AI ENGINE', 'ensorlogs'); ?></span>
+                </h2>
+            </div>
+            <div class="inside">
+                <?php self::render_panel_fields($post); ?>
+            </div>
+        </div>
+        <?php
     }
 
     public static function hide_legacy_section_metaboxes(): void
@@ -262,12 +278,8 @@ final class EAE_Admin
     /**
      * @param WP_Post $post
      */
-    public static function render_meta_box($post): void
+    public static function render_panel_fields($post): void
     {
-        if (!$post instanceof WP_Post || !current_user_can('edit_post', $post->ID)) {
-            return;
-        }
-
         $stacks = self::get_stack_choices();
         $selected = self::get_selected_stack_slugs((int) $post->ID);
         ?>
