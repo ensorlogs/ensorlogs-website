@@ -22,10 +22,13 @@ require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-openai.php';
 require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-rest.php';
 require_once ENSORLOGS_AI_ENGINE_DIR . 'includes/class-eae-admin.php';
 
-add_action(
-    'plugins_loaded',
-    static function (): void {
-        EAE_Admin::init();
-        EAE_Rest::init();
-    }
-);
+$boot = static function (): void {
+    EAE_Admin::init();
+    EAE_Rest::init();
+};
+
+if (did_action('plugins_loaded')) {
+    $boot();
+} else {
+    add_action('plugins_loaded', $boot);
+}
