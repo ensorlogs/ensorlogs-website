@@ -164,9 +164,13 @@ final class EAE_OpenAI
 
     private static function model_uses_completion_tokens(string $model): bool
     {
-        return preg_match('/^gpt-4(\.|$|-)/', $model) === 1
-            || str_starts_with($model, 'gpt-4o')
-            || str_starts_with($model, 'o');
+        if (preg_match('/^gpt-4(\.|$|-)/', $model) === 1) {
+            return true;
+        }
+        if (strncmp($model, 'gpt-4o', 6) === 0) {
+            return true;
+        }
+        return isset($model[0]) && $model[0] === 'o';
     }
 
     /**
