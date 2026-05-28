@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 final class EAE_Prompt
 {
     /**
-     * @param array<string,string> $input
+     * @param array<string,mixed> $input
      */
     public static function build_master_prompt(array $input): string
     {
@@ -18,9 +18,23 @@ final class EAE_Prompt
         $context    = trim((string) ($input['context'] ?? ''));
         $experience = trim((string) ($input['experience'] ?? ''));
         $teach      = trim((string) ($input['teach'] ?? ''));
-        $log_type   = trim((string) ($input['logType'] ?? ''));
-        $level      = trim((string) ($input['level'] ?? ''));
-        $audience   = trim((string) ($input['audience'] ?? ''));
+        $stacks     = $input['stacks'] ?? array();
+        if (!is_array($stacks)) {
+            $stacks = array();
+        }
+        $stack_labels = array();
+        foreach ($stacks as $slug) {
+            $slug = sanitize_title((string) $slug);
+            if ($slug === '') {
+                continue;
+            }
+            $term = get_term_by('slug', $slug, 'ensor_tema');
+            $stack_labels[] = $term instanceof WP_Term ? $term->name : $slug;
+        }
+        // Tipo de log: stacks del sitio (taxonomía ensor_tema). Nivel/público: valores editoriales por defecto del panel.
+        $log_type = $stack_labels ? implode(', ', $stack_labels) : 'General';
+        $level    = 'Básico';
+        $audience = 'Estudiantes';
 
         return implode(
             "\n",
@@ -68,27 +82,89 @@ final class EAE_Prompt
     {
         $allowed = array(
             'section' => array(
-                'class'    => true,
-                'data-aud' => true,
-                'data-quiz'=> true,
+                'class'     => true,
+                'data-aud'  => true,
+                'data-quiz' => true,
             ),
-            'h2'      => array('id' => true),
-            'p'       => array(),
-            'strong'  => array(),
-            'em'      => array(),
-            'mark'    => array(),
-            'a'       => array('href' => true, 'target' => true, 'rel' => true),
-            'ul'      => array(),
-            'ol'      => array(),
-            'li'      => array(),
+            'h2'         => array('id' => true),
+            'p'          => array(),
+            'strong'     => array(),
+            'em'         => array(),
+            'mark'       => array(),
+            'a'          => array('href' => true, 'target' => true, 'rel' => true),
+            'ul'         => array(),
+            'ol'         => array(),
+            'li'         => array(),
             'blockquote' => array(),
-            'code'    => array(),
-            'pre'     => array(),
+            'code'       => array(),
+            'pre'        => array(),
         );
 
         $clean = wp_kses($html, $allowed);
         $clean = self::enforce_required_sections($clean);
         return trim($clean);
+    }
+
+    /**
+     * Quita la sección quiz del HTML del editor y devuelve texto para meta _ensor_quiz.
+     *
+     * @return array{html:string,quiz_text:string}
+     */
+    public static function extract_quiz_for_meta(string $html): array
+    {
+        $quiz_text = '';
+        if (preg_match(
+            '/<section[^>]*class="[^"]*ensor-quiz[^"]*"[^>]*data-quiz=(["\'])(.*?)\1[^>]*>\s*<\/section>/is',
+            $html,
+            $m
+        )) {
+            $json_raw = html_entity_decode($m[2], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $decoded  = json_decode($json_raw, true);
+            if (is_array($decoded) && !empty($decoded['questions']) && is_array($decoded['questions'])) {
+                $quiz_text = self::quiz_json_to_textarea($decoded['questions']);
+            }
+            $html = str_replace($m[0], '', $html);
+        }
+        return array(
+            'html'      => trim($html),
+            'quiz_text' => $quiz_text,
+        );
+    }
+
+    /**
+     * @param list<array<string,mixed>> $questions
+     */
+    public static function quiz_json_to_textarea(array $questions): string
+    {
+        $letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
+        $blocks  = array();
+        foreach ($questions as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $q       = trim((string) ($item['q'] ?? ''));
+            $options = $item['options'] ?? array();
+            if ($q === '' || !is_array($options) || count($options) < 2) {
+                continue;
+            }
+            $correct = isset($item['correct']) ? (int) $item['correct'] : 0;
+            $lines   = array('Q: ' . $q);
+            foreach ($options as $idx => $opt) {
+                $letter = $letters[$idx] ?? chr(65 + (int) $idx);
+                $suffix = ((int) $idx === $correct) ? ' *' : '';
+                $lines[] = $letter . ': ' . trim((string) $opt) . $suffix;
+            }
+            $hint = trim((string) ($item['hint'] ?? ''));
+            if ($hint !== '') {
+                $lines[] = 'P: ' . $hint;
+            }
+            $explanation = trim((string) ($item['explanation'] ?? ''));
+            if ($explanation !== '') {
+                $lines[] = 'E: ' . $explanation;
+            }
+            $blocks[] = implode("\n", $lines);
+        }
+        return implode("\n---\n", $blocks);
     }
 
     private static function enforce_required_sections(string $html): string

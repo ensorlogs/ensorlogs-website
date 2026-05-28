@@ -31,9 +31,12 @@ final class EAE_Rest
                     'context'    => array('required' => false, 'type' => 'string'),
                     'experience' => array('required' => false, 'type' => 'string'),
                     'teach'      => array('required' => false, 'type' => 'string'),
-                    'logType'    => array('required' => false, 'type' => 'string'),
-                    'level'      => array('required' => false, 'type' => 'string'),
-                    'audience'   => array('required' => false, 'type' => 'string'),
+                    'postId'     => array('required' => false, 'type' => 'integer'),
+                    'stacks'     => array(
+                        'required' => false,
+                        'type'     => 'array',
+                        'items'    => array('type' => 'string'),
+                    ),
                 ),
             )
         );
@@ -61,14 +64,24 @@ final class EAE_Rest
             );
         }
 
+        $stacks_raw = $request->get_param('stacks');
+        $stacks     = array();
+        if (is_array($stacks_raw)) {
+            foreach ($stacks_raw as $slug) {
+                $slug = sanitize_title((string) $slug);
+                if ($slug !== '') {
+                    $stacks[] = $slug;
+                }
+            }
+        }
+        $stacks = array_values(array_unique($stacks));
+
         $input = array(
             'topic'      => sanitize_text_field((string) $request->get_param('topic')),
             'context'    => sanitize_textarea_field((string) $request->get_param('context')),
             'experience' => sanitize_textarea_field((string) $request->get_param('experience')),
             'teach'      => sanitize_textarea_field((string) $request->get_param('teach')),
-            'logType'    => sanitize_text_field((string) $request->get_param('logType')),
-            'level'      => sanitize_text_field((string) $request->get_param('level')),
-            'audience'   => sanitize_text_field((string) $request->get_param('audience')),
+            'stacks'     => $stacks,
         );
 
         if ($input['topic'] === '') {
@@ -110,13 +123,78 @@ final class EAE_Rest
             );
         }
 
+        $extracted  = EAE_Prompt::extract_quiz_for_meta($clean_html);
+        $editor_html = $extracted['html'];
+        $quiz_text   = $extracted['quiz_text'];
+
+        $post_id = absint($request->get_param('postId'));
+        $sync    = array();
+        if ($post_id > 0 && current_user_can('edit_post', $post_id)) {
+            $sync = self::sync_post_meta($post_id, $input['topic'], $stacks, $quiz_text);
+        }
+
         return new WP_REST_Response(
             array(
-                'ok'      => true,
-                'message' => __('LOG generado correctamente.', 'ensorlogs'),
-                'html'    => $clean_html,
+                'ok'       => true,
+                'message'  => __('LOG generado correctamente.', 'ensorlogs'),
+                'html'     => $editor_html,
+                'quizText' => $quiz_text,
+                'sync'     => $sync,
             ),
             200
         );
+    }
+
+    /**
+     * @param list<string> $stacks
+     * @return array<string, mixed>
+     */
+    private static function sync_post_meta(int $post_id, string $topic, array $stacks, string $quiz_text): array
+    {
+        $sync = array(
+            'stacks'      => '',
+            'primaryTema' => '',
+            'title'       => '',
+        );
+
+        if ($stacks) {
+            $temas_str = implode(' ', $stacks);
+            update_post_meta($post_id, '_ensor_temas', $temas_str);
+            if (function_exists('ensorlogs_sync_temas_meta_to_taxonomy')) {
+                ensorlogs_sync_temas_meta_to_taxonomy($post_id, $temas_str);
+            } elseif (taxonomy_exists('ensor_tema')) {
+                wp_set_object_terms($post_id, $stacks, 'ensor_tema', false);
+            }
+            $sync['stacks'] = $temas_str;
+
+            $primary = $stacks[0];
+            if (function_exists('ensorlogs_primary_tema_choices')) {
+                $choices = ensorlogs_primary_tema_choices();
+                if (array_key_exists($primary, $choices)) {
+                    update_post_meta($post_id, '_ensor_primary_tema', $primary);
+                    $sync['primaryTema'] = $primary;
+                }
+            } else {
+                update_post_meta($post_id, '_ensor_primary_tema', $primary);
+                $sync['primaryTema'] = $primary;
+            }
+        }
+
+        if ($quiz_text !== '') {
+            update_post_meta($post_id, '_ensor_quiz', $quiz_text);
+        }
+
+        $post = get_post($post_id);
+        if ($post instanceof WP_Post && $post->post_title === '' && $topic !== '') {
+            wp_update_post(
+                array(
+                    'ID'         => $post_id,
+                    'post_title' => $topic,
+                )
+            );
+            $sync['title'] = $topic;
+        }
+
+        return $sync;
     }
 }
