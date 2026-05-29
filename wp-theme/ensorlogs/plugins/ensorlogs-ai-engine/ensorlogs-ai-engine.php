@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Ensorlogs AI Engine
  * Description: Brief + prompt para ChatGPT Plus e importación de HTML en Logs (ensor_article).
- * Version: 0.2.1
+ * Version: 0.2.3
  * Author: Ensorlogs
  * Requires at least: 6.0
  * Requires PHP: 8.0
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_AI_ENGINE_VERSION', '0.2.1');
+define('ENSORLOGS_AI_ENGINE_VERSION', '0.2.3');
 define('ENSORLOGS_AI_ENGINE_FILE', __FILE__);
 define('ENSORLOGS_AI_ENGINE_DIR', plugin_dir_path(__FILE__));
 

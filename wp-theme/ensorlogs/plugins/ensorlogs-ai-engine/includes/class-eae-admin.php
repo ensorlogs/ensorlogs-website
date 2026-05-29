@@ -181,7 +181,7 @@ final class EAE_Admin
         ?>
         <div class="ensor-cpt-meta eae-panel-wrap">
             <p class="eae-intro">
-                <?php esc_html_e('1) Completa el brief. 2) Copia el prompt y pégalo en ChatGPT (Plus). 3) Cuando tengas el HTML, pégalo abajo e insértalo en el editor. El quiz se rellena en «Quiz de comprensión del log» si viene en el HTML.', 'ensorlogs'); ?>
+                <?php esc_html_e('1) Completa el brief. 2) Copia el prompt y pégalo en ChatGPT. 3) Pega el HTML abajo e insértalo en el editor. El quiz lo editas aparte en «Quiz de comprensión del log».', 'ensorlogs'); ?>
             </p>
             <ol class="eae-steps" aria-label="<?php esc_attr_e('Pasos con ChatGPT', 'ensorlogs'); ?>">
                 <li><?php esc_html_e('Brief en WordPress', 'ensorlogs'); ?></li>

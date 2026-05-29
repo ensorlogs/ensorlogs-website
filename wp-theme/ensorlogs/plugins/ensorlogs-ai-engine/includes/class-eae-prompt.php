@@ -16,23 +16,38 @@ final class EAE_Prompt
      */
     public static function build_chatgpt_prompt(array $input): string
     {
-        $manual = function_exists('eae_get_editorial_manual') ? eae_get_editorial_manual() : '';
-        $brief  = self::build_brief_block($input);
+        $manual     = function_exists('eae_get_editorial_manual') ? eae_get_editorial_manual() : '';
+        $brief      = self::build_brief_block($input);
+        $experience = trim((string) ($input['experience'] ?? ''));
+
+        $experience_rule = '';
+        if ($experience !== '') {
+            $experience_rule = "\n\n--- EXPERIENCIA PERSONAL DE ENSOR (obligatoria) ---\n\n"
+                . "La experiencia personal proporcionada por Ensor en el brief debe utilizarse obligatoriamente dentro de:\n"
+                . "- Algunas Palabras\n"
+                . "- Reflexión EnsorLogs\n\n"
+                . "No ignorar esta información.\n"
+                . "No resumirla en una sola frase.\n"
+                . "Debe integrarse de forma natural dentro del contenido.\n";
+        }
 
         return trim(
-            "=== ENSORLOGS — PROMPT PARA CHATGPT ===\n\n"
-            . "Copia todo este mensaje en un chat nuevo de ChatGPT (con tu cuenta Plus).\n"
-            . "Cuando ChatGPT responda, copia solo el HTML y pégalo en WordPress con «Insertar HTML en el editor».\n\n"
-            . "--- MANUAL EDITORIAL (obligatorio) ---\n\n"
+            "Amplifica la voz de Ensor y escribe un LOG completo para EnsorLogs siguiendo el manual y el brief.\n"
+            . "El protagonista es Ensor, no un redactor externo.\n\n"
             . $manual
+            . $experience_rule
             . "\n\n--- BRIEF DE ESTE LOG ---\n\n"
             . $brief
-            . "\n\n--- INSTRUCCIÓN DE SALIDA ---\n\n"
-            . "Genera el LOG completo para EnsorLogs siguiendo el manual editorial.\n"
-            . "Responde ÚNICAMENTE con HTML válido del log, sin markdown, sin explicaciones fuera del HTML "
-            . "y sin bloques de código.\n"
-            . "Incluye todas las secciones obligatorias (Algunas Palabras, Datos Reales, audiencias, "
-            . "Reflexión EnsorLogs, LOG QUESTIONS con 5 ítems y LOG CHECK en data-quiz con 3 preguntas)."
+            . "\n\n--- SALIDA ---\n\n"
+            . "Toda la respuesta debe ser un único HTML continuo.\n"
+            . "No dividir el contenido.\n"
+            . "No usar markdown.\n"
+            . "No usar bloques de código.\n"
+            . "No añadir explicaciones fuera del HTML.\n"
+            . "La respuesta debe poder copiarse directamente y pegarse en WordPress.\n\n"
+            . "Incluye las 7 secciones del manual en orden: Algunas Palabras, Datos Reales, "
+            . "¿Eres estudiante?, ¿Eres profesor?, Como profesional, Reflexión EnsorLogs y LOG QUESTIONS (5 ítems).\n"
+            . "No incluyas sección ensor-quiz ni data-quiz."
         );
     }
 
@@ -64,18 +79,21 @@ final class EAE_Prompt
         $level    = 'Básico';
         $audience = 'Estudiantes';
 
-        return implode(
-            "\n",
-            array(
-                'Tema: ' . $topic,
-                'Contexto/enfoque: ' . $context,
-                'Experiencia personal: ' . ($experience !== '' ? $experience : '(ninguna indicada)'),
-                'Qué enseñar: ' . $teach,
-                'Stacks / tipo de log: ' . $log_type,
-                'Nivel técnico: ' . $level,
-                'Público principal: ' . $audience,
-            )
-        );
+        $lines = array('Tema: ' . $topic);
+        if ($context !== '') {
+            $lines[] = 'Contexto/enfoque: ' . $context;
+        }
+        if ($experience !== '') {
+            $lines[] = 'Experiencia personal: ' . $experience;
+        }
+        if ($teach !== '') {
+            $lines[] = 'Qué enseñar: ' . $teach;
+        }
+        $lines[] = 'Stacks / tipo de log: ' . $log_type;
+        $lines[] = 'Nivel técnico: ' . $level;
+        $lines[] = 'Público principal: ' . $audience;
+
+        return implode("\n", $lines);
     }
 
     public static function sanitize_generated_html(string $html): string
@@ -185,14 +203,6 @@ final class EAE_Prompt
                 . '<h2>' . esc_html($title) . '</h2>'
                 . '<p></p>'
                 . '</section>';
-        }
-        if (stripos($html, 'class="ensor-quiz"') === false) {
-            $empty_quiz = wp_json_encode(
-                array(
-                    'questions' => array(),
-                )
-            );
-            $html .= "\n" . '<section class="ensor-quiz" data-quiz="' . esc_attr((string) $empty_quiz) . '"></section>';
         }
         return $html;
     }
