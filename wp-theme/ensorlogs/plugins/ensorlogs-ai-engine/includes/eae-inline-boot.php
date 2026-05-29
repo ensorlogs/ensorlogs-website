@@ -188,7 +188,7 @@ function eae_print_inline_generator_script(array $cfg): void
             return;
         }
         if (!html) {
-            setStatus((c.defaultMessages && c.defaultMessages.missingHtml) || 'Pega el HTML.', true);
+            setStatus((c.defaultMessages && (c.defaultMessages.missingRaw || c.defaultMessages.missingHtml)) || 'Pega la respuesta RAW.', true);
             return;
         }
         if (!c.importHtmlUrl) {

@@ -100,7 +100,7 @@ final class EAE_Rest
             return new WP_REST_Response(
                 array(
                     'ok'      => false,
-                    'message' => __('Pega el HTML que devolvió ChatGPT.', 'ensorlogs'),
+                    'message' => __('Pega la respuesta de ChatGPT.', 'ensorlogs'),
                 ),
                 400
             );
@@ -164,12 +164,27 @@ final class EAE_Rest
         array $stacks,
         int $post_id
     ): WP_REST_Response {
-        $clean_html = EAE_Prompt::sanitize_generated_html($raw_html);
+        $content = trim($raw_html);
+        if (!EAE_Prompt::is_raw_format($content)) {
+            return new WP_REST_Response(
+                array(
+                    'ok'      => false,
+                    'message' => __(
+                        'Usa formato RAW EnsorLogs: bloques [ALGUNAS_PALABRAS], [DATOS_REALES], [ESTUDIANTE], [PROFESOR], [PROFESIONAL] y [REFLEXION].',
+                        'ensorlogs'
+                    ),
+                ),
+                422
+            );
+        }
+
+        $normalized = EAE_Prompt::raw_to_html($content);
+        $clean_html = EAE_Prompt::sanitize_generated_html($normalized);
         if ($clean_html === '') {
             return new WP_REST_Response(
                 array(
                     'ok'      => false,
-                    'message' => __('El HTML no es válido o está vacío. Revisa la respuesta de ChatGPT.', 'ensorlogs'),
+                    'message' => __('No se pudo convertir el RAW. Revisa las etiquetas y el contenido.', 'ensorlogs'),
                 ),
                 422
             );

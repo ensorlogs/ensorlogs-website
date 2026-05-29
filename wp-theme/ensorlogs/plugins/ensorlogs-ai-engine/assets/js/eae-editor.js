@@ -324,8 +324,8 @@
         }
         if (!html) {
             setStatus(
-                (c.defaultMessages && c.defaultMessages.missingHtml) ||
-                    'Pega el HTML de ChatGPT.',
+                (c.defaultMessages && (c.defaultMessages.missingRaw || c.defaultMessages.missingHtml)) ||
+                    'Pega la respuesta RAW de ChatGPT.',
                 true
             );
             return;
@@ -381,7 +381,7 @@
                 }
             })
             .catch(function (err) {
-                setStatus(err && err.message ? err.message : 'No se pudo insertar el HTML.', true);
+                setStatus(err && err.message ? err.message : 'No se pudo insertar el LOG.', true);
             })
             .finally(function () {
                 setBusy(button, false);

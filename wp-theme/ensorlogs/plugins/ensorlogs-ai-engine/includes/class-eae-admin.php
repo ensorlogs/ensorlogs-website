@@ -52,12 +52,13 @@ final class EAE_Admin
             'isBlockEditor'   => self::post_uses_block_editor($post_id),
             'defaultMessages' => array(
                 'buildingPrompt' => __('Montando prompt con el manual editorial…', 'ensorlogs'),
-                'promptCopied'   => __('Prompt copiado. Pégalo en ChatGPT, espera el HTML y vuelve aquí.', 'ensorlogs'),
-                'importing'      => __('Insertando HTML en el editor…', 'ensorlogs'),
+                'promptCopied'   => __('Prompt copiado. Pégalo en ChatGPT y vuelve aquí con la respuesta RAW.', 'ensorlogs'),
+                'importing'      => __('Insertando LOG en el editor…', 'ensorlogs'),
                 'importSuccess'  => __('LOG insertado en el editor. Revisa antes de publicar.', 'ensorlogs'),
                 'savedReload'    => __('LOG guardado. Si no lo ves, guarda borrador y recarga la página.', 'ensorlogs'),
                 'missingTopic'   => __('Escribe el tema del LOG antes de copiar el prompt.', 'ensorlogs'),
-                'missingHtml'    => __('Pega el HTML que devolvió ChatGPT.', 'ensorlogs'),
+                'missingRaw'     => __('Pega la respuesta RAW de ChatGPT (formato EnsorLogs).', 'ensorlogs'),
+                'missingHtml'    => __('Pega la respuesta RAW de ChatGPT (formato EnsorLogs).', 'ensorlogs'),
                 'copyFailed'     => __('No se pudo copiar al portapapeles. Usa el cuadro de abajo y cópialo a mano (Ctrl+C).', 'ensorlogs'),
             ),
         );
@@ -250,12 +251,26 @@ final class EAE_Admin
             <div class="ensor-cpt-meta__section eae-section-import">
                 <h3 class="ensor-cpt-meta__title"><?php esc_html_e('Paso 3 — Respuesta de ChatGPT', 'ensorlogs'); ?></h3>
                 <div class="ensor-cpt-meta__row">
-                    <label for="eae-html-paste"><?php esc_html_e('Pega aquí el HTML del log', 'ensorlogs'); ?></label>
-                    <textarea id="eae-html-paste" class="large-text code" rows="10" placeholder="<?php esc_attr_e('Pega solo el HTML que devolvió ChatGPT (sin explicaciones).', 'ensorlogs'); ?>"></textarea>
+                    <label for="eae-html-paste"><?php esc_html_e('Pega aquí la respuesta de ChatGPT', 'ensorlogs'); ?></label>
+                    <textarea
+                        id="eae-html-paste"
+                        class="large-text code"
+                        rows="10"
+                        placeholder="<?php echo esc_attr(
+                            "Pega aquí la respuesta generada por ChatGPT usando el formato RAW EnsorLogs.\n\n"
+                            . "Ejemplo:\n\n"
+                            . "[ALGUNAS_PALABRAS]\ncontenido...\n[/ALGUNAS_PALABRAS]\n\n"
+                            . "[DATOS_REALES]\ncontenido...\n[/DATOS_REALES]\n\n"
+                            . "[ESTUDIANTE]\ncontenido...\n[/ESTUDIANTE]\n\n"
+                            . "[PROFESOR]\ncontenido...\n[/PROFESOR]\n\n"
+                            . "[PROFESIONAL]\ncontenido...\n[/PROFESIONAL]\n\n"
+                            . "[REFLEXION]\ncontenido...\n[/REFLEXION]"
+                        ); ?>"
+                    ></textarea>
                 </div>
                 <p class="eae-actions">
                     <button type="button" class="button button-secondary button-hero" id="eae-import-html">
-                        <?php esc_html_e('Insertar HTML en el editor', 'ensorlogs'); ?>
+                        <?php esc_html_e('Insertar LOG en el editor', 'ensorlogs'); ?>
                     </button>
                     <span class="eae-status" id="eae-status" role="status" aria-live="polite"></span>
                 </p>

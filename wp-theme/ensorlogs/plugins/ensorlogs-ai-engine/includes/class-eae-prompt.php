@@ -1,6 +1,6 @@
 <?php
 /**
- * Prompt builder and HTML guardrails.
+ * Prompt builder, RAW EnsorLogs → HTML, and HTML guardrails.
  */
 
 if (!defined('ABSPATH')) {
@@ -10,52 +10,19 @@ if (!defined('ABSPATH')) {
 final class EAE_Prompt
 {
     /**
-     * Prompt único para pegar en ChatGPT (Plus): manual editorial + brief del log.
+     * Prompt único para pegar en ChatGPT: manual + brief.
      *
      * @param array<string,mixed> $input
      */
     public static function build_chatgpt_prompt(array $input): string
     {
-        $manual     = function_exists('eae_get_editorial_manual') ? eae_get_editorial_manual() : '';
-        $brief      = self::build_brief_block($input);
-        $experience = trim((string) ($input['experience'] ?? ''));
+        $manual = function_exists('eae_get_editorial_manual') ? eae_get_editorial_manual() : '';
+        $brief  = self::build_brief_block($input);
 
-        $experience_rule = '';
-        if ($experience !== '') {
-            $experience_rule = "\n\n--- EXPERIENCIA PERSONAL DE ENSOR (obligatoria) ---\n\n"
-                . "La experiencia personal proporcionada por Ensor en el brief debe utilizarse obligatoriamente dentro de:\n"
-                . "- Algunas Palabras\n"
-                . "- Reflexión EnsorLogs\n\n"
-                . "No ignorar esta información.\n"
-                . "No resumirla en una sola frase.\n"
-                . "Debe integrarse de forma natural dentro del contenido.\n";
-        }
-
-        return trim(
-            "Amplifica la voz de Ensor y escribe un LOG completo para EnsorLogs siguiendo el manual y el brief.\n"
-            . "El protagonista es Ensor, no un redactor externo.\n\n"
-            . $manual
-            . $experience_rule
-            . "\n\n--- BRIEF DE ESTE LOG ---\n\n"
-            . "Si el brief trae errores ortográficos evidentes o nombres técnicos mal escritos, corrígelos al redactar "
-            . "sin cambiar la intención de Ensor.\n\n"
-            . $brief
-            . "\n\n--- SALIDA ---\n\n"
-            . "Toda la respuesta debe ser un único HTML continuo.\n"
-            . "No dividir el contenido.\n"
-            . "No usar markdown.\n"
-            . "No usar bloques de código.\n"
-            . "No añadir explicaciones fuera del HTML.\n"
-            . "La respuesta debe poder copiarse directamente y pegarse en WordPress.\n\n"
-            . "Incluye las 7 secciones del manual en orden: Algunas Palabras, Datos Reales, "
-            . "¿Eres estudiante?, ¿Eres profesor?, Como profesional, Reflexión EnsorLogs y LOG QUESTIONS (5 ítems).\n"
-            . "No incluyas sección ensor-quiz ni data-quiz."
-        );
+        return trim($manual . "\n\n--- BRIEF DE ESTE LOG ---\n\n" . $brief);
     }
 
     /**
-     * Bloque de brief reutilizable.
-     *
      * @param array<string,mixed> $input
      */
     public static function build_brief_block(array $input): string
@@ -81,21 +48,153 @@ final class EAE_Prompt
         $level    = 'Básico';
         $audience = 'Estudiantes';
 
-        $lines = array('Tema: ' . $topic);
-        if ($context !== '') {
-            $lines[] = 'Contexto/enfoque: ' . $context;
-        }
-        if ($experience !== '') {
-            $lines[] = 'Experiencia personal: ' . $experience;
-        }
-        if ($teach !== '') {
-            $lines[] = 'Qué enseñar: ' . $teach;
-        }
-        $lines[] = 'Stacks / tipo de log: ' . $log_type;
-        $lines[] = 'Nivel técnico: ' . $level;
-        $lines[] = 'Público principal: ' . $audience;
+        $lines = array(
+            'Tema: ' . $topic,
+            'Contexto o enfoque: ' . ($context !== '' ? $context : '(no indicado)'),
+            'Experiencia personal: ' . ($experience !== '' ? $experience : '(no indicada)'),
+            'Qué quiero enseñar: ' . ($teach !== '' ? $teach : '(no indicado)'),
+            'Stack: ' . $log_type,
+            'Nivel: ' . $level,
+            'Público: ' . $audience,
+        );
 
         return implode("\n", $lines);
+    }
+
+    public static function is_raw_format(string $text): bool
+    {
+        return (bool) preg_match(
+            '/\[(ALGUNAS_PALABRAS|DATOS_REALES|ESTUDIANTE|PROFESOR|PROFESIONAL|REFLEXION)\]/i',
+            $text
+        );
+    }
+
+    /**
+     * Convierte formato RAW EnsorLogs al HTML del editor.
+     */
+    public static function raw_to_html(string $raw): string
+    {
+        $raw = trim($raw);
+        if ($raw === '') {
+            return '';
+        }
+
+        $sections = array(
+            'ALGUNAS_PALABRAS' => array('aud' => 'context', 'title' => 'Algunas Palabras'),
+            'DATOS_REALES'     => array('aud' => 'data', 'title' => 'Datos Reales'),
+            'ESTUDIANTE'       => array('aud' => 'student', 'title' => '¿Eres estudiante?'),
+            'PROFESOR'         => array('aud' => 'teacher', 'title' => '¿Eres profesor?'),
+            'PROFESIONAL'      => array('aud' => 'professional', 'title' => 'Como profesional'),
+            'REFLEXION'        => array('aud' => 'context', 'title' => 'Reflexión EnsorLogs'),
+        );
+
+        $html = '';
+        foreach ($sections as $tag => $meta) {
+            $pattern = '/\[' . preg_quote($tag, '/') . '\]\s*([\s\S]*?)\s*\[\/' . preg_quote($tag, '/') . '\]/i';
+            if (!preg_match($pattern, $raw, $match)) {
+                continue;
+            }
+            $body = self::raw_body_to_html(trim($match[1]));
+            if ($body === '') {
+                continue;
+            }
+            $html .= '<section class="ensor-aud-section" data-aud="' . esc_attr($meta['aud']) . '">'
+                . '<h2>' . esc_html($meta['title']) . '</h2>'
+                . $body
+                . '</section>' . "\n";
+        }
+
+        return trim($html);
+    }
+
+    private static function raw_body_to_html(string $body): string
+    {
+        if ($body === '') {
+            return '';
+        }
+
+        $body = preg_replace_callback(
+            '/\[PROMPT\]\s*([\s\S]*?)\s*\[\/PROMPT\]/i',
+            static function (array $m): string {
+                return "\n\n<pre><code>" . esc_html($m[1]) . "</code></pre>\n\n";
+            },
+            $body
+        ) ?? $body;
+
+        $body = preg_replace_callback(
+            '/\[CODE\]\s*([\s\S]*?)\s*\[\/CODE\]/i',
+            static function (array $m): string {
+                return "\n\n<pre><code>" . esc_html($m[1]) . "</code></pre>\n\n";
+            },
+            $body
+        ) ?? $body;
+
+        $body = preg_replace_callback(
+            '/\[COMMAND\]\s*([\s\S]*?)\s*\[\/COMMAND\]/i',
+            static function (array $m): string {
+                return "\n\n<pre><code>" . esc_html($m[1]) . "</code></pre>\n\n";
+            },
+            $body
+        ) ?? $body;
+
+        $chunks = preg_split('/\n\s*\n/', trim($body)) ?: array();
+        $html   = '';
+
+        foreach ($chunks as $chunk) {
+            $chunk = trim($chunk);
+            if ($chunk === '') {
+                continue;
+            }
+            if (str_starts_with($chunk, '<pre')) {
+                $html .= $chunk;
+                continue;
+            }
+            if (preg_match('/^FUENTES CONSULTADAS\s*$/iu', $chunk)) {
+                $html .= '<p><strong>FUENTES CONSULTADAS</strong></p>';
+                continue;
+            }
+            if (preg_match('/^-\s/m', $chunk)) {
+                $html .= self::raw_list_to_html($chunk);
+                continue;
+            }
+            $html .= '<p>' . nl2br(esc_html($chunk), false) . '</p>';
+        }
+
+        return $html;
+    }
+
+    private static function raw_list_to_html(string $chunk): string
+    {
+        $lines = preg_split('/\r\n|\r|\n/', $chunk) ?: array();
+        $items = array();
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+            if (preg_match('/^[-·•]\s*(.+)$/', $line, $m)) {
+                $items[] = '<li>' . esc_html(trim($m[1])) . '</li>';
+            } elseif ($items) {
+                $items[count($items) - 1] = rtrim($items[count($items) - 1], '</li>')
+                    . ' ' . esc_html($line) . '</li>';
+            }
+        }
+        if (!$items) {
+            return '<p>' . nl2br(esc_html($chunk), false) . '</p>';
+        }
+        return '<ul>' . implode('', $items) . '</ul>';
+    }
+
+    /**
+     * Convierte contenido RAW EnsorLogs pegado en el Paso 3.
+     */
+    public static function normalize_import_content(string $content): string
+    {
+        $content = trim($content);
+        if ($content === '' || !self::is_raw_format($content)) {
+            return '';
+        }
+        return self::raw_to_html($content);
     }
 
     public static function sanitize_generated_html(string $html): string
@@ -107,6 +206,7 @@ final class EAE_Prompt
                 'data-quiz' => true,
             ),
             'h2'         => array('id' => true),
+            'h3'         => array('id' => true),
             'p'          => array(),
             'strong'     => array(),
             'em'         => array(),
@@ -116,8 +216,8 @@ final class EAE_Prompt
             'ol'         => array(),
             'li'         => array(),
             'blockquote' => array(),
-            'code'       => array(),
-            'pre'        => array(),
+            'code'       => array('class' => true),
+            'pre'        => array('class' => true),
         );
 
         $clean = wp_kses($html, $allowed);
