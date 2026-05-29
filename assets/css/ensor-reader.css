@@ -8,7 +8,8 @@
     /* Borde inferior del header fijo del sitio (px); lo rellena ensor-reader.js al cargar y al redimensionar. */
     --ensor-site-header-offset: 6.5rem;
     --ensor-reader-progress-h: 3px;
-    --ensor-reader-toc-w: 260px;
+    --ensor-reader-toc-w: 196px;
+    --ensor-reader-layout-max: 1280px;
     --ensor-reader-radius: 14px;
     --ensor-reader-bg-soft: rgba(255, 255, 255, 0.78);
     --ensor-reader-bg-soft-dark: rgba(20, 21, 23, 0.78);
@@ -498,11 +499,11 @@ html.dark .ensor-ai-prompt__copy {
 
 /* -------------------------------------------------------------------------
    Hero / imagen destacada del log
-   Alineada al ancho del grid (1180 px máx) y con respiración generosa.
+   Alineada al ancho del grid (1280 px máx) y con respiración generosa.
    ------------------------------------------------------------------------- */
 .ensor-reader-hero {
     /* Sobrescribe el max-w-screen-lg (1024px) que viene de Tailwind */
-    max-width: 1180px !important;
+    max-width: var(--ensor-reader-layout-max) !important;
     margin-left: auto;
     margin-right: auto;
     margin-top: 1rem;
@@ -584,6 +585,14 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
     width: 100%;
+    max-width: var(--ensor-reader-layout-max);
+    margin-left: auto;
+    margin-right: auto;
+}
+.ensor-reader-head {
+    max-width: var(--ensor-reader-layout-max);
+    margin-left: auto;
+    margin-right: auto;
 }
 .ensor-reader-layout > * {
     min-width: 0;
@@ -630,7 +639,7 @@ html.dark .ensor-reader-body :where(strong, b) {
 @media (min-width: 1024px) {
     .ensor-reader-layout {
         grid-template-columns: var(--ensor-reader-toc-w) minmax(0, 1fr);
-        gap: 2.5rem;
+        gap: 2rem;
         align-items: stretch;
     }
     .ensor-reader-toc {
@@ -640,7 +649,7 @@ html.dark .ensor-reader-body :where(strong, b) {
         position: sticky;
         top: calc(var(--ensor-site-header-offset, 6.5rem) + 12px);
         max-height: calc(100vh - var(--ensor-site-header-offset, 6.5rem) - 2rem);
-        padding-right: 0.5rem;
+        padding-right: 0.25rem;
     }
     .ensor-reader-toc__list {
         flex: 1 1 auto;
@@ -651,7 +660,7 @@ html.dark .ensor-reader-body :where(strong, b) {
 }
 @media (min-width: 1280px) {
     .ensor-reader-layout {
-        gap: 3rem;
+        gap: 2.25rem;
     }
 }
 .ensor-reader-toc__title {
@@ -677,13 +686,13 @@ html.dark .ensor-reader-toc__list {
 }
 .ensor-reader-toc__link {
     display: block;
-    padding: 0.4rem 0.85rem;
+    padding: 0.35rem 0.6rem;
     margin-left: -1px;
     border-left: 2px solid transparent;
     color: inherit;
     text-decoration: none;
-    font-size: 0.875rem;
-    line-height: 1.4;
+    font-size: 0.8125rem;
+    line-height: 1.35;
     transition: color .2s ease, border-color .2s ease, background-color .2s ease;
 }
 .ensor-reader-toc__link:hover {
@@ -695,8 +704,8 @@ html.dark .ensor-reader-toc__list {
     font-weight: 600;
 }
 .ensor-reader-toc__item--h3 .ensor-reader-toc__link {
-    padding-left: 1.5rem;
-    font-size: 0.825rem;
+    padding-left: 1.15rem;
+    font-size: 0.78rem;
     opacity: 0.85;
 }
 .ensor-reader-toc__item--quiz .ensor-reader-toc__link {

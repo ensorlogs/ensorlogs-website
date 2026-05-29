@@ -1,0 +1,103 @@
+/* =========================================================================
+   Ensorlogs · Compartir log en redes
+   ========================================================================= */
+
+.ensor-log-share {
+    margin: 1.75rem 0 2rem;
+    padding: 1.75rem 1.25rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--ensor-reader-edge, rgba(0, 0, 0, 0.08));
+    background: rgba(255, 255, 255, 0.72);
+}
+html.dark .ensor-log-share {
+    border-color: var(--ensor-reader-edge-dark, rgba(255, 255, 255, 0.08));
+    background: rgba(20, 21, 23, 0.55);
+}
+
+.ensor-log-share__title {
+    margin: 0 0 1rem;
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.35;
+    font-weight: 700;
+    color: #2a2c30;
+}
+html.dark .ensor-log-share__title {
+    color: #f3f4f6;
+}
+
+.ensor-log-share__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 0.65rem;
+}
+
+.ensor-log-share__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid currentColor;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+html.dark .ensor-log-share__btn {
+    background: rgba(255, 255, 255, 0.04);
+}
+.ensor-log-share__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.ensor-log-share__btn:focus-visible {
+    outline: 2px solid var(--ensor-accent, #d9a300);
+    outline-offset: 2px;
+}
+
+.ensor-log-share__icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+.ensor-log-share__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.ensor-log-share__btn--linkedin { color: #0077b5; }
+.ensor-log-share__btn--twitter  { color: #111827; }
+.ensor-log-share__btn--facebook { color: #1877f2; }
+.ensor-log-share__btn--whatsapp { color: #25d366; }
+.ensor-log-share__btn--email    { color: #4b5563; }
+
+html.dark .ensor-log-share__btn--twitter { color: #f3f4f6; }
+html.dark .ensor-log-share__btn--email    { color: #d1d5db; }
+
+.ensor-log-share__btn--linkedin:hover { background: rgba(0, 119, 181, 0.08); }
+.ensor-log-share__btn--twitter:hover  { background: rgba(17, 24, 39, 0.06); }
+.ensor-log-share__btn--facebook:hover { background: rgba(24, 119, 242, 0.08); }
+.ensor-log-share__btn--whatsapp:hover { background: rgba(37, 211, 102, 0.08); }
+.ensor-log-share__btn--email:hover    { background: rgba(75, 85, 99, 0.08); }
+
+@media (min-width: 768px) {
+    .ensor-log-share__list {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 479px) {
+    .ensor-log-share__list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

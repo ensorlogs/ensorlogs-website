@@ -371,6 +371,7 @@ add_filter(
             'ensorlogs-blog-filter',
             'ensorlogs-projects-filter',
             'ensorlogs-reader',
+            'ensorlogs-log-rating',
             'ensorlogs-newsletter',
         );
         if (!in_array($handle, $defer, true)) {
@@ -400,6 +401,7 @@ add_filter(
             'ensor-lang-switch.js',
             'ensor-newsletter.js',
             'ensor-quiz.js',
+            'ensor-log-rating.js',
             'ensor-reader.js',
         );
         foreach ($files as $file) {
@@ -409,6 +411,7 @@ add_filter(
         $exclude[] = 'ensorlogs-a11y';
         $exclude[] = 'ensorlogs-cookies';
         $exclude[] = 'ensorlogs-quiz';
+        $exclude[] = 'ensorlogs-log-rating';
 
         return $exclude;
     }
@@ -426,6 +429,7 @@ add_filter(
             'ensor-lang-switch.js',
             'ensor-newsletter.js',
             'ensor-quiz.js',
+            'ensor-log-rating.js',
             'ensor-reader.js',
         );
         foreach ($files as $file) {

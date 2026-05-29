@@ -102,7 +102,7 @@ while (have_posts()) {
 
     <article id="post-<?php the_ID(); ?>" <?php post_class('ensor-reader main-content mt-28 md:mt-32 lg:mt-36 xl:mt-44'); ?>>
         <div class="container">
-            <header class="ensor-reader-head max-w-[1180px] mx-auto" data-aos="fade-up">
+            <header class="ensor-reader-head mx-auto" data-aos="fade-up">
                 <h1 class="font-bold text-3xl lg:text-4xl xl:text-5xl text-powerBlack dark:text-pastelGrey mb-3 leading-tight">
                     <?php the_title(); ?>
                 </h1>
@@ -202,7 +202,7 @@ while (have_posts()) {
             </div>
             <?php endif; ?>
 
-            <div class="ensor-reader-layout max-w-[1180px] mx-auto">
+            <div class="ensor-reader-layout mx-auto">
                 <aside class="ensor-reader-toc hidden lg:block" aria-label="<?php esc_attr_e('Índice del log', 'ensorlogs'); ?>">
                     <p class="ensor-reader-toc__title"><?php esc_html_e('En este log', 'ensorlogs'); ?></p>
                     <ul class="ensor-reader-toc__list"></ul>
@@ -222,6 +222,20 @@ while (have_posts()) {
                             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             echo $ensor_quiz_html;
                         }
+                    }
+                    ?>
+
+                    <?php
+                    if (function_exists('ensorlogs_render_log_rating_section')) {
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo ensorlogs_render_log_rating_section((int) get_the_ID());
+                    }
+                    ?>
+
+                    <?php
+                    if (function_exists('ensorlogs_render_log_share_section')) {
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo ensorlogs_render_log_share_section((int) get_the_ID());
                     }
                     ?>
 

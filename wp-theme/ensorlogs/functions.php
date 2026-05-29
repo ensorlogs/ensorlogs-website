@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.58');
+define('ENSORLOGS_THEME_VERSION', '1.10.59');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -23,6 +23,8 @@ require_once get_template_directory() . '/inc/newsletter.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/updater.php';
 require_once get_template_directory() . '/inc/reader.php';
+require_once get_template_directory() . '/inc/log-rating.php';
+require_once get_template_directory() . '/inc/log-share.php';
 require_once get_template_directory() . '/inc/block-patterns.php';
 require_once get_template_directory() . '/inc/i18n.php';
 require_once get_template_directory() . '/inc/legal-i18n.php';
@@ -222,6 +224,27 @@ add_action('wp_enqueue_scripts', static function (): void {
             array(),
             $v,
             true
+        );
+        $rating_cfg = ensorlogs_log_rating_client_config((int) get_queried_object_id());
+        wp_enqueue_style(
+            'ensorlogs-log-rating',
+            $uri . '/assets/css/ensor-log-rating.css',
+            array('ensorlogs-reader'),
+            $v
+        );
+        wp_enqueue_script(
+            'ensorlogs-log-rating',
+            $uri . '/assets/js/ensor-log-rating.js',
+            array(),
+            $v,
+            true
+        );
+        wp_localize_script('ensorlogs-log-rating', 'ensorLogRating', $rating_cfg);
+        wp_enqueue_style(
+            'ensorlogs-log-share',
+            $uri . '/assets/css/ensor-log-share.css',
+            array('ensorlogs-reader'),
+            $v
         );
     }
 

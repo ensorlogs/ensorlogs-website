@@ -1,0 +1,123 @@
+/* =========================================================================
+   Ensorlogs · Valoración con estrellas al final de cada log
+   ========================================================================= */
+
+.ensor-log-rating {
+    margin: 2.5rem 0 1.5rem;
+    padding: 2rem 1.25rem 1.75rem;
+    text-align: center;
+    border-radius: 16px;
+    border: 1px solid var(--ensor-reader-edge, rgba(0, 0, 0, 0.08));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+}
+html.dark .ensor-log-rating {
+    border-color: var(--ensor-reader-edge-dark, rgba(255, 255, 255, 0.08));
+    background: linear-gradient(180deg, rgba(28, 30, 33, 0.72), rgba(20, 21, 23, 0.58));
+}
+
+.ensor-log-rating__title {
+    margin: 0 0 0.45rem;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    line-height: 1.35;
+    font-weight: 700;
+    color: #2a2c30;
+}
+html.dark .ensor-log-rating__title {
+    color: #f3f4f6;
+}
+
+.ensor-log-rating__hint,
+.ensor-log-rating__empty {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    color: rgba(42, 44, 48, 0.72);
+}
+html.dark .ensor-log-rating__hint,
+html.dark .ensor-log-rating__empty {
+    color: rgba(243, 244, 246, 0.72);
+}
+
+.ensor-log-rating__stars {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0.15rem 0 0.85rem;
+}
+.ensor-log-rating__stars.is-busy {
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.ensor-log-rating__star {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0.15rem;
+    cursor: pointer;
+    line-height: 0;
+    color: #c5cad3;
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+.ensor-log-rating__star:hover:not(:disabled),
+.ensor-log-rating__star:focus-visible:not(:disabled) {
+    transform: scale(1.08);
+}
+.ensor-log-rating__star:disabled {
+    cursor: default;
+}
+.ensor-log-rating__star:focus-visible {
+    outline: 2px solid var(--ensor-accent, #d9a300);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.ensor-log-rating__icon {
+    width: 34px;
+    height: 34px;
+    fill: currentColor;
+}
+@media (min-width: 768px) {
+    .ensor-log-rating__icon {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+.ensor-log-rating__star.is-active,
+.ensor-log-rating__star.is-hover {
+    color: #2563eb;
+}
+html.dark .ensor-log-rating__star.is-active,
+html.dark .ensor-log-rating__star.is-hover {
+    color: #60a5fa;
+}
+
+.ensor-log-rating__stats,
+.ensor-log-rating__thanks {
+    margin: 0;
+    font-size: 0.875rem;
+    color: rgba(42, 44, 48, 0.68);
+}
+html.dark .ensor-log-rating__stats,
+html.dark .ensor-log-rating__thanks {
+    color: rgba(243, 244, 246, 0.68);
+}
+
+.ensor-log-rating__thanks {
+    margin-top: 0.35rem;
+    font-weight: 600;
+    color: var(--ensor-accent, #d9a300);
+}
+html.dark .ensor-log-rating__thanks {
+    color: #facc15;
+}
+
+.ensor-log-rating__error {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    color: #b91c1c;
+}
+html.dark .ensor-log-rating__error {
+    color: #fca5a5;
+}
