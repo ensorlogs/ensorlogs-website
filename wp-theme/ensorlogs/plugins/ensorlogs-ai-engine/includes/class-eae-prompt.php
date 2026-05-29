@@ -80,12 +80,12 @@ final class EAE_Prompt
         }
 
         $sections = array(
-            'ALGUNAS_PALABRAS' => array('aud' => 'context', 'title' => 'Algunas Palabras'),
+            'ALGUNAS_PALABRAS' => array('aud' => '', 'title' => 'Algunas Palabras', 'plain' => true),
             'DATOS_REALES'     => array('aud' => 'data', 'title' => 'Datos Reales'),
             'ESTUDIANTE'       => array('aud' => 'student', 'title' => '¿Eres estudiante?'),
             'PROFESOR'         => array('aud' => 'teacher', 'title' => '¿Eres profesor?'),
             'PROFESIONAL'      => array('aud' => 'professional', 'title' => 'Como profesional'),
-            'REFLEXION'        => array('aud' => 'context', 'title' => 'Reflexión EnsorLogs'),
+            'REFLEXION'        => array('aud' => '', 'title' => 'Reflexión EnsorLogs', 'plain' => true),
         );
 
         $html = '';
@@ -96,6 +96,10 @@ final class EAE_Prompt
             }
             $body = self::raw_body_to_html(trim($match[1]));
             if ($body === '') {
+                continue;
+            }
+            if (!empty($meta['plain'])) {
+                $html .= '<h2>' . esc_html($meta['title']) . '</h2>' . $body . "\n";
                 continue;
             }
             $html .= '<section class="ensor-aud-section" data-aud="' . esc_attr($meta['aud']) . '">'
@@ -114,9 +118,25 @@ final class EAE_Prompt
         }
 
         $body = preg_replace_callback(
+            '/\[CITA\]\s*([\s\S]*?)\s*\[\/CITA\]/i',
+            static function (array $m): string {
+                return "\n\n" . self::raw_quote_to_html($m[1]) . "\n\n";
+            },
+            $body
+        ) ?? $body;
+
+        $body = preg_replace_callback(
+            '/\[IDEA_CLAVE\]\s*([\s\S]*?)\s*\[\/IDEA_CLAVE\]/i',
+            static function (array $m): string {
+                return "\n\n" . self::raw_callout_to_html($m[1]) . "\n\n";
+            },
+            $body
+        ) ?? $body;
+
+        $body = preg_replace_callback(
             '/\[PROMPT\]\s*([\s\S]*?)\s*\[\/PROMPT\]/i',
             static function (array $m): string {
-                return "\n\n<pre><code>" . esc_html($m[1]) . "</code></pre>\n\n";
+                return "\n\n" . self::raw_prompt_to_html($m[1]) . "\n\n";
             },
             $body
         ) ?? $body;
@@ -145,7 +165,7 @@ final class EAE_Prompt
             if ($chunk === '') {
                 continue;
             }
-            if (str_starts_with($chunk, '<pre')) {
+            if (str_starts_with($chunk, '<pre') || str_starts_with($chunk, '<div') || str_starts_with($chunk, '<blockquote')) {
                 $html .= $chunk;
                 continue;
             }
@@ -153,14 +173,71 @@ final class EAE_Prompt
                 $html .= '<p><strong>FUENTES CONSULTADAS</strong></p>';
                 continue;
             }
+            if (self::is_internal_subtitle($chunk)) {
+                $title = preg_replace('/^#{1,3}\s*/u', '', $chunk);
+                $html .= '<h3>' . self::raw_inline_format($title) . '</h3>';
+                continue;
+            }
             if (preg_match('/^-\s/m', $chunk)) {
                 $html .= self::raw_list_to_html($chunk);
                 continue;
             }
-            $html .= '<p>' . nl2br(esc_html($chunk), false) . '</p>';
+            if (preg_match('/^\d+\.\s/m', $chunk)) {
+                $html .= self::raw_ol_to_html($chunk);
+                continue;
+            }
+            $html .= '<p>' . nl2br(self::raw_inline_format($chunk), false) . '</p>';
         }
 
         return $html;
+    }
+
+    /**
+     * Convierte **negrita** y *cursiva* del RAW a HTML seguro.
+     */
+    private static function raw_inline_format(string $text): string
+    {
+        $text = esc_html($text);
+        $text = preg_replace('/==(.+?)==/s', '<mark>$1</mark>', $text) ?? $text;
+        $text = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', $text) ?? $text;
+        $text = preg_replace('/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/s', '<em>$1</em>', $text) ?? $text;
+        return $text;
+    }
+
+    private static function raw_quote_to_html(string $content): string
+    {
+        $content = trim($content);
+        if ($content === '') {
+            return '';
+        }
+        return '<blockquote><p>' . nl2br(self::raw_inline_format($content), false) . '</p></blockquote>';
+    }
+
+    private static function raw_callout_to_html(string $content): string
+    {
+        $content = trim($content);
+        if ($content === '') {
+            return '';
+        }
+        return '<div class="ensor-reader-callout"><p>' . nl2br(self::raw_inline_format($content), false) . '</p></div>';
+    }
+
+    private static function is_internal_subtitle(string $chunk): bool
+    {
+        if (preg_match('/^#{1,3}\s+\S/u', $chunk)) {
+            return strpos($chunk, "\n") === false;
+        }
+        if (strpos($chunk, "\n") !== false) {
+            return false;
+        }
+        $len = mb_strlen($chunk);
+        if ($len < 12 || $len > 180) {
+            return false;
+        }
+        if (preg_match('/^(introducción|características|beneficios|conclusión|resumen)$/iu', $chunk)) {
+            return false;
+        }
+        return (bool) preg_match('/^.+:.+$/u', $chunk);
     }
 
     private static function raw_list_to_html(string $chunk): string
@@ -173,16 +250,69 @@ final class EAE_Prompt
                 continue;
             }
             if (preg_match('/^[-·•]\s*(.+)$/', $line, $m)) {
-                $items[] = '<li>' . esc_html(trim($m[1])) . '</li>';
+                $items[] = '<li>' . self::raw_inline_format(trim($m[1])) . '</li>';
             } elseif ($items) {
                 $items[count($items) - 1] = rtrim($items[count($items) - 1], '</li>')
-                    . ' ' . esc_html($line) . '</li>';
+                    . ' ' . self::raw_inline_format($line) . '</li>';
             }
         }
         if (!$items) {
-            return '<p>' . nl2br(esc_html($chunk), false) . '</p>';
+            return '<p>' . nl2br(self::raw_inline_format($chunk), false) . '</p>';
         }
         return '<ul>' . implode('', $items) . '</ul>';
+    }
+
+    private static function raw_ol_to_html(string $chunk): string
+    {
+        $lines = preg_split('/\r\n|\r|\n/', $chunk) ?: array();
+        $items = array();
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+            if (preg_match('/^\d+\.\s*(.+)$/', $line, $m)) {
+                $items[] = '<li>' . self::raw_inline_format(trim($m[1])) . '</li>';
+            } elseif ($items) {
+                $items[count($items) - 1] = rtrim($items[count($items) - 1], '</li>')
+                    . ' ' . self::raw_inline_format($line) . '</li>';
+            }
+        }
+        if (!$items) {
+            return '<p>' . nl2br(self::raw_inline_format($chunk), false) . '</p>';
+        }
+        return '<ol>' . implode('', $items) . '</ol>';
+    }
+
+    /**
+     * Bloque Prompt IA (mismo markup que articulos/wordpress-vale-pena-aprender-2026).
+     */
+    private static function raw_prompt_to_html(string $content): string
+    {
+        $content = trim($content);
+        if ($content === '') {
+            return '';
+        }
+
+        $title = 'Prompt IA';
+        $body  = $content;
+
+        if (preg_match('/^Prompt IA\s*[—\-:]/iu', $content)) {
+            $lines = preg_split('/\r\n|\r|\n/', $content, 2);
+            if (is_array($lines) && isset($lines[0]) && trim($lines[0]) !== '') {
+                $title = trim($lines[0]);
+                $body  = isset($lines[1]) ? trim($lines[1]) : '';
+            }
+        }
+
+        if ($body === '') {
+            $body = $content;
+        }
+
+        return '<div class="ensor-ai-prompt">'
+            . '<p><strong>' . esc_html($title) . '</strong></p>'
+            . '<pre>' . esc_html($body) . '</pre>'
+            . '</div>';
     }
 
     /**
@@ -200,6 +330,7 @@ final class EAE_Prompt
     public static function sanitize_generated_html(string $html): string
     {
         $allowed = array(
+            'div'        => array('class' => true),
             'section' => array(
                 'class'     => true,
                 'data-aud'  => true,
@@ -290,7 +421,6 @@ final class EAE_Prompt
     private static function enforce_required_sections(string $html): string
     {
         $required = array(
-            'context'      => 'Algunas Palabras',
             'data'         => 'Datos Reales',
             'student'      => '¿Eres estudiante?',
             'teacher'      => '¿Eres profesor?',
