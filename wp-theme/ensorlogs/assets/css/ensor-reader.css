@@ -8,8 +8,8 @@
     /* Borde inferior del header fijo del sitio (px); lo rellena ensor-reader.js al cargar y al redimensionar. */
     --ensor-site-header-offset: 6.5rem;
     --ensor-reader-progress-h: 3px;
-    --ensor-reader-toc-w: 196px;
-    --ensor-reader-layout-max: 1280px;
+    --ensor-reader-toc-w: 11rem;
+    --ensor-reader-layout-max: 100%;
     --ensor-reader-radius: 14px;
     --ensor-reader-bg-soft: rgba(255, 255, 255, 0.78);
     --ensor-reader-bg-soft-dark: rgba(20, 21, 23, 0.78);
@@ -594,6 +594,20 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Logs: usar más ancho útil que el .container genérico */
+@media (min-width: 1024px) {
+    .ensor-reader > .container {
+        max-width: 1360px;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+}
+@media (min-width: 1440px) {
+    .ensor-reader > .container {
+        max-width: min(1440px, calc(100vw - 2.5rem));
+    }
+}
 .ensor-reader-layout > * {
     min-width: 0;
 }
@@ -638,18 +652,20 @@ html.dark .ensor-reader-body :where(strong, b) {
    El título queda fijo arriba; la lista hace scroll si hay muchos ítems. */
 @media (min-width: 1024px) {
     .ensor-reader-layout {
-        grid-template-columns: var(--ensor-reader-toc-w) minmax(0, 1fr);
-        gap: 2rem;
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        gap: 1rem;
         align-items: stretch;
     }
     .ensor-reader-toc {
         display: flex;
         flex-direction: column;
         align-self: stretch;
+        width: max-content;
+        max-width: var(--ensor-reader-toc-w);
         position: sticky;
         top: calc(var(--ensor-site-header-offset, 6.5rem) + 12px);
         max-height: calc(100vh - var(--ensor-site-header-offset, 6.5rem) - 2rem);
-        padding-right: 0.25rem;
+        padding-right: 0;
     }
     .ensor-reader-toc__list {
         flex: 1 1 auto;
@@ -660,7 +676,10 @@ html.dark .ensor-reader-body :where(strong, b) {
 }
 @media (min-width: 1280px) {
     .ensor-reader-layout {
-        gap: 2.25rem;
+        gap: 1.125rem;
+    }
+    .ensor-reader-toc {
+        max-width: 11.5rem;
     }
 }
 .ensor-reader-toc__title {
@@ -686,7 +705,7 @@ html.dark .ensor-reader-toc__list {
 }
 .ensor-reader-toc__link {
     display: block;
-    padding: 0.35rem 0.6rem;
+    padding: 0.32rem 0.45rem 0.32rem 0.55rem;
     margin-left: -1px;
     border-left: 2px solid transparent;
     color: inherit;
@@ -704,7 +723,7 @@ html.dark .ensor-reader-toc__list {
     font-weight: 600;
 }
 .ensor-reader-toc__item--h3 .ensor-reader-toc__link {
-    padding-left: 1.15rem;
+    padding-left: 0.95rem;
     font-size: 0.78rem;
     opacity: 0.85;
 }
