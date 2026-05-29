@@ -37,6 +37,8 @@ final class EAE_Prompt
             . $manual
             . $experience_rule
             . "\n\n--- BRIEF DE ESTE LOG ---\n\n"
+            . "Si el brief trae errores ortográficos evidentes o nombres técnicos mal escritos, corrígelos al redactar "
+            . "sin cambiar la intención de Ensor.\n\n"
             . $brief
             . "\n\n--- SALIDA ---\n\n"
             . "Toda la respuesta debe ser un único HTML continuo.\n"
