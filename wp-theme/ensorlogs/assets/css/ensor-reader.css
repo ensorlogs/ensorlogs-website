@@ -330,25 +330,14 @@ html.dark .ensor-aud-section {
     );
 }
 
-/* Banda superior: icono + etiqueta visible siempre */
+/* Etiqueta superior (icono + pastilla): oculta; el título va en el h1/h2 del contenido */
 .ensor-aud-section::before {
-    content: attr(data-aud-label);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 800;
-    color: var(--ensor-aud-color, var(--ensor-accent, #d9a300));
-    background: color-mix(in srgb, var(--ensor-aud-color, #d9a300) 12%, transparent);
-    padding: 0.3rem 0.7rem 0.3rem 0.55rem;
-    border-radius: 999px;
-    margin-bottom: 0.9rem;
+    content: none;
+    display: none;
 }
 .ensor-aud-section[data-aud=""]::before,
 .ensor-aud-section:not([data-aud-label])::before {
-    content: '';
+    content: none;
     display: none;
 }
 
@@ -389,11 +378,11 @@ html.dark .ensor-aud-section {
 }
 
 /* Heading principal dentro de cada sección: ligeramente teñido para coherencia */
-.ensor-aud-section > :where(h2, h3):first-of-type {
-    margin-top: 0.25rem;
+.ensor-aud-section > :where(h1, h2, h3):first-of-type {
+    margin-top: 0;
     color: var(--ensor-aud-color, currentColor);
 }
-html.dark .ensor-aud-section > :where(h2, h3):first-of-type {
+html.dark .ensor-aud-section > :where(h1, h2, h3):first-of-type {
     color: color-mix(in srgb, var(--ensor-aud-color, #ffd95a) 80%, white);
 }
 
