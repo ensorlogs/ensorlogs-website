@@ -360,6 +360,11 @@ function ensorlogs_page_editable_stale_markers(): array
         'También para cursos y talleres',
         'Tres ideas la mueven',
         'con gente y comunidades que saben',
+        'registro de tres ideas',
+        'con más geeks',
+        'registro de ese viaje',
+        'documento el proceso',
+        'Tres ideas:',
     );
 }
 
