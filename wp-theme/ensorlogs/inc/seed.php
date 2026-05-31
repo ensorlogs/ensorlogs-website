@@ -20,6 +20,7 @@ if (!defined('ABSPATH')) {
 const ENSORLOGS_SEED_VERSION = 9;
 const ENSORLOGS_SEED_META_KEY = '_ensor_seeded_at';
 const ENSORLOGS_PAGE_CONTENT_SEED_META = '_ensor_page_content_seeded';
+const ENSORLOGS_PAGE_EDITABLE_SYNC_OPTION = 'ensorlogs_page_editable_sync_version';
 
 /**
  * Crea las páginas estructurales del sitio si no existen. Si existen
@@ -343,6 +344,98 @@ function ensorlogs_run_theme_seed(): void
 }
 
 /**
+ * Marcadores del copy antiguo de home/about (ES). Si el editor WP aún los
+ * contiene, se puede refrescar desde el fragment del tema sin machacar textos
+ * personalizados que no coincidan.
+ *
+ * @return array<int, string>
+ */
+function ensorlogs_page_editable_stale_markers(): array
+{
+    return array(
+        'Esta es mi bitácora pública',
+        'Soy ingeniero en sistemas',
+        'curioso compulsivo',
+        'Disponible para proyectos',
+        'También para cursos y talleres',
+        'Tres ideas la mueven',
+        'con gente y comunidades que saben',
+    );
+}
+
+function ensorlogs_content_has_stale_editable_marker(string $html): bool
+{
+    $plain = wp_strip_all_tags($html);
+    if ($plain === '') {
+        return false;
+    }
+    foreach (ensorlogs_page_editable_stale_markers() as $marker) {
+        if (stripos($plain, $marker) !== false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Sincroniza inicio/about cuando el editor WP conserva el copy antiguo.
+ */
+function ensorlogs_sync_stale_page_editable_content(): void
+{
+    if (!function_exists('ensorlogs_page_fragments_map')
+        || !function_exists('ensorlogs_extract_fragment_editable_default')) {
+        return;
+    }
+
+    $targets = array('inicio', 'about');
+    $map     = ensorlogs_page_fragments_map();
+
+    foreach ($targets as $slug) {
+        if (!isset($map[$slug])) {
+            continue;
+        }
+        $found = get_posts(array(
+            'post_type'      => 'page',
+            'name'           => $slug,
+            'post_status'    => 'any',
+            'posts_per_page' => 1,
+        ));
+        if (empty($found) || !$found[0] instanceof WP_Post) {
+            continue;
+        }
+        $page    = $found[0];
+        $current = (string) $page->post_content;
+        if (trim(wp_strip_all_tags($current)) === '') {
+            continue;
+        }
+        if (!ensorlogs_content_has_stale_editable_marker($current)) {
+            continue;
+        }
+        $default = ensorlogs_extract_fragment_editable_default($map[$slug]);
+        if ($default === '') {
+            continue;
+        }
+        wp_update_post(array(
+            'ID'           => (int) $page->ID,
+            'post_content' => wp_slash($default),
+        ));
+    }
+}
+
+function ensorlogs_maybe_sync_page_editable_content(): void
+{
+    if (!defined('ENSORLOGS_THEME_VERSION')) {
+        return;
+    }
+    $stored = (string) get_option(ENSORLOGS_PAGE_EDITABLE_SYNC_OPTION, '');
+    if ($stored === ENSORLOGS_THEME_VERSION) {
+        return;
+    }
+    ensorlogs_sync_stale_page_editable_content();
+    update_option(ENSORLOGS_PAGE_EDITABLE_SYNC_OPTION, ENSORLOGS_THEME_VERSION, false);
+}
+
+/**
  * Permite forzar la importación de nuevos elementos al activar / actualizar
  * el tema sin tocar nada de lo que ya esté en la base de datos.
  */
@@ -360,6 +453,17 @@ add_action(
         flush_rewrite_rules(false);
     },
     100
+);
+
+add_action(
+    'init',
+    static function (): void {
+        if (get_template() !== 'ensorlogs') {
+            return;
+        }
+        ensorlogs_maybe_sync_page_editable_content();
+    },
+    5
 );
 
 /**
