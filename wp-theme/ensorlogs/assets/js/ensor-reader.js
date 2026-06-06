@@ -431,6 +431,66 @@
     }
 
     /* ------------------------------------------------------------------
+     * Hero parallax — revela más imagen al hacer scroll
+     * ------------------------------------------------------------------ */
+    function initHeroParallax() {
+        var hero = root.querySelector('.ensor-reader-hero--parallax');
+        if (!hero) return;
+
+        var frame = hero.querySelector('.ensor-reader-hero__frame');
+        var img = hero.querySelector('.ensor-reader-hero__img');
+        if (!frame || !img) return;
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+
+        var ticking = false;
+
+        function measureOverflow() {
+            return Math.max(0, img.offsetHeight - frame.offsetHeight);
+        }
+
+        function updateHeroParallax() {
+            ticking = false;
+            var overflow = measureOverflow();
+            if (overflow <= 0) {
+                img.style.transform = '';
+                return;
+            }
+            var rect = hero.getBoundingClientRect();
+            var vh = window.innerHeight || 800;
+            var start = vh * 0.9;
+            var end = -rect.height * 0.4;
+            var range = start - end;
+            var t = range > 0 ? (start - rect.top) / range : 0;
+            if (t < 0) t = 0;
+            if (t > 1) t = 1;
+            img.style.transform = 'translate3d(0,' + (-t * overflow) + 'px,0)';
+        }
+
+        function requestHeroParallax() {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(updateHeroParallax);
+            }
+        }
+
+        function bootHeroParallax() {
+            requestHeroParallax();
+        }
+
+        if (img.complete) {
+            bootHeroParallax();
+        } else {
+            img.addEventListener('load', bootHeroParallax, { once: true });
+        }
+
+        window.addEventListener('scroll', requestHeroParallax, { passive: true });
+        window.addEventListener('resize', requestHeroParallax, { passive: true });
+    }
+
+    /* ------------------------------------------------------------------
      * Mobile TOC sheet
      * ------------------------------------------------------------------ */
     function initMobileSheet() {
@@ -534,6 +594,7 @@
         watchHeadings(headings, quizEl);
         initAudienceChips();
         initMobileSheet();
+        initHeroParallax();
         initAiPrompts();
         updateProgress();
         function onScrollResize() {

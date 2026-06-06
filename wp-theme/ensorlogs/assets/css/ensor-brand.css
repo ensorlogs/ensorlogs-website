@@ -1006,14 +1006,14 @@ html.dark img.ensor-simple-icon {
 }
 
 /* Cabecera visual en páginas de artículo (menos altura que hero completo) */
-img.ensor-article-hero {
+img.ensor-article-hero:not(.ensor-reader-hero__img) {
     max-height: clamp(11rem, 30vw, 19rem);
     width: 100%;
     object-fit: cover;
 }
 
 @media (min-width: 768px) {
-    img.ensor-article-hero {
+    img.ensor-article-hero:not(.ensor-reader-hero__img) {
         max-height: clamp(12rem, 22vw, 17rem);
     }
 }

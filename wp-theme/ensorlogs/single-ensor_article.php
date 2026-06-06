@@ -191,14 +191,16 @@ while (have_posts()) {
             </header>
 
             <?php if ($hero_src !== '') : ?>
-            <div class="ensor-reader-hero max-w-screen-lg mx-auto mt-2 mb-8 md:mb-10">
-                <img
-                    src="<?php echo esc_url($hero_src); ?>"
-                    alt="<?php echo esc_attr(get_the_title()); ?>"
-                    width="1600" height="900"
-                    decoding="async" loading="eager" fetchpriority="high"
-                    class="ensor-article-hero rounded-xl xl:rounded-2xl w-full object-cover object-center"
-                >
+            <div class="ensor-reader-hero ensor-reader-hero--parallax max-w-screen-lg mx-auto mt-2 mb-8 md:mb-10">
+                <div class="ensor-reader-hero__frame">
+                    <img
+                        src="<?php echo esc_url($hero_src); ?>"
+                        alt="<?php echo esc_attr(get_the_title()); ?>"
+                        width="1600" height="900"
+                        decoding="async" loading="eager" fetchpriority="high"
+                        class="ensor-article-hero ensor-reader-hero__img rounded-xl xl:rounded-2xl w-full object-cover object-center"
+                    >
+                </div>
             </div>
             <?php endif; ?>
 

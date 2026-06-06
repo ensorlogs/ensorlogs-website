@@ -489,6 +489,7 @@ html.dark .ensor-ai-prompt__copy {
 /* -------------------------------------------------------------------------
    Hero / imagen destacada del log
    Alineada al ancho del grid (1280 px máx) y con respiración generosa.
+   Parallax suave: la imagen es más alta que el marco y se desplaza al scroll.
    ------------------------------------------------------------------------- */
 .ensor-reader-hero {
     /* Sobrescribe el max-w-screen-lg (1024px) que viene de Tailwind */
@@ -499,9 +500,46 @@ html.dark .ensor-ai-prompt__copy {
     margin-bottom: 2.25rem;
     padding-left: 0;
     padding-right: 0;
+    --ensor-hero-parallax-overflow: 22%;
 }
-.ensor-reader-hero img,
-.ensor-reader-hero .ensor-article-hero {
+
+.ensor-reader-hero__frame {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: clamp(15rem, 44vw, 30rem);
+    border-radius: 14px;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 12px 32px rgba(0, 0, 0, 0.10);
+}
+
+html.dark .ensor-reader-hero__frame {
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.35),
+        0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.ensor-reader-hero__img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: calc(100% + var(--ensor-hero-parallax-overflow));
+    max-height: none !important;
+    border-radius: 0;
+    box-shadow: none;
+    aspect-ratio: auto;
+    object-fit: cover;
+    object-position: center top;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+}
+
+/* Fallback sin JS / sin marco parallax */
+.ensor-reader-hero img:not(.ensor-reader-hero__img),
+.ensor-reader-hero .ensor-article-hero:not(.ensor-reader-hero__img) {
     display: block;
     width: 100%;
     height: auto;
@@ -513,11 +551,25 @@ html.dark .ensor-ai-prompt__copy {
     object-fit: cover;
     object-position: center;
 }
-html.dark .ensor-reader-hero img,
-html.dark .ensor-reader-hero .ensor-article-hero {
+
+html.dark .ensor-reader-hero img:not(.ensor-reader-hero__img),
+html.dark .ensor-reader-hero .ensor-article-hero:not(.ensor-reader-hero__img) {
     box-shadow:
         0 1px 2px rgba(0, 0, 0, 0.35),
         0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-reader-hero--parallax .ensor-reader-hero__frame {
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+    .ensor-reader-hero--parallax .ensor-reader-hero__img {
+        position: static;
+        height: auto;
+        transform: none !important;
+        object-position: center;
+    }
 }
 
 @media (min-width: 640px) {
@@ -530,8 +582,11 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     .ensor-reader-hero {
         margin-bottom: 3.25rem;
     }
-    .ensor-reader-hero img,
-    .ensor-reader-hero .ensor-article-hero {
+    .ensor-reader-hero__frame {
+        border-radius: 16px;
+    }
+    .ensor-reader-hero img:not(.ensor-reader-hero__img),
+    .ensor-reader-hero .ensor-article-hero:not(.ensor-reader-hero__img) {
         border-radius: 16px;
     }
 }
@@ -540,8 +595,12 @@ html.dark .ensor-reader-hero .ensor-article-hero {
         margin-top: 1.5rem;
         margin-bottom: 3.5rem;
     }
-    .ensor-reader-hero img,
-    .ensor-reader-hero .ensor-article-hero {
+    .ensor-reader-hero__frame {
+        height: clamp(16rem, 38vw, 32rem);
+        border-radius: 18px;
+    }
+    .ensor-reader-hero img:not(.ensor-reader-hero__img),
+    .ensor-reader-hero .ensor-article-hero:not(.ensor-reader-hero__img) {
         border-radius: 18px;
     }
 }
@@ -549,8 +608,11 @@ html.dark .ensor-reader-hero .ensor-article-hero {
     .ensor-reader-hero {
         margin-bottom: 4rem;
     }
-    .ensor-reader-hero img,
-    .ensor-reader-hero .ensor-article-hero {
+    .ensor-reader-hero__frame {
+        border-radius: 22px;
+    }
+    .ensor-reader-hero img:not(.ensor-reader-hero__img),
+    .ensor-reader-hero .ensor-article-hero:not(.ensor-reader-hero__img) {
         border-radius: 22px;
     }
 }
