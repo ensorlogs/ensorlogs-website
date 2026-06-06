@@ -361,6 +361,7 @@ function ensorlogs_i18n_hreflang(): void
         echo '<link rel="alternate" hreflang="es" href="' . esc_url($here) . '">' . "\n";
         echo '<link rel="alternate" hreflang="en" href="' . esc_url($alt) . '">' . "\n";
     }
+    echo '<link rel="alternate" hreflang="x-default" href="' . esc_url(home_url('/')) . '">' . "\n";
 }
 add_action('wp_head', 'ensorlogs_i18n_hreflang', 4);
 

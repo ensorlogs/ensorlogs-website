@@ -22,6 +22,189 @@ function ensorlogs_has_seo_plugin(): bool
 }
 
 /**
+ * Slug de página estructural para SEO (home, about, blog, projects…).
+ */
+function ensorlogs_seo_page_slug(): string
+{
+    if (is_front_page()) {
+        return 'home';
+    }
+    if (!is_page()) {
+        return '';
+    }
+    $post = get_queried_object();
+    return $post instanceof WP_Post ? $post->post_name : '';
+}
+
+/**
+ * Secciones principales del sitio (alineadas al menú de cabecera).
+ *
+ * @return array<int, array{slug: string, name: string, path: string}>
+ */
+function ensorlogs_seo_primary_sections(): array
+{
+    $en = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en';
+    if ($en) {
+        return array(
+            array('slug' => 'about', 'name' => 'About me', 'path' => '/about/'),
+            array('slug' => 'projects', 'name' => 'Projects', 'path' => '/projects/'),
+            array('slug' => 'blog', 'name' => "Let's talk about…", 'path' => '/blog/'),
+            array('slug' => 'services', 'name' => 'How can I help?', 'path' => '/services/'),
+        );
+    }
+    return array(
+        array('slug' => 'about', 'name' => 'Sobre mi', 'path' => '/about/'),
+        array('slug' => 'projects', 'name' => 'Proyectos', 'path' => '/projects/'),
+        array('slug' => 'blog', 'name' => 'Hablemos de…', 'path' => '/blog/'),
+        array('slug' => 'services', 'name' => '¿Cómo puedo ayudarte?', 'path' => '/services/'),
+    );
+}
+
+/**
+ * @return array<string, string>
+ */
+function ensorlogs_seo_titles_map(): array
+{
+    $en = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en';
+    if ($en) {
+        return array(
+            'home'     => 'Ensor Logs | Engineer, lecturer and digital logbook',
+            'about'    => 'About me | Ensor Sánchez | Ensorlogs',
+            'projects' => 'Projects | IT portfolio and real cases | Ensorlogs',
+            'blog'     => "Let's talk about… | IT logs and articles | Ensorlogs",
+            'services' => 'Services | IT consulting and workshops | Ensorlogs',
+            'contact'  => 'Contact | Ensor Sánchez | Ensorlogs',
+        );
+    }
+    return array(
+        'home'     => 'Ensor Logs | Ingeniero, profesor y bitácora digital',
+        'about'    => 'Sobre mi | Ensor Sánchez | Ensorlogs',
+        'projects' => 'Proyectos | Portfolio IT y casos reales | Ensorlogs',
+        'blog'     => 'Hablemos de… | Logs IT y bitácora | Ensorlogs',
+        'services' => 'Servicios | Consultoría IT y talleres | Ensorlogs',
+        'contact'  => 'Contacto | Ensor Sánchez | Ensorlogs',
+    );
+}
+
+/**
+ * @return array<string, string>
+ */
+function ensorlogs_seo_descriptions_map(): array
+{
+    $en = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en';
+    if ($en) {
+        return array(
+            'home'     => 'Ensor Logs: engineer, lecturer and digital explorer. I document what I learn about IT, WordPress, data and automation.',
+            'about'    => 'About Ensor Sánchez: engineer, lecturer and public logbook. Background, community work and how I collaborate with teams and students.',
+            'projects' => 'Real IT and PropTech projects: WordPress, CRM, automation, cloud and data. Filterable portfolio with context and deliverables.',
+            'blog'     => "Let's talk about… IT logs on WordPress, data, automation and digital operations. Practical articles for students, teachers and teams.",
+            'services' => 'IT consulting, CRM, automation, web and workshops. Concrete deliverables with documentation your team can maintain.',
+            'contact'  => 'Contact Ensor Sánchez for projects, workshops or collaboration. Brief form and Calendly for a 30-minute call.',
+        );
+    }
+    return array(
+        'home'     => 'Ensor Logs: ingeniero, profesor y explorador digital. Lo que aprendo lo documento y lo comparto — logs sobre IT, WordPress, datos y automatización.',
+        'about'    => 'Sobre mi: Ensor Sánchez, ingeniero, profesor y bitácora pública. Trayectoria IT, comunidades tech y cómo trabajo con equipos y estudiantes.',
+        'projects' => 'Proyectos reales de IT y PropTech: WordPress, CRM, automatización, cloud y datos. Portfolio filtrable con contexto y entregables.',
+        'blog'     => 'Hablemos de… logs sobre WordPress, datos, automatización y operaciones digitales. Artículos prácticos para estudiantes, docentes y equipos.',
+        'services' => 'Servicios IT, CRM, automatización, web y talleres. Entregables concretos con documentación para que tu equipo pueda mantenerlos.',
+        'contact'  => 'Contacto con Ensor Sánchez para proyectos, talleres o colaboración. Formulario de briefing y Calendly para una llamada de 30 minutos.',
+    );
+}
+
+/**
+ * URL absoluta de una sección principal.
+ *
+ * @param array{slug: string, name: string, path: string} $section
+ */
+function ensorlogs_seo_section_url(array $section): string
+{
+    if (function_exists('ensorlogs_lang_url')) {
+        return ensorlogs_lang_url($section['path']);
+    }
+    return home_url($section['path']);
+}
+
+/**
+ * ¿Página legal (hija de /legal/ o aviso/privacidad/cookies)?
+ */
+function ensorlogs_seo_is_legal_page(WP_Post $post): bool
+{
+    if ($post->post_name === 'legal') {
+        return true;
+    }
+    if (in_array($post->post_name, array('aviso-legal', 'privacidad', 'cookies', 'accesibilidad'), true)) {
+        return true;
+    }
+    if ((int) $post->post_parent > 0) {
+        $parent = get_post((int) $post->post_parent);
+        if ($parent instanceof WP_Post && $parent->post_name === 'legal') {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Elementos SiteNavigationElement + ItemList para JSON-LD de portada.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function ensorlogs_seo_navigation_graph(string $site_url): array
+{
+    $graph   = array();
+    $list    = array();
+    $pos     = 1;
+    $lang    = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en' ? 'en-US' : 'es-ES';
+    foreach (ensorlogs_seo_primary_sections() as $section) {
+        $url = ensorlogs_seo_section_url($section);
+        $graph[] = array(
+            '@type'      => 'SiteNavigationElement',
+            '@id'        => trailingslashit($url) . '#navigation',
+            'name'       => $section['name'],
+            'url'        => $url,
+            'inLanguage' => $lang,
+            'isPartOf'   => array('@id' => $site_url . '#website'),
+        );
+        $list[] = array(
+            '@type'    => 'ListItem',
+            'position' => $pos,
+            'name'     => $section['name'],
+            'item'     => $url,
+        );
+        ++$pos;
+    }
+    $graph[] = array(
+        '@type'           => 'ItemList',
+        '@id'             => $site_url . '#primary-nav',
+        'name'            => function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en'
+            ? 'Main sections'
+            : 'Secciones principales',
+        'itemListElement' => $list,
+    );
+    return $graph;
+}
+
+/**
+ * Títulos SEO por página estructural (sin plugin SEO externo).
+ *
+ * @param string $title
+ */
+function ensorlogs_seo_document_title(string $title): string
+{
+    if (ensorlogs_has_seo_plugin()) {
+        return $title;
+    }
+    $slug = ensorlogs_seo_page_slug();
+    if ($slug === '') {
+        return $title;
+    }
+    $map = ensorlogs_seo_titles_map();
+    return isset($map[$slug]) && $map[$slug] !== '' ? $map[$slug] : $title;
+}
+add_filter('pre_get_document_title', 'ensorlogs_seo_document_title', 20);
+
+/**
  * URL absoluta para Open Graph (imagen por defecto del tema o del Customizer).
  */
 function ensorlogs_default_social_image_url(): string
@@ -40,6 +223,15 @@ function ensorlogs_default_social_image_url(): string
  */
 function ensorlogs_meta_description(): string
 {
+    if (!ensorlogs_has_seo_plugin()) {
+        $slug = ensorlogs_seo_page_slug();
+        if ($slug !== '') {
+            $map = ensorlogs_seo_descriptions_map();
+            if (isset($map[$slug]) && $map[$slug] !== '') {
+                return $map[$slug];
+            }
+        }
+    }
     if (is_category() || is_tag() || is_tax()) {
         $d = get_the_archive_description();
         if (is_string($d) && $d !== '') {
@@ -170,13 +362,14 @@ add_action(
         $graph    = array();
 
         if (is_front_page()) {
+            $lang_code = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en' ? 'en-US' : 'es-ES';
             $graph[] = array(
                 '@type'       => 'WebSite',
                 '@id'         => $site_url . '#website',
                 'url'         => $site_url,
                 'name'        => $name,
                 'description' => ensorlogs_meta_description(),
-                'inLanguage'  => 'es-ES',
+                'inLanguage'  => $lang_code,
                 'publisher'   => array(
                     '@id' => $site_url . '#person',
                 ),
@@ -199,6 +392,7 @@ add_action(
                 'description' => ensorlogs_meta_description(),
                 'sameAs'      => $same_as,
             );
+            $graph = array_merge($graph, ensorlogs_seo_navigation_graph($site_url));
         } elseif (is_singular('ensor_article')) {
             $post = get_post();
             if ($post instanceof WP_Post) {
@@ -241,14 +435,47 @@ add_action(
                 );
             }
         } elseif (is_singular('page')) {
+            $page = get_queried_object();
+            $slug = $page instanceof WP_Post ? $page->post_name : '';
+            $lang = function_exists('ensorlogs_current_lang') && ensorlogs_current_lang() === 'en' ? 'en-US' : 'es-ES';
+            $page_type = 'WebPage';
+            if ($slug === 'blog') {
+                $page_type = 'Blog';
+            } elseif ($slug === 'projects') {
+                $page_type = 'CollectionPage';
+            }
             $graph[] = array(
-                '@type'       => 'WebPage',
+                '@type'       => $page_type,
                 'name'        => wp_get_document_title(),
                 'description' => ensorlogs_meta_description(),
                 'url'         => esc_url(get_permalink()),
-                'inLanguage'  => 'es-ES',
+                'inLanguage'  => $lang,
                 'isPartOf'    => array('@id' => $site_url . '#website'),
             );
+            if ($page instanceof WP_Post) {
+                $titles = ensorlogs_seo_titles_map();
+                $crumb_name = isset($titles[$slug]) ? preg_replace('/\s*\|\s*Ensorlogs.*/', '', $titles[$slug]) : get_the_title($page);
+                if (!is_string($crumb_name) || $crumb_name === '') {
+                    $crumb_name = get_the_title($page);
+                }
+                $graph[] = array(
+                    '@type'           => 'BreadcrumbList',
+                    'itemListElement' => array(
+                        array(
+                            '@type'    => 'ListItem',
+                            'position' => 1,
+                            'name'     => $name,
+                            'item'     => $site_url,
+                        ),
+                        array(
+                            '@type'    => 'ListItem',
+                            'position' => 2,
+                            'name'     => $crumb_name,
+                            'item'     => get_permalink($page),
+                        ),
+                    ),
+                );
+            }
         }
 
         if ($graph === array()) {
@@ -525,4 +752,65 @@ add_filter(
         return $robots;
     },
     10
+);
+
+/**
+ * Prioridad en sitemap: subir secciones principales; bajar legales y contacto.
+ *
+ * @param array<string, mixed> $entry
+ * @param WP_Post              $post
+ * @return array<string, mixed>
+ */
+function ensorlogs_seo_sitemap_page_entry(array $entry, WP_Post $post): array
+{
+    $priorities = array(
+        'about'    => 0.95,
+        'projects' => 0.95,
+        'blog'     => 0.95,
+        'services' => 0.85,
+        'contact'  => 0.65,
+        'legal'    => 0.25,
+    );
+    if (isset($priorities[$post->post_name])) {
+        $entry['priority'] = $priorities[$post->post_name];
+        return $entry;
+    }
+    if (ensorlogs_seo_is_legal_page($post)) {
+        $entry['priority'] = 0.25;
+    }
+    return $entry;
+}
+add_filter('wp_sitemap_pages_entry', 'ensorlogs_seo_sitemap_page_entry', 10, 2);
+
+/**
+ * Asegura referencia al sitemap nativo de WordPress en robots.txt.
+ *
+ * @param string $output
+ * @param bool   $public
+ */
+function ensorlogs_seo_robots_txt(string $output, bool $public): string
+{
+    if (!$public) {
+        return $output;
+    }
+    $sitemap = home_url('/wp-sitemap.xml');
+    if (stripos($output, 'Sitemap:') === false) {
+        $output .= "\nSitemap: {$sitemap}\n";
+    }
+    return $output;
+}
+add_filter('robots_txt', 'ensorlogs_seo_robots_txt', 10, 2);
+
+/**
+ * Enlace al sitemap en <head> (refuerzo para crawlers).
+ */
+add_action(
+    'wp_head',
+    static function (): void {
+        if (ensorlogs_has_seo_plugin()) {
+            return;
+        }
+        echo '<link rel="sitemap" type="application/xml" title="Sitemap" href="' . esc_url(home_url('/wp-sitemap.xml')) . '">' . "\n";
+    },
+    3
 );

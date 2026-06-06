@@ -19,15 +19,19 @@
     <meta name="keywords"
         content="Ensor Sánchez, Ensorlogs, consultor IT, servicios IT empresas, CRM, automatización procesos, PropTech, desarrollo web freelance, Microsoft 365, Azure, operaciones digitales, Madrid España">
     <meta name="description"
-        content="Ensor Sánchez: consultor IT con más de 10 años de experiencia. Servicios de CRM, automatización, desarrollo web y operaciones digitales para empresas que buscan contratar talento técnico con alcance claro.">
+        content="Ensor Logs: ingeniero, profesor y explorador digital. Lo que aprendo lo documento y lo comparto — logs sobre IT, WordPress, datos y automatización. Sobre mi, proyectos y bitácora.">
     <meta name="author" content="Ensor Sánchez · Ensorlogs">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://ensorlogs.com/">
+    <link rel="alternate" hreflang="es" href="https://ensorlogs.com/">
+    <link rel="alternate" hreflang="en" href="https://ensorlogs.com/en/">
+    <link rel="alternate" hreflang="x-default" href="https://ensorlogs.com/">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://ensorlogs.com/sitemap.xml">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Ensorlogs">
     <meta property="og:locale" content="es_ES">
-    <meta property="og:title" content="Ensor Sánchez | Consultor IT, CRM y automatización para empresas">
-    <meta property="og:description" content="Contrata consultoría IT: integración CRM, automatización, web y datos. Operaciones digitales y PropTech con foco en resultados medibles.">
+    <meta property="og:title" content="Ensor Logs | Ingeniero, profesor y bitácora digital">
+    <meta property="og:description" content="Bitácora de un geek venezolano: logs sobre WordPress, datos, automatización e IT. Sobre mi, proyectos y artículos prácticos.">
     <meta property="og:url" content="https://ensorlogs.com/">
     <meta property="og:image" content="https://ensorlogs.com/assets/img/Logo-EnsorLogs-full.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -36,7 +40,7 @@
 
     <!-- Site Title
     ================================================== -->
-    <title>Ensor Sánchez | Consultor IT, CRM y automatización | Ensorlogs</title>
+    <title>Ensor Logs | Ingeniero, profesor y bitácora digital</title>
 
     <!-- Site Favicon
     ================================================== -->
@@ -45,15 +49,37 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Ensor Sánchez",
-      "url": "https://ensorlogs.com/",
-      "image": "https://ensorlogs.com/assets/img/Ensor CV Test.jpg",
-      "jobTitle": "Consultor IT · Operaciones digitales · PropTech",
-      "worksFor": { "@type": "Organization", "name": "Ensorlogs" },
-      "address": { "@type": "PostalAddress", "addressLocality": "Madrid", "addressCountry": "ES" },
-      "sameAs": [
-        "https://www.linkedin.com/in/ensorsanchez/"
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://ensorlogs.com/#website",
+          "url": "https://ensorlogs.com/",
+          "name": "Ensorlogs",
+          "description": "Ensor Logs: ingeniero, profesor y bitácora digital sobre IT, WordPress, datos y automatización.",
+          "inLanguage": "es-ES",
+          "publisher": { "@id": "https://ensorlogs.com/#person" }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://ensorlogs.com/#person",
+          "name": "Ensor Sánchez",
+          "url": "https://ensorlogs.com/",
+          "image": "https://ensorlogs.com/assets/img/Ensor CV Test.jpg",
+          "jobTitle": "Ingeniero · Profesor · Operaciones digitales",
+          "worksFor": { "@type": "Organization", "name": "Ensorlogs" },
+          "sameAs": ["https://www.linkedin.com/in/ensorsanchez/"]
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://ensorlogs.com/#primary-nav",
+          "name": "Secciones principales",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Sobre mi", "item": "https://ensorlogs.com/about/" },
+            { "@type": "ListItem", "position": 2, "name": "Proyectos", "item": "https://ensorlogs.com/projects/" },
+            { "@type": "ListItem", "position": 3, "name": "Hablemos de…", "item": "https://ensorlogs.com/blog/" },
+            { "@type": "ListItem", "position": 4, "name": "¿Cómo puedo ayudarte?", "item": "https://ensorlogs.com/services/" }
+          ]
+        }
       ]
     }
     </script>
@@ -642,6 +668,12 @@
             </div>
         </div>
     <div id="ensor-legal-row" class="container max-w-[1180px] mx-auto px-4 pt-2 pb-6">
+        <nav aria-label="Secciones principales" class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-medium text-darkGray dark:text-pastelGrey pb-4">
+            <a href="https://ensorlogs.com/about/" class="hover:underline underline-offset-2">Sobre mi</a>
+            <a href="https://ensorlogs.com/projects/" class="hover:underline underline-offset-2">Proyectos</a>
+            <a href="https://ensorlogs.com/blog/" class="hover:underline underline-offset-2">Hablemos de…</a>
+            <a href="https://ensorlogs.com/services/" class="hover:underline underline-offset-2">¿Cómo puedo ayudarte?</a>
+        </nav>
         <nav aria-label="Enlaces legales" class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-darkGray/85 dark:text-pastelGrey/70 border-t border-black/5 dark:border-white/5 pt-4">
             <a href="legal/aviso-legal.html" class="hover:underline">Aviso legal</a>
             <a href="legal/privacidad.html" class="hover:underline">Privacidad</a>

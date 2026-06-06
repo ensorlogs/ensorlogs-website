@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://ensorlogs.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ensorlogs.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ensorlogs.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ensorlogs.com/"/>
+  </url>
+  <url>
+    <loc>https://ensorlogs.com/about/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ensorlogs.com/about/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ensorlogs.com/en/about/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ensorlogs.com/about/"/>
+  </url>
+  <url>
+    <loc>https://ensorlogs.com/projects/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ensorlogs.com/projects/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ensorlogs.com/en/projects/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ensorlogs.com/projects/"/>
+  </url>
+  <url>
+    <loc>https://ensorlogs.com/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ensorlogs.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ensorlogs.com/en/blog/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ensorlogs.com/blog/"/>
+  </url>
+  <url>
+    <loc>https://ensorlogs.com/services/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ensorlogs.com/contact/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+</urlset>

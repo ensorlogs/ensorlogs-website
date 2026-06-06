@@ -17,18 +17,22 @@
     <meta name="viewport" 
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
     <meta name="keywords"
-        content="Ensor Sánchez, Ensorlogs, IT consultant, IT services for businesses, CRM, process automation, PropTech, freelance web development, Microsoft 365, Azure, digital operations, Madrid España">
+        content="Ensor Sánchez, Ensorlogs, IT consultant, digital logbook, WordPress, automation, lecturer, Ensor Logs">
     <meta name="description"
-        content="Ensor Sánchez: IT consultant with 10+ years of experience. CRM, automation, web development and digital operations for companies that need clear technical scope.">
+        content="Ensor Logs: engineer, lecturer and digital explorer. I document what I learn about IT, WordPress, data and automation. About me, projects and logbook.">
     <meta name="author" content="Ensor Sánchez · Ensorlogs">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://ensorlogs.com/en/">
+    <link rel="alternate" hreflang="en" href="https://ensorlogs.com/en/">
+    <link rel="alternate" hreflang="es" href="https://ensorlogs.com/">
+    <link rel="alternate" hreflang="x-default" href="https://ensorlogs.com/">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://ensorlogs.com/sitemap.xml">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Ensorlogs">
     <meta property="og:locale" content="en_US">
-    <meta property="og:title" content="Ensor Sánchez | IT consultant, CRM and automation for businesses">
-    <meta property="og:description" content="Hire IT consulting: CRM integration, automation, web and data. Digital operations and PropTech with measurable outcomes.">
-    <meta property="og:url" content="https://ensorlogs.com/en">
+    <meta property="og:title" content="Ensor Logs | Engineer, lecturer and digital logbook">
+    <meta property="og:description" content="Public logbook on WordPress, data, automation and IT. About me, projects and practical articles.">
+    <meta property="og:url" content="https://ensorlogs.com/en/">
     <meta property="og:image" content="https://ensorlogs.com/assets/img/Logo-EnsorLogs-full.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ensor Sánchez | IT consultant and digital services | Ensorlogs">
@@ -36,7 +40,7 @@
 
     <!-- Site Title
     ================================================== -->
-    <title>Ensor Sánchez | IT consultant, CRM and automation | Ensorlogs</title>
+    <title>Ensor Logs | Engineer, lecturer and digital logbook</title>
 
     <!-- Site Favicon
     ================================================== -->
@@ -45,15 +49,37 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Ensor Sánchez",
-      "url": "https://ensorlogs.com/",
-      "image": "https://ensorlogs.com/assets/img/Ensor CV Test.jpg",
-      "jobTitle": "IT consultant · Digital operations · PropTech",
-      "worksFor": { "@type": "Organization", "name": "Ensorlogs" },
-      "address": { "@type": "PostalAddress", "addressLocality": "Madrid", "addressCountry": "ES" },
-      "sameAs": [
-        "https://www.linkedin.com/in/ensorsanchez/"
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://ensorlogs.com/en/#website",
+          "url": "https://ensorlogs.com/en/",
+          "name": "Ensorlogs",
+          "description": "Ensor Logs: engineer, lecturer and digital logbook on IT, WordPress, data and automation.",
+          "inLanguage": "en-US",
+          "publisher": { "@id": "https://ensorlogs.com/#person" }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://ensorlogs.com/#person",
+          "name": "Ensor Sánchez",
+          "url": "https://ensorlogs.com/en/",
+          "image": "https://ensorlogs.com/assets/img/Ensor CV Test.jpg",
+          "jobTitle": "Engineer · Lecturer · Digital operations",
+          "worksFor": { "@type": "Organization", "name": "Ensorlogs" },
+          "sameAs": ["https://www.linkedin.com/in/ensorsanchez/"]
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://ensorlogs.com/en/#primary-nav",
+          "name": "Main sections",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "About me", "item": "https://ensorlogs.com/en/about/" },
+            { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://ensorlogs.com/en/projects/" },
+            { "@type": "ListItem", "position": 3, "name": "Let's talk about…", "item": "https://ensorlogs.com/en/blog/" },
+            { "@type": "ListItem", "position": 4, "name": "How can I help?", "item": "https://ensorlogs.com/en/services/" }
+          ]
+        }
       ]
     }
     </script>

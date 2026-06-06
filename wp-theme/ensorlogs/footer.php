@@ -72,6 +72,18 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
         <?php
+        $ensor_primary_nav = ensorlogs_seo_primary_sections();
+        ?>
+        <div class="container max-w-[1180px] mx-auto px-4 pt-4">
+            <nav aria-label="<?php echo esc_attr(function_exists('ensorlogs_t') ? ensorlogs_t('Secciones principales', 'Main sections') : __('Secciones principales', 'ensorlogs')); ?>" class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-medium text-darkGray dark:text-pastelGrey">
+                <?php foreach ($ensor_primary_nav as $nav_item) :
+                    $nav_url = function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url($nav_item['path']) : home_url($nav_item['path']);
+                    ?>
+                    <a href="<?php echo esc_url($nav_url); ?>" class="hover:underline underline-offset-2"><?php echo esc_html($nav_item['name']); ?></a>
+                <?php endforeach; ?>
+            </nav>
+        </div>
+        <?php
         $ensor_legal_links = array(
             'legal/aviso-legal' => function_exists('ensorlogs_t') ? ensorlogs_t('Aviso legal', 'Legal notice') : __('Aviso legal', 'ensorlogs'),
             'legal/privacidad' => function_exists('ensorlogs_t') ? ensorlogs_t('Privacidad', 'Privacy') : __('Privacidad', 'ensorlogs'),

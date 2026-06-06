@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Plantillas demo — no indexar si quedan expuestas en la raíz
+Disallow: /blog-2.html
+Disallow: /blogs-details.html
+Disallow: /projects-details.html
+Disallow: /en/blog-2.html
+Disallow: /en/blogs-details.html
+Disallow: /en/projects-details.html
+
+Sitemap: https://ensorlogs.com/wp-sitemap.xml
+Sitemap: https://ensorlogs.com/sitemap.xml
