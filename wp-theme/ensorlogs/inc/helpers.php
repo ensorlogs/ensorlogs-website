@@ -629,7 +629,7 @@ function ensorlogs_tema_label(string $slug): string
         'servidores'   => 'Servidores',
         'it'           => 'IT',
         'windows'      => 'Windows',
-        'mac'          => 'Mac',
+        'excel'        => 'Excel',
     );
     return $map[ $slug ] ?? ucfirst($slug);
 }

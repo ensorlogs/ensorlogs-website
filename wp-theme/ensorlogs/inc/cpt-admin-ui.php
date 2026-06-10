@@ -28,7 +28,7 @@ function ensorlogs_primary_tema_choices(): array
         'servidores' => 'Servidores',
         'it'         => 'IT',
         'windows'    => 'Windows',
-        'mac'        => 'Mac',
+        'excel'      => 'Excel',
     );
 }
 
