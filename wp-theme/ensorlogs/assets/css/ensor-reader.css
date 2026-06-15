@@ -851,7 +851,7 @@ html.dark .ensor-reader-toc-sheet__panel {
     scroll-margin-top: 100px;
     position: relative;
     color: var(--ensor-ink, #1a1a1a);
-    font-family: var(--ensor-font-title, 'Space Grotesk', sans-serif);
+    font-family: var(--ensor-font-title, 'Pixelify Sans', monospace);
     font-weight: 600;
     letter-spacing: var(--ensor-title-letter-spacing, 0.04em);
     line-height: 1.45;
@@ -880,7 +880,7 @@ html.dark .ensor-reader-body :where(h1, h2, h3) {
     margin: 1.75rem 0 0.75rem;
 }
 .ensor-reader-body h4 {
-    font-family: var(--ensor-font-title, 'Space Grotesk', sans-serif);
+    font-family: var(--ensor-font-title, 'Pixelify Sans', monospace);
     font-weight: 500;
     font-size: clamp(1rem, 2vw, 1.15rem);
     line-height: 1.4;

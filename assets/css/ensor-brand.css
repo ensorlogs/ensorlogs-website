@@ -44,7 +44,7 @@
     --ensor-cta-hablemos-shadow-deep: rgba(120, 82, 0, 0.22);
     /* Sistema tipográfico UX/UI */
     --ensor-font-logo: 'Pixelify Sans', monospace;
-    --ensor-font-title: 'Space Grotesk', 'Inter', sans-serif;
+    --ensor-font-title: var(--ensor-font-logo);
     --ensor-font-ui: 'Inter', sans-serif;
     --ensor-font-body: 'Inter', sans-serif;
   /* Botones pixel / CTAs: misma familia que el wordmark */
@@ -55,7 +55,7 @@
     --ensor-header-btn-pad-x: 1.75rem;
     --ensor-title-weight: 600;
     --ensor-title-size-hero: clamp(1.55rem, 4.2vw, 2.5rem);
-    --ensor-title-letter-spacing: -0.01em;
+    --ensor-title-letter-spacing: 0.02em;
     --ensor-fs-h1: 1.85rem;
     --ensor-fs-h2: 1.45rem;
     --ensor-fs-h3: 1.2rem;
@@ -112,7 +112,7 @@ body {
     line-height: var(--ensor-lh-body);
 }
 
-/* ---------- Títulos: Space Grotesk ---------- */
+/* ---------- Títulos internos: Pixelify Sans ---------- */
 :is(
     .main-content :is(h1, h2, h3, h4, h5, h6),
     .entry-content :is(h1, h2, h3, h4, h5, h6),
@@ -705,6 +705,9 @@ html.dark .ensor-bitacora-word {
 
 /* Etiquetas tipo kicker en tarjetas (subrayado fino como en el branding) */
 .widget p.text-sm.opacity-70 {
+    font-family: var(--ensor-font-logo) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
     border-bottom: 2px solid var(--ensor-accent);
     display: inline-block;
     padding-bottom: 0.35rem;
@@ -747,6 +750,11 @@ html.dark a.ensor-widget-cover-16-10 img {
 /* Portada: carrusel de logs recientes */
 .ensor-home-logs-slider {
     outline: none;
+}
+
+.ensor-home-logs-slider .mt-10 > p.font-bold {
+    font-family: var(--ensor-font-logo) !important;
+    letter-spacing: 0.02em;
 }
 
 .ensor-home-logs-slider__media,
@@ -1387,7 +1395,8 @@ img[src*="ensorlogs2.png"].rounded-full {
     line-height: 1.35;
     text-transform: none;
     letter-spacing: 0.06em;
-    font-weight: 600;
+    font-family: var(--ensor-font-pixel) !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
     animation: ensor-preloader-loading-pulse 1.15s ease-in-out infinite;
 }
 
@@ -1563,6 +1572,7 @@ img.ensor-article-hero:not(.ensor-reader-hero__img) {
 .ensor-legal-hero__title,
 .blog-details-wrapper .blog-details-content > h1:first-child {
     display: block;
+    font-family: var(--ensor-font-logo) !important;
     font-size: var(--ensor-title-size-hero);
     font-weight: var(--ensor-title-weight);
     line-height: 1.45;
@@ -1631,6 +1641,7 @@ section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
 section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type,
 section[aria-labelledby="blog-temas-heading"] h1:first-of-type,
 section[aria-labelledby="blog-temas-heading"] h2:first-of-type {
+    font-family: var(--ensor-font-logo) !important;
     font-size: var(--ensor-title-size-hero) !important;
     font-weight: var(--ensor-title-weight);
     line-height: 1.45;

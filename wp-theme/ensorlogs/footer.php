@@ -18,15 +18,6 @@ if (!defined('ABSPATH')) {
         $ensor_footer_cta_link        = function_exists('ensorlogs_t')
             ? ensorlogs_t('Contáctame', 'Contact me')
             : __('Contáctame', 'ensorlogs');
-        $ensor_footer_lead            = function_exists('ensorlogs_t')
-            ? ensorlogs_t(
-                'Escríbeme para un proyecto o una colaboración, quiero que escuchen tu historia',
-                'Write to me about a project or a collaboration — I want to hear your story.'
-            )
-            : __(
-                'Escríbeme para un proyecto o una colaboración, quiero que escuchen tu historia',
-                'ensorlogs'
-            );
         ?>
         <div class="container text-center">
             <div class="ensor-footer-cta" data-aos="fade-up">
@@ -37,9 +28,6 @@ if (!defined('ABSPATH')) {
                     <?php echo wp_kses(nl2br(esc_html($ensor_footer_heading_default)), array('br' => array())); ?>
                     <a href="<?php echo esc_url(function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/contact/') : home_url('/contact/')); ?>" class="ensor-footer-cta__link"><?php echo esc_html($ensor_footer_cta_link); ?></a>
                 </h5>
-                <p class="ensor-footer-cta__lead">
-                    <?php echo esc_html($ensor_footer_lead); ?>
-                </p>
                 <?php if (function_exists('ensorlogs_footer_social_nav_html')) : ?>
                     <?php
                     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
