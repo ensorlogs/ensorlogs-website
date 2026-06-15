@@ -57,7 +57,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                     <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
                         ENSOR.<span class="ensor-logo-accent">LOGS</span>
                     </span>
-                    <span class="mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
+                    <span class="ensor-tagline mt-1 text-[11px] md:text-xs font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
                         <?php echo esc_html(function_exists('ensorlogs_get_tagline_localized') ? ensorlogs_get_tagline_localized() : __('Bitácora de un geek', 'ensorlogs')); ?>
                         <?php
                         if (function_exists('ensorlogs_header_flag_html')) {
@@ -116,7 +116,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                 <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">
                     ENSOR.<span class="ensor-logo-accent">LOGS</span>
                 </span>
-                <span class="mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
+                <span class="ensor-tagline mt-0.5 text-[10px] font-medium text-darkGray dark:text-pastelGrey tracking-tight leading-snug">
                     <?php echo esc_html(function_exists('ensorlogs_get_tagline_localized') ? ensorlogs_get_tagline_localized() : __('Bitácora de un geek', 'ensorlogs')); ?>
                     <?php
                     if (function_exists('ensorlogs_header_flag_html')) {

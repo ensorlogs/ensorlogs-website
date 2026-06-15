@@ -18,6 +18,150 @@ function ensorlogs_theme_uri(string $path = ''): string
 }
 
 /**
+ * Imagen de tarjeta para un artículo (thumbnail, meta o fallback).
+ */
+function ensorlogs_article_card_image_url(WP_Post $post, string $fallback): string
+{
+    $pid = (int) $post->ID;
+    $img = '';
+    if (has_post_thumbnail($pid)) {
+        $thumb = get_the_post_thumbnail_url($pid, 'large');
+        if (is_string($thumb) && $thumb !== '') {
+            $img = $thumb;
+        }
+    }
+    if ($img === '') {
+        $card = (string) get_post_meta($pid, '_ensor_card_image', true);
+        if ($card !== '' && function_exists('ensorlogs_resolve_public_asset_url')) {
+            $img = (string) ensorlogs_resolve_public_asset_url($card);
+        }
+    }
+    if ($img === '') {
+        return $fallback;
+    }
+
+    return $img;
+}
+
+/**
+ * Artículos recientes para widgets de inicio (slider / ticker).
+ *
+ * @return WP_Post[]
+ */
+function ensorlogs_home_recent_articles(int $limit = 6): array
+{
+    $args = array(
+        'post_type'              => 'ensor_article',
+        'post_status'            => 'publish',
+        'posts_per_page'         => max(1, $limit),
+        'orderby'                => 'date',
+        'order'                  => 'DESC',
+        'no_found_rows'          => true,
+        'ignore_sticky_posts'    => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false,
+    );
+    if (function_exists('ensorlogs_article_lang_meta_query')) {
+        $args['meta_query'] = ensorlogs_article_lang_meta_query();
+    }
+
+    $posts = get_posts($args);
+    return is_array($posts) ? $posts : array();
+}
+
+/**
+ * SVG de flecha del enlace al log (mismo trazo que la portada estática).
+ */
+function ensorlogs_home_log_link_arrow_svg(): string
+{
+    return '<svg class="w-11 shrink-0 text-nobelGray group-hover:text-darkGray dark:text-slateGray dark:group-hover:text-white transition-all duration-300 mt-0.5" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+        . '<path d="M26 16.1284C26.4158 16.9337 26.9612 17.6894 27.6363 18.3644C31.151 21.8792 36.8495 21.8792 40.3642 18.3644C43.8789 14.8497 43.8789 9.15127 40.3642 5.63653C36.8495 2.12181 31.151 2.12181 27.6363 5.63653C26.9612 6.31161 26.4158 7.06729 26 7.87259" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        . '<path d="M1 12H39L35 16M35 8L36.5 9.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        . '</svg>';
+}
+
+/**
+ * Carrusel de logs recientes en la portada (imagen + título).
+ */
+function ensorlogs_home_logs_slider_html(): string
+{
+    $fallback_img = esc_url(ensorlogs_theme_uri('assets/img/Ensorlogs%20Blog.png'));
+    $blog_url     = function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/blog/') : home_url('/blog/');
+    $blog_all     = trailingslashit(esc_url($blog_url));
+    $label_latest = function_exists('ensorlogs_t') ? ensorlogs_t('ÚLTIMOS LOGS', 'LATEST LOGS') : esc_html__('ÚLTIMOS LOGS', 'ensorlogs');
+    $label_all    = function_exists('ensorlogs_t') ? ensorlogs_t('Ver todos los logs', 'View all logs') : esc_html__('Ver todos los logs', 'ensorlogs');
+    $label_prev   = function_exists('ensorlogs_t') ? ensorlogs_t('Log anterior', 'Previous log') : esc_html__('Log anterior', 'ensorlogs');
+    $label_next   = function_exists('ensorlogs_t') ? ensorlogs_t('Siguiente log', 'Next log') : esc_html__('Siguiente log', 'ensorlogs');
+    $arrow        = ensorlogs_home_log_link_arrow_svg();
+    $posts        = ensorlogs_home_recent_articles(6);
+
+    $media_slides  = '';
+    $title_slides  = '';
+
+    if ($posts === array()) {
+        $title = function_exists('ensorlogs_t')
+            ? ensorlogs_t('Ver artículos y aprendizajes', 'View articles and learnings')
+            : esc_html__('Ver artículos y aprendizajes', 'ensorlogs');
+        $media_slides .= '<div class="ensor-home-logs-slider__slide" data-ensor-home-logs-slider-slide aria-hidden="false">'
+            . '<a href="' . $blog_all . '" class="relative block ensor-widget-cover-16-10 w-full overflow-hidden">'
+            . '<img src="' . $fallback_img . '" alt="" class="absolute inset-0 h-full w-full object-cover object-center" width="800" height="500" loading="lazy" decoding="async">'
+            . '</a></div>';
+        $title_slides .= '<div class="ensor-home-logs-slider__title-slide" data-ensor-home-logs-slider-slide aria-hidden="false">'
+            . '<h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group">'
+            . '<a href="' . $blog_all . '" class="flex items-start justify-between gap-3">'
+            . '<span class="min-w-0 flex-1 leading-snug line-clamp-3">' . esc_html($title) . '</span>'
+            . $arrow
+            . '</a></h6></div>';
+    } else {
+        foreach ($posts as $i => $post) {
+            if (!($post instanceof WP_Post)) {
+                continue;
+            }
+            $url   = esc_url(get_permalink($post));
+            $title = get_the_title($post);
+            if (!is_string($title) || trim($title) === '') {
+                continue;
+            }
+            $img      = esc_url(ensorlogs_article_card_image_url($post, $fallback_img));
+            $alt      = esc_attr($title);
+            $hidden   = $i === 0 ? 'false' : 'true';
+            $media_slides .= '<div class="ensor-home-logs-slider__slide" data-ensor-home-logs-slider-slide aria-hidden="' . $hidden . '">'
+                . '<a href="' . $url . '" class="relative block ensor-widget-cover-16-10 w-full overflow-hidden" aria-label="' . $alt . '">'
+                . '<img src="' . $img . '" alt="' . $alt . '" class="absolute inset-0 h-full w-full object-cover object-center" width="800" height="500" loading="lazy" decoding="async">'
+                . '</a></div>';
+            $title_slides .= '<div class="ensor-home-logs-slider__title-slide" data-ensor-home-logs-slider-slide aria-hidden="' . $hidden . '">'
+                . '<h6 class="font-semibold text-lg text-darkGray dark:text-pastelGrey group">'
+                . '<a href="' . $url . '" class="flex items-start justify-between gap-3">'
+                . '<span class="min-w-0 flex-1 leading-snug line-clamp-3">' . esc_html($title) . '</span>'
+                . $arrow
+                . '</a></h6></div>';
+        }
+    }
+
+    return '<div class="widget overflow-hidden ensor-widget-media-card ensor-home-logs-slider" data-aos="fade-up" data-aos-delay="150" data-ensor-home-logs-slider tabindex="0" role="region" aria-label="' . esc_attr($label_latest) . '">'
+        . '<div class="ensor-home-logs-slider__media">'
+        . '<div class="ensor-home-logs-slider__track" data-ensor-home-logs-slider-media>' . $media_slides . '</div>'
+        . '</div>'
+        . '<div class="mt-10 px-4 md:px-6 xl:px-10">'
+        . '<p class="text-[11px] font-bold uppercase tracking-wider text-powerBlack dark:text-pastelGrey">' . esc_html($label_latest) . '</p>'
+        . '<div class="ensor-home-logs-slider__controls mt-2">'
+        . '<button type="button" class="ensor-home-logs-slider__arrow" data-ensor-home-logs-slider-prev aria-label="' . esc_attr($label_prev) . '">'
+        . '<i class="fal fa-chevron-left" aria-hidden="true"></i></button>'
+        . '<div class="ensor-home-logs-slider__titles">'
+        . '<div class="ensor-home-logs-slider__track" data-ensor-home-logs-slider-titles>' . $title_slides . '</div>'
+        . '</div>'
+        . '<button type="button" class="ensor-home-logs-slider__arrow" data-ensor-home-logs-slider-next aria-label="' . esc_attr($label_next) . '">'
+        . '<i class="fal fa-chevron-right" aria-hidden="true"></i></button>'
+        . '</div>'
+        . '<p class="mt-4 pt-4 border-t border-flasWhite dark:border-flasBlack">'
+        . '<a href="' . $blog_all . '" class="inline-flex items-center gap-2 text-sm font-semibold text-powerBlack dark:text-pastelGrey underline-offset-2 hover:underline">'
+        . '<i class="fal fa-th-large text-xs opacity-80" aria-hidden="true"></i>'
+        . esc_html($label_all)
+        . '</a></p>'
+        . '</div></div>';
+}
+
+/**
  * Marcadores para la tarjeta “último log” en fragmentos (p. ej. portada).
  *
  * @return array<string, string> clave %%PLACEHOLDER%% => valor ya escapado para HTML.
@@ -59,31 +203,15 @@ function ensorlogs_latest_log_fragment_tokens(): array
     }
 
     $post  = $posts[0];
-    $pid   = (int) $post->ID;
     $url   = esc_url(get_permalink($post));
     $title = get_the_title($post);
-    $img   = '';
-    if (has_post_thumbnail($pid)) {
-        $thumb = get_the_post_thumbnail_url($pid, 'large');
-        if (is_string($thumb) && $thumb !== '') {
-            $img = $thumb;
-        }
-    }
-    if ($img === '') {
-        $card = (string) get_post_meta($pid, '_ensor_card_image', true);
-        if ($card !== '' && function_exists('ensorlogs_resolve_public_asset_url')) {
-            $img = (string) ensorlogs_resolve_public_asset_url($card);
-        }
-    }
-    if ($img === '') {
-        $img = $fallback_img;
-    }
+    $img   = esc_url(ensorlogs_article_card_image_url($post, $fallback_img));
 
     return array(
         '%%LATEST_LOG_URL%%'        => $url,
         '%%LATEST_LOG_TITLE%%'      => esc_html($title),
         '%%LATEST_LOG_TITLE_ATTR%%' => esc_attr($title),
-        '%%LATEST_LOG_IMG%%'        => esc_url($img),
+        '%%LATEST_LOG_IMG%%'        => $img,
     );
 }
 
@@ -155,6 +283,40 @@ function ensorlogs_home_log_ticker_segments_html(): string
 }
 
 /**
+ * Iconos de contacto/redes en el footer (encima de «Notifícame»).
+ */
+function ensorlogs_footer_social_nav_html(): string
+{
+    $aria_linkedin = function_exists('ensorlogs_t')
+        ? ensorlogs_t('LinkedIn: perfil profesional', 'LinkedIn: professional profile')
+        : __('LinkedIn: perfil profesional', 'ensorlogs');
+    $aria_github = function_exists('ensorlogs_t')
+        ? ensorlogs_t('GitHub: código y proyectos', 'GitHub: code and projects')
+        : __('GitHub: código y proyectos', 'ensorlogs');
+    $aria_email = function_exists('ensorlogs_t')
+        ? ensorlogs_t('Correo: hello@ensorlogs.com', 'Email: hello@ensorlogs.com')
+        : __('Correo: hello@ensorlogs.com', 'ensorlogs');
+    $aria_calendly = function_exists('ensorlogs_t')
+        ? ensorlogs_t('Reserva una llamada de 30 minutos en Calendly', 'Book a 30-minute call on Calendly')
+        : __('Reserva una llamada de 30 minutos en Calendly', 'ensorlogs');
+    $nav_label = function_exists('ensorlogs_t')
+        ? ensorlogs_t('Contacto y redes', 'Contact and social')
+        : __('Contacto y redes', 'ensorlogs');
+
+    return '<nav class="ensor-footer-cta__social ensor-home-social" aria-label="' . esc_attr($nav_label) . '">'
+        . '<div class="ensor-home-social__list">'
+        . '<a href="https://linkedin.com/in/ensorsanchez" target="_blank" rel="noopener noreferrer" class="ensor-home-social__link" aria-label="' . esc_attr($aria_linkedin) . '">'
+        . '<span class="ensor-home-social__icon" aria-hidden="true"><i class="fab fa-linkedin-in"></i></span></a>'
+        . '<a href="https://github.com/ensorlogs" target="_blank" rel="noopener noreferrer" class="ensor-home-social__link" aria-label="' . esc_attr($aria_github) . '">'
+        . '<span class="ensor-home-social__icon" aria-hidden="true"><i class="fab fa-github"></i></span></a>'
+        . '<a href="mailto:hello@ensorlogs.com" class="ensor-home-social__link" aria-label="' . esc_attr($aria_email) . '">'
+        . '<span class="ensor-home-social__icon" aria-hidden="true"><i class="far fa-envelope"></i></span></a>'
+        . '<a href="https://calendly.com/ensorlogs/30min" target="_blank" rel="noopener noreferrer" class="ensor-home-social__link" aria-label="' . esc_attr($aria_calendly) . '">'
+        . '<span class="ensor-home-social__icon ensor-calendly-icon" aria-hidden="true"><i class="far fa-calendar-alt"></i></span></a>'
+        . '</div></nav>';
+}
+
+/**
  * Tokens dinámicos del fragmento de contacto (suscripción a la lista).
  *
  * @return array<string, string>
@@ -172,7 +334,8 @@ function ensorlogs_contact_fragment_tokens(): array
  * Lee un fragmento en partials/*.fragment.html y sustituye marcadores.
  *
  * Marcadores: %%THEME_URI%%, %%HOME%%, %%LATEST_LOG_*%% (último ensor_article publicado),
- * %%HOME_LOG_TICKER_SEGMENTS%% (marquee terminal: últimos logs con enlace).
+ * %%HOME_LOG_TICKER_SEGMENTS%% (marquee terminal: últimos logs con enlace),
+ * %%HOME_LOGS_SLIDER%% (carrusel de logs en portada).
  */
 function ensorlogs_render_fragment(string $filename): string
 {
@@ -195,6 +358,9 @@ function ensorlogs_render_fragment(string $filename): string
     }
     if (strpos($html, '%%HOME_LOG_TICKER_SEGMENTS%%') !== false) {
         $html = str_replace('%%HOME_LOG_TICKER_SEGMENTS%%', ensorlogs_home_log_ticker_segments_html(), $html);
+    }
+    if (strpos($html, '%%HOME_LOGS_SLIDER%%') !== false) {
+        $html = str_replace('%%HOME_LOGS_SLIDER%%', ensorlogs_home_logs_slider_html(), $html);
     }
     if (strpos($html, '%%CONTACT_') !== false && function_exists('ensorlogs_contact_fragment_tokens')) {
         $contact = ensorlogs_contact_fragment_tokens();

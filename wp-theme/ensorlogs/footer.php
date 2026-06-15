@@ -20,21 +20,18 @@ if (!defined('ABSPATH')) {
             : __('Contáctame', 'ensorlogs');
         $ensor_footer_lead            = function_exists('ensorlogs_t')
             ? ensorlogs_t(
-                'Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.',
-                'Write to me about a project, a technical collaboration, a workshop, or a course. I also enjoy talking with people in the community and learning from those who know their craft.'
+                'Escríbeme para un proyecto o una colaboración, quiero que escuchen tu historia',
+                'Write to me about a project or a collaboration — I want to hear your story.'
             )
             : __(
-                'Escríbeme para un proyecto, una colaboración técnica, un taller o un curso. También me gusta hablar con gente de la comunidad y aprender de quienes saben.',
+                'Escríbeme para un proyecto o una colaboración, quiero que escuchen tu historia',
                 'ensorlogs'
             );
         ?>
         <div class="container text-center">
             <div class="ensor-footer-cta" data-aos="fade-up">
-                <span class="ensor-footer-cta__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.92"></path>
-                    </svg>
+                <span class="ensor-footer-cta__icon ensor-footer-cta__icon--logo" aria-hidden="true">
+                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png'); ?>" alt="" width="64" height="64" decoding="async" class="ensor-footer-cta__logo-img">
                 </span>
                 <h5 class="ensor-footer-cta__heading">
                     <?php echo wp_kses(nl2br(esc_html($ensor_footer_heading_default)), array('br' => array())); ?>
@@ -43,6 +40,12 @@ if (!defined('ABSPATH')) {
                 <p class="ensor-footer-cta__lead">
                     <?php echo esc_html($ensor_footer_lead); ?>
                 </p>
+                <?php if (function_exists('ensorlogs_footer_social_nav_html')) : ?>
+                    <?php
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    echo ensorlogs_footer_social_nav_html();
+                    ?>
+                <?php endif; ?>
                 <?php if (function_exists('ensorlogs_render_newsletter_button')) : ?>
                     <p class="ensor-footer-cta__newsletter">
                         <?php

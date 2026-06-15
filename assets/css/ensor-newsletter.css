@@ -91,9 +91,10 @@ html.dark .ensor-newsletter-modal__close:focus-visible {
 
 .ensor-newsletter-modal__title {
     margin: 0 2rem 0.5rem 0;
-    font-size: 1.35rem;
-    font-weight: 800;
-    line-height: 1.25;
+    font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+    font-weight: var(--ensor-title-weight, 400);
+    line-height: 1.45;
+    letter-spacing: var(--ensor-title-letter-spacing, 0.04em);
 }
 
 .ensor-newsletter-modal__lead {
@@ -154,20 +155,57 @@ html.dark .ensor-newsletter-native-form input[type="email"] {
 }
 
 .ensor-newsletter-native-form .ensor-newsletter-submit {
+    --ensor-pixel-pad-y: 0.72rem;
     width: 100%;
-    border: 0;
-    border-radius: 999px;
-    padding: 0.72rem 1.25rem;
-    font-size: 0.9rem;
-    font-weight: 700;
+    display: inline-grid !important;
+    place-content: center !important;
+    align-items: center !important;
+    justify-items: center !important;
+    border: 2px solid var(--ensor-pixel-border, #1a1300);
+    border-radius: 0 !important;
+    margin-bottom: var(--ensor-pixel-depth, 4px);
+    padding-top: var(--ensor-pixel-pad-y) !important;
+    padding-bottom: var(--ensor-pixel-pad-y) !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    font-family: var(--ensor-font-pixel, 'Pixelify Sans', monospace);
+    font-size: 0.8125rem;
+    font-weight: var(--ensor-font-pixel-weight, 700);
+    line-height: 1.15 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     cursor: pointer;
-    background: var(--ensor-accent, #d9a300);
+    background: var(--ensor-pixel-primary-face, #e8b020);
     color: #1a1300;
-    transition: filter 0.15s ease, transform 0.15s ease;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch, 3px),
+        var(--ensor-pixel-notch, 3px) var(--ensor-pixel-notch, 3px),
+        var(--ensor-pixel-notch, 3px) 0,
+        calc(100% - var(--ensor-pixel-notch, 3px)) 0,
+        calc(100% - var(--ensor-pixel-notch, 3px)) var(--ensor-pixel-notch, 3px),
+        100% var(--ensor-pixel-notch, 3px),
+        100% calc(100% - var(--ensor-pixel-notch, 3px)),
+        calc(100% - var(--ensor-pixel-notch, 3px)) calc(100% - var(--ensor-pixel-notch, 3px)),
+        calc(100% - var(--ensor-pixel-notch, 3px)) 100%,
+        var(--ensor-pixel-notch, 3px) 100%,
+        var(--ensor-pixel-notch, 3px) calc(100% - var(--ensor-pixel-notch, 3px)),
+        0 calc(100% - var(--ensor-pixel-notch, 3px))
+    );
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight, rgba(255, 244, 210, 0.95)),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade, rgba(72, 50, 0, 0.5)),
+        0 var(--ensor-pixel-depth, 4px) 0 var(--ensor-pixel-primary-shadow, #6b4f08);
+    transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
 
 .ensor-newsletter-native-form .ensor-newsletter-submit:hover:not(:disabled) {
-    filter: brightness(0.95);
+    filter: none;
+    transform: translateY(-2px);
+    background: var(--ensor-pixel-primary-face-hover, #f5c030);
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight, rgba(255, 244, 210, 0.95)),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade, rgba(72, 50, 0, 0.5)),
+        0 calc(var(--ensor-pixel-depth, 4px) + 2px) 0 var(--ensor-pixel-primary-shadow, #6b4f08);
 }
 
 .ensor-newsletter-native-form .ensor-newsletter-submit:disabled {

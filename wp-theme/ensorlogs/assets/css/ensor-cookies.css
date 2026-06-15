@@ -51,25 +51,76 @@ html.dark .ensor-cookies__text { color: rgba(232, 232, 232, 0.86); }
     align-items: center;
 }
 .ensor-cookies__btn {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    background: transparent;
+    --ensor-pixel-pad-y: 0.5rem;
+    display: inline-grid !important;
+    place-content: center !important;
+    align-items: center !important;
+    justify-items: center !important;
+    border: 2px solid var(--ensor-pixel-outline-border, #3d3830);
+    background: var(--ensor-pixel-outline-face, #ece6d6);
     color: inherit;
-    padding: 0.5rem 0.9rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 700;
+    margin-bottom: var(--ensor-pixel-depth, 4px);
+    padding-top: var(--ensor-pixel-pad-y) !important;
+    padding-bottom: var(--ensor-pixel-pad-y) !important;
+    padding-left: 0.9rem !important;
+    padding-right: 0.9rem !important;
+    border-radius: 0 !important;
+    font-family: var(--ensor-font-pixel, 'Pixelify Sans', monospace);
+    font-size: 0.75rem;
+    font-weight: var(--ensor-font-pixel-weight, 700);
+    line-height: 1.15 !important;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch, 3px),
+        var(--ensor-pixel-notch, 3px) var(--ensor-pixel-notch, 3px),
+        var(--ensor-pixel-notch, 3px) 0,
+        calc(100% - var(--ensor-pixel-notch, 3px)) 0,
+        calc(100% - var(--ensor-pixel-notch, 3px)) var(--ensor-pixel-notch, 3px),
+        100% var(--ensor-pixel-notch, 3px),
+        100% calc(100% - var(--ensor-pixel-notch, 3px)),
+        calc(100% - var(--ensor-pixel-notch, 3px)) calc(100% - var(--ensor-pixel-notch, 3px)),
+        calc(100% - var(--ensor-pixel-notch, 3px)) 100%,
+        var(--ensor-pixel-notch, 3px) 100%,
+        var(--ensor-pixel-notch, 3px) calc(100% - var(--ensor-pixel-notch, 3px)),
+        0 calc(100% - var(--ensor-pixel-notch, 3px))
+    );
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+        0 var(--ensor-pixel-depth, 4px) 0 var(--ensor-pixel-outline-shadow, #6a6458);
+    transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
-html.dark .ensor-cookies__btn { border-color: rgba(255, 255, 255, 0.16); }
-.ensor-cookies__btn:hover { border-color: var(--ensor-accent, #d9a300); }
-.ensor-cookies__btn--primary {
-    background: var(--ensor-accent, #d9a300);
-    color: #1a1300;
+html.dark .ensor-cookies__btn {
+    border-color: #4a4b52;
+    background: #2a2b30;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth, 4px) 0 #121316;
+}
+.ensor-cookies__btn:hover {
     border-color: var(--ensor-accent, #d9a300);
+    transform: translateY(-2px);
+    background: var(--ensor-pixel-outline-face-hover, #f5f0e4);
+}
+.ensor-cookies__btn--primary {
+    background: var(--ensor-pixel-primary-face, #e8b020);
+    color: #1a1300;
+    border-color: var(--ensor-pixel-border, #1a1300);
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight, rgba(255, 244, 210, 0.95)),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade, rgba(72, 50, 0, 0.5)),
+        0 var(--ensor-pixel-depth, 4px) 0 var(--ensor-pixel-primary-shadow, #6b4f08);
 }
 .ensor-cookies__btn--primary:hover {
-    background: color-mix(in srgb, var(--ensor-accent, #d9a300) 90%, #000);
+    background: var(--ensor-pixel-primary-face-hover, #f5c030);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight, rgba(255, 244, 210, 0.95)),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade, rgba(72, 50, 0, 0.5)),
+        0 calc(var(--ensor-pixel-depth, 4px) + 2px) 0 var(--ensor-pixel-primary-shadow, #6b4f08);
 }
 .ensor-cookies__link {
     margin-left: auto;

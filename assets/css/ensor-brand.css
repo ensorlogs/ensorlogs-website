@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700;800&display=swap');
+
 /**
  * =============================================================================
  * ENSOR.LOGS — capa de marca y ajustes sobre la plantilla base
@@ -38,6 +42,178 @@
     --ensor-cta-hablemos-border: rgba(74, 52, 0, 0.35);
     --ensor-cta-hablemos-shadow: rgba(var(--ensor-accent-rgb), 0.32);
     --ensor-cta-hablemos-shadow-deep: rgba(120, 82, 0, 0.22);
+    /* Sistema tipográfico UX/UI */
+    --ensor-font-logo: 'Pixelify Sans', monospace;
+    --ensor-font-title: 'Space Grotesk', 'Inter', sans-serif;
+    --ensor-font-ui: 'Inter', sans-serif;
+    --ensor-font-body: 'Inter', sans-serif;
+  /* Botones pixel / CTAs: misma familia que el wordmark */
+    --ensor-font-pixel: var(--ensor-font-logo);
+    --ensor-font-pixel-weight: 700;
+    --ensor-header-btn-font-size: 0.8125rem;
+    --ensor-header-btn-pad-y: 0.625rem;
+    --ensor-header-btn-pad-x: 1.75rem;
+    --ensor-title-weight: 600;
+    --ensor-title-size-hero: clamp(1.55rem, 4.2vw, 2.5rem);
+    --ensor-title-letter-spacing: -0.01em;
+    --ensor-fs-h1: 1.85rem;
+    --ensor-fs-h2: 1.45rem;
+    --ensor-fs-h3: 1.2rem;
+    --ensor-fs-h4: 1.08rem;
+    --ensor-fs-body: 1rem;
+    --ensor-lh-heading: 1.3;
+    --ensor-lh-body: 1.8;
+    --ensor-pixel-notch: 3px;
+    --ensor-pixel-depth: 4px;
+    --ensor-pixel-border: #1a1300;
+    --ensor-pixel-primary-face: #e8b020;
+    --ensor-pixel-primary-face-hover: #f5c030;
+    --ensor-pixel-primary-shadow: #6b4f08;
+    --ensor-pixel-primary-highlight: rgba(255, 244, 210, 0.95);
+    --ensor-pixel-primary-shade: rgba(72, 50, 0, 0.5);
+    --ensor-pixel-outline-face: #ece6d6;
+    --ensor-pixel-outline-face-hover: #f5f0e4;
+    --ensor-pixel-outline-shadow: #6a6458;
+    --ensor-pixel-outline-border: #3d3830;
+    --ensor-pixel-pad-y: 0.625rem;
+}
+
+@media (min-width: 768px) {
+    :root {
+        --ensor-fs-h1: 2.1rem;
+        --ensor-fs-h2: 1.6rem;
+        --ensor-fs-h3: 1.28rem;
+        --ensor-fs-h4: 1.13rem;
+        --ensor-fs-body: 1.02rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    :root {
+        --ensor-fs-h1: 2.35rem;
+        --ensor-fs-h2: 1.75rem;
+        --ensor-fs-h3: 1.35rem;
+        --ensor-fs-h4: 1.18rem;
+        --ensor-fs-body: 1.05rem;
+    }
+}
+
+body {
+    font-family: var(--ensor-font-body);
+    font-weight: 400;
+    line-height: var(--ensor-lh-body);
+}
+
+.main-content :where(p, li, dd, dt),
+.entry-content :where(p, li, dd, dt),
+.ensor-wp-content :where(p, li, dd, dt) {
+    font-family: var(--ensor-font-body);
+    font-size: var(--ensor-fs-body);
+    line-height: var(--ensor-lh-body);
+}
+
+/* ---------- Títulos: Space Grotesk ---------- */
+:is(
+    .main-content :is(h1, h2, h3, h4, h5, h6),
+    .entry-content :is(h1, h2, h3, h4, h5, h6),
+    .ensor-wp-content :is(h1, h2, h3, h4, h5, h6),
+    .ensor-section-hero-title,
+    .ensor-services-hero__title,
+    .ensor-legal-hero__title,
+    .ensor-footer-cta__heading,
+    .ensor-newsletter-modal__title,
+    .blog-wrapper .blog-item .description h2,
+    .ensor-ai-prompt__title,
+    .ensor-reader-toc__title,
+    .ensor-reader-body :is(h1, h2, h3)
+) {
+    font-family: var(--ensor-font-title) !important;
+    font-weight: 600 !important;
+    letter-spacing: var(--ensor-title-letter-spacing);
+    line-height: var(--ensor-lh-heading);
+}
+
+:is(
+    .main-content :is(h1, h2, h3, h4, h5, h6),
+    .entry-content :is(h1, h2, h3, h4, h5, h6),
+    .ensor-wp-content :is(h1, h2, h3, h4, h5, h6)
+)[class*="font-"] {
+    font-weight: 600 !important;
+}
+
+:is(.main-content, .entry-content, .ensor-wp-content) h1 {
+    font-family: var(--ensor-font-title) !important;
+    font-weight: 700 !important;
+    font-size: var(--ensor-fs-h1) !important;
+    line-height: var(--ensor-lh-heading) !important;
+}
+
+:is(.main-content, .entry-content, .ensor-wp-content) h2 {
+    font-family: var(--ensor-font-title) !important;
+    font-weight: 600 !important;
+    font-size: var(--ensor-fs-h2) !important;
+    line-height: var(--ensor-lh-heading) !important;
+}
+
+:is(.main-content, .entry-content, .ensor-wp-content) :is(h3, h4) {
+    font-family: var(--ensor-font-title) !important;
+    font-weight: 500 !important;
+    line-height: calc(var(--ensor-lh-heading) + 0.05) !important;
+}
+
+:is(.main-content, .entry-content, .ensor-wp-content) h3 {
+    font-size: var(--ensor-fs-h3) !important;
+}
+
+:is(.main-content, .entry-content, .ensor-wp-content) h4 {
+    font-size: var(--ensor-fs-h4) !important;
+}
+
+/* Centrado vertical común en CTAs pixel (anula leading-/py- de Tailwind) */
+:is(
+    .ensor-btn,
+    a.ensor-cta-hablemos,
+    .mobile_menu .cta_button a.bg-darkGray,
+    .mobile_menu .cta_button a.dark\:bg-metalBlack,
+    .ensor-pulse-dot.ensor-pulse-dot--cta,
+    .ensor-footer-cta__alt-link
+) {
+    display: inline-grid !important;
+    place-content: center !important;
+    align-items: center !important;
+    justify-items: center !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
+    line-height: 1.15 !important;
+    min-height: unset !important;
+    padding-top: var(--ensor-pixel-pad-y) !important;
+    padding-bottom: var(--ensor-pixel-pad-y) !important;
+}
+
+.ensor-pulse-dot.ensor-pulse-dot--cta {
+    grid-auto-flow: column;
+    column-gap: 0.375rem;
+}
+
+:is(.ensor-btn, a.ensor-cta-hablemos)[class*="leading-"] {
+    line-height: 1.15 !important;
+}
+
+:is(.ensor-btn, a.ensor-cta-hablemos).font-semibold {
+    font-weight: var(--ensor-font-pixel-weight) !important;
+}
+
+@supports (text-box-trim: trim-both) {
+    :is(
+        .ensor-btn,
+        a.ensor-cta-hablemos,
+        .ensor-pulse-dot.ensor-pulse-dot--cta,
+        .ensor-footer-cta__alt-link,
+        .ensor-newsletter-native-form .ensor-newsletter-submit,
+        .ensor-cookies__btn
+    ) {
+        text-box-trim: trim-both;
+        text-box-edge: cap alphabetic;
+    }
 }
 
 /* =============================================================================
@@ -164,17 +340,30 @@ html.dark .ensor-logo-accent {
 
 /* Header lockup: marca negrita + tagline */
 .ensor-wordmark {
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    font-size: clamp(1.35rem, 3.2vw, 2.125rem);
+    font-family: var(--ensor-font-logo) !important;
+    font-weight: 800 !important;
+    letter-spacing: var(--ensor-title-letter-spacing);
+    line-height: 1.35;
+    font-size: clamp(1.05rem, 2.8vw, 1.35rem);
+    text-transform: uppercase;
 }
 
 header .nav > a:first-of-type .ensor-wordmark {
-    font-weight: 900;
+    font-weight: var(--ensor-title-weight);
 }
 
 .mobile_menu .ensor-wordmark {
-    font-size: clamp(1.2rem, 4.2vw, 1.45rem);
+    font-size: clamp(1rem, 4vw, 1.2rem);
+}
+
+/* Tagline bajo ENSOR.LOGS — misma familia pixel que el saludo del hero */
+.ensor-tagline,
+header .ensor-wordmark + span,
+.mobile_menu .ensor-wordmark + span {
+    font-family: var(--ensor-font-logo) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
 }
 
 /* Avatar/logo circular: más grande + ligero “bob” (lados / arriba-abajo) */
@@ -238,16 +427,15 @@ html.dark .mobile_menu .ensor-header-logo-wrap {
 }
 
 /*
- * Header: ensorlogs2.png — espejo horizontal; anclado arriba para recortar abajo (hasta camisa/mano).
+ * Header: ensorlogs2.png — avatar pixel art mirando a la derecha.
  */
 .ensor-header-logo-img {
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: cover;
-    object-position: center top;
-    transform: scaleX(-1) scale(1.14);
-    transform-origin: center top;
+    object-fit: contain;
+    object-position: center;
+    transform: scaleX(-1);
 }
 
 /* ---------- Barra header en móvil / tablet: más aire y marca menos ancha ---------- */
@@ -476,16 +664,16 @@ img.ensor-about-photo {
     }
 }
 
-/* Bloque intro about/credentials: títulos menos “gritados” en móvil */
+/* Bloque intro about/credentials: títulos en móvil (Press Start 2P) */
 @media (max-width: 639px) {
     .ensor-intro-card h1 {
-        font-size: clamp(1.65rem, 6.5vw, 2.15rem);
-        line-height: 1.15;
+        font-size: clamp(1.2rem, 5.5vw, 1.65rem);
+        line-height: 1.45;
     }
 
     .ensor-intro-card h2 {
-        font-size: clamp(1rem, 3.8vw, 1.125rem);
-        line-height: 1.35;
+        font-size: clamp(0.85rem, 3.5vw, 1rem);
+        line-height: 1.45;
     }
 }
 
@@ -556,6 +744,80 @@ html.dark a.ensor-widget-cover-16-10 img {
     }
 }
 
+/* Portada: carrusel de logs recientes */
+.ensor-home-logs-slider {
+    outline: none;
+}
+
+.ensor-home-logs-slider__media,
+.ensor-home-logs-slider__titles {
+    overflow: hidden;
+}
+
+.ensor-home-logs-slider__track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.45s ease;
+    will-change: transform;
+}
+
+.ensor-home-logs-slider__slide,
+.ensor-home-logs-slider__title-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+}
+
+.ensor-home-logs-slider__controls {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ensor-home-logs-slider__arrow {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--ensor-line-soft, rgba(26, 26, 26, 0.12));
+    background: linear-gradient(to bottom, #f4efe3, #eae3d2);
+    color: var(--ensor-ink);
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.ensor-home-logs-slider__arrow:hover,
+.ensor-home-logs-slider__arrow:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(var(--ensor-accent-rgb), 0.5);
+    color: var(--ensor-accent-hover);
+    outline: none;
+}
+
+html.dark .ensor-home-logs-slider__arrow {
+    color: var(--ensor-paper);
+    border-color: rgba(255, 255, 255, 0.12);
+    background: linear-gradient(to bottom, #2f3137, #24262b);
+}
+
+html.dark .ensor-home-logs-slider__arrow:hover,
+html.dark .ensor-home-logs-slider__arrow:focus-visible {
+    color: var(--ensor-accent-on-dark);
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.55);
+}
+
+.ensor-home-logs-slider--single .ensor-home-logs-slider__arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ensor-home-logs-slider__track {
+        transition: none;
+    }
+}
+
 /* Navegación principal */
 /* Espacio para sombras/borde del CTA — evita que el pill “Hablemos” se vea recortado */
 header .nav,
@@ -568,97 +830,251 @@ header .button-groups {
     padding-block: 0.375rem;
 }
 
-header .main-menu a.active {
-    border-color: var(--ensor-accent) !important;
+/* Menú escritorio — solo ≥1024px (móvil/tablet: drawer .mobile_menu) */
+header .main-menu {
+    display: none !important;
 }
 
-html:not(.dark) header .main-menu a:hover {
-    color: var(--ensor-accent) !important;
+@media (min-width: 1024px) {
+    header .main-menu {
+        display: flex !important;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        overflow: visible;
+    }
+
+    header .main-menu > a {
+        --ensor-pixel-pad-y: var(--ensor-header-btn-pad-y);
+        display: inline-grid !important;
+        place-content: center !important;
+        align-items: center !important;
+        justify-items: center !important;
+        box-sizing: border-box;
+        text-decoration: none !important;
+        border-radius: 0 !important;
+        font-family: var(--ensor-font-pixel) !important;
+        font-size: var(--ensor-header-btn-font-size);
+        font-weight: var(--ensor-font-pixel-weight) !important;
+        line-height: 1.15 !important;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--ensor-ink) !important;
+        background: var(--ensor-pixel-outline-face) !important;
+        border: 2px solid var(--ensor-pixel-outline-border) !important;
+        padding: var(--ensor-pixel-pad-y) var(--ensor-header-btn-pad-x) !important;
+        margin-bottom: var(--ensor-pixel-depth);
+        clip-path: polygon(
+            0 var(--ensor-pixel-notch),
+            var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+            var(--ensor-pixel-notch) 0,
+            calc(100% - var(--ensor-pixel-notch)) 0,
+            calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+            100% var(--ensor-pixel-notch),
+            100% calc(100% - var(--ensor-pixel-notch)),
+            calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+            calc(100% - var(--ensor-pixel-notch)) 100%,
+            var(--ensor-pixel-notch) 100%,
+            var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+            0 calc(100% - var(--ensor-pixel-notch))
+        );
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+            0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow);
+        transform: translateY(0);
+        transition:
+            transform 0.12s ease,
+            background 0.12s ease,
+            color 0.12s ease,
+            border-color 0.12s ease,
+            box-shadow 0.12s ease;
+    }
+
+    header .main-menu > a:hover {
+        color: var(--ensor-ink) !important;
+        background: var(--ensor-pixel-outline-face-hover) !important;
+        border-color: var(--ensor-accent-hover) !important;
+        transform: translateY(-2px);
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+            0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-outline-shadow);
+    }
+
+    header .main-menu > a:active {
+        transform: translateY(var(--ensor-pixel-depth));
+        box-shadow:
+            inset 2px 2px 0 rgba(0, 0, 0, 0.12),
+            inset -2px -2px 0 rgba(255, 255, 255, 0.85),
+            0 0 0 var(--ensor-pixel-outline-shadow);
+    }
+
+    header .main-menu > a.active {
+        color: var(--ensor-cta-hablemos-text) !important;
+        background: var(--ensor-pixel-primary-face) !important;
+        border-color: var(--ensor-pixel-border) !important;
+        box-shadow:
+            inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+            inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+            0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-primary-shadow);
+    }
+
+    header .main-menu > a.active:hover {
+        background: var(--ensor-pixel-primary-face-hover) !important;
+        box-shadow:
+            inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+            inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+            0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-primary-shadow);
+    }
+
+    header .main-menu > a:focus-visible {
+        outline: 2px solid var(--ensor-accent);
+        outline-offset: 3px;
+    }
+
+    html.dark header .main-menu > a {
+        color: #f3f4f6 !important;
+        background: #2a2b30 !important;
+        border-color: #4a4b52 !important;
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+            0 var(--ensor-pixel-depth) 0 #121316;
+    }
+
+    html.dark header .main-menu > a:hover {
+        color: #f3f4f6 !important;
+        background: #35363c !important;
+        border-color: var(--ensor-accent-on-dark) !important;
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.1),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+            0 calc(var(--ensor-pixel-depth) + 2px) 0 #121316;
+    }
+
+    html.dark header .main-menu > a.active,
+    html.dark header .main-menu > a.active:hover {
+        color: var(--ensor-cta-hablemos-text) !important;
+        background: #f0c14e !important;
+        border-color: #1a1300 !important;
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 248, 220, 0.9),
+            inset -2px -2px 0 rgba(60, 42, 0, 0.45),
+            0 var(--ensor-pixel-depth) 0 #5c4208;
+    }
+
+    html.dark header .main-menu > a.active:hover {
+        background: #fde68a !important;
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 252, 235, 0.95),
+            inset -2px -2px 0 rgba(60, 42, 0, 0.4),
+            0 calc(var(--ensor-pixel-depth) + 2px) 0 #5c4208;
+    }
+
+    html.dark header .main-menu > a:focus-visible {
+        outline-color: var(--ensor-accent-on-dark);
+    }
 }
 
-html.dark header .main-menu a:hover {
-    color: var(--ensor-accent-on-dark) !important;
+@media (min-width: 1280px) {
+    header .main-menu {
+        gap: 0.65rem;
+    }
 }
 
-/* CTA “Hablemos” — oro de marca, sombra nítida, sin halo difuso */
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+    header .main-menu > a,
+    header .main-menu > a:hover,
+    header .main-menu > a:active {
+        transform: none !important;
+    }
+}
+
+/* CTA “Hablemos” — pixel art oro marca (bevel 3D, esquinas escalonadas) */
 a.ensor-cta-hablemos {
+    --ensor-pixel-pad-y: var(--ensor-header-btn-pad-y);
     position: relative;
     isolation: isolate;
     overflow: visible;
     box-sizing: border-box;
     text-decoration: none !important;
-    line-height: 1.25;
-    min-height: 2.75rem;
-    padding-top: 0.625rem !important;
-    padding-bottom: 0.625rem !important;
-    border: 1px solid var(--ensor-cta-hablemos-border) !important;
+    border-radius: 0 !important;
+    font-family: var(--ensor-font-pixel);
+    font-size: var(--ensor-header-btn-font-size);
+    font-weight: var(--ensor-font-pixel-weight);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--ensor-pixel-depth);
     color: var(--ensor-cta-hablemos-text) !important;
-    background: linear-gradient(
-        180deg,
-        #f5b027 0%,
-        #f0a812 48%,
-        var(--ensor-accent) 100%
-    ) !important;
+    background: var(--ensor-pixel-primary-face) !important;
+    border: 2px solid var(--ensor-pixel-border) !important;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
     box-shadow:
-        0 1px 2px rgba(26, 26, 26, 0.07),
-        0 4px 14px var(--ensor-cta-hablemos-shadow);
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-primary-shadow) !important;
+    transform: translateY(0);
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+        transform 0.12s ease,
+        background 0.12s ease,
+        box-shadow 0.12s ease,
+        color 0.12s ease;
 }
 
 html.dark a.ensor-cta-hablemos {
-    border-color: rgba(255, 230, 170, 0.22) !important;
     color: var(--ensor-cta-hablemos-text) !important;
-    background: linear-gradient(
-        180deg,
-        #fde68a 0%,
-        #f5b027 45%,
-        #d9a300 100%
-    ) !important;
+    background: #f0c14e !important;
+    border-color: #1a1300 !important;
     box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.45),
-        0 5px 16px rgba(0, 0, 0, 0.35),
-        0 4px 14px var(--ensor-cta-hablemos-shadow);
+        inset 2px 2px 0 rgba(255, 248, 220, 0.9),
+        inset -2px -2px 0 rgba(60, 42, 0, 0.45),
+        0 var(--ensor-pixel-depth) 0 #5c4208 !important;
 }
 
 a.ensor-cta-hablemos:hover {
-    transform: translateY(-1px);
-    border-color: rgba(50, 36, 0, 0.42) !important;
+    transform: translateY(-2px);
     color: var(--ensor-cta-hablemos-text) !important;
-    background: linear-gradient(
-        180deg,
-        #fcd34d 0%,
-        #eab308 45%,
-        var(--ensor-accent-hover) 100%
-    ) !important;
+    background: var(--ensor-pixel-primary-face-hover) !important;
     box-shadow:
-        0 2px 4px rgba(26, 26, 26, 0.1),
-        0 8px 22px var(--ensor-cta-hablemos-shadow),
-        0 12px 28px var(--ensor-cta-hablemos-shadow-deep);
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-primary-shadow) !important;
 }
 
 html.dark a.ensor-cta-hablemos:hover {
-    border-color: rgba(255, 224, 160, 0.28) !important;
-    color: var(--ensor-cta-hablemos-text) !important;
-    background: linear-gradient(
-        180deg,
-        #fff7c2 0%,
-        #f5b027 42%,
-        #b8890f 100%
-    ) !important;
+    background: #fde68a !important;
     box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.5),
-        0 10px 26px rgba(0, 0, 0, 0.42),
-        0 6px 18px rgba(var(--ensor-accent-rgb), 0.35);
+        inset 2px 2px 0 rgba(255, 252, 235, 0.95),
+        inset -2px -2px 0 rgba(60, 42, 0, 0.4),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 #5c4208 !important;
+}
+
+a.ensor-cta-hablemos:active {
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-shade),
+        inset -2px -2px 0 var(--ensor-pixel-primary-highlight),
+        0 0 0 var(--ensor-pixel-primary-shadow) !important;
 }
 
 a.ensor-cta-hablemos:focus-visible {
     outline: 2px solid var(--ensor-accent);
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
 html.dark a.ensor-cta-hablemos:focus-visible {
@@ -667,8 +1083,16 @@ html.dark a.ensor-cta-hablemos:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
     a.ensor-cta-hablemos,
-    a.ensor-cta-hablemos:hover {
+    a.ensor-cta-hablemos:hover,
+    a.ensor-cta-hablemos:active {
         transform: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+    a.ensor-cta-hablemos.md\:px-7 {
+        padding-left: var(--ensor-header-btn-pad-x) !important;
+        padding-right: var(--ensor-header-btn-pad-x) !important;
     }
 }
 
@@ -681,16 +1105,53 @@ html.dark .mobile_menu a.active {
     box-shadow: inset 3px 0 0 var(--ensor-accent-on-dark);
 }
 
-/* Botón principal menú móvil */
+/* Botón principal menú móvil — pixel art */
 .mobile_menu .cta_button a.bg-darkGray,
 .mobile_menu .cta_button a.dark\:bg-metalBlack {
-    background-color: var(--ensor-accent) !important;
+    --ensor-pixel-pad-y: 0.75rem;
+    border-radius: 0 !important;
+    font-family: var(--ensor-font-pixel) !important;
+    font-size: 0.8125rem !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--ensor-ink) !important;
-    transition: filter 0.2s ease;
+    background: var(--ensor-pixel-primary-face) !important;
+    border: 2px solid var(--ensor-pixel-border) !important;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-primary-shadow) !important;
+    margin-bottom: var(--ensor-pixel-depth);
+    transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
 
 .mobile_menu .cta_button a:hover {
-    filter: brightness(1.05);
+    filter: none;
+    transform: translateY(-2px);
+    background: var(--ensor-pixel-primary-face-hover) !important;
+}
+
+.mobile_menu .cta_button a:active {
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-shade),
+        inset -2px -2px 0 var(--ensor-pixel-primary-highlight),
+        0 0 0 var(--ensor-pixel-primary-shadow) !important;
 }
 
 /* Enlaces en tarjetas tipo widget (flecha) */
@@ -789,7 +1250,7 @@ html.dark textarea:focus {
     }
 }
 
-/* Caja del logo: el círculo recorta; el zoom interno amplía el PNG para llenar el círculo (sin aro blanco / rejilla) */
+/* Caja del logo: halo suave mientras carga (sin wipe duplicado). */
 .ensor-preloader-logo {
     position: relative;
     width: 9rem;
@@ -797,10 +1258,11 @@ html.dark textarea:focus {
     margin-left: auto;
     margin-right: auto;
     flex-shrink: 0;
-    filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.08));
     border-radius: 50%;
     overflow: hidden;
     background-color: #d8d8dc;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+    animation: ensor-preloader-halo 2.2s ease-in-out infinite;
 }
 
 @media (min-width: 768px) {
@@ -811,54 +1273,71 @@ html.dark textarea:focus {
 }
 
 html.dark .ensor-preloader-logo {
-    filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.45));
     background-color: #1e1f22;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
 }
 
-/* Escala común: base + revelado se mueven juntos (alineación del wipe).
-   Origen arriba + object-position top: prioriza coronilla; zoom algo menor para no perder pelo al clip circular. */
+@keyframes ensor-preloader-halo {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(212, 168, 59, 0.28),
+            0 14px 36px rgba(0, 0, 0, 0.08);
+    }
+    50% {
+        box-shadow:
+            0 0 0 12px rgba(212, 168, 59, 0),
+            0 18px 42px rgba(0, 0, 0, 0.12);
+    }
+}
+
+html.dark .ensor-preloader-logo {
+    animation-name: ensor-preloader-halo-dark;
+}
+
+@keyframes ensor-preloader-halo-dark {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(212, 168, 59, 0.22),
+            0 14px 36px rgba(0, 0, 0, 0.45);
+    }
+    50% {
+        box-shadow:
+            0 0 0 12px rgba(212, 168, 59, 0),
+            0 18px 42px rgba(0, 0, 0, 0.55);
+    }
+}
+
 .ensor-preloader-logo-zoom {
     position: absolute;
     inset: 0;
-    transform: scale(1.38);
-    transform-origin: center top;
+    animation: ensor-preloader-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Capa inferior: mismo PNG, siempre visible */
-.ensor-preloader-base-img {
-    position: absolute;
-    inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    opacity: 0.42;
-    pointer-events: none;
-    z-index: 0;
-    transform: none;
-}
-
-html.dark .ensor-preloader-base-img {
-    opacity: 0.48;
-}
-
-@keyframes ensor-preloader-widen {
+@keyframes ensor-preloader-enter {
     from {
-        width: 0%;
+        opacity: 0;
+        transform: scale(0.84);
     }
     to {
-        width: 100%;
+        opacity: 1;
+        transform: scale(1);
     }
+}
+
+/* Una sola capa visible: sin fantasma ni barrido lateral */
+.ensor-preloader-base-img {
+    display: none;
 }
 
 .ensor-preloader-fill {
     position: absolute;
     inset: 0;
-    width: 0%;
+    width: 100%;
     overflow: hidden;
     z-index: 1;
-    animation: ensor-preloader-widen 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: none;
 }
 
 .ensor-preloader-fill-img {
@@ -867,10 +1346,26 @@ html.dark .ensor-preloader-base-img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    object-fit: contain;
+    object-position: center;
     pointer-events: none;
-    transform: none;
+    transform: scaleX(-1);
+    animation: ensor-preloader-breathe 2s ease-in-out infinite;
+}
+
+@keyframes ensor-preloader-breathe {
+    0%,
+    100% {
+        transform: scaleX(-1) scale(1);
+    }
+    50% {
+        transform: scaleX(-1) scale(1.045);
+    }
+}
+
+/* Avatares pequeños del blog con el mismo logo */
+img[src*="ensorlogs2.png"].rounded-full {
+    transform: scaleX(-1);
 }
 
 @keyframes ensor-preloader-loading-pulse {
@@ -903,9 +1398,23 @@ html.dark .ensor-preloader-base-img {
         transform: none !important;
     }
 
+    .ensor-preloader-logo,
+    html.dark .ensor-preloader-logo {
+        animation: none !important;
+    }
+
+    .ensor-preloader-logo-zoom,
+    .ensor-preloader-fill-img {
+        animation: none !important;
+    }
+
     .ensor-preloader-fill {
         width: 100% !important;
         animation: none !important;
+    }
+
+    .ensor-preloader-fill-img {
+        transform: scaleX(-1) !important;
     }
 
     .ensor-preloader-loading {
@@ -1024,19 +1533,40 @@ img.ensor-article-hero:not(.ensor-reader-hero__img) {
     display: none !important;
 }
 
+/* Home hero: saludo + nombre con tipografía pixel del wordmark */
+.widget:has(.ensor-home-hero-name) > .flex > p {
+    font-family: var(--ensor-font-logo) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+}
+
 /* Títulos principales: tipografía + subrayado de marca al 50% del ancho */
+.ensor-home-hero-name {
+    display: block;
+    font-family: var(--ensor-font-logo) !important;
+    font-size: var(--ensor-title-size-hero);
+    font-weight: 800 !important;
+    line-height: 1.35;
+    letter-spacing: var(--ensor-title-letter-spacing);
+    text-transform: uppercase;
+    color: var(--ensor-ink);
+    margin: 0;
+    text-wrap: balance;
+    background-image: none;
+}
+
 .main-content .container > section:first-child h1,
 .ensor-intro-card h1,
 .ensor-section-hero-title,
 .ensor-services-hero__title,
 .ensor-legal-hero__title,
-.blog-details-wrapper .blog-details-content > h1:first-child,
-.ensor-home-hero-name {
+.blog-details-wrapper .blog-details-content > h1:first-child {
     display: block;
-    font-size: clamp(1.75rem, 4.2vw, 3.2rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.055em;
+    font-size: var(--ensor-title-size-hero);
+    font-weight: var(--ensor-title-weight);
+    line-height: 1.45;
+    letter-spacing: var(--ensor-title-letter-spacing);
     color: var(--ensor-ink);
     margin: 0;
     text-wrap: balance;
@@ -1101,10 +1631,10 @@ section[aria-labelledby="proyectos-intro-heading"] h1:first-of-type,
 section[aria-labelledby="proyectos-intro-heading"] h2:first-of-type,
 section[aria-labelledby="blog-temas-heading"] h1:first-of-type,
 section[aria-labelledby="blog-temas-heading"] h2:first-of-type {
-    font-size: clamp(1.75rem, 4.2vw, 3.2rem) !important;
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.055em;
+    font-size: var(--ensor-title-size-hero) !important;
+    font-weight: var(--ensor-title-weight);
+    line-height: 1.45;
+    letter-spacing: var(--ensor-title-letter-spacing);
     color: var(--ensor-ink);
     margin: 0;
     text-wrap: balance;
@@ -1866,25 +2396,49 @@ html.dark .ensor-marquee--matrix .ensor-terminal-ticker__link:focus-visible {
     }
 }
 
-/* ---------- Botones pill de marca (hero, formularios, listados) ---------- */
+/* ---------- Botones pixel art de marca (hero, formularios, listados) ---------- */
 .ensor-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    font-weight: 600;
-    border-radius: 9999px;
+    font-family: var(--ensor-font-pixel);
+    font-size: 0.8125rem;
+    font-weight: var(--ensor-font-pixel-weight);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 0 !important;
     border-style: solid;
     border-width: 2px;
     text-decoration: none;
     cursor: pointer;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
+    margin-bottom: var(--ensor-pixel-depth);
+    transform: translateY(0);
     transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        filter 0.2s ease,
-        transform 0.15s ease;
+        background 0.12s ease,
+        color 0.12s ease,
+        box-shadow 0.12s ease,
+        transform 0.12s ease;
+}
+
+.ensor-btn.py-2 {
+    --ensor-pixel-pad-y: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .ensor-btn.lg\:py-3 {
+        --ensor-pixel-pad-y: 0.75rem;
+    }
 }
 
 .ensor-btn:focus-visible {
@@ -1898,86 +2452,110 @@ html.dark .ensor-btn:focus-visible {
 
 .ensor-btn-primary {
     color: var(--ensor-ink);
-    background: linear-gradient(
-        180deg,
-        #f5b027 0%,
-        #f0a812 48%,
-        var(--ensor-accent) 100%
-    );
-    border-color: rgba(74, 52, 0, 0.32);
+    background: var(--ensor-pixel-primary-face);
+    border-color: var(--ensor-pixel-border);
     box-shadow:
-        0 1px 2px rgba(26, 26, 26, 0.07),
-        0 4px 14px rgba(var(--ensor-accent-rgb), 0.3);
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-primary-shadow);
 }
 
 .ensor-btn-primary:hover {
-    background: linear-gradient(
-        180deg,
-        #fcd34d 0%,
-        #eab308 45%,
-        var(--ensor-accent-hover) 100%
-    );
+    background: var(--ensor-pixel-primary-face-hover);
+    transform: translateY(-2px);
     box-shadow:
-        0 2px 4px rgba(26, 26, 26, 0.1),
-        0 8px 22px rgba(var(--ensor-accent-rgb), 0.34),
-        0 12px 28px rgba(120, 82, 0, 0.2);
-    transform: translateY(-1px);
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-primary-shadow);
 }
 
 .ensor-btn-primary:active {
-    transform: translateY(0);
-    filter: brightness(0.97);
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-shade),
+        inset -2px -2px 0 var(--ensor-pixel-primary-highlight),
+        0 0 0 var(--ensor-pixel-primary-shadow);
 }
 
 html.dark .ensor-btn-primary {
     color: var(--ensor-ink);
-    background: linear-gradient(180deg, #fde68a 0%, #f5b027 45%, #d9a300 100%);
-    border-color: rgba(255, 230, 170, 0.22);
+    background: #f0c14e;
+    border-color: #1a1300;
     box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.45),
-        0 5px 16px rgba(0, 0, 0, 0.32),
-        0 4px 14px rgba(var(--ensor-accent-rgb), 0.28);
+        inset 2px 2px 0 rgba(255, 248, 220, 0.9),
+        inset -2px -2px 0 rgba(60, 42, 0, 0.45),
+        0 var(--ensor-pixel-depth) 0 #5c4208;
 }
 
 html.dark .ensor-btn-primary:hover {
-    background: linear-gradient(180deg, #fff7c2 0%, #f5b027 42%, #b8890f 100%);
+    background: #fde68a;
     box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.5),
-        0 10px 26px rgba(0, 0, 0, 0.4),
-        0 6px 18px rgba(var(--ensor-accent-rgb), 0.32);
+        inset 2px 2px 0 rgba(255, 252, 235, 0.95),
+        inset -2px -2px 0 rgba(60, 42, 0, 0.4),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 #5c4208;
 }
 
 .ensor-btn-outline {
     color: var(--ensor-ink);
-    background: rgba(255, 255, 255, 0.72);
-    border-color: var(--ensor-accent);
-    box-shadow: 0 2px 14px rgba(var(--ensor-accent-rgb), 0.12);
+    background: var(--ensor-pixel-outline-face);
+    border-color: var(--ensor-pixel-outline-border);
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.12),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow);
 }
 
 html:not(.dark) .ensor-btn-outline:hover {
-    background: var(--ensor-accent-soft);
+    background: var(--ensor-pixel-outline-face-hover);
     border-color: var(--ensor-accent-hover);
-    box-shadow: 0 5px 20px rgba(var(--ensor-accent-rgb), 0.22);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-outline-shadow);
+}
+
+html:not(.dark) .ensor-btn-outline:active {
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 rgba(0, 0, 0, 0.12),
+        inset -2px -2px 0 rgba(255, 255, 255, 0.85),
+        0 0 0 var(--ensor-pixel-outline-shadow);
 }
 
 html.dark .ensor-btn-outline {
-    color: #e2e4e8;
-    background: rgba(22, 22, 24, 0.65);
-    border-color: var(--ensor-accent-on-dark);
-    box-shadow: 0 2px 16px rgba(var(--ensor-accent-on-dark-rgb), 0.12);
+    color: #f3f4f6;
+    background: #2a2b30;
+    border-color: #4a4b52;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth) 0 #121316;
 }
 
 html.dark .ensor-btn-outline:hover {
-    background: rgba(var(--ensor-accent-on-dark-rgb), 0.14);
+    background: #35363c;
     border-color: var(--ensor-accent-on-dark);
-    box-shadow: 0 6px 22px rgba(var(--ensor-accent-on-dark-rgb), 0.2);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.1),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 #121316;
+}
+
+html.dark .ensor-btn-outline:active {
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 rgba(0, 0, 0, 0.35),
+        inset -2px -2px 0 rgba(255, 255, 255, 0.06),
+        0 0 0 #121316;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .ensor-btn-primary:hover,
-    .ensor-btn-outline:hover {
+    .ensor-btn-outline:hover,
+    .ensor-btn-primary:active,
+    .ensor-btn-outline:active {
         transform: none;
     }
 }
@@ -2120,6 +2698,30 @@ html.dark .blog-details-wrapper .details-body a:hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.ensor-footer-cta__icon--logo {
+    padding: 0.4rem;
+    overflow: hidden;
+    background: var(--ensor-header-logo-bg) !important;
+    border-color: rgba(var(--ensor-accent-rgb), 0.42);
+    animation: ensor-logo-bob 5.5s ease-in-out infinite;
+    will-change: transform;
+}
+
+.ensor-footer-cta__logo-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    transform: scaleX(-1);
+    transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.ensor-footer-cta:hover .ensor-footer-cta__logo-img {
+    transform: scaleX(-1) scale(1.08) rotate(-4deg);
+    filter: drop-shadow(0 0 10px rgba(var(--ensor-accent-rgb), 0.5));
+}
+
 .ensor-footer-cta__icon svg,
 .ensor-footer-cta__icon i {
     width: 2rem;
@@ -2135,15 +2737,21 @@ html.dark .ensor-footer-cta__icon {
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
 }
 
+html.dark .ensor-footer-cta__icon--logo {
+    background: var(--ensor-header-logo-bg) !important;
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.38);
+}
+
 .ensor-footer-cta:hover .ensor-footer-cta__icon {
     transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(var(--ensor-accent-rgb), 0.28);
 }
 
 .ensor-footer-cta__heading {
-    font-weight: 600;
-    font-size: clamp(1.65rem, 3.5vw, 2.85rem);
-    line-height: 1.2;
+    font-weight: var(--ensor-title-weight);
+    font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+    line-height: 1.45;
+    letter-spacing: var(--ensor-title-letter-spacing);
     color: var(--ensor-ink);
     margin: 0;
     text-wrap: balance;
@@ -2299,6 +2907,15 @@ html.dark .ensor-footer-cta__wp:focus-visible {
         transition: none;
         transform: none;
     }
+
+    .ensor-footer-cta__icon--logo {
+        animation: none !important;
+    }
+
+    .ensor-footer-cta:hover .ensor-footer-cta__logo-img {
+        transform: scaleX(-1);
+        filter: none;
+    }
 }
 
 /* Enlace secundario del footer CTA — Calendly */
@@ -2307,47 +2924,83 @@ html.dark .ensor-footer-cta__wp:focus-visible {
 }
 
 .ensor-footer-cta__alt-link {
-    display: inline-flex;
-    align-items: center;
+    --ensor-pixel-pad-y: 0.5rem;
     gap: 0.5rem;
-    padding: 0.45rem 0.95rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--ensor-accent);
-    border: 1px dashed rgba(var(--ensor-accent-rgb), 0.4);
-    border-radius: 9999px;
-    background: rgba(var(--ensor-accent-rgb), 0.06);
+    margin-bottom: var(--ensor-pixel-depth);
+    padding-left: 0.95rem !important;
+    padding-right: 0.95rem !important;
+    font-family: var(--ensor-font-pixel);
+    font-size: 0.75rem;
+    font-weight: var(--ensor-font-pixel-weight);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--ensor-ink);
+    border: 2px solid var(--ensor-pixel-outline-border);
+    border-radius: 0 !important;
+    background: var(--ensor-pixel-outline-face);
     text-decoration: none !important;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow);
+    transform: translateY(0);
+    transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .ensor-footer-cta__alt-link:hover,
 .ensor-footer-cta__alt-link:focus-visible {
     color: var(--ensor-ink);
-    background: rgba(var(--ensor-accent-rgb), 0.18);
-    border-color: rgba(var(--ensor-accent-rgb), 0.65);
-    border-style: solid;
-    transform: translateY(-1px);
+    background: var(--ensor-pixel-outline-face-hover);
+    border-color: var(--ensor-accent-hover);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-outline-shadow);
     outline: none;
 }
 
 html.dark .ensor-footer-cta__alt-link {
-    color: var(--ensor-accent-on-dark);
-    border-color: rgba(var(--ensor-accent-rgb), 0.5);
-    background: rgba(var(--ensor-accent-rgb), 0.1);
+    color: #f3f4f6;
+    border-color: #4a4b52;
+    background: #2a2b30;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth) 0 #121316;
 }
 
 html.dark .ensor-footer-cta__alt-link:hover,
 html.dark .ensor-footer-cta__alt-link:focus-visible {
     color: var(--ensor-paper);
-    background: rgba(var(--ensor-accent-rgb), 0.22);
-    border-color: rgba(var(--ensor-accent-rgb), 0.75);
+    background: #35363c;
+    border-color: var(--ensor-accent-on-dark);
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.1),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 #121316;
 }
 
 @media (max-width: 640px) {
     .ensor-footer-cta__alt-link {
-        font-size: 0.82rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.6875rem;
+        --ensor-pixel-pad-y: 0.45rem;
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
     }
 }
 
@@ -2384,6 +3037,69 @@ html.dark .ensor-calendly-icon {
     );
 }
 
+/* Bloque social compacto (footer; antes en home) */
+.ensor-home-social {
+    padding-top: 0.85rem !important;
+    padding-bottom: 0.85rem !important;
+}
+
+.ensor-footer-cta__social.ensor-home-social {
+    padding: 0 !important;
+    margin: 0 auto 1.15rem;
+    max-width: 18rem;
+}
+
+.ensor-home-social__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+}
+
+.ensor-home-social__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+}
+
+.ensor-home-social__icon {
+    width: 2.7rem;
+    height: 2.7rem;
+    display: grid;
+    place-content: center;
+    border-radius: 999px;
+    color: var(--ensor-ink);
+    border: 1px solid var(--ensor-line-soft);
+    background: linear-gradient(to bottom, #f4efe3, #eae3d2);
+    transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.ensor-home-social__icon i {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.ensor-home-social__link:hover .ensor-home-social__icon,
+.ensor-home-social__link:focus-visible .ensor-home-social__icon {
+    transform: translateY(-1px);
+    border-color: rgba(var(--ensor-accent-rgb), 0.5);
+    color: var(--ensor-accent-hover);
+}
+
+html.dark .ensor-home-social__icon {
+    color: var(--ensor-paper);
+    border-color: rgba(255, 255, 255, 0.12);
+    background: linear-gradient(to bottom, #2f3137, #24262b);
+}
+
+html.dark .ensor-home-social__link:hover .ensor-home-social__icon,
+html.dark .ensor-home-social__link:focus-visible .ensor-home-social__icon {
+    color: var(--ensor-accent-on-dark);
+    border-color: rgba(var(--ensor-accent-on-dark-rgb), 0.55);
+}
+
 @keyframes ensor-cta-dot-blink {
     0%,
     100% {
@@ -2394,44 +3110,81 @@ html.dark .ensor-calendly-icon {
     }
 }
 
-/* Pill "Agenda una llamada" — interactivo */
+/* Pill "Agenda una llamada" — pixel art interactivo */
 .ensor-pulse-dot.ensor-pulse-dot--cta {
-    border-color: rgba(var(--ensor-accent-rgb), 0.78) !important;
-    border-width: 2px;
-    background: linear-gradient(
-        180deg,
-        rgba(var(--ensor-accent-rgb), 0.1) 0%,
-        rgba(var(--ensor-accent-rgb), 0.03) 100%
-    ) !important;
-    box-shadow: 0 10px 24px -18px rgba(var(--ensor-accent-rgb), 0.65);
+    --ensor-pixel-pad-y: 0.5rem;
+    border-radius: 0 !important;
+    border: 2px solid var(--ensor-pixel-border) !important;
+    border-width: 2px !important;
+    font-family: var(--ensor-font-pixel) !important;
+    font-size: 0.75rem !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: var(--ensor-pixel-outline-face) !important;
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow) !important;
     color: var(--ensor-ink) !important;
-    font-weight: 800;
-    letter-spacing: -0.015em;
     text-decoration: none !important;
     cursor: pointer;
-    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: var(--ensor-pixel-depth);
+    transform: translateY(0);
+    transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
 
 .ensor-pulse-dot.ensor-pulse-dot--cta::before {
     animation: ensor-cta-dot-blink 1.5s ease-in-out infinite;
-    box-shadow: 0 0 0 3px rgba(107, 142, 120, 0.16);
+    box-shadow: 0 0 0 2px rgba(107, 142, 120, 0.35);
+    border-radius: 0 !important;
+    align-self: center;
+    flex-shrink: 0;
+    margin: 0 !important;
 }
 
 html.dark .ensor-pulse-dot.ensor-pulse-dot--cta {
-    color: var(--ensor-paper) !important;
-    background: linear-gradient(
-        180deg,
-        rgba(var(--ensor-accent-rgb), 0.2) 0%,
-        rgba(var(--ensor-accent-rgb), 0.07) 100%
-    ) !important;
+    color: #f3f4f6 !important;
+    background: #2a2b30 !important;
+    border-color: #4a4b52 !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth) 0 #121316 !important;
 }
 
 .ensor-pulse-dot.ensor-pulse-dot--cta:hover,
 .ensor-pulse-dot.ensor-pulse-dot--cta:focus-visible {
     transform: translateY(-2px);
     border-color: var(--ensor-accent) !important;
-    box-shadow: 0 14px 28px -16px rgba(var(--ensor-accent-rgb), 0.9);
+    background: var(--ensor-pixel-outline-face-hover) !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-outline-shadow) !important;
     outline: none;
+}
+
+.ensor-pulse-dot.ensor-pulse-dot--cta:active {
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 rgba(0, 0, 0, 0.12),
+        inset -2px -2px 0 rgba(255, 255, 255, 0.85),
+        0 0 0 var(--ensor-pixel-outline-shadow) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -117,7 +117,7 @@ while ($blog_q->have_posts()) {
             </h2>
             <div class="meta my-3 text-sm text-darkGray dark:text-pastelGrey">
                 <span class="text-regular inline-flex items-center gap-2">
-                    <img class="w-8 h-8 shrink-0 rounded-full object-cover object-top bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="<?php echo esc_url($t_logo); ?>" alt="EnsorLogs">
+                    <img class="w-8 h-8 shrink-0 rounded-full object-contain object-center bg-gradient-to-b from-milkWhite to-seashell dark:from-metalBlack dark:to-oilBlack border border-flasWhite dark:border-flasBlack" src="<?php echo esc_url($t_logo); ?>" alt="EnsorLogs">
                     <span class="author-name"><span><?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('Por', 'By') : __('Por', 'ensorlogs')); ?></span> EnsorLogs</span>
                 </span>
                 <time class="text-regular block mt-1.5 opacity-90" datetime="<?php echo esc_attr($time_attr); ?>"><?php echo esc_html($time_show); ?></time>

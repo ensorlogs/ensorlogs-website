@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ENSORLOGS_THEME_VERSION', '1.10.70');
+define('ENSORLOGS_THEME_VERSION', '1.10.71');
 
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/block-content.php';
@@ -115,7 +115,7 @@ function ensorlogs_fonts_url(): string
     }
     return (string) apply_filters(
         'ensorlogs_fonts_url',
-        'https://fonts.bunny.net/css?family=bricolage-grotesque:200,300,400,500,600,700,800&display=swap'
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pixelify+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap'
     );
 }
 
@@ -167,6 +167,16 @@ add_action('wp_enqueue_scripts', static function (): void {
     wp_enqueue_script('ensorlogs-a11y', $uri . '/assets/js/ensor-a11y.js', array(), $v, true);
     wp_enqueue_script('ensorlogs-cookies', $uri . '/assets/js/ensor-cookies.js', array(), $v, true);
     wp_enqueue_script('ensorlogs-quiz', $uri . '/assets/js/ensor-quiz.js', array(), $v, true);
+
+    if (is_front_page()) {
+        wp_enqueue_script(
+            'ensorlogs-home-logs-slider',
+            $uri . '/assets/js/ensor-home-logs-slider.js',
+            array(),
+            $v,
+            true
+        );
+    }
 
     if (function_exists('ensorlogs_newsletter_enabled') && ensorlogs_newsletter_enabled()) {
         wp_enqueue_style(
