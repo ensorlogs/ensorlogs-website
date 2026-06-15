@@ -87,8 +87,53 @@ html.dark .ensor-lang-switch__btn {
     justify-content: flex-start;
     gap: 0.65rem;
     padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    box-shadow: none;
+    border-radius: 0 !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+        0 var(--ensor-pixel-depth, 4px) 0 var(--ensor-pixel-outline-shadow, #6a6458);
+    border: 2px solid var(--ensor-pixel-outline-border, #3d3830);
+    background: var(--ensor-pixel-outline-face, #ece6d6);
+    font-family: var(--ensor-font-pixel, 'Pixelify Sans', monospace);
+    font-size: var(--ensor-header-btn-font-size, 0.8125rem);
+    font-weight: var(--ensor-font-pixel-weight, 700);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--ensor-pixel-depth, 4px);
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch, 3px),
+        var(--ensor-pixel-notch, 3px) var(--ensor-pixel-notch, 3px),
+        var(--ensor-pixel-notch, 3px) 0,
+        calc(100% - var(--ensor-pixel-notch, 3px)) 0,
+        calc(100% - var(--ensor-pixel-notch, 3px)) var(--ensor-pixel-notch, 3px),
+        100% var(--ensor-pixel-notch, 3px),
+        100% calc(100% - var(--ensor-pixel-notch, 3px)),
+        calc(100% - var(--ensor-pixel-notch, 3px)) calc(100% - var(--ensor-pixel-notch, 3px)),
+        calc(100% - var(--ensor-pixel-notch, 3px)) 100%,
+        var(--ensor-pixel-notch, 3px) 100%,
+        var(--ensor-pixel-notch, 3px) calc(100% - var(--ensor-pixel-notch, 3px)),
+        0 calc(100% - var(--ensor-pixel-notch, 3px))
+    );
+}
+
+html.dark .ensor-lang-switch--mobile .ensor-lang-switch__btn {
+    background: #2a2b30;
+    color: #f3f4f6;
+    border-color: #4a4b52;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth, 4px) 0 #121316;
+}
+
+.ensor-lang-switch--mobile .ensor-lang-switch__btn.is-active {
+    background: var(--ensor-pixel-primary-face, #e8b020);
+    border-color: var(--ensor-pixel-border, #1a1300);
+    color: var(--ensor-cta-hablemos-text, #1a1300);
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight, rgba(255, 244, 210, 0.95)),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade, rgba(72, 50, 0, 0.5)),
+        0 var(--ensor-pixel-depth, 4px) 0 var(--ensor-pixel-primary-shadow, #6b4f08);
 }
 
 .ensor-lang-switch--mobile .ensor-lang-switch__flag {
@@ -97,7 +142,7 @@ html.dark .ensor-lang-switch__btn {
 }
 
 .ensor-lang-switch--mobile .ensor-lang-switch__code {
-    font-size: 0.75rem;
+    font-size: var(--ensor-header-btn-font-size, 0.8125rem);
     letter-spacing: 0.08em;
 }
 

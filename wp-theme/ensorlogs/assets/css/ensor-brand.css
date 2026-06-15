@@ -1104,13 +1104,176 @@ html.dark a.ensor-cta-hablemos:focus-visible {
     }
 }
 
-/* Menú móvil: acento en ítem activo */
-.mobile_menu a.active {
-    box-shadow: inset 3px 0 0 var(--ensor-accent);
+/* Menú móvil — drawer: pixel art coherente con escritorio */
+.mobile_menu .my-12 > a {
+    --ensor-pixel-pad-y: 0.625rem;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box;
+    text-decoration: none !important;
+    border-radius: 0 !important;
+    font-family: var(--ensor-font-pixel) !important;
+    font-size: var(--ensor-header-btn-font-size) !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ensor-ink) !important;
+    background: var(--ensor-pixel-outline-face) !important;
+    border: 2px solid var(--ensor-pixel-outline-border) !important;
+    padding: var(--ensor-pixel-pad-y) 1rem !important;
+    margin-bottom: var(--ensor-pixel-depth);
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow) !important;
+    transform: translateY(0);
+    transition:
+        transform 0.12s ease,
+        background 0.12s ease,
+        color 0.12s ease,
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
 }
 
-html.dark .mobile_menu a.active {
-    box-shadow: inset 3px 0 0 var(--ensor-accent-on-dark);
+.mobile_menu .my-12 > a:hover {
+    color: var(--ensor-ink) !important;
+    background: var(--ensor-pixel-outline-face-hover) !important;
+    border-color: var(--ensor-accent-hover) !important;
+    transform: translateY(-2px);
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-outline-shadow) !important;
+}
+
+.mobile_menu .my-12 > a:active {
+    transform: translateY(var(--ensor-pixel-depth));
+    box-shadow:
+        inset 2px 2px 0 rgba(0, 0, 0, 0.12),
+        inset -2px -2px 0 rgba(255, 255, 255, 0.85),
+        0 0 0 var(--ensor-pixel-outline-shadow) !important;
+}
+
+.mobile_menu .my-12 > a.active {
+    color: var(--ensor-cta-hablemos-text) !important;
+    background: var(--ensor-pixel-primary-face) !important;
+    border-color: var(--ensor-pixel-border) !important;
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-primary-shadow) !important;
+}
+
+.mobile_menu .my-12 > a.active:hover {
+    background: var(--ensor-pixel-primary-face-hover) !important;
+    box-shadow:
+        inset 2px 2px 0 var(--ensor-pixel-primary-highlight),
+        inset -2px -2px 0 var(--ensor-pixel-primary-shade),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-primary-shadow) !important;
+}
+
+html.dark .mobile_menu .my-12 > a {
+    color: #f3f4f6 !important;
+    background: #2a2b30 !important;
+    border-color: #4a4b52 !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth) 0 #121316 !important;
+}
+
+html.dark .mobile_menu .my-12 > a:hover {
+    color: #f3f4f6 !important;
+    background: #35363c !important;
+    border-color: var(--ensor-accent-on-dark) !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.1),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+        0 calc(var(--ensor-pixel-depth) + 2px) 0 #121316 !important;
+}
+
+html.dark .mobile_menu .my-12 > a.active,
+html.dark .mobile_menu .my-12 > a.active:hover {
+    color: var(--ensor-cta-hablemos-text) !important;
+    background: #f0c14e !important;
+    border-color: #1a1300 !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 248, 220, 0.9),
+        inset -2px -2px 0 rgba(60, 42, 0, 0.45),
+        0 var(--ensor-pixel-depth) 0 #5c4208 !important;
+}
+
+.mobile_menu .ensor-mobile-theme-toggle {
+    border-radius: 0 !important;
+    font-family: var(--ensor-font-pixel) !important;
+    font-size: var(--ensor-header-btn-font-size) !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ensor-ink) !important;
+    background: var(--ensor-pixel-outline-face) !important;
+    border: 2px solid var(--ensor-pixel-outline-border) !important;
+    margin-bottom: var(--ensor-pixel-depth);
+    clip-path: polygon(
+        0 var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+        var(--ensor-pixel-notch) 0,
+        calc(100% - var(--ensor-pixel-notch)) 0,
+        calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+        100% var(--ensor-pixel-notch),
+        100% calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+        calc(100% - var(--ensor-pixel-notch)) 100%,
+        var(--ensor-pixel-notch) 100%,
+        var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+        0 calc(100% - var(--ensor-pixel-notch))
+    );
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+        0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow) !important;
+}
+
+html.dark .mobile_menu .ensor-mobile-theme-toggle {
+    color: #f3f4f6 !important;
+    background: #2a2b30 !important;
+    border-color: #4a4b52 !important;
+    box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+        0 var(--ensor-pixel-depth) 0 #121316 !important;
+}
+
+.mobile_menu .cta_button > p {
+    font-family: var(--ensor-font-pixel) !important;
+    font-size: var(--ensor-header-btn-font-size) !important;
+    font-weight: var(--ensor-font-pixel-weight) !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mobile_menu .my-12 > a,
+    .mobile_menu .my-12 > a:hover,
+    .mobile_menu .my-12 > a:active {
+        transform: none !important;
+    }
 }
 
 /* Botón principal menú móvil — pixel art */
