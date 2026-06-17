@@ -58,7 +58,7 @@ if (function_exists('ensorlogs_article_lang_meta_query')) {
 }
 $blog_q = new WP_Query($blog_query_args);
 
-$t_logo = esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
+$t_logo = esc_url(function_exists('ensorlogs_brand_logo_url') ? ensorlogs_brand_logo_url() : get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
 
 while ($blog_q->have_posts()) {
     $blog_q->the_post();
@@ -86,7 +86,7 @@ while ($blog_q->have_posts()) {
         $img_src = is_string($thumb) && $thumb !== '' ? esc_url($thumb) : '';
     }
     if ($img_src === '') {
-        $img_src = esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
+        $img_src = esc_url(function_exists('ensorlogs_brand_logo_url') ? ensorlogs_brand_logo_url() : get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
     }
     $card_txt = (string) get_post_meta($pid, '_ensor_card_excerpt', true);
     if ($card_txt === '') {

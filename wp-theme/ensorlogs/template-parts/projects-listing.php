@@ -95,7 +95,7 @@ while ($proj_q->have_posts()) {
         $img_src = ensorlogs_resolve_public_asset_url($img_rel);
     }
     if ($img_src === '') {
-        $img_src = esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
+        $img_src = esc_url(function_exists('ensorlogs_brand_logo_url') ? ensorlogs_brand_logo_url() : get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png');
     }
     $tags_raw = (string) get_post_meta($pid, '_ensor_tag_slugs', true);
     $tags     = json_decode($tags_raw, true);

@@ -165,7 +165,9 @@ function ensorlogs_get_og_default_image_url(): string
             return $u;
         }
     }
-    return trailingslashit(get_template_directory_uri()) . 'assets/img/Logos/ensorlogs2.png';
+    return function_exists('ensorlogs_brand_logo_url')
+        ? ensorlogs_brand_logo_url()
+        : trailingslashit(get_template_directory_uri()) . 'assets/img/Logos/ensorlogs2.png';
 }
 
 add_action(

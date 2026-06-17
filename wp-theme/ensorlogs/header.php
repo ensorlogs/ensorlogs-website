@@ -8,6 +8,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 $t_uri    = get_template_directory_uri();
+$brand_logo = function_exists('ensorlogs_brand_logo_url')
+    ? ensorlogs_brand_logo_url()
+    : trailingslashit($t_uri) . 'assets/img/Logos/ensorlogs2.png';
 $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_get_theme_default_mode() : 'light';
 ?><!DOCTYPE html>
 <html id="top" <?php language_attributes(); ?> class="<?php echo $ensor_mode === 'dark' ? 'dark' : ''; ?>">
@@ -23,7 +26,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <?php endif; ?>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="preload" as="image" href="<?php echo esc_url($t_uri); ?>/assets/img/Logos/ensorlogs2.png">
+    <link rel="preload" as="image" href="<?php echo esc_url($brand_logo); ?>">
     <?php wp_head(); ?>
 </head>
 
@@ -34,9 +37,9 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
     <div class="ensor-preloader-inner flex flex-col items-center gap-7 px-6">
         <div class="ensor-preloader-logo">
             <div class="ensor-preloader-logo-zoom" aria-hidden="true">
-                <img src="<?php echo esc_url($t_uri); ?>/assets/img/Logos/ensorlogs2.png" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
+                <img src="<?php echo esc_url($brand_logo); ?>" alt="" width="240" height="240" decoding="async" fetchpriority="high" class="ensor-preloader-base-img">
                 <div class="ensor-preloader-fill">
-                    <img src="<?php echo esc_url($t_uri); ?>/assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
+                    <img src="<?php echo esc_url($brand_logo); ?>" alt="Ensorlogs" width="240" height="240" decoding="async" class="ensor-preloader-fill-img">
                 </div>
             </div>
         </div>
@@ -51,7 +54,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
         <div class="nav max-md:py-3 py-5 px-4 lg:px-6 xl:px-8 flex items-center justify-between bg-white dark:bg-[#1B1C1C] rounded-xl shadow-lg shadow-black/5">
             <a href="<?php echo esc_url(function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/') : home_url('/')); ?>" class="inline-flex items-center gap-3 min-w-0">
                 <span class="ensor-header-logo-wrap rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0 grid place-content-center p-1.5">
-                    <img src="<?php echo esc_url($t_uri); ?>/assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
+                    <img src="<?php echo esc_url($brand_logo); ?>" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
                 </span>
                 <span class="flex flex-col justify-center min-w-0 leading-none">
                     <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-[1.05rem] md:text-xl uppercase">
@@ -110,7 +113,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
     <div class="relative">
         <a href="<?php echo esc_url(function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/') : home_url('/')); ?>" class="inline-flex items-center gap-2.5 pr-10">
             <span class="ensor-header-logo-wrap shrink-0 rounded-full overflow-hidden border border-black/10 dark:border-white/10 grid place-content-center p-1.5">
-                <img src="<?php echo esc_url($t_uri); ?>/assets/img/Logos/ensorlogs2.png" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
+                <img src="<?php echo esc_url($brand_logo); ?>" alt="Ensorlogs" class="ensor-header-logo-img w-full h-full">
             </span>
             <span class="flex flex-col justify-center min-w-0 leading-none">
                 <span class="ensor-wordmark block text-powerBlack dark:text-white font-black tracking-tighter text-base uppercase">

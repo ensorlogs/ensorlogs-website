@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
         <div class="container text-center">
             <div class="ensor-footer-cta" data-aos="fade-up">
                 <span class="ensor-footer-cta__icon ensor-footer-cta__icon--logo" aria-hidden="true">
-                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png'); ?>" alt="" width="64" height="64" decoding="async" class="ensor-footer-cta__logo-img">
+                    <img src="<?php echo esc_url(function_exists('ensorlogs_brand_logo_url') ? ensorlogs_brand_logo_url() : get_template_directory_uri() . '/assets/img/Logos/ensorlogs2.png'); ?>" alt="" width="64" height="64" decoding="async" class="ensor-footer-cta__logo-img">
                 </span>
                 <h5 class="ensor-footer-cta__heading">
                     <?php echo wp_kses(nl2br(esc_html($ensor_footer_heading_default)), array('br' => array())); ?>

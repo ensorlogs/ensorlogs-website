@@ -18,6 +18,22 @@ function ensorlogs_theme_uri(string $path = ''): string
 }
 
 /**
+ * Logo de marca (ensorlogs2.png) con cache-bust por versión del tema.
+ */
+function ensorlogs_brand_logo_url(): string
+{
+    $url  = ensorlogs_theme_uri('assets/img/Logos/ensorlogs2.png');
+    $path = get_template_directory() . '/assets/img/Logos/ensorlogs2.png';
+    if (is_readable($path)) {
+        $ver = (string) filemtime($path);
+    } else {
+        $ver = defined('ENSORLOGS_THEME_VERSION') ? ENSORLOGS_THEME_VERSION : '1';
+    }
+
+    return add_query_arg('v', rawurlencode($ver), $url);
+}
+
+/**
  * Imagen de tarjeta para un artículo (thumbnail, meta o fallback).
  */
 function ensorlogs_article_card_image_url(WP_Post $post, string $fallback): string
@@ -352,6 +368,10 @@ function ensorlogs_render_fragment(string $filename): string
     $search  = array('%%THEME_URI%%', '%%HOME%%');
     $replace = array(esc_url(get_template_directory_uri()), trailingslashit(esc_url($home)));
     $html    = str_replace($search, $replace, $html);
+    if (strpos($html, 'ensorlogs2.png') !== false && function_exists('ensorlogs_brand_logo_url')) {
+        $logo_plain = esc_url(trailingslashit(get_template_directory_uri()) . 'assets/img/Logos/ensorlogs2.png');
+        $html       = str_replace($logo_plain, esc_url(ensorlogs_brand_logo_url()), $html);
+    }
     if (strpos($html, '%%LATEST_LOG_') !== false) {
         $latest = ensorlogs_latest_log_fragment_tokens();
         $html   = str_replace(array_keys($latest), array_values($latest), $html);
