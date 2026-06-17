@@ -455,9 +455,96 @@ html.dark .mobile_menu .ensor-header-logo-wrap {
         box-sizing: border-box;
         min-width: 2.75rem;
         min-height: 2.75rem;
+        display: inline-flex !important;
         align-items: center;
         justify-content: center;
-        border-radius: 0.75rem;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        color: var(--ensor-ink) !important;
+        background: var(--ensor-pixel-outline-face) !important;
+        border: 2px solid var(--ensor-pixel-outline-border) !important;
+        margin-bottom: var(--ensor-pixel-depth);
+        clip-path: polygon(
+            0 var(--ensor-pixel-notch),
+            var(--ensor-pixel-notch) var(--ensor-pixel-notch),
+            var(--ensor-pixel-notch) 0,
+            calc(100% - var(--ensor-pixel-notch)) 0,
+            calc(100% - var(--ensor-pixel-notch)) var(--ensor-pixel-notch),
+            100% var(--ensor-pixel-notch),
+            100% calc(100% - var(--ensor-pixel-notch)),
+            calc(100% - var(--ensor-pixel-notch)) calc(100% - var(--ensor-pixel-notch)),
+            calc(100% - var(--ensor-pixel-notch)) 100%,
+            var(--ensor-pixel-notch) 100%,
+            var(--ensor-pixel-notch) calc(100% - var(--ensor-pixel-notch)),
+            0 calc(100% - var(--ensor-pixel-notch))
+        );
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.9),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.1),
+            0 var(--ensor-pixel-depth) 0 var(--ensor-pixel-outline-shadow) !important;
+        transition:
+            transform 0.12s ease,
+            background 0.12s ease,
+            border-color 0.12s ease,
+            box-shadow 0.12s ease;
+    }
+
+    header .button-groups .menu_toggle:hover {
+        background: var(--ensor-pixel-outline-face-hover) !important;
+        border-color: var(--ensor-accent-hover) !important;
+        transform: translateY(-2px);
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+            0 calc(var(--ensor-pixel-depth) + 2px) 0 var(--ensor-pixel-outline-shadow) !important;
+    }
+
+    header .button-groups .menu_toggle:active {
+        transform: translateY(var(--ensor-pixel-depth));
+        box-shadow:
+            inset 2px 2px 0 rgba(0, 0, 0, 0.12),
+            inset -2px -2px 0 rgba(255, 255, 255, 0.85),
+            0 0 0 var(--ensor-pixel-outline-shadow) !important;
+    }
+
+    header .button-groups .menu_toggle i,
+    header .button-groups .menu_toggle .fa,
+    header .button-groups .menu_toggle .fal {
+        display: none !important;
+    }
+
+    header .button-groups .menu_toggle::before {
+        content: '';
+        display: block;
+        width: 14px;
+        height: 3px;
+        background: currentColor;
+        color: var(--ensor-ink);
+        box-shadow: 0 6px 0 currentColor, 0 12px 0 currentColor;
+        pointer-events: none;
+    }
+
+    html.dark header .button-groups .menu_toggle {
+        color: #f3f4f6 !important;
+        background: #2a2b30 !important;
+        border-color: #4a4b52 !important;
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.35),
+            0 var(--ensor-pixel-depth) 0 #121316 !important;
+    }
+
+    html.dark header .button-groups .menu_toggle:hover {
+        background: #35363c !important;
+        border-color: var(--ensor-accent-on-dark) !important;
+        box-shadow:
+            inset 2px 2px 0 rgba(255, 255, 255, 0.1),
+            inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+            0 calc(var(--ensor-pixel-depth) + 2px) 0 #121316 !important;
+    }
+
+    html.dark header .button-groups .menu_toggle::before {
+        color: #f3f4f6;
     }
 
     header .button-groups .btn_theme_switch {

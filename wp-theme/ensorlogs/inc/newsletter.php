@@ -146,6 +146,8 @@ function ensorlogs_newsletter_client_config(): array
         'successMessage' => function_exists('ensorlogs_t')
             ? ensorlogs_t('Te has suscrito correctamente. ¡Gracias!', 'You subscribed successfully. Thank you!')
             : __('Te has suscrito correctamente. ¡Gracias!', 'ensorlogs'),
+        'autoOpenEnabled'  => true,
+        'autoOpenDelayMs'  => 8000,
     );
 }
 

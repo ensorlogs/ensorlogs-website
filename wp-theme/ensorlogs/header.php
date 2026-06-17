@@ -98,7 +98,7 @@ $ensor_mode = function_exists('ensorlogs_get_theme_default_mode') ? ensorlogs_ge
                 <a href="<?php echo esc_url(function_exists('ensorlogs_lang_url') ? ensorlogs_lang_url('/contact/') : home_url('/contact/')); ?>" class="ensor-cta-hablemos inline-flex items-center justify-center shrink-0 font-semibold py-2 px-5 md:py-2.5 md:px-7 leading-snug rounded-full">
                     <span><?php echo esc_html(function_exists('ensorlogs_t') ? ensorlogs_t('Hablemos', "Let's talk") : 'Hablemos'); ?></span>
                 </a>
-                <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden">
+                <button type="button" class="text-darkGray dark:text-pastelGrey menu_toggle flex items-center text-xl lg:hidden" aria-label="<?php esc_attr_e('Abrir menú', 'ensorlogs'); ?>">
                     <i class="fal fa-bars"></i>
                 </button>
             </div>

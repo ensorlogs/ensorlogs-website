@@ -6,8 +6,13 @@
     var d = document;
     var cfg = typeof window.ensorNewsletter === 'object' ? window.ensorNewsletter : {};
     var BODY_LOCK = 'ensor-newsletter-open';
+    var AUTO_OPEN_DEFAULT_MS = 8000;
+    var DISMISS_STORAGE_KEY = 'ensor-newsletter-dismissed';
+    var SUBSCRIBED_STORAGE_KEY = 'ensor-newsletter-subscribed';
+    var DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
     var lastFocus = null;
+    var autoOpenTimer = null;
 
     function getModal() {
         return d.getElementById('ensor-newsletter-modal');
@@ -237,6 +242,104 @@
             lastFocus.focus();
         }
         lastFocus = null;
+        markDismissed();
+    }
+
+    function getAutoOpenDelayMs() {
+        hydrateCfg();
+        if (cfg.autoOpenEnabled === false || cfg.autoOpenEnabled === 'false') {
+            return 0;
+        }
+        var delay = cfg.autoOpenDelayMs;
+        if (delay === false || delay === 0 || delay === '0') {
+            return 0;
+        }
+        if (typeof delay === 'number' && delay > 0) {
+            return delay;
+        }
+        if (typeof delay === 'string' && /^\d+$/.test(delay)) {
+            return parseInt(delay, 10);
+        }
+        return AUTO_OPEN_DEFAULT_MS;
+    }
+
+    function markDismissed() {
+        try {
+            localStorage.setItem(DISMISS_STORAGE_KEY, String(Date.now()));
+        } catch (e) {
+            /* Sin almacenamiento: el popup puede volver en otra visita. */
+        }
+    }
+
+    function markSubscribed() {
+        try {
+            localStorage.setItem(SUBSCRIBED_STORAGE_KEY, '1');
+            localStorage.removeItem(DISMISS_STORAGE_KEY);
+        } catch (e) {
+            /* ignore */
+        }
+    }
+
+    function shouldAutoOpen() {
+        if (!getModal()) {
+            return false;
+        }
+        if (isOpen()) {
+            return false;
+        }
+        try {
+            if (localStorage.getItem(SUBSCRIBED_STORAGE_KEY) === '1') {
+                return false;
+            }
+            var dismissed = localStorage.getItem(DISMISS_STORAGE_KEY);
+            if (dismissed) {
+                var ts = parseInt(dismissed, 10);
+                if (!isNaN(ts) && Date.now() - ts < DISMISS_TTL_MS) {
+                    return false;
+                }
+            }
+        } catch (e) {
+            /* Si no hay localStorage, seguimos. */
+        }
+        return true;
+    }
+
+    function isPreloaderVisible() {
+        var pre = d.querySelector('.preloader');
+        if (!pre) {
+            return false;
+        }
+        var style = window.getComputedStyle(pre);
+        return (
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            parseFloat(style.opacity || '1') > 0.05
+        );
+    }
+
+    function tryAutoOpen() {
+        if (!shouldAutoOpen() || isOpen()) {
+            return;
+        }
+        if (d.hidden || isPreloaderVisible()) {
+            autoOpenTimer = window.setTimeout(tryAutoOpen, 400);
+            return;
+        }
+        openModal();
+    }
+
+    function scheduleAutoOpen() {
+        var delayMs = getAutoOpenDelayMs();
+        if (!delayMs || !shouldAutoOpen()) {
+            return;
+        }
+        if (autoOpenTimer) {
+            clearTimeout(autoOpenTimer);
+        }
+        autoOpenTimer = window.setTimeout(function () {
+            autoOpenTimer = null;
+            tryAutoOpen();
+        }, delayMs);
     }
 
     function onCloseActivate(e) {
@@ -415,6 +518,7 @@
                         cfg.successMessage ||
                         'Te has suscrito correctamente. ¡Gracias!';
                     setFeedback(form, msg, 'success');
+                    markSubscribed();
                     if (emailInput) {
                         emailInput.value = '';
                     }
@@ -523,6 +627,10 @@
     d.addEventListener('click', function (e) {
         if (e.target.closest('.ensor-newsletter-open')) {
             e.preventDefault();
+            if (autoOpenTimer) {
+                clearTimeout(autoOpenTimer);
+                autoOpenTimer = null;
+            }
             openModal();
             return;
         }
@@ -542,5 +650,6 @@
         bindModal();
         applyConfigHints(isMailchimpReady(), configHintMessage());
         syncConfigHints();
+        scheduleAutoOpen();
     });
 })();
