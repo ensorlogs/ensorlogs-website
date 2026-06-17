@@ -32,6 +32,14 @@ jobs:
           test -f ensorlogs.zip
           unzip -l ensorlogs.zip | grep -q 'seed-html/legal/privacidad.en.html'
 
+      - name: Verificar que la versión del zip coincide con el tag
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          ZIP_VER=$(unzip -p wp-theme/ensorlogs.zip ensorlogs/style.css | sed -n 's/^Version: //p' | tr -d '[:space:]')
+          CONST_VER=$(unzip -p wp-theme/ensorlogs.zip ensorlogs/functions.php | sed -n "s/.*ENSORLOGS_THEME_VERSION', '//p" | sed "s/');.*//")
+          echo "Tag: ${TAG} | style.css: ${ZIP_VER} | functions.php: ${CONST_VER}"
+          test "${ZIP_VER}" = "${TAG}" && test "${CONST_VER}" = "${TAG}"
+
       - name: Publicar release en GitHub con ensorlogs.zip
         uses: softprops/action-gh-release@v2
         with:
